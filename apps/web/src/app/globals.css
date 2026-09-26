@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+/*
+ * Amerivo English design tokens.
+ * Source of truth: the "Amerivo English – UI Design" canvas (18 · UI style guide).
+ * Use these utilities (bg-navy, text-teal-dark, font-display, …) instead of raw hex values.
+ */
+@theme {
+  /* Brand */
+  --color-navy: #0f3b5b;
+  --color-navy-soft: #2e5872; /* secondary text on light */
+  --color-navy-deep: #0a2a41; /* classroom background */
+  --color-ink-soft: #c9d8e3; /* secondary text on navy */
+  --color-teal: #2fb7a8; /* decorative only — not for text on white */
+  --color-teal-dark: #177a70; /* buttons/links with white text (AA) */
+  --color-teal-deep: #0f5f57; /* success text on teal-100 */
+  --color-teal-50: #f0faf8;
+  --color-teal-100: #ddf2ef;
+  --color-teal-200: #bfe8e2;
+  --color-orange: #ffb366; /* primary CTA — always navy text */
+  --color-orange-100: #ffebd2;
+  --color-orange-dark: #b5651d;
+  --color-orange-text: #7a3f0b;
+  --color-cream: #fff6e8;
+  --color-yellow: #ffd98e;
+  --color-beige: #f7f5ef;
+  --color-beige-2: #f4f2ec;
+
+  /* Neutrals & lines */
+  --color-muted: #5b6b7a;
+  --color-sand: #e8e3d6;
+  --color-line: #d9d2c2;
+  --color-line-soft: #eee9dd;
+
+  /* Supporting tints */
+  --color-sky-100: #dcebf7;
+  --color-sky: #1d6f8c;
+  --color-lilac-100: #e7e4f6;
+  --color-lilac: #4b4891;
+  --color-danger: #c0392b;
+  --color-danger-100: #fbe3e0;
+  --color-danger-text: #8e2a1e;
+  --color-online: #22a06b;
+
+  /* Type */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-hand: "Caveat", cursive;
+  --font-serif: Georgia, "Times New Roman", serif;
+
+  /* Shape */
+  --radius-card: 24px;
+  --shadow-card: 0 6px 24px rgb(15 59 91 / 0.06);
+  --shadow-float: 0 12px 40px rgb(15 59 91 / 0.08);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  body {
+    background: var(--color-beige);
+    color: var(--color-navy);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+  }
+  fieldset {
+    min-width: 0;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-teal);
+    outline-offset: 2px;
+  }
+  input[type="checkbox"],
+  input[type="radio"],
+  input[type="range"] {
+    accent-color: var(--color-teal-dark);
+  }
+}

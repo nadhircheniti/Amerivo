@@ -1,0 +1,447 @@
+/**
+ * Amerivo English — database schema (PostgreSQL, Drizzle ORM).
+ * Money is stored in integer cents (USD). Times are stored in UTC (timestamptz);
+ * teacher availability rules are stored in the teacher's own IANA time zone.
+ */
+import { sql } from "drizzle-orm";
+import {
+  boolean,
+  check,
+  date,
+  index,
+  integer,
+  jsonb,
+  pgEnum,
+  pgTable,
+  primaryKey,
+  smallint,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from "drizzle-orm/pg-core";
+
+const id = () => uuid("id").primaryKey().defaultRandom();
+const createdAt = () => timestamp("created_at", { withTimezone: true }).notNull().defaultNow();
+const updatedAt = () =>
+  timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date());
+
+/* ------------------------------------------------------------------ enums */
+export const userRole = pgEnum("user_role", ["student", "teacher", "admin"]);
+export const userStatus = pgEnum("user_status", ["pending_verification", "active", "blocked", "deleted"]);
+export const learningGoal = pgEnum("learning_goal", ["business", "travel", "university", "immigration", "conversation"]);
+export const selfLevel = pgEnum("self_level", ["beginner", "intermediate", "advanced"]);
+export const cefrLevel = pgEnum("cefr_level", ["A1", "A2", "B1", "B2", "C1", "C2"]);
+export const genderPref = pgEnum("gender", ["female", "male", "other", "no_preference"]);
+export const teacherStatus = pgEnum("teacher_status", ["draft", "pending", "approved", "rejected", "suspended"]);
+export const identityStatus = pgEnum("identity_status", ["not_started", "pending", "verified", "failed"]);
+export const bookingType = pgEnum("booking_type", ["trial", "single", "package"]);
+export const bookingStatus = pgEnum("booking_status", ["pending_payment", "confirmed", "completed", "cancelled", "refunded", "no_show"]);
+export const cancelledBy = pgEnum("cancelled_by", ["student", "teacher", "admin"]);
+export const packageStatus = pgEnum("package_status", ["pending_payment", "active", "exhausted", "refunded", "expired"]);
+export const paymentProvider = pgEnum("payment_provider", ["stripe", "paypal"]);
+export const paymentStatus = pgEnum("payment_status", ["requires_payment", "succeeded", "failed", "refunded", "partially_refunded"]);
+export const attendance = pgEnum("attendance", ["attended", "late", "no_show"]);
+export const homeworkStatus = pgEnum("homework_status", ["assigned", "submitted", "completed"]);
+export const earningStatus = pgEnum("earning_status", ["pending", "available", "paid", "reversed"]);
+export const payoutStatus = pgEnum("payout_status", ["requested", "processing", "paid", "failed"]);
+export const messageKind = pgEnum("message_kind", ["text", "file", "homework"]);
+export const notificationChannel = pgEnum("notification_channel", ["email", "sms", "push", "in_app"]);
+
+/* ------------------------------------------------------------------ users */
+export const users = pgTable(
+  "users",
+  {
+    id: id(),
+    clerkId: text("clerk_id").notNull().unique(),
+    role: userRole("role").notNull(),
+    status: userStatus("status").notNull().default("pending_verification"),
+    email: text("email").notNull(),
+    firstName: text("first_name").notNull(),
+    lastName: text("last_name").notNull(),
+    phone: text("phone"),
+    country: text("country"),
+    nativeLanguage: text("native_language"),
+    timezone: text("timezone").notNull().default("UTC"),
+    avatarUrl: text("avatar_url"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [uniqueIndex("users_email_idx").on(t.email)],
+);
+
+export const studentProfiles = pgTable("student_profiles", {
+  userId: uuid("user_id")
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+  goal: learningGoal("goal"),
+  selfLevel: selfLevel("self_level"),
+  cefrLevel: cefrLevel("cefr_level"),
+  /** Per-skill results of the placement test: { grammar, reading, listening, speaking } → CEFR */
+  placementScores: jsonb("placement_scores").$type<Partial<Record<"grammar" | "reading" | "listening" | "speaking", string>>>(),
+  preferredTeacherGender: genderPref("preferred_teacher_gender").default("no_preference"),
+  /** morning | afternoon | evening | weekend */
+  preferredTimes: text("preferred_times").array().notNull().default(sql`'{}'::text[]`),
+  updatedAt: updatedAt(),
+});
+
+/* --------------------------------------------------------------- teachers */
+export const teacherProfiles = pgTable(
+  "teacher_profiles",
+  {
+    userId: uuid("user_id")
+      .primaryKey()
+      .references(() => users.id, { onDelete: "cascade" }),
+    slug: text("slug").notNull().unique(),
+    status: teacherStatus("status").notNull().default("draft"),
+    headline: text("headline"),
+    bio: text("bio"),
+    city: text("city"),
+    gender: genderPref("gender"),
+    timezone: text("timezone").notNull(),
+    education: text("education"),
+    yearsExperience: smallint("years_experience").notNull().default(0),
+    specialties: text("specialties").array().notNull().default(sql`'{}'::text[]`),
+    /** adults | teens | children */
+    teaches: text("teaches").array().notNull().default(sql`'{}'::text[]`),
+    languages: jsonb("languages").$type<{ language: string; level: string }[]>().notNull().default([]),
+    certifications: jsonb("certifications").$type<{ name: string; fileUrl?: string }[]>().notNull().default([]),
+    /** Price per 50-minute lesson, $20–$50 */
+    priceCents: integer("price_cents").notNull().default(3000),
+    offersPack5: boolean("offers_pack5").notNull().default(false),
+    offersPack10: boolean("offers_pack10").notNull().default(false),
+    offersTrial: boolean("offers_trial").notNull().default(true),
+    introVideoUrl: text("intro_video_url"),
+    identityStatus: identityStatus("identity_status").notNull().default("not_started"),
+    stripeIdentitySessionId: text("stripe_identity_session_id"),
+    stripeAccountId: text("stripe_account_id"),
+    paypalEmail: text("paypal_email"),
+    vacationMode: boolean("vacation_mode").notNull().default(false),
+    ratingAvg: integer("rating_avg_x100").notNull().default(0), // 4.90 → 490
+    ratingCount: integer("rating_count").notNull().default(0),
+    lessonsCompleted: integer("lessons_completed").notNull().default(0),
+    approvedAt: timestamp("approved_at", { withTimezone: true }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [
+    check("teacher_price_range", sql`${t.priceCents} between 2000 and 5000`),
+    index("teacher_status_idx").on(t.status),
+  ],
+);
+
+/** Admin review of a teacher application (intro video + interview). */
+export const teacherApplications = pgTable("teacher_applications", {
+  id: id(),
+  teacherId: uuid("teacher_id")
+    .notNull()
+    .references(() => teacherProfiles.userId, { onDelete: "cascade" }),
+  submittedAt: timestamp("submitted_at", { withTimezone: true }),
+  /** 1–5 scores: fluency, professionalism, teachingAbility, cameraQuality, internetQuality */
+  evaluation: jsonb("evaluation").$type<Record<string, number>>(),
+  adminNotes: text("admin_notes"),
+  interviewRequestedAt: timestamp("interview_requested_at", { withTimezone: true }),
+  decidedBy: uuid("decided_by").references(() => users.id),
+  decidedAt: timestamp("decided_at", { withTimezone: true }),
+  decision: teacherStatus("decision"),
+  createdAt: createdAt(),
+});
+
+/** Weekly recurring windows, in the teacher's time zone (minutes since midnight). */
+export const availabilityRules = pgTable(
+  "availability_rules",
+  {
+    id: id(),
+    teacherId: uuid("teacher_id")
+      .notNull()
+      .references(() => teacherProfiles.userId, { onDelete: "cascade" }),
+    weekday: smallint("weekday").notNull(), // 1 = Monday … 7 = Sunday (ISO)
+    startMinute: smallint("start_minute").notNull(),
+    endMinute: smallint("end_minute").notNull(),
+  },
+  (t) => [
+    check("rule_weekday", sql`${t.weekday} between 1 and 7`),
+    check("rule_window", sql`${t.startMinute} >= 0 and ${t.endMinute} <= 1440 and ${t.startMinute} < ${t.endMinute}`),
+    index("rules_teacher_idx").on(t.teacherId),
+  ],
+);
+
+/** Blocked dates / holidays, inclusive, in the teacher's time zone. */
+export const blockedDates = pgTable("blocked_dates", {
+  id: id(),
+  teacherId: uuid("teacher_id")
+    .notNull()
+    .references(() => teacherProfiles.userId, { onDelete: "cascade" }),
+  startDate: date("start_date").notNull(),
+  endDate: date("end_date").notNull(),
+  reason: text("reason"),
+});
+
+/* --------------------------------------------------------------- commerce */
+/** A purchased bundle of lessons with one teacher (1, 5 or 10 lessons). */
+export const lessonPackages = pgTable("lesson_packages", {
+  id: id(),
+  studentId: uuid("student_id")
+    .notNull()
+    .references(() => users.id),
+  teacherId: uuid("teacher_id")
+    .notNull()
+    .references(() => teacherProfiles.userId),
+  lessonCount: smallint("lesson_count").notNull(),
+  lessonsUsed: smallint("lessons_used").notNull().default(0),
+  unitPriceCents: integer("unit_price_cents").notNull(),
+  discountPct: smallint("discount_pct").notNull().default(0),
+  totalCents: integer("total_cents").notNull(),
+  status: packageStatus("status").notNull().default("pending_payment"),
+  createdAt: createdAt(),
+});
+
+export const bookings = pgTable(
+  "bookings",
+  {
+    id: id(),
+    studentId: uuid("student_id")
+      .notNull()
+      .references(() => users.id),
+    teacherId: uuid("teacher_id")
+      .notNull()
+      .references(() => teacherProfiles.userId),
+    packageId: uuid("package_id").references(() => lessonPackages.id),
+    type: bookingType("type").notNull(),
+    startsAt: timestamp("starts_at", { withTimezone: true }).notNull(),
+    durationMin: smallint("duration_min").notNull(),
+    priceCents: integer("price_cents").notNull(),
+    status: bookingStatus("status").notNull().default("pending_payment"),
+    topic: text("topic"),
+    cancelledBy: cancelledBy("cancelled_by"),
+    cancelledAt: timestamp("cancelled_at", { withTimezone: true }),
+    cancelReason: text("cancel_reason"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [
+    index("bookings_teacher_time_idx").on(t.teacherId, t.startsAt),
+    index("bookings_student_time_idx").on(t.studentId, t.startsAt),
+    // A teacher can't hold two live bookings starting at the same instant.
+    uniqueIndex("bookings_teacher_slot_uq")
+      .on(t.teacherId, t.startsAt)
+      .where(sql`${t.status} in ('pending_payment','confirmed')`),
+  ],
+);
+
+export const payments = pgTable("payments", {
+  id: id(),
+  studentId: uuid("student_id")
+    .notNull()
+    .references(() => users.id),
+  bookingId: uuid("booking_id").references(() => bookings.id),
+  packageId: uuid("package_id").references(() => lessonPackages.id),
+  provider: paymentProvider("provider").notNull().default("stripe"),
+  providerRef: text("provider_ref").unique(), // Stripe PaymentIntent id / PayPal order id
+  amountCents: integer("amount_cents").notNull(),
+  refundedCents: integer("refunded_cents").notNull().default(0),
+  currency: text("currency").notNull().default("usd"),
+  status: paymentStatus("status").notNull().default("requires_payment"),
+  createdAt: createdAt(),
+  updatedAt: updatedAt(),
+});
+
+/* ---------------------------------------------------------------- lessons */
+export const lessons = pgTable("lessons", {
+  id: id(),
+  bookingId: uuid("booking_id")
+    .notNull()
+    .unique()
+    .references(() => bookings.id),
+  dailyRoomName: text("daily_room_name"),
+  startedAt: timestamp("started_at", { withTimezone: true }),
+  endedAt: timestamp("ended_at", { withTimezone: true }),
+  attendance: attendance("attendance"),
+  sharedNotes: text("shared_notes"),
+});
+
+export const lessonReports = pgTable("lesson_reports", {
+  id: id(),
+  lessonId: uuid("lesson_id")
+    .notNull()
+    .unique()
+    .references(() => lessons.id, { onDelete: "cascade" }),
+  topicsCovered: text("topics_covered").notNull(),
+  strengths: text("strengths"),
+  developmentAreas: text("development_areas"),
+  homework: text("homework"),
+  homeworkDue: date("homework_due"),
+  recommendation: text("recommendation"),
+  /** Private teacher-only rating of the student, 1–5 */
+  privateFluency: smallint("private_fluency"),
+  privateAccuracy: smallint("private_accuracy"),
+  privateEngagement: smallint("private_engagement"),
+  sentAt: timestamp("sent_at", { withTimezone: true }),
+  createdAt: createdAt(),
+});
+
+export const homework = pgTable("homework", {
+  id: id(),
+  lessonId: uuid("lesson_id").references(() => lessons.id),
+  studentId: uuid("student_id")
+    .notNull()
+    .references(() => users.id),
+  teacherId: uuid("teacher_id")
+    .notNull()
+    .references(() => teacherProfiles.userId),
+  description: text("description").notNull(),
+  dueDate: date("due_date"),
+  status: homeworkStatus("status").notNull().default("assigned"),
+  submissionUrl: text("submission_url"),
+  createdAt: createdAt(),
+});
+
+export const reviews = pgTable(
+  "reviews",
+  {
+    id: id(),
+    bookingId: uuid("booking_id")
+      .notNull()
+      .unique()
+      .references(() => bookings.id),
+    studentId: uuid("student_id")
+      .notNull()
+      .references(() => users.id),
+    teacherId: uuid("teacher_id")
+      .notNull()
+      .references(() => teacherProfiles.userId),
+    rating: smallint("rating").notNull(),
+    comment: text("comment"),
+    createdAt: createdAt(),
+  },
+  (t) => [check("review_rating", sql`${t.rating} between 1 and 5`)],
+);
+
+/* ------------------------------------------------------ teacher earnings */
+/** Ledger: one row per paid lesson taught. gross − 20% commission = net. */
+export const earnings = pgTable("earnings", {
+  id: id(),
+  teacherId: uuid("teacher_id")
+    .notNull()
+    .references(() => teacherProfiles.userId),
+  bookingId: uuid("booking_id")
+    .notNull()
+    .unique()
+    .references(() => bookings.id),
+  grossCents: integer("gross_cents").notNull(),
+  commissionCents: integer("commission_cents").notNull(),
+  netCents: integer("net_cents").notNull(),
+  status: earningStatus("status").notNull().default("pending"),
+  availableAt: timestamp("available_at", { withTimezone: true }),
+  payoutId: uuid("payout_id").references(() => payouts.id),
+  createdAt: createdAt(),
+});
+
+export const payouts = pgTable("payouts", {
+  id: id(),
+  teacherId: uuid("teacher_id")
+    .notNull()
+    .references(() => teacherProfiles.userId),
+  amountCents: integer("amount_cents").notNull(),
+  method: paymentProvider("method").notNull().default("stripe"),
+  providerRef: text("provider_ref"), // Stripe transfer id / PayPal payout id
+  status: payoutStatus("status").notNull().default("requested"),
+  /** true = teacher clicked "Withdraw now"; false = monthly automatic run (28th) */
+  onDemand: boolean("on_demand").notNull().default(false),
+  requestedAt: createdAt(),
+  paidAt: timestamp("paid_at", { withTimezone: true }),
+});
+
+/* -------------------------------------------------------------- messaging */
+export const conversations = pgTable(
+  "conversations",
+  {
+    id: id(),
+    studentId: uuid("student_id")
+      .notNull()
+      .references(() => users.id),
+    teacherId: uuid("teacher_id")
+      .notNull()
+      .references(() => users.id),
+    lastMessageAt: timestamp("last_message_at", { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => [uniqueIndex("conversation_pair_uq").on(t.studentId, t.teacherId)],
+);
+
+export const messages = pgTable(
+  "messages",
+  {
+    id: id(),
+    conversationId: uuid("conversation_id")
+      .notNull()
+      .references(() => conversations.id, { onDelete: "cascade" }),
+    senderId: uuid("sender_id")
+      .notNull()
+      .references(() => users.id),
+    kind: messageKind("kind").notNull().default("text"),
+    body: text("body"),
+    attachmentUrl: text("attachment_url"),
+    attachmentName: text("attachment_name"),
+    readAt: timestamp("read_at", { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => [index("messages_conversation_idx").on(t.conversationId, t.createdAt)],
+);
+
+/* ------------------------------------------------------- notifications */
+export const notifications = pgTable(
+  "notifications",
+  {
+    id: id(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    type: text("type").notNull(), // booking_confirmed, lesson_reminder, homework_assigned, payout_issued, …
+    title: text("title").notNull(),
+    body: text("body"),
+    channels: notificationChannel("channels").array().notNull(),
+    readAt: timestamp("read_at", { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => [index("notifications_user_idx").on(t.userId, t.createdAt)],
+);
+
+/* ------------------------------------------------ corporate & compliance */
+/** "Companies can express interest and book 10, 20 or more sessions." */
+export const corporateRequests = pgTable("corporate_requests", {
+  id: id(),
+  companyName: text("company_name").notNull(),
+  contactName: text("contact_name").notNull(),
+  contactEmail: text("contact_email").notNull(),
+  learners: integer("learners"),
+  sessions: integer("sessions"),
+  needs: text("needs"),
+  handled: boolean("handled").notNull().default(false),
+  createdAt: createdAt(),
+});
+
+/** Admin actions (approve, refund, override…) — required by the security spec. */
+export const auditLogs = pgTable("audit_logs", {
+  id: id(),
+  actorId: uuid("actor_id").references(() => users.id),
+  action: text("action").notNull(),
+  entity: text("entity").notNull(),
+  entityId: text("entity_id"),
+  data: jsonb("data"),
+  createdAt: createdAt(),
+});
+
+/** Stripe/PayPal webhook idempotency. */
+export const processedEvents = pgTable(
+  "processed_events",
+  {
+    provider: paymentProvider("provider").notNull(),
+    eventId: text("event_id").notNull(),
+    processedAt: createdAt(),
+  },
+  (t) => [primaryKey({ columns: [t.provider, t.eventId] })],
+);

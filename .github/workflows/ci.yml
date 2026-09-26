@@ -1,0 +1,25 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: API — typecheck, tests (in-memory Postgres), build
+        run: |
+          npm run typecheck -w api
+          npm test -w api
+          npm run build -w api
+      - name: Web — lint & build
+        run: |
+          npm run lint -w web
+          npm run build -w web
