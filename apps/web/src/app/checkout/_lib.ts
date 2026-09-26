@@ -51,9 +51,11 @@ export function describeSlot(slot: string, studentTz: string, teacherTz: string)
 }
 
 export function describeOrder(teacher: Teacher, requested: LessonType) {
-  // Packs are opt-in per teacher; fall back to a single lesson if the teacher doesn't offer it.
+  // Trial and packs are opt-in per teacher; fall back to a single lesson if the teacher doesn't offer it.
   const type: LessonType =
-    (requested === "pack5" && !teacher.offersPack5) || (requested === "pack10" && !teacher.offersPack10) ? "single" : requested;
+    (requested === "trial" && !teacher.offersTrial) || (requested === "pack5" && !teacher.offersPack5) || (requested === "pack10" && !teacher.offersPack10)
+      ? "single"
+      : requested;
   const unit = teacher.priceUsd;
   switch (type) {
     case "trial":

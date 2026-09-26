@@ -1,19 +1,28 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Field, Input, Select } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { ageOn, latestBirthDate, MIN_STUDENT_AGE } from "@/lib/age";
 
 export function SignupForm() {
   const router = useRouter();
+  const [ageError, setAgeError] = useState<string | null>(null);
 
   return (
     <form
       className="grid grid-cols-1 gap-4 sm:grid-cols-2"
       onSubmit={(e) => {
         e.preventDefault();
-        const email = String(new FormData(e.currentTarget).get("email") ?? "");
+        const data = new FormData(e.currentTarget);
+        const birthDate = String(data.get("birthDate") ?? "");
+        if (!birthDate || ageOn(birthDate) < MIN_STUDENT_AGE) {
+          setAgeError(`You must be at least ${MIN_STUDENT_AGE} years old to create an account.`);
+          return;
+        }
+        const email = String(data.get("email") ?? "");
         router.push(`/verify-email?${new URLSearchParams({ email })}`);
       }}
     >
@@ -28,6 +37,30 @@ export function SignupForm() {
       </Field>
       <Field label="Password">
         <Input name="password" type="password" autoComplete="new-password" placeholder="At least 8 characters" minLength={8} required />
+      </Field>
+      <Field
+        label="Date of birth"
+        className="sm:col-span-2"
+        hint={
+          ageError ? (
+            <span role="alert" className="font-semibold text-danger-text">
+              {ageError}
+            </span>
+          ) : (
+            `Amerivo is for learners aged ${MIN_STUDENT_AGE} and over.`
+          )
+        }
+      >
+        <Input
+          name="birthDate"
+          type="date"
+          autoComplete="bday"
+          max={latestBirthDate()}
+          required
+          aria-invalid={ageError ? true : undefined}
+          onChange={() => setAgeError(null)}
+          className="sm:max-w-[260px]"
+        />
       </Field>
       <Field label="Country">
         <Select name="country" autoComplete="country-name" defaultValue="" required>

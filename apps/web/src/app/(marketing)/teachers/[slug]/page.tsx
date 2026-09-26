@@ -156,6 +156,7 @@ export default async function TeacherProfilePage({ params }: Params) {
           slug={t.slug}
           firstName={firstName}
           priceUsd={t.priceUsd}
+          offersTrial={t.offersTrial}
           offersPack5={t.offersPack5}
           offersPack10={t.offersPack10}
           teacherTimezone={t.timezone}

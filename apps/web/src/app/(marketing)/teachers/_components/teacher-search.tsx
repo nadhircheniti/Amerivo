@@ -15,11 +15,11 @@ const specialtyOptions: { value: Specialty; label: string }[] = [
   { value: "Interview Prep", label: "Interview Preparation" },
   { value: "IELTS Prep", label: "IELTS Prep" },
   { value: "TOEFL Prep", label: "TOEFL Prep" },
-  { value: "Kids & Teens", label: "Kids & Teens" },
+  { value: "Teens", label: "Teens (13+)" },
 ];
 
 type Audience = Teacher["teaches"][number];
-const audiences: Audience[] = ["Adults", "Teens", "Children 7+"];
+const audiences: Audience[] = ["Adults", "Teens"];
 const availabilityOptions = ["Morning", "Afternoon", "Evening", "Weekend"] as const;
 const languageOptions = ["Spanish", "French", "Arabic", "Portuguese"] as const;
 
@@ -343,9 +343,11 @@ function TeacherCard({ t }: { t: Teacher }) {
         <ButtonLink href={`/teachers/${t.slug}`} variant="teal" size="sm" className="h-11 text-[15px]" aria-label={`Book lesson with ${t.name}`}>
           Book lesson
         </ButtonLink>
-        <ButtonLink href={`/teachers/${t.slug}?type=trial`} variant="outline" size="sm" className="h-11 text-[15px]" aria-label={`Free 20-min trial with ${t.name}`}>
-          Free 20-min trial
-        </ButtonLink>
+        {t.offersTrial && (
+          <ButtonLink href={`/teachers/${t.slug}?type=trial`} variant="outline" size="sm" className="h-11 text-[15px]" aria-label={`Free 20-min trial with ${t.name}`}>
+            Free 20-min trial
+          </ButtonLink>
+        )}
       </div>
     </article>
   );

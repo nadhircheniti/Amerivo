@@ -10,7 +10,8 @@ export const steps = [
 ] as const;
 
 export const subjects = ["Business English", "Conversation (Speaking)", "Reading", "General English", "Interview Preparation", "IELTS / TOEFL Prep"];
-export const groups = ["Adults", "Teens", "Children 7 and up", "Corporate groups"];
+/** Students are 13+ (client decision): no children group. */
+export const groups = ["Adults", "Teens (13–17)", "Corporate groups"];
 export const educationLevels = ["Bachelor's degree", "Master's degree", "PhD", "Associate degree", "Other"];
 export const experienceLevels = ["Less than 1 year", "1–2 years", "3–5 years", "5–10 years", "10+ years"];
 export const countries = ["United States", "Canada", "Mexico", "United Kingdom", "Spain", "Portugal", "Germany", "Japan", "Other"];
@@ -51,6 +52,7 @@ export type Application = {
   certificateFiles: string[];
   languages: string[];
   rate: number;
+  offersTrial: boolean;
   idType: (typeof idTypes)[number]["value"];
   idFiles: string[];
   video: string[];
@@ -74,6 +76,7 @@ export const initialApplication: Application = {
   certificateFiles: [],
   languages: ["English · Native", "Spanish · B2"],
   rate: 35,
+  offersTrial: true,
   idType: "passport",
   idFiles: [],
   video: [],

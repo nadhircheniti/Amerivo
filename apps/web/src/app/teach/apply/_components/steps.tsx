@@ -166,6 +166,13 @@ export function ProfessionalStep({ app, update }: StepProps) {
           <span aria-hidden="true">$50</span>
         </div>
       </div>
+
+      <ChoiceTile checked={app.offersTrial} onChange={(on) => update({ offersTrial: on })}>
+        <span className="flex flex-col">
+          <span>Offer a free 20-minute trial lesson</span>
+          <span className="text-[13px] font-normal text-muted">Students can meet you once before booking. You can change this later.</span>
+        </span>
+      </ChoiceTile>
     </>
   );
 }
@@ -367,7 +374,7 @@ export function ReviewStep({ app, update, onEdit }: StepProps & { onEdit: (step:
           <Row label="Certifications">{app.certifications.join(", ") || dash}</Row>
           <Row label="Languages">{app.languages.join(", ") || dash}</Row>
           <Row label="Rate">
-            ${app.rate} per lesson · you receive {formatUsd(teacherNet(app.rate))}
+            ${app.rate} per lesson · you receive {formatUsd(teacherNet(app.rate))} · free trial {app.offersTrial ? "on" : "off"}
           </Row>
         </ReviewCard>
         <ReviewCard title={steps[2].title} onEdit={() => onEdit(2)}>

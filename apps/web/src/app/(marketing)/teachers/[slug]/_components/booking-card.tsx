@@ -33,7 +33,7 @@ function useViewerClockSnapshot() {
   );
 }
 
-/** `?type=trial` from the teacher list pre-selects the free trial. */
+/** `?type=trial` from the teacher list pre-selects the free trial (only if the teacher offers one). */
 function useQueryType(): LessonType | null {
   return useSyncExternalStore(
     noopSubscribe,
@@ -49,6 +49,7 @@ export function BookingCard({
   slug,
   firstName,
   priceUsd,
+  offersTrial,
   offersPack5,
   offersPack10,
   teacherTimezone,
@@ -56,6 +57,7 @@ export function BookingCard({
   slug: string;
   firstName: string;
   priceUsd: number;
+  offersTrial: boolean;
   offersPack5: boolean;
   offersPack10: boolean;
   teacherTimezone: string;
@@ -73,7 +75,7 @@ export function BookingCard({
   const [slot, setSlot] = useState<{ iso: string; instant: number } | null>(null);
 
   const options = [
-    { value: "trial" as const, label: "Trial lesson · 20 min", price: 0 },
+    ...(offersTrial ? [{ value: "trial" as const, label: "Trial lesson · 20 min", price: 0 }] : []),
     { value: "single" as const, label: "Single lesson · 50 min", price: priceUsd },
     ...(offersPack5 ? [{ value: "pack5" as const, label: "5 lessons", discount: "−5%", price: packagePrice(priceUsd, 5) }] : []),
     ...(offersPack10 ? [{ value: "pack10" as const, label: "10 lessons", discount: "−10%", price: packagePrice(priceUsd, 10) }] : []),

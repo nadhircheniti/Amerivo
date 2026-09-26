@@ -111,8 +111,12 @@ export default function ResultsPage() {
                 ))}
               </ul>
               <div className="mt-auto flex gap-2.5">
-                <ButtonLink href={`/teachers/${t.slug}`} className="flex-1 px-3" aria-label={`Book free trial with ${t.name}`}>
-                  Book free trial
+                <ButtonLink
+                  href={t.offersTrial ? `/teachers/${t.slug}?type=trial` : `/teachers/${t.slug}`}
+                  className="flex-1 px-3"
+                  aria-label={t.offersTrial ? `Book free trial with ${t.name}` : `Book a lesson with ${t.name}`}
+                >
+                  {t.offersTrial ? "Book free trial" : "Book a lesson"}
                 </ButtonLink>
                 <ButtonLink href={`/teachers/${t.slug}`} variant="outline" className="flex-1 px-3" aria-label={`${t.name}'s profile`}>
                   Profile

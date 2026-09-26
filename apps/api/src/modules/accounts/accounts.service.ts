@@ -3,6 +3,8 @@ import { eq } from "drizzle-orm";
 import { DB, type Db } from "../../db/db";
 import { studentProfiles, teacherProfiles, users } from "../../db/schema";
 import { badRequest, conflict } from "../../common/errors";
+import { CLOCK, type Clock } from "../../common/clock";
+import { isOldEnough, MIN_STUDENT_AGE } from "../../domain/age";
 
 export interface RegisterInput {
   role: "student" | "teacher";
@@ -13,6 +15,7 @@ export interface RegisterInput {
   nativeLanguage?: string;
   phone?: string;
   timezone: string;
+  birthDate?: string;
 }
 
 const slugify = (s: string) =>
@@ -25,7 +28,10 @@ const slugify = (s: string) =>
 
 @Injectable()
 export class AccountsService {
-  constructor(@Inject(DB) private readonly db: Db) {}
+  constructor(
+    @Inject(DB) private readonly db: Db,
+    @Inject(CLOCK) private readonly clock: Clock,
+  ) {}
 
   /** Creates the Amerivo account for a signed-in Clerk user (student sign-up or teacher application start). */
   async register(clerkId: string, input: RegisterInput, emailVerified: boolean) {
@@ -33,6 +39,10 @@ export class AccountsService {
       Intl.DateTimeFormat(undefined, { timeZone: input.timezone });
     } catch {
       throw badRequest("Invalid time zone");
+    }
+    if (input.role === "student") {
+      if (!input.birthDate) throw badRequest("Date of birth is required");
+      if (!isOldEnough(input.birthDate, this.clock.now())) throw badRequest(`You must be at least ${MIN_STUDENT_AGE} years old to use Amerivo`);
     }
     const [existing] = await this.db.select({ id: users.id }).from(users).where(eq(users.clerkId, clerkId));
     if (existing) throw conflict("Account already exists");

@@ -21,7 +21,7 @@ const steps = [
 ];
 
 const plans = [
-  { title: "Trial lesson", price: "20 min", body: "Meet a teacher and discuss your goals before you book." },
+  { title: "Trial lesson", price: "20 min", body: "Free with teachers who offer it: meet and discuss your goals before you book." },
   { title: "Single lesson", price: "$20–50", body: "One 50-minute live lesson at the teacher's rate." },
   { title: "5-lesson pack", price: "Up to 5% off", body: "Offered by participating teachers.", featured: true },
   { title: "10-lesson pack", price: "Up to 10% off", body: "Best value for steady progress." },
@@ -78,7 +78,7 @@ export default function HomePage() {
             </button>
           </form>
           <ul className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[15px] text-navy-soft">
-            {["Free placement test", "20-min trial lessons", "U.S. teachers only"].map((item) => (
+            {["Free placement test", "Free trial lessons", "U.S. teachers only"].map((item) => (
               <li key={item} className="flex items-center gap-2">
                 <Icon name="check" size={18} strokeWidth={2.2} className="text-teal-dark" />
                 {item}

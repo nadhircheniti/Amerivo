@@ -11,7 +11,7 @@ const teachers = [
   { first: "Amanda", last: "Lee", slug: "amanda-lee", tz: "America/New_York", city: "Boston, MA", price: 4500, years: 12, specialties: ["IELTS Prep", "TOEFL Prep", "Business English"], teaches: ["adults"], gender: "female" as const, p5: true, p10: true },
   { first: "James", last: "Robinson", slug: "james-robinson", tz: "America/Chicago", city: "Chicago, IL", price: 2800, years: 5, specialties: ["Conversation", "Business English", "Travel"], teaches: ["adults", "teens"], gender: "male" as const, p5: true, p10: false },
   { first: "Michael", last: "Brooks", slug: "michael-brooks", tz: "America/Los_Angeles", city: "Seattle, WA", price: 5000, years: 10, specialties: ["Business English", "Corporate"], teaches: ["adults"], gender: "male" as const, p5: false, p10: true },
-  { first: "David", last: "King", slug: "david-king", tz: "America/Denver", city: "Denver, CO", price: 2200, years: 3, specialties: ["Kids & Teens", "General English"], teaches: ["teens", "children"], gender: "male" as const, p5: true, p10: true },
+  { first: "David", last: "King", slug: "david-king", tz: "America/Denver", city: "Denver, CO", price: 2200, years: 3, specialties: ["Teens", "General English"], teaches: ["teens"], gender: "male" as const, p5: true, p10: true },
 ];
 
 async function main() {
@@ -27,7 +27,7 @@ async function main() {
     if (!u) continue;
     await db.insert(s.teacherProfiles).values({
       userId: u.id, slug: t.slug, status: "approved", timezone: t.tz, city: t.city, priceCents: t.price, yearsExperience: t.years, specialties: t.specialties, teaches: t.teaches,
-      gender: t.gender, offersPack5: t.p5, offersPack10: t.p10, identityStatus: "verified", headline: t.specialties[0], bio: `${t.first} teaches ${t.specialties.join(", ")}.`, approvedAt: new Date(),
+      gender: t.gender, offersTrial: t.slug !== "michael-brooks", offersPack5: t.p5, offersPack10: t.p10, identityStatus: "verified", headline: t.specialties[0], bio: `${t.first} teaches ${t.specialties.join(", ")}.`, approvedAt: new Date(),
     });
     // Weekdays 9:00–13:00 and 16:00–19:00, teacher time.
     const rules = [1, 2, 3, 4, 5].flatMap((weekday) => [{ teacherId: u.id, weekday, startMinute: 540, endMinute: 780 }, { teacherId: u.id, weekday, startMinute: 960, endMinute: 1140 }]);

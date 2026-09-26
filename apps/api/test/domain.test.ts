@@ -5,6 +5,7 @@ import { decideCancellation, canAdminRefundAfterLesson, teacherShouldBeWarned } 
 import { splitEarning, nextMonthlyPayoutDate, balances } from "../src/domain/earnings";
 import { generateSlots, isSlotAvailable, type SlotQuery } from "../src/domain/availability";
 import { recommend } from "../src/domain/matching";
+import { ageOn, isOldEnough } from "../src/domain/age";
 
 const teacher = { priceCents: 3500, offersTrial: true, offersPack5: true, offersPack10: true };
 
@@ -128,5 +129,16 @@ describe("matching", () => {
     );
     assert.equal(r[0].teacherId, "sarah");
     assert.ok(r[0].reasons.includes("Business English specialist"));
+  });
+});
+
+describe("minimum age (13+)", () => {
+  it("counts full years and birthdays correctly", () => {
+    const today = new Date("2026-10-01T12:00:00Z");
+    assert.equal(ageOn("2013-10-01", today), 13);
+    assert.equal(ageOn("2013-10-02", today), 12);
+    assert.equal(isOldEnough("2013-10-01", today), true);
+    assert.equal(isOldEnough("2013-10-02", today), false);
+    assert.equal(isOldEnough("not-a-date", today), false);
   });
 });

@@ -67,7 +67,7 @@ before(async () => {
   const [admin] = await db.insert(schema.users).values({ clerkId: "clerk_admin", role: "admin", status: "active", email: "admin@amerivo.test", firstName: "Ada", lastName: "Admin" }).returning();
   const [sarah] = await db.insert(schema.users).values({ clerkId: "clerk_sarah", role: "teacher", status: "active", email: "sarah@amerivo.test", firstName: "Sarah", lastName: "Mitchell", timezone: "America/Chicago" }).returning();
   await db.insert(schema.teacherProfiles).values({
-    userId: sarah.id, slug: "sarah-mitchell", status: "approved", timezone: "America/Chicago", priceCents: 3500, offersPack5: true, offersPack10: true,
+    userId: sarah.id, slug: "sarah-mitchell", status: "approved", timezone: "America/Chicago", priceCents: 3500, offersTrial: true, offersPack5: true, offersPack10: true,
     specialties: ["Business English", "Interview Prep"], teaches: ["adults"], yearsExperience: 8, identityStatus: "verified", stripeAccountId: "acct_sarah", bio: "HR manager turned coach",
   });
   await db.insert(schema.availabilityRules).values([{ teacherId: sarah.id, weekday: 3, startMinute: 660, endMinute: 780 }]);
@@ -87,10 +87,16 @@ describe("Amerivo API", () => {
   });
 
   it("a student registers and saves placement answers", async () => {
-    const res = await http().post("/api/me/register").set(as("clerk_maria")).send({ role: "student", email: "maria@example.com", firstName: "Maria", lastName: "Silva", country: "Brazil", timezone: "Europe/Zurich" }).expect(201);
+    // Students must be 13 or older (clock: 2026-10-01).
+    const young = await http().post("/api/me/register").set(as("clerk_kid")).send({ role: "student", email: "kid@example.com", firstName: "Kid", lastName: "Young", timezone: "Europe/Zurich", birthDate: "2013-10-02" }).expect(400);
+    assert.match(young.body.message, /at least 13/);
+    await http().post("/api/me/register").set(as("clerk_kid")).send({ role: "student", email: "kid@example.com", firstName: "Kid", lastName: "Young", timezone: "Europe/Zurich" }).expect(400);
+    await http().post("/api/me/register").set(as("clerk_teen")).send({ role: "student", email: "teen@example.com", firstName: "Teen", lastName: "Ager", timezone: "Europe/Zurich", birthDate: "2013-10-01" }).expect(201);
+
+    const res = await http().post("/api/me/register").set(as("clerk_maria")).send({ role: "student", email: "maria@example.com", firstName: "Maria", lastName: "Silva", country: "Brazil", timezone: "Europe/Zurich", birthDate: "1994-05-12" }).expect(201);
     ids.maria = res.body.id;
     assert.equal(res.body.status, "active");
-    await http().post("/api/me/register").set(as("clerk_maria")).send({ role: "student", email: "maria@example.com", firstName: "Maria", lastName: "Silva", timezone: "Europe/Zurich" }).expect(409);
+    await http().post("/api/me/register").set(as("clerk_maria")).send({ role: "student", email: "maria@example.com", firstName: "Maria", lastName: "Silva", timezone: "Europe/Zurich", birthDate: "1994-05-12" }).expect(409);
     await http().put("/api/student/placement").set(as("clerk_maria")).send({ goal: "business", selfLevel: "intermediate", preferredTeacherGender: "no_preference", preferredTimes: ["morning"] }).expect(200);
     const result = await http().put("/api/student/placement/result").set(as("clerk_maria")).send({ grammar: "B1", reading: "B2", listening: "B1", speaking: "A2" }).expect(200);
     assert.equal(result.body.cefrLevel, "B1");
@@ -145,6 +151,16 @@ describe("Amerivo API", () => {
     assert.equal(res.body.booking.durationMin, 20);
     assert.equal(res.body.payment, null);
     await http().post("/api/bookings").set(as("clerk_ana")).send({ teacherSlug: "sarah-mitchell", offer: "trial", startsAt: "2026-10-21T16:00:00.000Z" }).expect(400);
+  });
+
+  it("trial lessons are an opt-in setting of each teacher", async () => {
+    await http().put("/api/teacher/profile").set(as("clerk_sarah")).send({ offersTrial: false }).expect(200);
+    const off = await http().post("/api/bookings").set(as("clerk_maria")).send({ teacherSlug: "sarah-mitchell", offer: "trial", startsAt: "2026-10-21T16:00:00.000Z" }).expect(400);
+    assert.match(off.body.message, /does not offer trial/);
+    await http().get("/api/teachers/sarah-mitchell/slots?from=2026-10-19T00:00:00Z&to=2026-10-25T00:00:00Z&tz=UTC&trial=1").expect(400);
+    await http().put("/api/teacher/profile").set(as("clerk_sarah")).send({ offersTrial: true }).expect(200);
+    const profile = await http().get("/api/teachers/sarah-mitchell").expect(200);
+    assert.equal(profile.body.offersTrial, true);
   });
 
   it("5-lesson package at −5%, then lessons booked from the package", async () => {

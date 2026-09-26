@@ -67,6 +67,8 @@ export const users = pgTable(
     nativeLanguage: text("native_language"),
     timezone: text("timezone").notNull().default("UTC"),
     avatarUrl: text("avatar_url"),
+    /** Students must be 13 or older (checked at registration). */
+    birthDate: date("birth_date"),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
@@ -105,7 +107,7 @@ export const teacherProfiles = pgTable(
     education: text("education"),
     yearsExperience: smallint("years_experience").notNull().default(0),
     specialties: text("specialties").array().notNull().default(sql`'{}'::text[]`),
-    /** adults | teens | children */
+    /** adults | teens (students are 13+) */
     teaches: text("teaches").array().notNull().default(sql`'{}'::text[]`),
     languages: jsonb("languages").$type<{ language: string; level: string }[]>().notNull().default([]),
     certifications: jsonb("certifications").$type<{ name: string; fileUrl?: string }[]>().notNull().default([]),
@@ -113,7 +115,8 @@ export const teacherProfiles = pgTable(
     priceCents: integer("price_cents").notNull().default(3000),
     offersPack5: boolean("offers_pack5").notNull().default(false),
     offersPack10: boolean("offers_pack10").notNull().default(false),
-    offersTrial: boolean("offers_trial").notNull().default(true),
+    /** Free 20-min trial is opt-in per teacher */
+    offersTrial: boolean("offers_trial").notNull().default(false),
     introVideoUrl: text("intro_video_url"),
     identityStatus: identityStatus("identity_status").notNull().default("not_started"),
     stripeIdentitySessionId: text("stripe_identity_session_id"),

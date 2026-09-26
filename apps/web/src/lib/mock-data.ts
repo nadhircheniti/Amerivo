@@ -11,7 +11,7 @@ export type Specialty =
   | "Interview Prep"
   | "IELTS Prep"
   | "TOEFL Prep"
-  | "Kids & Teens"
+  | "Teens"
   | "General English"
   | "Travel"
   | "Corporate";
@@ -29,9 +29,11 @@ export type Teacher = {
   yearsExperience: number;
   languages: string[];
   specialties: Specialty[];
-  teaches: ("Adults" | "Teens" | "Children 7+")[];
+  /** Students are 13+ (client decision) — no children. */
+  teaches: ("Adults" | "Teens")[];
   certifications: string[];
   priceUsd: number; // per 50-min lesson, $20–$50
+  offersTrial: boolean; // free 20-min trial, opt-in per teacher
   offersPack5: boolean; // 5% off
   offersPack10: boolean; // 10% off
   rating: number;
@@ -55,6 +57,7 @@ export const teachers: Teacher[] = [
     teaches: ["Adults", "Teens"],
     certifications: ["TESOL (120h)", "B.A. Communications"],
     priceUsd: 35,
+    offersTrial: true,
     offersPack5: true,
     offersPack10: true,
     rating: 4.9,
@@ -76,6 +79,7 @@ export const teachers: Teacher[] = [
     teaches: ["Adults"],
     certifications: ["CELTA", "M.Ed. TESOL"],
     priceUsd: 45,
+    offersTrial: true,
     offersPack5: true,
     offersPack10: true,
     rating: 5.0,
@@ -97,6 +101,7 @@ export const teachers: Teacher[] = [
     teaches: ["Adults", "Teens"],
     certifications: ["TEFL (150h)"],
     priceUsd: 28,
+    offersTrial: true,
     offersPack5: true,
     offersPack10: false,
     rating: 4.8,
@@ -118,6 +123,7 @@ export const teachers: Teacher[] = [
     teaches: ["Adults"],
     certifications: ["MBA", "TESOL"],
     priceUsd: 50,
+    offersTrial: false,
     offersPack5: false,
     offersPack10: true,
     rating: 4.9,
@@ -129,20 +135,21 @@ export const teachers: Teacher[] = [
     shortName: "David K.",
     initials: "DK",
     tone: "lilac",
-    headline: "English for Kids & Teens",
+    headline: "English for Teens",
     city: "Denver, CO",
     timezone: "America/Denver",
     tzLabel: "MST",
     yearsExperience: 3,
     languages: ["English (native)"],
-    specialties: ["Kids & Teens", "General English"],
-    teaches: ["Teens", "Children 7+"],
+    specialties: ["Teens", "General English"],
+    teaches: ["Teens"],
     certifications: ["TEFL (120h)"],
     priceUsd: 22,
+    offersTrial: true,
     offersPack5: true,
     offersPack10: true,
     rating: 4.7,
-    summary: "Playful, game-based lessons that build confidence for young learners.",
+    summary: "Dynamic, game-based lessons that build confidence for teenagers (13+).",
   },
 ];
 

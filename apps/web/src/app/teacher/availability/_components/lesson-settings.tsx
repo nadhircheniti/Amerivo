@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { formatUsd, packagePrice } from "@/lib/mock-data";
 
-export function LessonSettings({ price, pack5, pack10 }: { price: number; pack5: boolean; pack10: boolean }) {
+export function LessonSettings({ price, trial, pack5, pack10 }: { price: number; trial: boolean; pack5: boolean; pack10: boolean }) {
+  const [offersTrial, setOffersTrial] = useState(trial);
   const [p5, setP5] = useState(pack5);
   const [p10, setP10] = useState(pack10);
 
@@ -17,11 +18,14 @@ export function LessonSettings({ price, pack5, pack10 }: { price: number; pack5:
           <dt className="text-ink-soft">Standard lesson</dt>
           <dd className="font-bold">50 min · {formatUsd(price).replace(".00", "")}</dd>
         </div>
-        <div className="flex justify-between gap-3">
-          <dt className="text-ink-soft">Trial lesson</dt>
-          <dd className="font-bold">20 min · Free</dd>
-        </div>
       </dl>
+      <label className="flex cursor-pointer items-center justify-between gap-3 border-t border-white/15 pt-3 text-sm">
+        <span>
+          <strong>Offer a free trial lesson</strong>
+          <span className="block text-xs text-ink-soft">20 min · once per student · {offersTrial ? "visible on your profile" : "hidden from students"}</span>
+        </span>
+        <input type="checkbox" checked={offersTrial} onChange={(e) => setOffersTrial(e.target.checked)} className="size-5" />
+      </label>
       <fieldset className="mt-1 flex flex-col gap-2 border-t border-white/15 pt-3">
         <legend className="float-left mb-1 w-full text-sm text-ink-soft">Packages (opt-in)</legend>
         <label className="flex cursor-pointer items-center justify-between gap-3 text-sm">

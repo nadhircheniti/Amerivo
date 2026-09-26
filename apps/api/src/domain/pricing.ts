@@ -1,7 +1,7 @@
 /**
  * Lesson pricing rules (spec §5, §8).
  * - Teachers set a price per 50-minute lesson between $20 and $50.
- * - Trial ("demo") lessons are 20 minutes and free.
+ * - Trial ("demo") lessons are 20 minutes and free, only if the teacher enables them.
  * - Optional packages the teacher can offer: 5 lessons −5%, 10 lessons −10%.
  */
 export const MIN_PRICE_CENTS = 2000;

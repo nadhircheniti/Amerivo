@@ -25,6 +25,8 @@ export class RegisterDto {
   @IsOptional() @IsString() @MaxLength(80) nativeLanguage?: string;
   @IsOptional() @IsString() @MaxLength(30) phone?: string;
   @IsString() timezone!: string;
+  /** Required for students (13+). yyyy-mm-dd */
+  @IsOptional() @IsDateString() birthDate?: string;
 }
 
 export class CreateBookingDto {
@@ -115,7 +117,7 @@ export class TeacherProfileDto {
   @IsOptional() @IsString() @MaxLength(200) education?: string;
   @IsOptional() @IsInt() @Min(0) @Max(60) yearsExperience?: number;
   @IsOptional() @IsArray() @IsString({ each: true }) specialties?: string[];
-  @IsOptional() @IsArray() @IsIn(["adults", "teens", "children"], { each: true }) teaches?: string[];
+  @IsOptional() @IsArray() @IsIn(["adults", "teens"], { each: true }) teaches?: string[];
   @IsOptional() @IsArray() @ValidateNested({ each: true }) @Type(() => LanguageDto) languages?: LanguageDto[];
   @IsOptional() @IsArray() @ValidateNested({ each: true }) @Type(() => CertificationDto) certifications?: CertificationDto[];
   @IsOptional() @IsInt() @Min(2000) @Max(5000) priceCents?: number;

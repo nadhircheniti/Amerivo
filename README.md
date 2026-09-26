@@ -83,7 +83,8 @@ apps/
 
 | Rule | Where |
 |---|---|
-| Teacher price $20–$50 per 50-min lesson; free 20-min trial (once per teacher) | `domain/pricing.ts`, `bookings.service.ts` |
+| Teacher price $20–$50 per 50-min lesson; free 20-min trial **opt-in per teacher** (off by default, once per student/teacher) | `domain/pricing.ts`, `bookings.service.ts` |
+| Students must be **13 or older** (date of birth checked at sign-up and by the API); teachers teach adults and teens only | `domain/age.ts`, `accounts.service.ts` |
 | Packages: 5 lessons −5 %, 10 lessons −10 % (teacher opt-in) | `domain/pricing.ts` |
 | Availability in teacher's time zone → slots shown in the student's time zone (DST-safe); blocked dates, vacation mode, no double booking | `domain/availability.ts`, unique DB index |
 | Booking: *Pending payment* → Stripe webhook → *Confirmed* (idempotent), notifications to both | `bookings.service.ts` |

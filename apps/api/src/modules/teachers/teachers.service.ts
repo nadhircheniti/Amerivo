@@ -3,7 +3,7 @@ import { and, arrayOverlaps, asc, desc, eq, gte, inArray, lte, sql } from "drizz
 import { DB, type Db } from "../../db/db";
 import { availabilityRules, blockedDates, bookings, teacherProfiles, users } from "../../db/schema";
 import { CLOCK, type Clock } from "../../common/clock";
-import { notFound } from "../../common/errors";
+import { badRequest, notFound } from "../../common/errors";
 import { generateSlots } from "../../domain/availability";
 import { LESSON_MINUTES, TRIAL_MINUTES } from "../../domain/pricing";
 
@@ -110,6 +110,7 @@ export class TeachersService {
 
   async slots(slug: string, p: { viewerTz: string; from: Date; to: Date; trial?: boolean }) {
     const t = await this.bySlug(slug);
+    if (p.trial && !t.offersTrial) throw badRequest("This teacher does not offer trial lessons");
     const ctx = await this.scheduleContext(t.id, p.from, p.to);
     return generateSlots({
       ...ctx,

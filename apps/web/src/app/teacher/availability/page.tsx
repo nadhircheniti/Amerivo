@@ -22,7 +22,7 @@ export default function AvailabilityPage() {
           <p className="text-[13px] leading-normal text-muted">Hides your calendar from new bookings. Existing lessons stay confirmed.</p>
         </section>
         <BlockedDates />
-        <LessonSettings price={currentTeacher.priceUsd} pack5={currentTeacher.offersPack5} pack10={currentTeacher.offersPack10} />
+        <LessonSettings price={currentTeacher.priceUsd} trial={currentTeacher.offersTrial} pack5={currentTeacher.offersPack5} pack10={currentTeacher.offersPack10} />
       </aside>
     </div>
   );
