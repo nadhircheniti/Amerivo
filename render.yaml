@@ -1,0 +1,41 @@
+# Render Blueprint — Amerivo API (staging, free plan).
+# Render → New → Blueprint → select this repository. Secrets marked `sync: false` are asked at creation.
+services:
+  - type: web
+    name: amerivo-api
+    runtime: node
+    plan: free
+    region: frankfurt
+    branch: main
+    buildCommand: npm ci && npm run build -w api
+    # Applies pending database migrations, then starts the API.
+    startCommand: npm run start:prod -w api
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL        # Neon connection string (…?sslmode=require)
+        sync: false
+      - key: DB_POOL_MAX         # keep small on Neon's free plan
+        value: "5"
+      - key: SEED_DEMO           # "1" = load demo teachers/students at start (staging only; safe to re-run)
+        value: "1"
+      - key: WEB_URL             # Vercel URL, for CORS (comma-separated if several)
+        sync: false
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: DAILY_API_KEY
+        sync: false
+      - key: DAILY_DOMAIN
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        value: "Amerivo English <onboarding@resend.dev>"

@@ -10,7 +10,10 @@
     "test": "tsc -p tsconfig.test.json && node --test --test-concurrency=1 \"dist-test/test/*.test.js\"",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx src/db/migrate.ts",
-    "db:seed": "tsx src/db/seed.ts"
+    "db:seed": "tsx src/db/seed.ts",
+    "start:prod": "node dist/db/migrate.js && if [ \"$SEED_DEMO\" = \"1\" ]; then node dist/db/seed.js; fi && node dist/main.js",
+    "db:migrate:prod": "node dist/db/migrate.js",
+    "db:seed:prod": "node dist/db/seed.js"
   },
   "dependencies": {
     "@clerk/backend": "^3.20.1",
