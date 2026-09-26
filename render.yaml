@@ -7,7 +7,8 @@ services:
     plan: free
     region: frankfurt
     branch: main
-    buildCommand: npm ci && npm run build -w api
+    # --include=dev: NODE_ENV=production would otherwise skip the Nest CLI/TypeScript needed to build.
+    buildCommand: npm ci --include=dev && npm run build -w api
     # Applies pending database migrations, then starts the API.
     startCommand: npm run start:prod -w api
     healthCheckPath: /api/health
