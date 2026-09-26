@@ -107,6 +107,8 @@ apps/
 1. Connect the web screens to the API; Clerk sign-in; Stripe Payment Element; Daily.co call frame in the classroom.
 2. Messaging in real time, file uploads (S3), notification e-mails/SMS, scheduled jobs (lesson reminders, monthly payouts).
 3. Remaining screens: student lessons/homework/progress/payments, teacher students & messages, admin students/bookings/payments/disputes/settings, corporate request form.
-4. Legal pages (Terms, Privacy/GDPR/CCPA), production deployment (Vercel + AWS), monitoring (Sentry).
+4. Legal pages (Terms, Privacy/GDPR/CCPA), production deployment, monitoring (Sentry).
+
+Deployment (staging on Vercel + Render + Neon): see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 Design reference: the "Amerivo English – UI Design" canvas (18 screens).
