@@ -29,9 +29,7 @@ function Policy() {
   return (
     <div className="flex items-start gap-3.5 rounded-2xl bg-cream px-5 py-[18px] text-sm leading-relaxed">
       <Icon name="clock" size={22} className="shrink-0 text-orange-dark" />
-      <p>
-        {t.rich("policy", { strong: (c) => <strong>{c}</strong> })}
-      </p>
+      <p>{t.rich("policy", { strong: (c) => <strong>{c}</strong> })}</p>
     </div>
   );
 }
@@ -71,9 +69,11 @@ export function PaymentForm({ ctaLabel, free, booking }: { ctaLabel: string; fre
           const why =
             stripeKeyProblem === "secret"
               ? "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY contains a secret key: use the pk_… key"
-              : stripeKeyProblem === "invalid"
-                ? "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not a pk_… key"
-                : "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is missing in this build";
+              : stripeKeyProblem === "clerk"
+                ? "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY contains the Clerk key: use Stripe's pk_… key"
+                : stripeKeyProblem === "invalid"
+                  ? "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not a pk_… key"
+                  : "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is missing in this build";
           setError(`${t("cardsUnavailable")} (${why})`);
           return;
         }
@@ -110,9 +110,7 @@ export function PaymentForm({ ctaLabel, free, booking }: { ctaLabel: string; fre
       }}
     >
       {simulatedPayments && !free && (
-        <p className="rounded-2xl bg-teal-50 px-5 py-4 text-sm text-teal-deep">
-          {t.rich("testEnvironment", { strong: (c) => <strong>{c}</strong> })}
-        </p>
+        <p className="rounded-2xl bg-teal-50 px-5 py-4 text-sm text-teal-deep">{t.rich("testEnvironment", { strong: (c) => <strong>{c}</strong> })}</p>
       )}
 
       {stripeEnabled && !free && (
