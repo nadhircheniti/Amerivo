@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/form";
 import { Icon } from "@/components/ui/icon";
 import { API_URL } from "@/lib/api";
-import { getStripe, stripeAppearance, stripeEnabled } from "@/lib/stripe";
+import { getStripe, stripeAppearance, stripeEnabled, stripeKeyProblem } from "@/lib/stripe";
 import { useApi } from "@/lib/use-api";
 
 type BookingRequest = {
@@ -67,7 +67,14 @@ export function PaymentForm({ ctaLabel, free, booking }: { ctaLabel: string; fre
       const res = await api.call<BookingResponse>("/bookings", { method: "POST", body: JSON.stringify(booking) });
       if (res.payment?.clientSecret && !res.payment.simulated) {
         if (!stripeEnabled) {
-          setError(t("cardsUnavailable"));
+          // Tells whoever tests the site what is wrong with the configuration (the key itself is never shown).
+          const why =
+            stripeKeyProblem === "secret"
+              ? "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY contains a secret key: use the pk_… key"
+              : stripeKeyProblem === "invalid"
+                ? "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is not a pk_… key"
+                : "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is missing in this build";
+          setError(`${t("cardsUnavailable")} (${why})`);
           return;
         }
         setIntent({ bookingId: res.booking.id, clientSecret: res.payment.clientSecret });
