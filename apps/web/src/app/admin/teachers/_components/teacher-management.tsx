@@ -21,8 +21,7 @@ const STATUS_TONE: Record<ApplicantStatus, BadgeTone> = {
   suspended: "neutral",
 };
 
-const inTab = (s: ApplicantStatus, tab: TabId) =>
-  tab === "all" || (tab === "pending" ? s === "pending" || s === "interview" : s === tab);
+const inTab = (s: ApplicantStatus, tab: TabId) => tab === "all" || (tab === "pending" ? s === "pending" || s === "interview" : s === tab);
 
 const EVAL_FIELDS: (keyof Evaluation)[] = ["fluency", "professionalism", "teaching", "camera", "internet"];
 
@@ -154,7 +153,11 @@ export function TeacherManagement({ initial }: { initial: Applicant[] }) {
                         })}
                       </span>
                     </span>
-                    {a.flag && <Badge tone="warning" className="shrink-0 px-2 py-[3px] text-[11px] font-bold">{t(`flags.${a.flag}`)}</Badge>}
+                    {a.flag && (
+                      <Badge tone="warning" className="shrink-0 px-2 py-[3px] text-[11px] font-bold">
+                        {t(`flags.${a.flag}`)}
+                      </Badge>
+                    )}
                     {tab === "all" && !a.flag && a.status !== "pending" && (
                       <Badge tone={STATUS_TONE[a.status]} className="shrink-0 px-2 py-[3px] text-[11px]">
                         {t(`status.${a.status}`)}
@@ -198,9 +201,7 @@ function ApplicantDetail({
   const t = useTranslations("admin.teachers");
   const ts = useTranslations("common.specialties");
   const locale = useLocale();
-  const teaches = new Intl.ListFormat(intlTags[locale], { style: "narrow", type: "unit" }).format(
-    a.teaches.map((s) => (ts.has(s as never) ? ts(s as never) : s)),
-  );
+  const teaches = new Intl.ListFormat(intlTags[locale], { style: "narrow", type: "unit" }).format(a.teaches.map((s) => (ts.has(s as never) ? ts(s as never) : s)));
   const fact = "text-xs font-semibold tracking-[1px] text-muted uppercase";
 
   return (
@@ -288,11 +289,7 @@ function ApplicantDetail({
           {EVAL_FIELDS.map((key) => (
             <label key={key} className="flex flex-col gap-1.5">
               {t(`evalFields.${key}`)}
-              <select
-                value={a.evaluation[key]}
-                onChange={(e) => onEvaluation({ ...a.evaluation, [key]: Number(e.target.value) as Score })}
-                className={control}
-              >
+              <select value={a.evaluation[key]} onChange={(e) => onEvaluation({ ...a.evaluation, [key]: Number(e.target.value) as Score })} className={control}>
                 {SCORES.map((n) => (
                   <option key={n} value={n}>
                     {t(`scores.${n}`)}

@@ -11,7 +11,10 @@
   "modes": {
     "vacation": "Mode vacances",
     "holiday": "Mode jours fériés",
-    "hiddenNote": "Masqué pour les nouvelles réservations"
+    "hiddenNote": "Masqué pour les nouvelles réservations",
+    "saveError": "Impossible de modifier le mode vacances. Veuillez réessayer.",
+    "loadError": "Impossible de charger le mode vacances.",
+    "retry": "Réessayer"
   },
   "dashboard": {
     "metaTitle": "Tableau de bord professeur · Amerivo English",
@@ -74,7 +77,17 @@
       "captionWeek": "Disponibilités de cette semaine uniquement, {tz}",
       "slotBooked": "{day} {time}, réservé par {name}",
       "slotOpen": "{day} {time}, ouvert",
-      "slotClosed": "{day} {time}, fermé"
+      "slotClosed": "{day} {time}, fermé",
+      "yourTimeZone": "Horaires dans votre fuseau horaire : <strong>{tz}</strong>",
+      "captionLive": "Vos disponibilités hebdomadaires récurrentes, {tz}",
+      "liveHelp": "Les élèves ne voient que les créneaux libres au moins 1 heure à l'avance. Un cours nécessite une plage libre de 50 minutes (20 minutes pour un cours d'essai).",
+      "save": "Enregistrer les disponibilités",
+      "saving": "Enregistrement…",
+      "saved": "Enregistré",
+      "unsaved": "Vous avez des modifications non enregistrées.",
+      "emptyWarning": "Aucun créneau ouvert : les élèves ne peuvent pas vous réserver tant que vous n'en ouvrez pas.",
+      "misaligned": "Certains de vos horaires enregistrés ne commencent ou ne finissent pas à l'heure pile. À l'enregistrement, seules les heures entières affichées dans la grille sont conservées.",
+      "saveError": "Impossible d'enregistrer vos disponibilités. Veuillez réessayer."
     },
     "blocked": {
       "title": "Dates bloquées",
@@ -83,10 +96,17 @@
       "holidays": "Fêtes de fin d'année",
       "withNote": "{dates} · {note}",
       "remove": "Débloquer la date {label}",
-      "dateToBlock": "Date à bloquer",
       "add": "Ajouter",
       "cancel": "Annuler",
-      "blockDate": "Bloquer une date"
+      "blockDate": "Bloquer une date",
+      "firstDay": "Premier jour",
+      "lastDay": "Dernier jour",
+      "endBeforeStart": "Le dernier jour ne peut pas précéder le premier.",
+      "reason": "Motif (facultatif)",
+      "reasonPlaceholder": "ex. : voyage en famille",
+      "adding": "Ajout…",
+      "addError": "Impossible de bloquer ces dates. Veuillez réessayer.",
+      "removeError": "Impossible de débloquer cette date. Veuillez réessayer."
     },
     "settings": {
       "title": "Réglages des cours",
@@ -97,7 +117,20 @@
       "trialHidden": "20 min · une fois par élève · masqué pour les élèves",
       "packages": "Forfaits (facultatifs)",
       "pack": "{count, plural, one {{count} cours} other {{count} cours}} (−{discount} %)",
-      "total": "{price} au total"
+      "total": "{price} au total",
+      "price": "Prix d'un cours de {minutes} min (USD)",
+      "priceHint": "En dollars entiers, de {min} à {max}.",
+      "priceInvalid": "Saisissez un nombre entier de {min} à {max}.",
+      "trialExplain": "Le cours d'essai est un cours gratuit de 20 minutes. Chaque élève ne peut le suivre qu'une seule fois avec vous.",
+      "save": "Enregistrer les réglages",
+      "saving": "Enregistrement…",
+      "saved": "Enregistré",
+      "saveError": "Impossible d'enregistrer vos réglages. Veuillez réessayer."
+    },
+    "live": {
+      "loading": "Chargement de votre planning…",
+      "loadError": "Impossible de charger votre planning. Le service est peut-être en train de redémarrer, ce qui peut prendre jusqu'à une minute.",
+      "retry": "Réessayer"
     }
   },
   "earnings": {

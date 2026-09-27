@@ -23,8 +23,7 @@ export default function EarningsPage() {
   const tag = intlTags[locale];
   const max = Math.max(...monthlyNet.map((m) => m.value));
   const fmt0 = (n: number) => formatUsd(n, locale).replace(/[.,]00(?!\d)/, "");
-  const monthName = (ym: string, month: "short" | "long") =>
-    new Intl.DateTimeFormat(tag, { month, timeZone: "UTC" }).format(new Date(`${ym}-15T12:00:00Z`));
+  const monthName = (ym: string, month: "short" | "long") => new Intl.DateTimeFormat(tag, { month, timeZone: "UTC" }).format(new Date(`${ym}-15T12:00:00Z`));
   const nextPayout = new Intl.DateTimeFormat(tag, { month: "short", day: "numeric", timeZone: "UTC" }).format(new Date("2026-10-28T12:00:00Z"));
 
   return (

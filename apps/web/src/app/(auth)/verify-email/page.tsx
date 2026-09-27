@@ -15,8 +15,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function VerifyEmailPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-  const { email: raw } = await searchParams;
+  const { email: raw, as } = await searchParams;
   const email = (Array.isArray(raw) ? raw[0] : raw)?.trim();
+  // Teacher applicants (/signup?as=teacher) continue to their application instead of goals + level test.
+  const teacher = (Array.isArray(as) ? as[0] : as) === "teacher";
   const t = await getTranslations("auth.verify");
   const strong = (c: React.ReactNode) => <strong className="text-navy">{c}</strong>;
 
@@ -25,13 +27,13 @@ export default async function VerifyEmailPage({ searchParams }: { searchParams: 
       topRight={
         <>
           {t("wrongAddress")}{" "}
-          <Link href="/signup" className="font-semibold text-teal-dark hover:text-navy">
+          <Link href={teacher ? "/signup?as=teacher" : "/signup"} className="font-semibold text-teal-dark hover:text-navy">
             {t("changeEmail")}
           </Link>
         </>
       }
     >
-      <SignupSteps current={2} />
+      <SignupSteps current={2} teacher={teacher} />
       <div className="flex w-full max-w-[600px] flex-col gap-[26px] lg:mt-6">
         <div className="flex size-20 items-center justify-center rounded-3xl bg-teal-100 text-teal-dark">
           <Icon name="message" size={36} strokeWidth={1.7} />
@@ -43,7 +45,21 @@ export default async function VerifyEmailPage({ searchParams }: { searchParams: 
           </Badge>
           <h1 className="text-[28px] font-extrabold sm:text-[34px]">{t("title")}</h1>
           <p className="text-base leading-relaxed text-navy-soft">
-            {clerkEnabled ? (email ? t.rich("sentCode", { email, strong }) : t("sentCodeNoEmail")) : email ? t.rich("sentLink", { email, strong }) : t("sentLinkNoEmail")}
+            {teacher
+              ? clerkEnabled
+                ? email
+                  ? t.rich("teacherSentCode", { email, strong })
+                  : t("teacherSentCodeNoEmail")
+                : email
+                  ? t.rich("teacherSentLink", { email, strong })
+                  : t("teacherSentLinkNoEmail")
+              : clerkEnabled
+                ? email
+                  ? t.rich("sentCode", { email, strong })
+                  : t("sentCodeNoEmail")
+                : email
+                  ? t.rich("sentLink", { email, strong })
+                  : t("sentLinkNoEmail")}
           </p>
         </div>
         <ul className="flex flex-col gap-2 rounded-2xl bg-beige p-5 text-[15px] text-navy-soft">
@@ -60,7 +76,7 @@ export default async function VerifyEmailPage({ searchParams }: { searchParams: 
           <VerifyCodeForm />
         ) : (
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-            <ButtonLink href="/onboarding/goals" variant="teal" size="lg" className="font-bold">
+            <ButtonLink href={teacher ? "/teach/apply" : "/onboarding/goals"} variant="teal" size="lg" className="font-bold">
               {t("verifiedContinue")}
               <Icon name="arrowRight" size={18} strokeWidth={2} />
             </ButtonLink>

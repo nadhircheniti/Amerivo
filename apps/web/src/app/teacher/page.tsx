@@ -9,7 +9,7 @@ import { intlTags, type Locale } from "@/i18n/config";
 import { currentTeacher, formatUsd } from "@/lib/mock-data";
 import { Suspense } from "react";
 import { LiveLessons } from "@/app/student/_components/live-lessons";
-import { ModeToggle } from "./_components/mode-toggle";
+import { VacationToggle } from "./_components/vacation-toggle";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("teacher.dashboard");
@@ -36,7 +36,6 @@ const sr = (c: React.ReactNode) => <span className="sr-only">{c}</span>;
 
 export default function TeacherDashboardPage() {
   const t = useTranslations("teacher.dashboard");
-  const tm = useTranslations("teacher.modes");
   const ts = useTranslations("common.specialties");
   const locale = useLocale() as Locale;
   const tag = intlTags[locale];
@@ -62,7 +61,7 @@ export default function TeacherDashboardPage() {
           <h1 className="text-2xl font-extrabold sm:text-[30px]">{t("greeting", { name: firstName, count: 3 })}</h1>
           <p className="mt-1 text-[15px] text-muted">{t("dateLine", { date: date(TODAY, { weekday: "long", month: "long", day: "numeric" }) })}</p>
         </div>
-        <ModeToggle label={tm("vacation")} onNote={tm("hiddenNote")} />
+        <VacationToggle />
       </header>
 
       {/* Real bookings (API) with the classroom link; the tiles below are still sample data. */}

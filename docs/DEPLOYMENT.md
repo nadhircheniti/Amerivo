@@ -104,6 +104,26 @@ et un téléphone) : l'élève via « My booked lessons → Classroom », le pro
 Dans la salle : caméra, micro, partage d'écran, discussion (non conservée) et notes partagées (enregistrées avec le cours).
 Le professeur termine le cours (« End lesson ») puis rédige le compte rendu.
 
+## 7. Recrutement des professeurs
+
+Parcours : « Become a Teacher » → compte professeur (`/signup?as=teacher`, sans date de naissance) → candidature
+en 6 étapes enregistrée au fur et à mesure (infos, profil pro avec titre et présentation, **vérification d'identité
+Stripe Identity** : pièce d'identité + selfie, **lien vers une vidéo** YouTube/Vimeo/Loom de 2 min, récapitulatif,
+envoi) → l'admin examine dans **Admin → Professeurs** (vidéo intégrée, notes, entretien, approuver / refuser /
+suspendre) → une fois approuvé, le professeur règle ses **disponibilités, son tarif, le cours d'essai et les forfaits**
+dans **Planning et disponibilités**, et apparaît dans la liste publique.
+
+Stripe (mode test) :
+- **Stripe Identity** doit être activé : dashboard Stripe → **Identity** → accepter les conditions (en test, Stripe
+  propose des documents de test ; aucun vrai document n'est nécessaire).
+- Dans la destination webhook, ajouter les événements `identity.verification_session.verified`,
+  `identity.verification_session.requires_input`, `identity.verification_session.processing`,
+  `identity.verification_session.canceled` (facultatif : le résultat est aussi relu quand le professeur revient sur
+  sa candidature).
+- Approbation impossible tant que l'identité n'est pas « vérifiée ».
+
+Pas encore disponible : envoi de fichiers (photo de profil, certificats) — le professeur les ajoutera plus tard.
+
 ## Fonctionnement au quotidien
 
 - Chaque fusion sur `main` redéploie automatiquement Render et Vercel.

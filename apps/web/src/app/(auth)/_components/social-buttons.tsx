@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { clerkMessage, useSignInFlow, useSignUpFlow, type OAuthProvider } from "@/lib/auth-flows";
+import { clerkMessage, useSignInFlow, useSignUpFlow, type OAuthProvider, type SignupRole } from "@/lib/auth-flows";
 
 const base = "flex h-[52px] items-center justify-center gap-2.5 rounded-[14px] border border-line bg-white text-[15px] font-semibold text-navy hover:bg-beige";
 
 /** "Continue with Google / Apple" through Clerk (demo mode: goes straight to the next step). */
-export function SocialButtons({ mode, next }: { mode: "signup" | "login"; next?: string }) {
+export function SocialButtons({ mode, next, role = "student" }: { mode: "signup" | "login"; next?: string; role?: SignupRole }) {
   const t = useTranslations("auth");
   const signUp = useSignUpFlow();
   const signIn = useSignInFlow();
@@ -15,7 +15,7 @@ export function SocialButtons({ mode, next }: { mode: "signup" | "login"; next?:
   const go = async (strategy: OAuthProvider) => {
     setError(null);
     try {
-      if (mode === "signup") await signUp.oauth(strategy);
+      if (mode === "signup") await signUp.oauth(strategy, role);
       else await signIn.oauth(strategy, next ?? new URLSearchParams(window.location.search).get("redirect_url"));
     } catch (e) {
       setError(clerkMessage(e, t("errors.generic")));

@@ -65,7 +65,13 @@
     "progress": "第 {current} 步，共 {total} 步",
     "back": "返回",
     "submit": "提交申请",
-    "backHome": "返回 Amerivo"
+    "backHome": "返回 Amerivo",
+    "saving": "正在保存…",
+    "submitting": "正在提交…",
+    "saved": "已保存",
+    "saveError": "无法保存您的申请，请重试。",
+    "pickSubject": "请至少选择一项您可以教授的内容。",
+    "identityRequired": "请先通过 Stripe 完成身份验证再继续。"
   },
   "options": {
     "subjects": {
@@ -143,7 +149,10 @@
     "timeZone": "时区",
     "timeZoneHint": "用于按学生的当地时间显示您的可预约时间。",
     "gender": "性别",
-    "genderHint": "部分学生会按偏好的老师性别进行筛选。您之后可以更改。"
+    "genderHint": "部分学生会按偏好的老师性别进行筛选。您之后可以更改。",
+    "photoLater": "您可以稍后再添加头像。",
+    "emailHint": "您账户的邮箱地址。",
+    "selectCountry": "选择您的国家/地区"
   },
   "professional": {
     "education": "最高学历",
@@ -158,7 +167,17 @@
     "rateValue": "每节课 {price}",
     "net": "扣除 {commission}% 平台佣金后，您可得 {net}",
     "trial": "提供 20 分钟免费试听课",
-    "trialHint": "学生可在预约前与您见面一次。您之后可以更改。"
+    "trialHint": "学生可在预约前与您见面一次。您之后可以更改。",
+    "headline": "个人标题",
+    "headlineHint": "学生会在搜索结果中看到的一句话（最多 120 个字符）。",
+    "headlinePlaceholder": "例如：面向科技从业者的商务英语教练",
+    "bio": "关于您",
+    "bioHint": "您的背景、教学风格，以及您喜欢教的学生类型。",
+    "bioCount": "{count} / {max}",
+    "bioPlaceholder": "向学生介绍您自己，并描述一下您的课是什么样的。",
+    "selectEducation": "选择您的最高学历",
+    "certificationsPlaceholder": "例如：TESOL",
+    "certificatesLater": "您可以稍后再上传证书文件。"
   },
   "previews": {
     "label": "接下来",
@@ -181,7 +200,49 @@
     "uploadHint": "如适用，请上传正反两面 · JPG、PNG 或 PDF",
     "secure": "<strong>由 Stripe Identity 安全处理。</strong>Amerivo 绝不保存您的证件副本，我们只接收验证结果。",
     "taxTitle": "税务信息（W-9）",
-    "taxText": "我们会收集您的 W-9 表格，1099 表格将自动开具。您将在绑定提现账户时填写。"
+    "taxText": "我们会收集您的 W-9 表格，1099 表格将自动开具。您将在绑定提现账户时填写。",
+    "liveIntro": "每位老师在接受预约前都需要通过验证。Stripe Identity 会核验一份带照片的证件（护照、驾照或身份证）和一张自拍，在手机或电脑上大约只需 2 分钟。",
+    "statusLabel": "验证状态",
+    "status": {
+      "notStarted": {
+        "label": "未开始",
+        "text": "开始验证：您将跳转到 Stripe，完成后会返回这里。"
+      },
+      "pending": {
+        "label": "进行中",
+        "text": "Stripe 正在审核您的证件，您可以同时继续填写申请。"
+      },
+      "verified": {
+        "label": "已验证",
+        "text": "您的身份已通过验证，谢谢！"
+      },
+      "failed": {
+        "label": "未通过",
+        "text": "验证未通过。请使用有效且清晰的带照片证件重试。"
+      }
+    },
+    "failedReason": "Stripe 给出的原因：{reason}",
+    "start": "通过 Stripe 验证我的身份",
+    "retry": "通过 Stripe 重试",
+    "redirecting": "正在打开 Stripe…",
+    "checkAgain": "重新检查",
+    "checking": "正在检查…",
+    "checked": "状态已更新。",
+    "stripeError": "无法连接验证服务，请重试。",
+    "how": {
+      "document": {
+        "title": "带照片的证件",
+        "text": "护照、驾照或政府签发的身份证。"
+      },
+      "selfie": {
+        "title": "一张自拍",
+        "text": "Stripe 会将其与证件上的照片进行比对。"
+      },
+      "time": {
+        "title": "大约 2 分钟",
+        "text": "使用手机摄像头或电脑摄像头即可。"
+      }
+    }
   },
   "video": {
     "intro": "录制一段不超过 2 分钟的视频。学生在预约前会在您的主页上观看，所以请自然表达并看着镜头。",
@@ -208,7 +269,33 @@
         "text": "和您上课是什么感觉。"
       }
     },
-    "topic": "{number}. {title}"
+    "topic": "{number}. {title}",
+    "liveIntro": "学生在预约前会在您的主页上观看这段视频。请录制不超过 2 分钟的视频，上传到视频平台，然后把链接粘贴到这里。",
+    "urlLabel": "2 分钟自我介绍视频的链接",
+    "urlHint": "不公开的 YouTube 视频，或 Vimeo、Loom、Google Drive 链接（以 https:// 开头）。",
+    "urlPattern": "请输入以 https:// 开头的链接",
+    "preview": "预览",
+    "previewTitle": "自我介绍视频预览",
+    "noPreview": "YouTube 和 Vimeo 链接支持预览。请确保任何拥有链接的人都能观看您的视频。",
+    "tipsTitle": "拍出好视频的小贴士",
+    "tips": {
+      "say": {
+        "title": "说些什么",
+        "text": "您来自美国哪里、您的教学经验，以及您的课堂氛围。"
+      },
+      "light": {
+        "title": "光线充足",
+        "text": "面向窗户或台灯，让学生能清楚地看到您。"
+      },
+      "quiet": {
+        "title": "安静的房间",
+        "text": "避免背景噪音，看着镜头自然地说话。"
+      },
+      "share": {
+        "title": "可分享的链接",
+        "text": "在 YouTube 上选择“不公开”，或在 Google Drive 上选择“知道链接的任何人”。"
+      }
+    }
   },
   "review": {
     "notProvided": "未填写",
@@ -237,7 +324,11 @@
     "interviewTitle": "简短面试",
     "interviewText": "如果您的申请通过审核，我们将邀请您与我们的教学团队进行一次 15 分钟的视频面试。",
     "interviewTime": "首选面试时间",
-    "confirm": "我确认本人是以英语为母语的美国人，且本申请中的信息真实准确。"
+    "confirm": "我确认本人是以英语为母语的美国人，且本申请中的信息真实准确。",
+    "headline": "个人标题",
+    "bio": "关于您",
+    "identityStatus": "状态",
+    "selectInterviewTime": "选择时间"
   },
   "approval": {
     "submitted": "申请已提交",
@@ -265,6 +356,63 @@
         "label": "已暂停",
         "text": "如未遵守我们的老师标准或条款，已通过的账户可能会被暂停。"
       }
+    },
+    "liveEmailTo": "我们正在审核您的申请，将在 3–5 个工作日内发送邮件至 {email}。",
+    "liveEmailYou": "我们正在审核您的申请，将在 3–5 个工作日内给您发送邮件。",
+    "interviewTitle": "诚邀您参加视频面试",
+    "interviewText": "我们的教学团队希望与您见面（邀请发送于 {date}）。请查看邮箱以安排面试时间。",
+    "interviewNotes": "来自 Amerivo 团队的消息",
+    "approvedTitle": "恭喜，您的申请已通过！",
+    "approvedTitleName": "恭喜，{name}，您的申请已通过！",
+    "approvedText": "欢迎加入 Amerivo 教学团队。您的主页已准备好上线。",
+    "availabilityHint": "下一步：设置您的可预约时间，让学生可以预约您的课。",
+    "goDashboard": "前往我的控制面板",
+    "rejectedTitle": "您的申请未获通过",
+    "rejectedText": "您可以修改申请后重新提交。",
+    "reviewerNotes": "Amerivo 团队的备注",
+    "editResubmit": "修改并重新提交",
+    "suspendedTitle": "您的老师账户已被暂停",
+    "suspendedText": "请联系我们的客服团队，了解详情并商讨后续安排。",
+    "contactSupport": "联系客服"
+  },
+  "live": {
+    "loading": "正在加载您的申请…",
+    "loadError": "暂时无法加载您的申请。服务可能正在唤醒——请稍等一分钟后重试。",
+    "tryAgain": "重试",
+    "intro": {
+      "eyebrow": "成为老师",
+      "title": "在 Amerivo 教授美式英语",
+      "text": "创建老师账户后，按照自己的节奏完成申请。每一步的进度都会自动保存。",
+      "create": "创建我的老师账户",
+      "login": "我已有账户",
+      "needTitle": "您需要准备",
+      "needs": {
+        "native": {
+          "title": "以英语为母语的美国人",
+          "text": "Amerivo 的老师均以美式英语为母语。"
+        },
+        "identity": {
+          "title": "带照片的证件和一张自拍",
+          "text": "由 Stripe Identity 安全验证。"
+        },
+        "video": {
+          "title": "一段 2 分钟的视频",
+          "text": "一段简短自我介绍视频的链接（YouTube、Vimeo、Loom 或 Google Drive）。"
+        },
+        "time": {
+          "title": "大约 10 分钟",
+          "text": "您可以随时保存，稍后再回来继续。"
+        }
+      }
+    },
+    "otherAccount": {
+      "studentTitle": "这是一个学生账户",
+      "adminTitle": "这是一个管理员账户",
+      "text": "老师需要使用另一个邮箱注册单独的 Amerivo 账户。请先退出登录，再创建老师账户。",
+      "signOutHint": "您也可以在页面顶部退出登录。",
+      "signOutCreate": "退出并创建老师账户",
+      "goStudent": "前往我的学生空间",
+      "goAdmin": "前往管理后台"
     }
   }
 }

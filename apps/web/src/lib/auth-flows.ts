@@ -6,20 +6,26 @@
  *
  * The profile collected at sign-up (birth date, country…) is kept in Clerk's unsafeMetadata and
  * turned into an Amerivo account by /welcome, the single landing page after every sign-in.
+ * Teacher applicants sign up with role "teacher" (/signup?as=teacher) and continue to /teach/apply.
  */
 import { useSignIn, useSignUp } from "@clerk/nextjs/legacy";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { clerkEnabled } from "./auth-config";
 
+/** "student" (default) or "teacher" (applicant: no birth date / native language, lands on /teach/apply). */
+export type SignupRole = "student" | "teacher";
 export type SignupProfile = {
+  role?: SignupRole;
   firstName: string;
   lastName: string;
   email: string;
   password: string;
-  birthDate: string;
+  /** Students only (13+ rule). */
+  birthDate?: string;
   country: string;
-  nativeLanguage: string;
+  /** Students only. */
+  nativeLanguage?: string;
   phone: string;
 };
 export type OAuthProvider = "oauth_google" | "oauth_apple";
@@ -34,6 +40,10 @@ export function clerkMessage(e: unknown, fallback = "Something went wrong. Pleas
 }
 
 const welcome = (next?: string | null) => `/welcome${next ? `?${new URLSearchParams({ next })}` : ""}`;
+/** Where a teacher applicant goes once signed up: /welcome creates the teacher account, then the application. */
+const TEACHER_APPLY = "/teach/apply";
+const teacherWelcome = (oauth = false) => `/welcome?${new URLSearchParams(oauth ? { next: TEACHER_APPLY, as: "teacher" } : { next: TEACHER_APPLY })}`;
+const verifyUrl = (email: string, role?: SignupRole) => `/verify-email?${new URLSearchParams(role === "teacher" ? { email, as: "teacher" } : { email })}`;
 
 /* ------------------------------------------------------------------ sign-up */
 function useClerkSignUpFlow() {
@@ -44,39 +54,44 @@ function useClerkSignUpFlow() {
     ready: isLoaded,
     async start(p: SignupProfile) {
       if (!isLoaded) return;
+      const teacher = p.role === "teacher";
       await signUp.create({
         emailAddress: p.email,
         password: p.password,
-        unsafeMetadata: {
-          role: "student",
-          firstName: p.firstName,
-          lastName: p.lastName,
-          birthDate: p.birthDate,
-          country: p.country,
-          nativeLanguage: p.nativeLanguage,
-          phone: p.phone,
-        },
+        unsafeMetadata: teacher
+          ? { role: "teacher", firstName: p.firstName, lastName: p.lastName, country: p.country, phone: p.phone }
+          : {
+              role: "student",
+              firstName: p.firstName,
+              lastName: p.lastName,
+              birthDate: p.birthDate,
+              country: p.country,
+              nativeLanguage: p.nativeLanguage,
+              phone: p.phone,
+            },
       });
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
-      router.push(`/verify-email?${new URLSearchParams({ email: p.email })}`);
+      router.push(verifyUrl(p.email, p.role));
     },
     async verify(code: string) {
       if (!isLoaded) return;
       const res = await signUp.attemptEmailAddressVerification({ code });
       if (res.status !== "complete" || !res.createdSessionId) throw new Error(t("signupIncomplete"));
       await setActive({ session: res.createdSessionId });
-      router.push(welcome("/onboarding/goals"));
+      const teacher = (res.unsafeMetadata as { role?: string } | undefined)?.role === "teacher";
+      router.push(teacher ? teacherWelcome() : welcome("/onboarding/goals"));
     },
     async resend() {
       if (!isLoaded) return;
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
     },
-    async oauth(strategy: OAuthProvider) {
+    async oauth(strategy: OAuthProvider, role: SignupRole = "student") {
       if (!isLoaded) return;
       await signUp.authenticateWithRedirect({
         strategy,
         redirectUrl: "/sso-callback",
-        redirectUrlComplete: welcome("/onboarding/goals"),
+        redirectUrlComplete: role === "teacher" ? teacherWelcome(true) : welcome("/onboarding/goals"),
+        ...(role === "teacher" ? { unsafeMetadata: { role } } : {}),
       });
     },
   };
@@ -87,14 +102,14 @@ function useDemoSignUpFlow() {
   return {
     ready: true,
     async start(p: SignupProfile) {
-      router.push(`/verify-email?${new URLSearchParams({ email: p.email })}`);
+      router.push(verifyUrl(p.email, p.role));
     },
     async verify() {
       router.push("/onboarding/goals");
     },
     async resend() {},
-    async oauth() {
-      router.push("/onboarding/goals");
+    async oauth(_strategy: OAuthProvider, role: SignupRole = "student") {
+      router.push(role === "teacher" ? TEACHER_APPLY : "/onboarding/goals");
     },
   };
 }

@@ -3,11 +3,13 @@ import { useTranslations } from "next-intl";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { cn } from "@/lib/cn";
 
-const steps = ["account", "verifyEmail", "goals", "levelTest"] as const;
+const studentSteps = ["account", "verifyEmail", "goals", "levelTest"] as const;
+const teacherSteps = ["account", "verifyEmail", "application"] as const;
 
-/** 4-step sign-up progress (1 · Account → 4 · Level test). */
-export function SignupSteps({ current }: { current: 1 | 2 | 3 | 4 }) {
+/** Sign-up progress: students 1 · Account → 4 · Level test; teachers 1 · Account → 3 · Application. */
+export function SignupSteps({ current, teacher = false }: { current: 1 | 2 | 3 | 4; teacher?: boolean }) {
   const t = useTranslations("auth.steps");
+  const steps = teacher ? teacherSteps : studentSteps;
   return (
     <ol aria-label={t("label")} className="flex gap-2 text-[13px] font-semibold">
       {steps.map((id, i) => {

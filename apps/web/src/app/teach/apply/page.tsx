@@ -6,6 +6,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { intlTags, type Locale } from "@/i18n/config";
 import { formatUsd, PLATFORM_COMMISSION, teacherNet } from "@/lib/mock-data";
 import { ApplyWizard } from "./_components/apply-wizard";
+import { ApplyHeaderActions } from "./_components/header-actions";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("apply.page");
@@ -22,7 +23,7 @@ export default async function TeachApplyPage() {
 
   return (
     <div className="min-h-dvh bg-beige">
-      <FocusHeader brandSuffix={t("brandSuffix")} right={{ href: "/", label: t("saveExit") }} />
+      <FocusHeader brandSuffix={t("brandSuffix")} right={<ApplyHeaderActions />} />
 
       <main className="mx-auto max-w-[1440px] px-4 py-8 sm:px-6 lg:px-20 lg:py-11">
         <ApplyWizard />
