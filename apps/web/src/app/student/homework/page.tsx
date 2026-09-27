@@ -1,7 +1,22 @@
+import type { Metadata } from "next";
+import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { ComingSoon } from "@/components/layout/coming-soon";
 
-export const metadata = { title: "Homework" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("student.comingSoon.homework");
+  return { title: t("title") };
+}
 
 export default function Page() {
-  return <ComingSoon title="Homework" description="All assigned, pending and completed homework in one place." icon="book" backHref="/student" backLabel="Back to overview" />;
+  const t = useTranslations("student");
+  return (
+    <ComingSoon
+      title={t("comingSoon.homework.title")}
+      description={t("comingSoon.homework.description")}
+      icon="book"
+      backHref="/student"
+      backLabel={t("backToOverview")}
+    />
+  );
 }

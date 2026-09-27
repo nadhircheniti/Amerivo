@@ -1,0 +1,251 @@
+{
+  "home": {
+    "eyebrow": "L'anglais en ligne",
+    "title": "L'anglais<br></br>à votre façon",
+    "tagline": "Flexible. Personnalisé. Sans frontières.",
+    "intro": "Des cours particuliers en direct avec des professeurs d'anglais américains soigneusement sélectionnés. Parlez avec aisance et atteignez vos objectifs — où que vous soyez.",
+    "searchLabel": "Que souhaitez-vous apprendre ?",
+    "searchPlaceholder": "Que souhaitez-vous apprendre ? ex. : anglais des affaires",
+    "searchSubmit": "Rechercher des professeurs",
+    "perks": {
+      "placementTest": "Test de niveau gratuit",
+      "trialLessons": "Cours d'essai gratuits",
+      "usTeachers": "Professeurs 100 % américains"
+    },
+    "photoLabel": "Gratte-ciel de New York au coucher du soleil",
+    "handwritten": "Parlez<br></br>mieux,<br></br>allez<br></br>plus loin",
+    "whyLabel": "Pourquoi Amerivo",
+    "values": {
+      "teachers": {
+        "title": "Des professeurs experts",
+        "body": "Qualifiés et natifs,<br></br>venus des États-Unis."
+      },
+      "scheduling": {
+        "title": "Des horaires flexibles",
+        "body": "Des cours qui s'adaptent à votre vie,<br></br>dans votre fuseau horaire."
+      },
+      "personalized": {
+        "title": "Un apprentissage personnalisé",
+        "body": "Un programme adapté à votre niveau<br></br>et à vos objectifs."
+      },
+      "community": {
+        "title": "Une communauté mondiale",
+        "body": "Apprendre, échanger, progresser —<br></br>ensemble."
+      }
+    },
+    "how": {
+      "eyebrow": "Comment ça marche",
+      "title": "Du premier test aux conversations fluides",
+      "steps": {
+        "test": {
+          "title": "Passez le test de niveau",
+          "body": "Indiquez vos objectifs et obtenez votre niveau CECRL, de A1 à C2."
+        },
+        "match": {
+          "title": "Trouvez votre professeur",
+          "body": "Nous vous recommandons des professeurs selon vos objectifs, vos disponibilités, leur spécialité et leur note."
+        },
+        "book": {
+          "title": "Réservez et payez en toute sécurité",
+          "body": "Choisissez un créneau dans votre fuseau horaire. Carte, Apple Pay, Google Pay ou PayPal."
+        },
+        "learn": {
+          "title": "Apprenez en direct",
+          "body": "Rejoignez votre salle de classe vidéo en un clic, puis recevez notes et devoirs."
+        }
+      }
+    },
+    "teachers": {
+      "eyebrow": "Nos professeurs",
+      "title": "De vraies personnes. De vraies conversations.",
+      "browseAll": "Voir tous les professeurs",
+      "introVideo": "Vidéo de présentation",
+      "perLesson": "/50 min",
+      "meta": "{city} · {years, plural, one {# an} other {# ans}} d'expérience"
+    },
+    "pricing": {
+      "eyebrow": "Des tarifs simples",
+      "title": "Payez au cours ou économisez avec un forfait",
+      "intro": "Chaque professeur fixe son tarif, de 20 $ à 50 $ par séance de 50 minutes. Annulation avec remboursement intégral jusqu'à 24 heures avant.",
+      "popular": "Populaire",
+      "plans": {
+        "trial": {
+          "title": "Cours d'essai",
+          "price": "20 min",
+          "body": "Gratuit avec les professeurs qui le proposent : faites connaissance et parlez de vos objectifs avant de réserver."
+        },
+        "single": {
+          "title": "Cours à l'unité",
+          "price": "20–50 $",
+          "body": "Un cours en direct de 50 minutes, au tarif du professeur."
+        },
+        "pack5": {
+          "title": "Forfait 5 cours",
+          "price": "Jusqu'à −5 %",
+          "body": "Proposé par les professeurs participants."
+        },
+        "pack10": {
+          "title": "Forfait 10 cours",
+          "price": "Jusqu'à −10 %",
+          "body": "Le meilleur rapport qualité-prix pour progresser régulièrement."
+        }
+      }
+    },
+    "business": {
+      "title": "L'anglais pour votre équipe",
+      "body": "Parlez-nous des besoins linguistiques de votre entreprise et réservez 10, 20 séances ou plus pour vos collaborateurs.",
+      "cta": "Demander une offre entreprise"
+    },
+    "teach": {
+      "title": "Enseignez l'anglais américain",
+      "body": "Fixez votre tarif, enseignez d'où vous voulez et soyez payé chaque mois. Postulez avec une vidéo de présentation de 2 minutes.",
+      "cta": "Devenir professeur"
+    }
+  },
+  "pages": {
+    "backHome": "Retour à l'accueil",
+    "about": {
+      "title": "À propos d'Amerivo",
+      "description": "Histoire de l'entreprise et équipe — contenu à fournir par Amerivo."
+    },
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "description": "Les conditions définitives seront fournies par le conseil juridique d'Amerivo."
+    },
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "description": "Politique de confidentialité RGPD / CCPA — à fournir par le conseil juridique d'Amerivo."
+    }
+  },
+  "search": {
+    "metaTitle": "Trouver un professeur",
+    "metaDescription": "Parcourez des professeurs d'anglais natifs américains vérifiés, par spécialité, prix et public.",
+    "title": "Trouvez votre professeur d'anglais américain",
+    "subtitle": "Tous nos professeurs sont des natifs américains, vérifiés et reçus en entretien par notre équipe.",
+    "sortBy": "Trier par",
+    "sort": {
+      "best": "Pertinence",
+      "rating": "Mieux notés",
+      "price": "Prix croissant",
+      "experience": "Plus expérimentés"
+    },
+    "showFilters": "Afficher les filtres",
+    "hideFilters": "Masquer les filtres",
+    "filters": "Filtres",
+    "wantToLearn": "Je veux apprendre",
+    "specialties": {
+      "businessEnglish": "Anglais des affaires",
+      "conversation": "Conversation",
+      "interviewPrep": "Préparation aux entretiens",
+      "ieltsPrep": "Préparation IELTS",
+      "toeflPrep": "Préparation TOEFL",
+      "teens": "Adolescents (13 ans et +)"
+    },
+    "pricePerLesson": "Prix par cours",
+    "priceRange": "{min} – {max}",
+    "upTo": "Jusqu'à {price}",
+    "availability": "Disponibilités",
+    "yourTime": "(votre heure)",
+    "slots": {
+      "Morning": "Matin",
+      "Afternoon": "Après-midi",
+      "Evening": "Soir",
+      "Weekend": "Week-end"
+    },
+    "teaches": "Public",
+    "gender": "Genre du professeur",
+    "genderAny": "Sans préférence",
+    "genderFemale": "Femme",
+    "genderMale": "Homme",
+    "alsoSpeaks": "Parle aussi",
+    "anyLanguage": "Toutes les langues",
+    "clearFilters": "Effacer tous les filtres",
+    "results": "Résultats",
+    "count": "{count, plural, one {# professeur} other {# professeurs}}",
+    "countFor": "{count, plural, one {# professeur} other {# professeurs}} pour <strong>{specialties}</strong>",
+    "listSeparator": ", ",
+    "pricesNote": "prix en USD par cours de 50 min",
+    "matching": "Résultats pour « <strong>{text}</strong> »",
+    "clearSearch": "Effacer la recherche",
+    "emptyTitle": "Aucun professeur ne correspond à ces filtres",
+    "emptyBody": "Essayez un prix maximum plus élevé ou moins de spécialités.",
+    "pagination": "Pagination",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante",
+    "verified": "Vérifié",
+    "cardMeta": "{city} ({tz}) · {years, plural, one {# an} other {# ans}} d'expérience",
+    "speaks": "Parle {languages}",
+    "reviewsPlaceholder": "[N] avis",
+    "lessonsPlaceholder": "[N] cours",
+    "perLesson": "par cours de 50 min",
+    "bookLesson": "Réserver un cours",
+    "bookLessonWith": "Réserver un cours avec {name}",
+    "freeTrial": "Essai gratuit de 20 min",
+    "freeTrialWith": "Essai gratuit de 20 min avec {name}"
+  },
+  "languages": {
+    "English": "anglais",
+    "Spanish": "espagnol",
+    "French": "français",
+    "Arabic": "arabe",
+    "Portuguese": "portugais",
+    "native": "langue maternelle"
+  },
+  "profile": {
+    "breadcrumb": "Fil d'Ariane",
+    "idVerified": "Identité vérifiée",
+    "averageRating": "Note moyenne",
+    "lessonsCompleted": "Cours donnés",
+    "experience": "Expérience",
+    "yearsShort": "{count, plural, one {# an} other {# ans}}",
+    "timeZones": {
+      "EST": "Heure de l'Est",
+      "EDT": "Heure de l'Est",
+      "CST": "Heure du Centre",
+      "CDT": "Heure du Centre",
+      "MST": "Heure des Rocheuses",
+      "MDT": "Heure des Rocheuses",
+      "PST": "Heure du Pacifique",
+      "PDT": "Heure du Pacifique"
+    },
+    "videoSection": "Vidéo de présentation",
+    "playVideo": "Lire la vidéo de présentation de {name}",
+    "meet": "Découvrez {name} · présentation de 2 min",
+    "aboutMe": "À propos de moi",
+    "bioPlaceholder": "[Biographie du professeur] — Parcours, expérience et style d'enseignement, rédigés par le professeur lors de son inscription.",
+    "specialties": "Spécialités",
+    "teaches": "Public",
+    "languages": "Langues",
+    "certifications": "Certifications",
+    "reviews": "Avis des élèves",
+    "noReviews": "Pas encore d'avis",
+    "reviewsSummary": "{rating} en moyenne · {count, plural, one {# avis} other {# avis}}",
+    "reviewsSummaryUnknown": "{rating} en moyenne · [N] avis",
+    "reviewPlaceholder": "[Texte de l'avis — affiché après un cours terminé]",
+    "reviewMeta": "Nom de l'élève · Pays · Date",
+    "fallbackHeadline": "Professeur d'anglais américain",
+    "fallbackCity": "États-Unis"
+  },
+  "booking": {
+    "title": "Réserver un cours avec {name}",
+    "perLesson": "par cours de 50 min",
+    "lessonType": "Type de cours",
+    "trial": "Cours d'essai · 20 min",
+    "single": "Cours à l'unité · 50 min",
+    "pack5": "5 cours",
+    "pack10": "10 cours",
+    "free": "Gratuit",
+    "pickTime": "Choisissez un créneau",
+    "previousWeek": "Semaine précédente",
+    "nextWeek": "Semaine suivante",
+    "timezone": "Horaires affichés dans votre fuseau horaire : {tz} (détecté automatiquement)",
+    "detecting": "Détection de votre fuseau horaire…",
+    "noSlots": "Aucun créneau libre cette semaine — essayez la semaine suivante.",
+    "unavailable": "{time}, indisponible",
+    "selectTime": "Choisissez un créneau pour continuer",
+    "continue": "Continuer vers le paiement",
+    "message": "Écrire à {name}",
+    "cancellation": "Annulation gratuite jusqu'à 24 heures avant le cours.",
+    "loadError": "Impossible de charger le calendrier de ce professeur. Veuillez actualiser dans un instant."
+  }
+}

@@ -2,6 +2,7 @@
 
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/form";
@@ -24,12 +25,12 @@ type BookingResponse = {
 const simulatedPayments = !!API_URL && !stripeEnabled;
 
 function Policy() {
+  const t = useTranslations("checkout.payment");
   return (
     <div className="flex items-start gap-3.5 rounded-2xl bg-cream px-5 py-[18px] text-sm leading-relaxed">
       <Icon name="clock" size={22} className="shrink-0 text-orange-dark" />
       <p>
-        <strong>Cancellation policy.</strong> Cancel more than 24 hours before the lesson for a full refund. Lessons cancelled less than 24 hours before are not refunded. If your
-        teacher cancels, you are refunded automatically.
+        {t.rich("policy", { strong: (c) => <strong>{c}</strong> })}
       </p>
     </div>
   );
@@ -47,6 +48,8 @@ function ErrorNote({ error }: { error: string | null }) {
 export function PaymentForm({ ctaLabel, free, booking }: { ctaLabel: string; free: boolean; booking: BookingRequest | null }) {
   const router = useRouter();
   const api = useApi();
+  const t = useTranslations("checkout.payment");
+  const locale = useLocale();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [intent, setIntent] = useState<{ bookingId: string; clientSecret: string } | null>(null);
@@ -64,7 +67,7 @@ export function PaymentForm({ ctaLabel, free, booking }: { ctaLabel: string; fre
       const res = await api.call<BookingResponse>("/bookings", { method: "POST", body: JSON.stringify(booking) });
       if (res.payment?.clientSecret && !res.payment.simulated) {
         if (!stripeEnabled) {
-          setError("Card payments aren't available yet on this site. Please try again later.");
+          setError(t("cardsUnavailable"));
           return;
         }
         setIntent({ bookingId: res.booking.id, clientSecret: res.payment.clientSecret });
@@ -82,7 +85,7 @@ export function PaymentForm({ ctaLabel, free, booking }: { ctaLabel: string; fre
   if (intent) {
     return (
       <div className="flex flex-col gap-[26px]">
-        <Elements stripe={getStripe()} options={{ clientSecret: intent.clientSecret, appearance: stripeAppearance, loader: "always" }}>
+        <Elements stripe={getStripe()} options={{ clientSecret: intent.clientSecret, appearance: stripeAppearance, loader: "always", locale }}>
           <StripePay bookingId={intent.bookingId} ctaLabel={ctaLabel} />
         </Elements>
       </div>
@@ -101,29 +104,29 @@ export function PaymentForm({ ctaLabel, free, booking }: { ctaLabel: string; fre
     >
       {simulatedPayments && !free && (
         <p className="rounded-2xl bg-teal-50 px-5 py-4 text-sm text-teal-deep">
-          <strong>Test environment:</strong> no card is charged — the lesson is confirmed as if the payment succeeded.
+          {t.rich("testEnvironment", { strong: (c) => <strong>{c}</strong> })}
         </p>
       )}
 
       {stripeEnabled && !free && (
         <p className="flex items-center gap-2.5 rounded-2xl bg-beige px-5 py-4 text-sm text-navy-soft">
           <Icon name="lock" size={18} className="shrink-0 text-teal-dark" />
-          Card, Apple Pay or Google Pay — secured by Stripe. Your time slot is held for 30 minutes while you pay.
+          {t("stripeNote")}
         </p>
       )}
 
       {showPrototypeFields && (
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Name on card" className="sm:col-span-2">
-            <Input name="cardName" placeholder="Full name" autoComplete="cc-name" />
+          <Field label={t("nameOnCard")} className="sm:col-span-2">
+            <Input name="cardName" placeholder={t("fullName")} autoComplete="cc-name" />
           </Field>
-          <Field label="Card number" className="sm:col-span-2">
+          <Field label={t("cardNumber")} className="sm:col-span-2">
             <Input name="cardNumber" placeholder="1234 1234 1234 1234" inputMode="numeric" autoComplete="cc-number" />
           </Field>
-          <Field label="Expiry">
-            <Input name="cardExpiry" placeholder="MM / YY" autoComplete="cc-exp" />
+          <Field label={t("expiry")}>
+            <Input name="cardExpiry" placeholder={t("expiryPlaceholder")} autoComplete="cc-exp" />
           </Field>
-          <Field label="CVC">
+          <Field label={t("cvc")}>
             <Input name="cardCvc" placeholder="123" inputMode="numeric" autoComplete="cc-csc" />
           </Field>
         </div>
@@ -133,7 +136,7 @@ export function PaymentForm({ ctaLabel, free, booking }: { ctaLabel: string; fre
       <ErrorNote error={error} />
 
       <Button type="submit" size="lg" className="h-auto py-[18px] text-[17px]" disabled={pending}>
-        {pending ? "One moment…" : stripeEnabled && !free ? "Continue to secure payment" : ctaLabel}
+        {pending ? t("oneMoment") : stripeEnabled && !free ? t("continueSecure") : ctaLabel}
       </Button>
     </form>
   );
@@ -144,6 +147,7 @@ function StripePay({ bookingId, ctaLabel }: { bookingId: string; ctaLabel: strin
   const elements = useElements();
   const router = useRouter();
   const { call } = useApi();
+  const t = useTranslations("checkout.payment");
   const [ready, setReady] = useState(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -156,7 +160,7 @@ function StripePay({ bookingId, ctaLabel }: { bookingId: string; ctaLabel: strin
     // Cards finish here; methods that need a bank page (3-D Secure redirect, PayPal…) come back to returnUrl.
     const { error: stripeError } = await stripe.confirmPayment({ elements, confirmParams: { return_url: returnUrl }, redirect: "if_required" });
     if (stripeError) {
-      setError(stripeError.message ?? "Your payment could not be completed. Please try another method.");
+      setError(stripeError.message ?? t("paymentFailed"));
       setPending(false);
       return;
     }
@@ -180,7 +184,7 @@ function StripePay({ bookingId, ctaLabel }: { bookingId: string; ctaLabel: strin
       <Policy />
       <ErrorNote error={error} />
       <Button type="submit" size="lg" className="h-auto py-[18px] text-[17px]" disabled={!ready || pending}>
-        {pending ? "Processing payment…" : ctaLabel}
+        {pending ? t("processing") : ctaLabel}
       </Button>
     </form>
   );

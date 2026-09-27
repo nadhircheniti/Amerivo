@@ -5,6 +5,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import { ApiError, API_URL } from "@/lib/api";
 import { clerkEnabled, homeForRole, canOpen, type Role } from "@/lib/auth-config";
 import { useApi } from "@/lib/use-api";
+import { useTranslations } from "next-intl";
 
 /**
  * Shows a space (student / teacher / admin) only to the right role, checked with the API.
@@ -27,6 +28,7 @@ function CheckedGate({ space, children }: { space: Role; children: ReactNode }) 
   const pathname = usePathname();
   const [state, setState] = useState<"checking" | "ok" | "error">("checking");
   const [me, setMe] = useState<Me | null>(null);
+  const t = useTranslations("common.gate");
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -56,12 +58,12 @@ function CheckedGate({ space, children }: { space: Role; children: ReactNode }) 
   return (
     <div className="flex min-h-screen items-center justify-center bg-beige px-6 text-center text-navy-soft" role="status">
       {state === "checking" ? (
-        "Loading your space…"
+        t("loading")
       ) : (
         <div className="flex flex-col items-center gap-3">
-          <p>We couldn&apos;t reach Amerivo right now. The service may be waking up — please try again in a minute.</p>
+          <p>{t("unreachable")}</p>
           <button type="button" className="font-semibold text-teal-dark underline" onClick={() => window.location.reload()}>
-            Try again
+            {t("tryAgain")}
           </button>
         </div>
       )}

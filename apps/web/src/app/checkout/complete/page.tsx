@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getTranslations } from "next-intl/server";
 import { FocusHeader } from "@/components/layout/focus-header";
 import { Card } from "@/components/ui/primitives";
 import { CompletePayment } from "./complete-payment";
 
-export const metadata: Metadata = { title: "Payment" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("checkout.complete");
+  return { title: t("metaTitle") };
+}
 
 /** Stripe sends the student back here after a bank page (3-D Secure, PayPal…). */
 export default function CheckoutCompletePage() {

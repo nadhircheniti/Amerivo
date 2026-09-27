@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { ChoiceTile, Field, Input, Segmented, Select } from "@/components/ui/form";
 import { Badge, type BadgeTone } from "@/components/ui/primitives";
+import { intlTags, type Locale } from "@/i18n/config";
 import { formatUsd, PLATFORM_COMMISSION, teacherNet } from "@/lib/mock-data";
 import {
   countries,
@@ -22,10 +24,29 @@ import { SectionTitle, TagInput, UploadButton } from "./fields";
 
 type StepProps = { app: Application; update: (patch: Partial<Application>) => void };
 
-const toggle = (list: string[], v: string, on: boolean) => (on ? [...list, v] : list.filter((x) => x !== v));
+const toggle = <T extends string>(list: T[], v: T, on: boolean) => (on ? [...list, v] : list.filter((x) => x !== v));
+
+/** Whole-dollar price in the reader's number format (e.g. "$35", "35 $US"). */
+const wholeUsd = (n: number, locale: Locale) => n.toLocaleString(intlTags[locale], { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+
+/** Country name in the reader's language ("other" has its own label). */
+function useCountryName() {
+  const locale = useLocale() as Locale;
+  const t = useTranslations("apply.options");
+  let names: Intl.DisplayNames | null = null;
+  try {
+    names = new Intl.DisplayNames([intlTags[locale]], { type: "region" });
+  } catch {
+    names = null;
+  }
+  return (code: (typeof countries)[number]) => (code === "other" ? t("countryOther") : (names?.of(code) ?? code));
+}
 
 /* ---------------- 1 · Personal info ---------------- */
 export function PersonalStep({ app, update }: StepProps) {
+  const t = useTranslations("apply.personal");
+  const to = useTranslations("apply.options");
+  const countryName = useCountryName();
   return (
     <>
       <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
@@ -33,37 +54,39 @@ export function PersonalStep({ app, update }: StepProps) {
           {app.photo.length ? <Icon name="check" size={32} strokeWidth={2.4} className="text-teal-dark" /> : <Icon name="user" size={40} />}
         </span>
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-semibold">Profile photo</p>
-          <p className="text-[13px] text-muted">A friendly, well-lit headshot. Students see it on your profile and in search results.</p>
-          <UploadButton label={app.photo.length ? "Replace photo" : "Upload photo (JPG, PNG)"} accept="image/jpeg,image/png" files={app.photo} onFiles={(photo) => update({ photo })} />
+          <p className="text-sm font-semibold">{t("photo")}</p>
+          <p className="text-[13px] text-muted">{t("photoHint")}</p>
+          <UploadButton label={app.photo.length ? t("replacePhoto") : t("uploadPhoto")} accept="image/jpeg,image/png" files={app.photo} onFiles={(photo) => update({ photo })} />
         </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="First name">
+        <Field label={t("firstName")}>
           <Input required autoComplete="given-name" value={app.firstName} onChange={(e) => update({ firstName: e.target.value })} />
         </Field>
-        <Field label="Last name">
+        <Field label={t("lastName")}>
           <Input required autoComplete="family-name" value={app.lastName} onChange={(e) => update({ lastName: e.target.value })} />
         </Field>
-        <Field label="Email">
+        <Field label={t("email")}>
           <Input required type="email" autoComplete="email" value={app.email} onChange={(e) => update({ email: e.target.value })} />
         </Field>
-        <Field label="Phone">
+        <Field label={t("phone")}>
           <Input type="tel" autoComplete="tel" placeholder="+1 (555) 000-0000" value={app.phone} onChange={(e) => update({ phone: e.target.value })} />
         </Field>
-        <Field label="Country of residence">
-          <Select required value={app.country} onChange={(e) => update({ country: e.target.value })}>
+        <Field label={t("country")}>
+          <Select required value={app.country} onChange={(e) => update({ country: e.target.value as Application["country"] })}>
             {countries.map((c) => (
-              <option key={c}>{c}</option>
+              <option key={c} value={c}>
+                {countryName(c)}
+              </option>
             ))}
           </Select>
         </Field>
-        <Field label="Time zone" hint="Used to show your availability to students in their local time.">
+        <Field label={t("timeZone")} hint={t("timeZoneHint")}>
           <Select value={app.timeZone} onChange={(e) => update({ timeZone: e.target.value })}>
-            {timeZones.map((t) => (
-              <option key={t.value} value={t.value}>
-                {t.label}
+            {timeZones.map((z) => (
+              <option key={z.value} value={z.value}>
+                {to(`timeZones.${z.key}`)}
               </option>
             ))}
           </Select>
@@ -71,13 +94,13 @@ export function PersonalStep({ app, update }: StepProps) {
       </div>
 
       <fieldset className="flex flex-wrap gap-2.5">
-        <SectionTitle>Gender</SectionTitle>
+        <SectionTitle>{t("gender")}</SectionTitle>
         {genders.map((g) => (
           <ChoiceTile key={g} type="radio" name="gender" shape="pill" checked={app.gender === g} onChange={() => update({ gender: g })}>
-            {g}
+            {to(`genders.${g}`)}
           </ChoiceTile>
         ))}
-        <p className="w-full text-[13px] text-muted">Some students filter by a preferred teacher gender. You can change this later.</p>
+        <p className="w-full text-[13px] text-muted">{t("genderHint")}</p>
       </fieldset>
     </>
   );
@@ -85,66 +108,73 @@ export function PersonalStep({ app, update }: StepProps) {
 
 /* ---------------- 2 · Professional info ---------------- */
 export function ProfessionalStep({ app, update }: StepProps) {
+  const t = useTranslations("apply.professional");
+  const to = useTranslations("apply.options");
+  const locale = useLocale() as Locale;
   return (
     <>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Highest education">
-          <Select value={app.education} onChange={(e) => update({ education: e.target.value })}>
+        <Field label={t("education")}>
+          <Select value={app.education} onChange={(e) => update({ education: e.target.value as Application["education"] })}>
             {educationLevels.map((o) => (
-              <option key={o}>{o}</option>
+              <option key={o} value={o}>
+                {to(`education.${o}`)}
+              </option>
             ))}
           </Select>
         </Field>
-        <Field label="Years of teaching experience">
-          <Select value={app.experience} onChange={(e) => update({ experience: e.target.value })}>
+        <Field label={t("experience")}>
+          <Select value={app.experience} onChange={(e) => update({ experience: e.target.value as Application["experience"] })}>
             {experienceLevels.map((o) => (
-              <option key={o}>{o}</option>
+              <option key={o} value={o}>
+                {to(`experience.${o}`)}
+              </option>
             ))}
           </Select>
         </Field>
       </div>
 
       <fieldset>
-        <SectionTitle>What can you teach?</SectionTitle>
+        <SectionTitle>{t("subjects")}</SectionTitle>
         <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
           {subjects.map((s) => (
             <ChoiceTile key={s} checked={app.subjects.includes(s)} onChange={(on) => update({ subjects: toggle(app.subjects, s, on) })}>
-              {s}
+              {to(`subjects.${s}`)}
             </ChoiceTile>
           ))}
         </div>
       </fieldset>
 
       <fieldset className="flex flex-wrap gap-2.5">
-        <SectionTitle>Groups you can teach</SectionTitle>
+        <SectionTitle>{t("groups")}</SectionTitle>
         {groups.map((g) => (
           <ChoiceTile key={g} shape="pill" checked={app.groups.includes(g)} onChange={(on) => update({ groups: toggle(app.groups, g, on) })}>
-            {g}
+            {to(`groups.${g}`)}
           </ChoiceTile>
         ))}
       </fieldset>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
-          <TagInput label="Certifications" values={app.certifications} onChange={(certifications) => update({ certifications })} />
+          <TagInput label={t("certifications")} values={app.certifications} onChange={(certifications) => update({ certifications })} />
           <UploadButton
-            label="Upload certificates (PDF, JPG)"
+            label={t("uploadCertificates")}
             accept="application/pdf,image/jpeg"
             multiple
             files={app.certificateFiles}
             onFiles={(certificateFiles) => update({ certificateFiles })}
           />
         </div>
-        <TagInput label="Spoken languages" tone="orange" placeholder="e.g. French · B1" values={app.languages} onChange={(languages) => update({ languages })} />
+        <TagInput label={t("languages")} tone="orange" placeholder={t("languagesPlaceholder")} values={app.languages} onChange={(languages) => update({ languages })} />
       </div>
 
       <div className="flex flex-col gap-2.5">
         <div className="flex items-baseline justify-between">
           <label htmlFor="rate" className="text-sm font-semibold">
-            Your rate per 50-min lesson
+            {t("rate")}
           </label>
           <span className="font-display text-xl font-extrabold" aria-hidden="true">
-            ${app.rate}
+            {wholeUsd(app.rate, locale)}
           </span>
         </div>
         <input
@@ -154,23 +184,23 @@ export function ProfessionalStep({ app, update }: StepProps) {
           max={50}
           step={1}
           value={app.rate}
-          aria-valuetext={`$${app.rate} per lesson`}
+          aria-valuetext={t("rateValue", { price: wholeUsd(app.rate, locale) })}
           aria-describedby="rate-net"
           onChange={(e) => update({ rate: Number(e.target.value) })}
         />
         <div className="flex justify-between gap-3 text-[13px] text-muted">
-          <span aria-hidden="true">$20</span>
+          <span aria-hidden="true">{wholeUsd(20, locale)}</span>
           <span id="rate-net" className="text-center" aria-live="polite">
-            You receive {formatUsd(teacherNet(app.rate))} after the {PLATFORM_COMMISSION * 100}% platform commission
+            {t("net", { net: formatUsd(teacherNet(app.rate), locale), commission: PLATFORM_COMMISSION * 100 })}
           </span>
-          <span aria-hidden="true">$50</span>
+          <span aria-hidden="true">{wholeUsd(50, locale)}</span>
         </div>
       </div>
 
       <ChoiceTile checked={app.offersTrial} onChange={(on) => update({ offersTrial: on })}>
         <span className="flex flex-col">
-          <span>Offer a free 20-minute trial lesson</span>
-          <span className="text-[13px] font-normal text-muted">Students can meet you once before booking. You can change this later.</span>
+          <span>{t("trial")}</span>
+          <span className="text-[13px] font-normal text-muted">{t("trialHint")}</span>
         </span>
       </ChoiceTile>
     </>
@@ -179,18 +209,19 @@ export function ProfessionalStep({ app, update }: StepProps) {
 
 /** Right-column previews of steps 3 and 4 (shown next to step 2 on wide screens, as in the design). */
 export function StepPreviews() {
+  const t = useTranslations("apply.previews");
   return (
-    <aside aria-label="Coming up next" className="flex flex-col gap-4">
+    <aside aria-label={t("label")} className="flex flex-col gap-4">
       <div className="flex flex-col gap-3 rounded-3xl bg-white p-6">
-        <span className="text-xs font-semibold tracking-[2px] text-muted">STEP 3 · PREVIEW</span>
-        <h3 className="text-[17px] font-bold">Identity verification</h3>
-        <p className="text-sm leading-normal text-navy-soft">Government ID, passport or driver&apos;s license, plus a selfie. Handled securely by Stripe Identity.</p>
-        <div className="flex h-[90px] items-center justify-center rounded-[14px] border border-dashed border-line text-[13px] text-muted">Upload ID document</div>
+        <span className="text-xs font-semibold tracking-[2px] text-muted">{t("step3")}</span>
+        <h3 className="text-[17px] font-bold">{t("identityTitle")}</h3>
+        <p className="text-sm leading-normal text-navy-soft">{t("identityText")}</p>
+        <div className="flex h-[90px] items-center justify-center rounded-[14px] border border-dashed border-line text-[13px] text-muted">{t("identityUpload")}</div>
       </div>
       <div className="flex flex-col gap-3 rounded-3xl bg-navy p-6 text-white">
-        <span className="text-xs font-semibold tracking-[2px] text-yellow">STEP 4 · PREVIEW</span>
-        <h3 className="text-[17px] font-bold text-white">2-minute video introduction</h3>
-        <p className="text-sm leading-normal text-ink-soft">Background · Experience · Teaching style. Students see it on your profile.</p>
+        <span className="text-xs font-semibold tracking-[2px] text-yellow">{t("step4")}</span>
+        <h3 className="text-[17px] font-bold text-white">{t("videoTitle")}</h3>
+        <p className="text-sm leading-normal text-ink-soft">{t("videoText")}</p>
       </div>
     </aside>
   );
@@ -198,24 +229,24 @@ export function StepPreviews() {
 
 /* ---------------- 3 · Identity verification ---------------- */
 export function IdentityStep({ app, update }: StepProps) {
+  const t = useTranslations("apply.identity");
+  const to = useTranslations("apply.options");
   return (
     <>
       <p className="text-[15px] leading-relaxed text-navy-soft">
-        We verify every teacher before they can accept bookings. Upload a valid photo ID; you&apos;ll be asked for a quick selfie to match it.
+        {t("intro")}
       </p>
 
       <div className="flex flex-col gap-3">
-        <span className="text-sm font-semibold">
-          Document type
-        </span>
-        <Segmented label="Document type" options={idTypes.map((t) => ({ value: t.value, label: t.label }))} value={app.idType} onChange={(idType) => update({ idType })} className="max-w-[560px] flex-wrap" />
+        <span className="text-sm font-semibold">{t("documentType")}</span>
+        <Segmented label={t("documentType")} options={idTypes.map((id) => ({ value: id, label: to(`idTypes.${id}`) }))} value={app.idType} onChange={(idType) => update({ idType })} className="max-w-[560px] flex-wrap" />
       </div>
 
       <UploadButton
         variant="tile"
         icon="shieldCheck"
-        label={`Upload your ${idTypes.find((t) => t.value === app.idType)?.label.toLowerCase()}`}
-        hint="Front and back if applicable · JPG, PNG or PDF"
+        label={t(`upload.${app.idType}`)}
+        hint={t("uploadHint")}
         accept="image/jpeg,image/png,application/pdf"
         multiple
         files={app.idFiles}
@@ -225,16 +256,14 @@ export function IdentityStep({ app, update }: StepProps) {
 
       <div className="flex items-start gap-3 rounded-2xl bg-teal-50 p-4 text-sm leading-normal">
         <Icon name="lock" size={20} className="mt-0.5 shrink-0 text-teal-dark" />
-        <p>
-          <strong className="font-semibold">Handled securely by Stripe Identity.</strong> Amerivo never stores a copy of your ID document; we only receive the verification result.
-        </p>
+        <p>{t.rich("secure", { strong: (c) => <strong className="font-semibold">{c}</strong> })}</p>
       </div>
 
       <div className="flex items-start gap-3 rounded-2xl bg-beige p-4 text-sm leading-normal">
         <Icon name="file" size={20} className="mt-0.5 shrink-0 text-navy" />
         <div className="flex flex-col gap-1">
-          <strong className="font-semibold">Tax information (W-9)</strong>
-          <p className="text-navy-soft">We collect your W-9; 1099 forms are issued automatically. You&apos;ll complete it when you connect your payout account.</p>
+          <strong className="font-semibold">{t("taxTitle")}</strong>
+          <p className="text-navy-soft">{t("taxText")}</p>
         </div>
       </div>
     </>
@@ -242,13 +271,10 @@ export function IdentityStep({ app, update }: StepProps) {
 }
 
 /* ---------------- 4 · Video introduction ---------------- */
-const videoTopics = [
-  { title: "Background", text: "Where you're from in the U.S. and a little about you." },
-  { title: "Experience", text: "Who you've taught and what results they got." },
-  { title: "Teaching style", text: "What a lesson with you feels like." },
-];
+const videoTopics = ["background", "experience", "style"] as const;
 
 export function VideoStep({ app, update }: StepProps) {
+  const t = useTranslations("apply.video");
   const [recording, setRecording] = useState(false);
   const [seconds, setSeconds] = useState(0);
 
@@ -262,11 +288,11 @@ export function VideoStep({ app, update }: StepProps) {
       setSeconds(next);
       if (next >= 120) {
         setRecording(false);
-        update({ video: ["Browser recording (2:00)"] });
+        update({ video: [t("browserRecording", { duration: "2:00" })] });
       }
     }, 1000);
     return () => window.clearInterval(id);
-  }, [recording, update]);
+  }, [recording, update, t]);
 
   const mmss = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 
@@ -274,7 +300,7 @@ export function VideoStep({ app, update }: StepProps) {
     // TODO(media): use getUserMedia + MediaRecorder and upload the clip; this is a UI placeholder.
     if (recording) {
       setRecording(false);
-      update({ video: [`Browser recording (${mmss})`] });
+      update({ video: [t("browserRecording", { duration: mmss })] });
     } else {
       secondsRef.current = 0;
       setSeconds(0);
@@ -284,11 +310,11 @@ export function VideoStep({ app, update }: StepProps) {
 
   return (
     <>
-      <p className="text-[15px] leading-relaxed text-navy-soft">Record a video of up to 2 minutes. Students watch it on your profile before booking, so speak naturally and look at the camera.</p>
+      <p className="text-[15px] leading-relaxed text-navy-soft">{t("intro")}</p>
 
       <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_240px]">
         <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-[20px] bg-navy text-white">
-          <div className="pointer-events-none absolute -top-16 -right-16 size-56 rounded-full bg-teal opacity-15" aria-hidden="true" />
+          <div className="pointer-events-none absolute -top-16 -end-16 size-56 rounded-full bg-teal opacity-15" aria-hidden="true" />
           <div className="flex flex-col items-center gap-3 text-center">
             {app.video.length && !recording ? (
               <>
@@ -302,16 +328,16 @@ export function VideoStep({ app, update }: StepProps) {
                 <span className="flex size-16 items-center justify-center rounded-full bg-white/12">
                   <Icon name="video" size={28} />
                 </span>
-                <span className="font-display text-2xl font-bold tabular-nums" role="timer" aria-label="Recording time">
+                <span className="font-display text-2xl font-bold tabular-nums" role="timer" aria-label={t("recordingTime")}>
                   {mmss} <span className="text-base font-medium text-ink-soft">/ 2:00</span>
                 </span>
               </>
             )}
           </div>
           {recording && (
-            <span className="absolute top-4 left-4 flex items-center gap-2 rounded-full bg-danger px-3 py-1 text-xs font-semibold text-white" role="status">
+            <span className="absolute start-4 top-4 flex items-center gap-2 rounded-full bg-danger px-3 py-1 text-xs font-semibold text-white" role="status">
               <span className="size-2 animate-pulse rounded-full bg-white" aria-hidden="true" />
-              Recording
+              {t("recording")}
             </span>
           )}
         </div>
@@ -324,22 +350,20 @@ export function VideoStep({ app, update }: StepProps) {
             className="flex h-12 items-center justify-center gap-2 rounded-full bg-orange font-bold text-navy hover:bg-[#ffa64d]"
           >
             <span className={recording ? "size-3 rounded-sm bg-danger" : "size-3 rounded-full bg-danger"} aria-hidden="true" />
-            {recording ? "Stop recording" : app.video.length ? "Record again" : "Record in browser"}
+            {recording ? t("stop") : app.video.length ? t("again") : t("record")}
           </button>
-          <UploadButton label="Upload a video file" accept="video/mp4,video/quicktime,video/webm" icon="video" files={[]} onFiles={(video) => update({ video })} />
-          <p className="text-[13px] text-muted">MP4, MOV or WebM · max 2 minutes</p>
+          <UploadButton label={t("upload")} accept="video/mp4,video/quicktime,video/webm" icon="video" files={[]} onFiles={(video) => update({ video })} />
+          <p className="text-[13px] text-muted">{t("formats")}</p>
         </div>
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-display text-[15px] font-bold">What to cover</h2>
+        <h2 className="font-display text-[15px] font-bold">{t("whatToCover")}</h2>
         <ol className="grid gap-3 sm:grid-cols-3">
-          {videoTopics.map((t, i) => (
-            <li key={t.title} className="flex flex-col gap-1 rounded-2xl bg-beige p-4">
-              <span className="font-display text-sm font-bold">
-                {i + 1}. {t.title}
-              </span>
-              <span className="text-[13px] leading-normal text-navy-soft">{t.text}</span>
+          {videoTopics.map((k, i) => (
+            <li key={k} className="flex flex-col gap-1 rounded-2xl bg-beige p-4">
+              <span className="font-display text-sm font-bold">{t("topic", { number: i + 1, title: t(`topics.${k}.title`) })}</span>
+              <span className="text-[13px] leading-normal text-navy-soft">{t(`topics.${k}.text`)}</span>
             </li>
           ))}
         </ol>
@@ -350,39 +374,45 @@ export function VideoStep({ app, update }: StepProps) {
 
 /* ---------------- 5 · Review & interview ---------------- */
 export function ReviewStep({ app, update, onEdit }: StepProps & { onEdit: (step: number) => void }) {
-  const tz = timeZones.find((t) => t.value === app.timeZone)?.label ?? app.timeZone;
-  const idLabel = idTypes.find((t) => t.value === app.idType)?.label ?? "";
-  const dash = <span className="text-muted">Not provided</span>;
+  const t = useTranslations("apply.review");
+  const to = useTranslations("apply.options");
+  const ts = useTranslations("apply.steps");
+  const locale = useLocale() as Locale;
+  const countryName = useCountryName();
+  const list = (items: string[]) => new Intl.ListFormat(intlTags[locale], { style: "long", type: "conjunction" }).format(items);
+  const zone = timeZones.find((z) => z.value === app.timeZone);
+  const tz = zone ? to(`timeZones.${zone.key}`) : app.timeZone;
+  const dash = <span className="text-muted">{t("notProvided")}</span>;
 
   return (
     <>
       <div className="flex flex-col gap-4">
-        <ReviewCard title={steps[0].title} onEdit={() => onEdit(0)}>
-          <Row label="Name">{`${app.firstName} ${app.lastName}`.trim() || dash}</Row>
-          <Row label="Email">{app.email || dash}</Row>
-          <Row label="Phone">{app.phone || dash}</Row>
-          <Row label="Country">{app.country}</Row>
-          <Row label="Gender">{app.gender || dash}</Row>
-          <Row label="Time zone">{tz}</Row>
-          <Row label="Photo">{app.photo[0] ?? dash}</Row>
+        <ReviewCard title={ts(`${steps[0].id}.title`)} onEdit={() => onEdit(0)}>
+          <Row label={t("name")}>{`${app.firstName} ${app.lastName}`.trim() || dash}</Row>
+          <Row label={t("email")}>{app.email || dash}</Row>
+          <Row label={t("phone")}>{app.phone || dash}</Row>
+          <Row label={t("country")}>{countryName(app.country)}</Row>
+          <Row label={t("gender")}>{app.gender ? to(`genders.${app.gender}`) : dash}</Row>
+          <Row label={t("timeZone")}>{tz}</Row>
+          <Row label={t("photo")}>{app.photo[0] ?? dash}</Row>
         </ReviewCard>
-        <ReviewCard title={steps[1].title} onEdit={() => onEdit(1)}>
-          <Row label="Education">{app.education}</Row>
-          <Row label="Experience">{app.experience}</Row>
-          <Row label="Teaches">{app.subjects.join(", ") || dash}</Row>
-          <Row label="Groups">{app.groups.join(", ") || dash}</Row>
-          <Row label="Certifications">{app.certifications.join(", ") || dash}</Row>
-          <Row label="Languages">{app.languages.join(", ") || dash}</Row>
-          <Row label="Rate">
-            ${app.rate} per lesson · you receive {formatUsd(teacherNet(app.rate))} · free trial {app.offersTrial ? "on" : "off"}
+        <ReviewCard title={ts(`${steps[1].id}.title`)} onEdit={() => onEdit(1)}>
+          <Row label={t("education")}>{to(`education.${app.education}`)}</Row>
+          <Row label={t("experience")}>{to(`experience.${app.experience}`)}</Row>
+          <Row label={t("teaches")}>{list(app.subjects.map((s) => to(`subjects.${s}`))) || dash}</Row>
+          <Row label={t("groups")}>{list(app.groups.map((g) => to(`groups.${g}`))) || dash}</Row>
+          <Row label={t("certifications")}>{list(app.certifications) || dash}</Row>
+          <Row label={t("languages")}>{list(app.languages) || dash}</Row>
+          <Row label={t("rate")}>
+            {t("rateValue", { price: wholeUsd(app.rate, locale), net: formatUsd(teacherNet(app.rate), locale), trial: app.offersTrial ? "on" : "off" })}
           </Row>
         </ReviewCard>
-        <ReviewCard title={steps[2].title} onEdit={() => onEdit(2)}>
-          <Row label="Document">{app.idFiles.length ? `${idLabel} · ${app.idFiles.length} file(s)` : dash}</Row>
-          <Row label="W-9">Collected when you connect payouts</Row>
+        <ReviewCard title={ts(`${steps[2].id}.title`)} onEdit={() => onEdit(2)}>
+          <Row label={t("document")}>{app.idFiles.length ? t("documentValue", { type: to(`idTypes.${app.idType}`), count: app.idFiles.length }) : dash}</Row>
+          <Row label={t("w9")}>{t("w9Value")}</Row>
         </ReviewCard>
-        <ReviewCard title={steps[3].title} onEdit={() => onEdit(3)}>
-          <Row label="Video">{app.video[0] ?? dash}</Row>
+        <ReviewCard title={ts(`${steps[3].id}.title`)} onEdit={() => onEdit(3)}>
+          <Row label={t("video")}>{app.video[0] ?? dash}</Row>
         </ReviewCard>
       </div>
 
@@ -390,14 +420,16 @@ export function ReviewStep({ app, update, onEdit }: StepProps & { onEdit: (step:
         <div className="flex items-start gap-3">
           <Icon name="video" size={20} className="mt-0.5 shrink-0 text-orange-dark" />
           <div className="flex flex-col gap-1 text-sm leading-normal">
-            <strong className="font-semibold">Short interview</strong>
-            <p className="text-orange-text">If your application passes review, we&apos;ll invite you to a 15-minute video interview with our teaching team.</p>
+            <strong className="font-semibold">{t("interviewTitle")}</strong>
+            <p className="text-orange-text">{t("interviewText")}</p>
           </div>
         </div>
-        <Field label="Preferred interview time" className="max-w-[320px]">
-          <Select value={app.interviewSlot} onChange={(e) => update({ interviewSlot: e.target.value })}>
+        <Field label={t("interviewTime")} className="max-w-[320px]">
+          <Select value={app.interviewSlot} onChange={(e) => update({ interviewSlot: e.target.value as Application["interviewSlot"] })}>
             {interviewSlots.map((s) => (
-              <option key={s}>{s}</option>
+              <option key={s} value={s}>
+                {to(`interviewSlots.${s}`)}
+              </option>
             ))}
           </Select>
         </Field>
@@ -405,19 +437,20 @@ export function ReviewStep({ app, update, onEdit }: StepProps & { onEdit: (step:
 
       <label className="flex items-start gap-3 text-sm leading-normal">
         <input type="checkbox" required className="mt-0.5 size-[18px] shrink-0" />
-        <span>I confirm that I am a U.S. native English speaker and that the information in this application is accurate.</span>
+        <span>{t("confirm")}</span>
       </label>
     </>
   );
 }
 
 function ReviewCard({ title, onEdit, children }: { title: string; onEdit: () => void; children: ReactNode }) {
+  const t = useTranslations("apply.review");
   return (
     <section className="rounded-2xl border border-line-soft p-5">
       <div className="mb-3 flex items-center justify-between gap-3">
         <h2 className="font-display text-base font-bold">{title}</h2>
-        <button type="button" onClick={onEdit} className="text-sm font-semibold text-teal-dark hover:text-navy">
-          Edit<span className="sr-only"> {title.toLowerCase()}</span>
+        <button type="button" onClick={onEdit} aria-label={t("editSection", { section: title })} className="text-sm font-semibold text-teal-dark hover:text-navy">
+          {t("edit")}
         </button>
       </div>
       <dl className="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-[140px_minmax(0,1fr)]">{children}</dl>
@@ -435,14 +468,15 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
 }
 
 /* ---------------- 6 · Approval ---------------- */
-const statuses: { label: string; tone: BadgeTone; text: string }[] = [
-  { label: "Pending", tone: "warning", text: "We're reviewing your documents, video and interview. This usually takes 3–5 business days." },
-  { label: "Approved", tone: "success", text: "Your profile goes live. Set your availability and connect Stripe to start accepting bookings." },
-  { label: "Rejected", tone: "danger", text: "Your application didn't meet our requirements this time. We'll email you the reason." },
-  { label: "Suspended", tone: "neutral", text: "An approved account can be paused if our teacher standards or terms aren't met." },
+const statuses: { id: "pending" | "approved" | "rejected" | "suspended"; tone: BadgeTone }[] = [
+  { id: "pending", tone: "warning" },
+  { id: "approved", tone: "success" },
+  { id: "rejected", tone: "danger" },
+  { id: "suspended", tone: "neutral" },
 ];
 
 export function ApprovalStep({ app }: { app: Application }) {
+  const t = useTranslations("apply.approval");
   return (
     <>
       <div className="flex flex-col items-start gap-4 rounded-2xl bg-orange-100 p-6 sm:flex-row sm:items-center" role="status">
@@ -451,26 +485,26 @@ export function ApprovalStep({ app }: { app: Application }) {
         </span>
         <div className="flex flex-col gap-1">
           <span className="flex flex-wrap items-center gap-2">
-            <strong className="font-display text-lg font-bold">Application submitted</strong>
-            <Badge tone="warning">Pending review</Badge>
+            <strong className="font-display text-lg font-bold">{t("submitted")}</strong>
+            <Badge tone="warning">{t("pendingReview")}</Badge>
           </span>
           <p className="text-sm leading-normal text-orange-text">
-            Thanks{app.firstName ? `, ${app.firstName}` : ""}! We&apos;ll email {app.email || "you"} within 3–5 business days to schedule your interview.
+            {app.firstName ? t("thanksName", { name: app.firstName }) : t("thanks")} {app.email ? t("emailTo", { email: app.email }) : t("emailYou")}
           </p>
         </div>
       </div>
 
       <div className="flex flex-col gap-3">
-        <h2 className="font-display text-[15px] font-bold">What each status means</h2>
+        <h2 className="font-display text-[15px] font-bold">{t("statusTitle")}</h2>
         <ul className="flex flex-col gap-2.5">
           {statuses.map((s, i) => (
-            <li key={s.label} className={i === 0 ? "flex flex-col gap-2 rounded-2xl border-2 border-orange p-4 sm:flex-row sm:items-center sm:gap-4" : "flex flex-col gap-2 rounded-2xl border border-line-soft p-4 sm:flex-row sm:items-center sm:gap-4"}>
+            <li key={s.id} className={i === 0 ? "flex flex-col gap-2 rounded-2xl border-2 border-orange p-4 sm:flex-row sm:items-center sm:gap-4" : "flex flex-col gap-2 rounded-2xl border border-line-soft p-4 sm:flex-row sm:items-center sm:gap-4"}>
               <Badge tone={s.tone} className="w-fit shrink-0 sm:w-[96px] sm:justify-center">
-                {s.label}
+                {t(`statuses.${s.id}.label`)}
               </Badge>
               <span className="text-sm leading-normal text-navy-soft">
-                {s.text}
-                {i === 0 && <span className="sr-only"> (your current status)</span>}
+                {t(`statuses.${s.id}.text`)}
+                {i === 0 && <span className="sr-only"> {t("current")}</span>}
               </span>
             </li>
           ))}

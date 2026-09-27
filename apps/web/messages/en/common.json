@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "title": "Amerivo English — Learn English Your Way",
+    "description": "Live one-on-one lessons with vetted American English teachers. Flexible, personalized, global."
+  },
+  "language": {
+    "label": "Language"
+  },
+  "nav": {
+    "main": "Main",
+    "home": "Home",
+    "teachers": "Teachers",
+    "howItWorks": "How it works",
+    "pricing": "Pricing",
+    "business": "For Business",
+    "becomeTeacher": "Become a Teacher",
+    "logIn": "Log In",
+    "getStarted": "Get Started",
+    "mySpace": "My space",
+    "logOut": "Log out",
+    "homeLink": "Amerivo English home"
+  },
+  "footer": {
+    "tagline": "Real People. Real Conversations. A Brighter You.",
+    "learn": "Learn",
+    "findTeacher": "Find a teacher",
+    "placementTest": "Placement test",
+    "pricing": "Pricing",
+    "teach": "Teach",
+    "becomeTeacher": "Become a teacher",
+    "teacherFaq": "Teacher FAQ",
+    "company": "Company",
+    "about": "About",
+    "support": "Support",
+    "privacy": "Privacy & GDPR",
+    "terms": "Terms",
+    "rights": "© {year} Amerivo English LLC. All rights reserved.",
+    "motto": "LEARN · CONNECT · GROW"
+  },
+  "sidebar": {
+    "nav": "Dashboard",
+    "viewing": "{role} · {space} space"
+  },
+  "roles": {
+    "student": "Student",
+    "teacher": "Teacher",
+    "admin": "Administrator"
+  },
+  "spaces": {
+    "student": "student",
+    "teacher": "teacher",
+    "admin": "admin"
+  },
+  "gate": {
+    "loading": "Loading your space…",
+    "unreachable": "We couldn't reach Amerivo right now. The service may be waking up — please try again in a minute.",
+    "tryAgain": "Try again"
+  },
+  "rating": {
+    "new": "New",
+    "outOf5": "out of 5",
+    "stars": "{count} out of 5 stars"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you're looking for doesn't exist or has moved.",
+    "back": "Back to home"
+  },
+  "progress": "Progress",
+  "loading": "Loading…",
+  "specialties": {
+    "Business English": "Business English",
+    "Conversation": "Conversation",
+    "Interview Prep": "Interview Prep",
+    "IELTS Prep": "IELTS Prep",
+    "TOEFL Prep": "TOEFL Prep",
+    "Teens": "Teens",
+    "General English": "General English",
+    "Travel": "Travel",
+    "Corporate": "Corporate",
+    "Reading": "Reading",
+    "Grammar": "Grammar"
+  },
+  "audiences": {
+    "Adults": "Adults",
+    "Teens": "Teens"
+  }
+}

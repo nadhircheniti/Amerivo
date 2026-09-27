@@ -114,6 +114,22 @@ apps/
 3. Remaining screens: student lessons/homework/progress/payments, teacher students & messages, admin students/bookings/payments/disputes/settings, corporate request form.
 4. Legal pages (Terms, Privacy/GDPR/CCPA), production deployment, monitoring (Sentry).
 
+## Languages (i18n)
+
+The interface is available in **English, French, Arabic (right-to-left), Chinese (Simplified / Mandarin) and Russian**
+([next-intl](https://next-intl.dev), no URL prefixes: the language comes from the visitor's choice — cookie
+`NEXT_LOCALE`, set by the language switcher — or from the browser's language, else English).
+
+- Texts live in `apps/web/messages/<locale>/<area>.json` (areas: common, marketing, auth, onboarding, checkout,
+  student, teacher, apply, admin, classroom). English is the reference; keys are type-checked against it.
+- To change a wording: edit the JSON of that language. To add a text: add the key in `en/…json` first, then in
+  the 4 other languages.
+- `node apps/web/scripts/check-i18n.mjs` checks that every language has the same keys and placeholders.
+- Content written by users (teacher bios, messages, reviews…) is shown as written; prices stay in US dollars.
+- To add a language: add it to `apps/web/src/i18n/config.ts`, copy `messages/en` to `messages/<code>`, translate,
+  and add its Clerk localization in `apps/web/src/app/layout.tsx`.
+- The translations were produced carefully but by machine: have a native speaker review fr/ar/zh/ru before launch.
+
 Deployment (staging on Vercel + Render + Neon): see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
 Design reference: the "Amerivo English – UI Design" canvas (18 screens).

@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "title": "Amerivo English — تعلّم الإنجليزية على طريقتك",
+    "description": "دروس فردية مباشرة مع معلمين أمريكيين معتمدين للغة الإنجليزية. مرنة، مخصّصة لك، ومتاحة في كل مكان."
+  },
+  "language": {
+    "label": "اللغة"
+  },
+  "nav": {
+    "main": "القائمة الرئيسية",
+    "home": "الرئيسية",
+    "teachers": "المعلمون",
+    "howItWorks": "كيف يعمل",
+    "pricing": "الأسعار",
+    "business": "للشركات",
+    "becomeTeacher": "كن معلمًا",
+    "logIn": "تسجيل الدخول",
+    "getStarted": "ابدأ الآن",
+    "mySpace": "مساحتي",
+    "logOut": "تسجيل الخروج",
+    "homeLink": "الصفحة الرئيسية لـ Amerivo English"
+  },
+  "footer": {
+    "tagline": "أشخاص حقيقيون. محادثات حقيقية. مستقبل أكثر إشراقًا.",
+    "learn": "تعلّم",
+    "findTeacher": "ابحث عن معلم",
+    "placementTest": "اختبار تحديد المستوى",
+    "pricing": "الأسعار",
+    "teach": "علِّم",
+    "becomeTeacher": "كن معلمًا",
+    "teacherFaq": "أسئلة المعلمين الشائعة",
+    "company": "الشركة",
+    "about": "من نحن",
+    "support": "الدعم",
+    "privacy": "الخصوصية واللائحة العامة لحماية البيانات",
+    "terms": "الشروط",
+    "rights": "© {year} Amerivo English LLC. جميع الحقوق محفوظة.",
+    "motto": "تعلّم · تواصل · تقدّم"
+  },
+  "sidebar": {
+    "nav": "لوحة التحكم",
+    "viewing": "{role} · مساحة {space}"
+  },
+  "roles": {
+    "student": "طالب",
+    "teacher": "معلم",
+    "admin": "مسؤول"
+  },
+  "spaces": {
+    "student": "الطالب",
+    "teacher": "المعلم",
+    "admin": "الإدارة"
+  },
+  "gate": {
+    "loading": "جارٍ تحميل مساحتك…",
+    "unreachable": "تعذّر الوصول إلى Amerivo حاليًا. ربما تتم إعادة تشغيل الخدمة — يُرجى المحاولة مجددًا بعد دقيقة.",
+    "tryAgain": "حاول مرة أخرى"
+  },
+  "rating": {
+    "new": "جديد",
+    "outOf5": "من 5",
+    "stars": "{count} من 5 نجوم"
+  },
+  "notFound": {
+    "title": "الصفحة غير موجودة",
+    "description": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    "back": "العودة إلى الرئيسية"
+  },
+  "progress": "التقدّم",
+  "loading": "جارٍ التحميل…",
+  "specialties": {
+    "Business English": "الإنجليزية للأعمال",
+    "Conversation": "المحادثة",
+    "Interview Prep": "التحضير للمقابلات",
+    "IELTS Prep": "التحضير لاختبار IELTS",
+    "TOEFL Prep": "التحضير لاختبار TOEFL",
+    "Teens": "المراهقون",
+    "General English": "الإنجليزية العامة",
+    "Travel": "السفر",
+    "Corporate": "الشركات",
+    "Reading": "القراءة",
+    "Grammar": "القواعد"
+  },
+  "audiences": {
+    "Adults": "البالغون",
+    "Teens": "المراهقون"
+  }
+}

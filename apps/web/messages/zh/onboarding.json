@@ -1,0 +1,87 @@
+{
+  "goals": {
+    "metaTitle": "学习目标",
+    "step": "第 3 步，共 4 步 · 学习目标",
+    "saveLater": "保存，稍后完成",
+    "title": "告诉我们你的学习目标",
+    "subtitle": "我们会根据你的回答推荐合适的老师。",
+    "whyLegend": "你为什么学习英语？",
+    "goals": {
+      "business": "商务",
+      "businessHint": "会议、邮件、面试",
+      "travel": "旅行",
+      "travelHint": "出行畅通无阻",
+      "university": "教育",
+      "universityHint": "学校、大学、考试",
+      "immigration": "移民",
+      "immigrationHint": "在美国生活和工作",
+      "conversation": "日常会话",
+      "conversationHint": "每天自然地交流"
+    },
+    "levelQuestion": "你如何描述自己的水平？",
+    "levelLabel": "你的英语水平",
+    "levels": {
+      "beginner": "初级",
+      "intermediate": "中级",
+      "advanced": "高级"
+    },
+    "teacherLegend": "老师偏好",
+    "teacherPrefs": {
+      "none": "无偏好",
+      "female": "女老师",
+      "male": "男老师"
+    },
+    "timesLegend": "偏好的上课时间",
+    "times": {
+      "morning": "上午",
+      "afternoon": "下午",
+      "evening": "晚上",
+      "weekend": "周末"
+    },
+    "back": "返回",
+    "continue": "继续进行水平测试",
+    "aboutTest": "关于水平测试",
+    "nextEyebrow": "下一步 · 水平测试",
+    "duration": "约 15 分钟",
+    "testDescription": "四个简短部分，测出你从 A1 到 C2 的 CEFR 等级，并保存到你的个人资料。",
+    "sampleLegend": "示例题 · 语法"
+  },
+  "skills": {
+    "grammar": "语法",
+    "reading": "阅读",
+    "listening": "听力",
+    "speaking": "口语"
+  },
+  "results": {
+    "metaTitle": "你的水平和推荐老师",
+    "step": "第 4 步，共 4 步 · 完成",
+    "dashboard": "前往我的控制面板",
+    "levelAria": "你的水平：{level}，{label}",
+    "eyebrow": "你的水平测试结果",
+    "title": "太棒了，{name}！你的水平是 {level}。",
+    "description": "你已能应对大多数日常场景。下一个目标：在会议中更流利地表达，并能听懂母语者的正常语速（B2）。",
+    "cefrScale": "CEFR 等级",
+    "bySkill": "各项技能水平",
+    "recommendedTitle": "为你推荐的老师",
+    "recommendedSubtitle": "根据你的目标（{goal}）、水平、晚间可上课时间和评分匹配。",
+    "seeAll": "查看所有老师",
+    "bestMatch": "最佳匹配",
+    "perLesson": "{price} / 课",
+    "reasons": {
+      "specialist": "{specialty}专家",
+      "evenings": "你的晚间时段可预约",
+      "speaksSpanish": "会说西班牙语",
+      "negotiation": "谈判与演讲",
+      "experience": "{years, plural, other {# 年教学经验}}",
+      "weekend": "周末可约",
+      "fluency": "专注口语流利度",
+      "budget": "价格实惠"
+    },
+    "bookTrial": "预约免费试听课",
+    "bookTrialWith": "预约 {name} 的免费试听课",
+    "bookLesson": "预约课程",
+    "bookLessonWith": "预约 {name} 的课程",
+    "profile": "个人资料",
+    "profileOf": "{name} 的个人资料"
+  }
+}

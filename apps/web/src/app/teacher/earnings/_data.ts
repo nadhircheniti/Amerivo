@@ -1,12 +1,17 @@
 import { currentTeacher, packagePrice } from "@/lib/mock-data";
 
-export type EarningStatus = "Pending" | "Available" | "Trial" | "Refunded";
+/** Status ids; labels live in messages/<locale>/teacher.json → earnings.status. */
+export type EarningStatus = "pending" | "available" | "trial" | "refunded";
+
+/** What was taught: a single lesson, one lesson of a pack, or a free trial. */
+export type LessonKind = { type: "single"; minutes: number } | { type: "pack"; size: number; index: number } | { type: "trial"; minutes: number };
 
 export type LessonEarning = {
   id: string;
+  /** yyyy-mm-dd */
   date: string;
   student: string;
-  lesson: string;
+  lesson: LessonKind;
   /** Gross price paid by the student for this lesson (USD). */
   price: number;
   status: EarningStatus;
@@ -17,28 +22,29 @@ const tenPackUnit = packagePrice(unit, 10) / 10;
 
 /** Sample lesson ledger (October). */
 export const lessonEarnings: LessonEarning[] = [
-  { id: "e1", date: "Oct 14", student: "Maria S.", lesson: "50 min", price: unit, status: "Pending" },
-  { id: "e2", date: "Oct 13", student: "Lucas M.", lesson: "50 min", price: unit, status: "Available" },
-  { id: "e3", date: "Oct 12", student: "Ana C.", lesson: "10-pack (1/10)", price: tenPackUnit, status: "Available" },
-  { id: "e4", date: "Oct 11", student: "Kenji T.", lesson: "Trial 20 min", price: 0, status: "Trial" },
-  { id: "e5", date: "Oct 10", student: "Maria S.", lesson: "50 min", price: unit, status: "Available" },
-  { id: "e6", date: "Oct 9", student: "Ana C.", lesson: "50 min", price: unit, status: "Refunded" },
+  { id: "e1", date: "2026-10-14", student: "Maria S.", lesson: { type: "single", minutes: 50 }, price: unit, status: "pending" },
+  { id: "e2", date: "2026-10-13", student: "Lucas M.", lesson: { type: "single", minutes: 50 }, price: unit, status: "available" },
+  { id: "e3", date: "2026-10-12", student: "Ana C.", lesson: { type: "pack", size: 10, index: 1 }, price: tenPackUnit, status: "available" },
+  { id: "e4", date: "2026-10-11", student: "Kenji T.", lesson: { type: "trial", minutes: 20 }, price: 0, status: "trial" },
+  { id: "e5", date: "2026-10-10", student: "Maria S.", lesson: { type: "single", minutes: 50 }, price: unit, status: "available" },
+  { id: "e6", date: "2026-10-09", student: "Ana C.", lesson: { type: "single", minutes: 50 }, price: unit, status: "refunded" },
 ];
 
+/** date: yyyy-mm-dd · period: yyyy-mm */
 export type Payout = { id: string; date: string; period: string; method: string; lessons: number; amount: number };
 
 export const payouts: Payout[] = [
-  { id: "p9", date: "Sep 28", period: "September", method: "Chase •••• 4821", lessons: 43, amount: 1190 },
-  { id: "p8", date: "Aug 28", period: "August", method: "Chase •••• 4821", lessons: 38, amount: 1050 },
-  { id: "p7", date: "Jul 28", period: "July", method: "Chase •••• 4821", lessons: 35, amount: 960 },
-  { id: "p6", date: "Jun 28", period: "June", method: "Chase •••• 4821", lessons: 30, amount: 820 },
+  { id: "p9", date: "2026-09-28", period: "2026-09", method: "Chase •••• 4821", lessons: 43, amount: 1190 },
+  { id: "p8", date: "2026-08-28", period: "2026-08", method: "Chase •••• 4821", lessons: 38, amount: 1050 },
+  { id: "p7", date: "2026-07-28", period: "2026-07", method: "Chase •••• 4821", lessons: 35, amount: 960 },
+  { id: "p6", date: "2026-06-28", period: "2026-06", method: "Chase •••• 4821", lessons: 30, amount: 820 },
 ];
 
-/** Net earnings per month (after commission), last 5 months. */
+/** Net earnings per month (after commission), last 5 months. month: yyyy-mm */
 export const monthlyNet = [
-  { month: "Jun", value: 820 },
-  { month: "Jul", value: 960 },
-  { month: "Aug", value: 1050 },
-  { month: "Sep", value: 1190 },
-  { month: "Oct", value: 1092, current: true },
+  { month: "2026-06", value: 820 },
+  { month: "2026-07", value: 960 },
+  { month: "2026-08", value: 1050 },
+  { month: "2026-09", value: 1190 },
+  { month: "2026-10", value: 1092, current: true },
 ];

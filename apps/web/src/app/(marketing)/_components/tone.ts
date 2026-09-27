@@ -1,4 +1,5 @@
 import type { AvatarTone } from "@/components/ui/primitives";
+import { intlTags, type Locale } from "@/i18n/config";
 
 /** Large initials tiles (teacher cards) — same pairings as the Avatar tones. */
 export const toneTile: Record<AvatarTone, string> = {
@@ -11,14 +12,19 @@ export const toneTile: Record<AvatarTone, string> = {
   navy: "bg-navy-soft text-white",
 };
 
-/** Formats a USD amount without trailing ".00" (e.g. $35, $166.25). */
-export function shortUsd(n: number) {
-  return Number.isInteger(n) ? `$${n}` : `$${n.toFixed(2)}`;
+/** Formats a USD amount without trailing ".00" (e.g. $35, $166.25), in the visitor's language. */
+export function shortUsd(n: number, locale: Locale = "en") {
+  const digits = Number.isInteger(n) ? 0 : 2;
+  return n.toLocaleString(intlTags[locale], { style: "currency", currency: "USD", minimumFractionDigits: digits, maximumFractionDigits: digits });
 }
 
-export const tzLongName: Record<string, string> = {
-  EST: "Eastern Time",
-  CST: "Central Time",
-  MST: "Mountain Time",
-  PST: "Pacific Time",
-};
+/**
+ * Localizes a spoken-language entry such as "Spanish (B2)" or "English (native)".
+ * `tr` returns the translated language name (or the input when unknown); CEFR levels stay as-is.
+ */
+export function localizeLanguage(entry: string, tr: (name: string) => string) {
+  const m = entry.match(/^(.*?)\s*\((.*)\)$/);
+  if (!m) return tr(entry);
+  const [, name, level] = m;
+  return `${tr(name)} (${level === "native" ? tr("native") : level})`;
+}

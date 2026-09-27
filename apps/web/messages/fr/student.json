@@ -1,0 +1,178 @@
+{
+  "nav": {
+    "overview": "Vue d'ensemble",
+    "lessons": "Mes cours",
+    "findTeachers": "Trouver un professeur",
+    "messages": "Messages",
+    "homework": "Devoirs",
+    "progress": "Progression",
+    "payments": "Paiements",
+    "settings": "Paramètres",
+    "userSubtitle": "Élève · Niveau {level}"
+  },
+  "backToOverview": "Retour à la vue d'ensemble",
+  "comingSoon": {
+    "lessons": {
+      "title": "Mes cours",
+      "description": "Votre calendrier complet, vos cours passés et vos comptes rendus apparaîtront ici."
+    },
+    "homework": {
+      "title": "Devoirs",
+      "description": "Tous vos devoirs — à faire, en cours et terminés — au même endroit."
+    },
+    "progress": {
+      "title": "Progression",
+      "description": "L'évolution de votre niveau, de vos heures d'étude et de vos compétences."
+    },
+    "payments": {
+      "title": "Paiements",
+      "description": "Factures, historique des paiements et vos forfaits."
+    },
+    "settings": {
+      "title": "Paramètres",
+      "description": "Profil, notifications, fuseau horaire et mot de passe."
+    }
+  },
+  "overview": {
+    "metaTitle": "Vue d'ensemble",
+    "greeting": "Bonsoir, {name}",
+    "encouragement": "Continuez comme ça — le niveau {level} se rapproche.",
+    "notifications": "Notifications (nouvelles)",
+    "bookLesson": "Réserver un cours",
+    "nextLesson": {
+      "eyebrow": "Prochain cours · dans {minutes} min",
+      "title": "{subject} avec {name}",
+      "details": "Aujourd'hui · {time} (votre heure) · Sujet : {topic}",
+      "join": "Rejoindre la salle de classe"
+    },
+    "stats": {
+      "label": "Votre progression",
+      "hoursStudied": "Heures d'étude",
+      "hoursHint": "+{hours} ce mois-ci",
+      "lessonsCompleted": "Cours terminés",
+      "withTeachers": "{count, plural, one {Avec # professeur} other {Avec # professeurs}}",
+      "levelProgress": "Progression de niveau",
+      "levelProgressAria": "Progression de {from} à {to}",
+      "currentPlan": "Formule actuelle",
+      "pack": "Forfait de {count} cours",
+      "lessonsLeft": "{count, plural, one {# cours restant} other {# cours restants}}"
+    },
+    "upcoming": {
+      "title": "Cours à venir",
+      "viewCalendar": "Voir le calendrier",
+      "reschedule": "Reprogrammer",
+      "rescheduleAria": "Reprogrammer le cours avec {name} le {date}",
+      "nextTeacher": "<strong>Un autre professeur ?</strong> Continuez avec {name} ou essayez quelqu'un de nouveau.",
+      "bookName": "Réserver avec {name}",
+      "browse": "Parcourir"
+    },
+    "lastLesson": {
+      "title": "Résumé du dernier cours",
+      "openReport": "Ouvrir le compte rendu",
+      "strengths": "Points forts",
+      "toWorkOn": "À travailler"
+    },
+    "payments": {
+      "title": "Paiements",
+      "allInvoices": "Toutes les factures",
+      "free": "Gratuit",
+      "pack": "Forfait de {count} cours · {teacher}",
+      "single": "Cours à l'unité · {teacher}",
+      "trial": "Cours d'essai · {teacher}"
+    }
+  },
+  "homework": {
+    "title": "Devoirs",
+    "status": "{pending} à faire · {done, plural, one {# terminé} other {# terminés}}",
+    "completed": "Terminé",
+    "dueTomorrow": "Pour demain",
+    "dueOn": "Pour le {date}",
+    "from": "{due} · de {teacher}"
+  },
+  "live": {
+    "booked": "Votre cours est réservé ! Vous le trouverez ci-dessous et recevrez un e-mail de confirmation.",
+    "title": "Mes cours réservés",
+    "loadError": "Impossible de charger vos cours pour le moment. Veuillez actualiser dans une minute.",
+    "empty": "Aucun cours à venir pour l'instant — choisissez un professeur et réservez votre premier cours.",
+    "withName": {
+      "trial": "Cours d'essai avec {name}",
+      "single": "Cours avec {name}",
+      "package": "Cours du forfait avec {name}"
+    },
+    "withYourTeacher": {
+      "trial": "Cours d'essai avec votre professeur",
+      "single": "Cours avec votre professeur",
+      "package": "Cours du forfait avec votre professeur"
+    },
+    "status": {
+      "confirmed": "Confirmé",
+      "pending_payment": "En attente de paiement"
+    },
+    "timeZoneNote": "Heures affichées dans votre fuseau horaire ({tz})."
+  },
+  "lesson": {
+    "metaTitle": "Résumé du cours",
+    "eyebrow": "Résumé du cours",
+    "niceWork": "Beau travail aujourd'hui, {name} !",
+    "meta": "{teacher} · {date} · {minutes} min · {topic}",
+    "srLesson": "(cours {id})",
+    "homeworkDue": "Devoirs · pour le {date}",
+    "nextRecommendation": "Conseil pour le prochain cours",
+    "strengths": "Points forts",
+    "toWorkOn": "À travailler",
+    "howWas": "Comment s'est passé votre cours avec {name} ?",
+    "bookNext": "Réserver le prochain avec {name}",
+    "tryAnother": "Essayer un autre professeur"
+  },
+  "review": {
+    "labels": {
+      "poor": "Décevant",
+      "fair": "Passable",
+      "good": "Bien",
+      "veryGood": "Très bien",
+      "excellent": "Excellent"
+    },
+    "thanks": "Merci pour votre avis !",
+    "rated": "Vous avez noté ce cours {rating} sur 5.",
+    "willAppear": "Votre avis apparaîtra sur le profil public de {name}.",
+    "helps": "Votre note aide {name} et les autres élèves.",
+    "legend": "Note",
+    "starOption": "{count, plural, one {# étoile} other {# étoiles}} – {label}",
+    "tapToRate": "Touchez une étoile pour noter",
+    "writeReview": "Écrire un avis (facultatif)",
+    "placeholder": "Qu'avez-vous apprécié ? Votre avis apparaîtra sur le profil public de {name}.",
+    "submit": "Envoyer mon avis"
+  },
+  "messages": {
+    "metaTitle": "Messages",
+    "title": "Messages",
+    "searchLabel": "Rechercher dans les messages",
+    "searchPlaceholder": "Rechercher",
+    "conversations": "Conversations",
+    "unread": "Non lu",
+    "noMatch": "Aucune conversation ne correspond à « {query} ».",
+    "conversationWith": "Conversation avec {name}",
+    "backToList": "Retour aux conversations",
+    "attach": "Joindre un fichier",
+    "messageLabel": "Message",
+    "placeholder": "Écrire un message…",
+    "send": "Envoyer",
+    "youSr": "Vous : ",
+    "youPreview": "Vous : {text}",
+    "youSent": "Vous avez envoyé {name}",
+    "open": "Ouvrir",
+    "openFile": "Ouvrir {name}",
+    "details": "Détails de la conversation",
+    "viewProfile": "Voir le profil",
+    "sharedFiles": "Fichiers partagés",
+    "together": "Votre parcours ensemble",
+    "togetherStats": "{lessons, plural, one {# cours} other {# cours}} · {hours} h",
+    "joinLesson": "Rejoindre le cours de {time}",
+    "today": "Aujourd'hui",
+    "homeworkSubmitted": "Devoir rendu",
+    "online": "En ligne · {city}, {time}",
+    "lastSeen": "Dernière connexion : {day} · {city}",
+    "repliesWithinHours": "Répond généralement en quelques heures",
+    "supportSubtitle": "Aide pour vos réservations, paiements et votre compte"
+  }
+}

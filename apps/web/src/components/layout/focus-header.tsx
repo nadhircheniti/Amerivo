@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { Logo } from "@/components/ui/logo";
+import { LanguageSwitcher } from "./language-switcher";
 
 /** Slim header for focused flows (onboarding, checkout, teacher application). */
 export function FocusHeader({
@@ -15,6 +17,7 @@ export function FocusHeader({
   progress?: number;
   brandSuffix?: string;
 }) {
+  const t = useTranslations("common");
   return (
     <>
       <header className="border-b border-sand bg-white">
@@ -29,12 +32,12 @@ export function FocusHeader({
               {(right as { label: string }).label}
             </Link>
           ) : (
-            ((right as ReactNode) ?? <span />)
+            ((right as ReactNode) ?? <LanguageSwitcher compact />)
           )}
         </div>
       </header>
       {progress !== undefined && (
-        <div className="h-[5px] bg-sand" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label="Progress">
+        <div className="h-[5px] bg-sand" role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label={t("progress")}>
           <div className="h-full bg-teal-dark" style={{ width: `${progress}%` }} />
         </div>
       )}

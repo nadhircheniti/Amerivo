@@ -1,0 +1,209 @@
+{
+  "nav": {
+    "analytics": "الإحصاءات",
+    "teachers": "المعلمون",
+    "students": "الطلاب",
+    "bookings": "الحجوزات",
+    "payments": "المدفوعات وتحويل الأرباح",
+    "disputes": "النزاعات والاسترداد",
+    "settings": "الإعدادات وسجل التدقيق",
+    "signedIn2fa": "تم تسجيل الدخول بالتحقق الثنائي"
+  },
+  "comingSoon": {
+    "back": "العودة إلى الإحصاءات",
+    "bookingsTitle": "الحجوزات",
+    "bookingsDescription": "الدروس القادمة والمكتملة والملغاة، مع إعادة الجدولة وتجاوز الحالة.",
+    "disputesTitle": "النزاعات والاسترداد",
+    "disputesDescription": "الشكاوى وطلبات الاسترداد (خلال 24 ساعة).",
+    "paymentsTitle": "المدفوعات وتحويل الأرباح",
+    "paymentsDescription": "الإيرادات، وتحويل أرباح المعلمين، والاسترداد، والمدفوعات المستحقة.",
+    "settingsTitle": "الإعدادات وسجل التدقيق",
+    "settingsDescription": "جدول تحويل الأرباح، والعمولة، والمسؤولون مع التحقق الثنائي، وسجل التدقيق.",
+    "studentsTitle": "الطلاب",
+    "studentsDescription": "إضافة الطلاب وتعديلهم وحظرهم والتواصل معهم واسترداد مدفوعاتهم."
+  },
+  "overview": {
+    "metaTitle": "إحصاءات المنصة · Amerivo Admin",
+    "title": "إحصاءات المنصة",
+    "subtitle": "بيانات تجريبية · تُحدَّث الأرقام في الوقت الفعلي",
+    "period": "الفترة",
+    "last30": "آخر 30 يومًا",
+    "last90": "آخر 90 يومًا",
+    "thisYear": "هذا العام",
+    "keyMetrics": "المؤشرات الرئيسية",
+    "kpi": {
+      "totalStudents": "إجمالي الطلاب",
+      "totalStudentsHint": "ارتفاع مقارنةً بالفترة السابقة",
+      "activeStudents": "الطلاب النشطون",
+      "activeStudentsHint": "حجزوا خلال آخر 30 يومًا",
+      "totalTeachers": "إجمالي المعلمين",
+      "totalTeachersHint": "{count, plural, zero {لا توجد طلبات معلّقة} one {طلب واحد معلّق} two {طلبان معلّقان} few {# طلبات معلّقة} many {# طلبًا معلّقًا} other {# طلب معلّق}}",
+      "revenue": "الإيرادات (الإجمالية)",
+      "revenueHint": "العمولة {percent}%: {amount}",
+      "lessonsCompleted": "الدروس المكتملة",
+      "retention": "معدل الاحتفاظ",
+      "retentionHint": "طلاب حجزوا مجددًا خلال 30 يومًا",
+      "conversion": "معدل التحويل",
+      "conversionHint": "درس تجريبي ← درس مدفوع",
+      "payouts": "تحويلات أرباح مستحقة",
+      "payoutsHint": "تستحق في {date}"
+    }
+  },
+  "export": {
+    "button": "تصدير CSV",
+    "bookingId": "رقم الحجز",
+    "amountUsd": "المبلغ (USD)"
+  },
+  "chart": {
+    "title": "الإيرادات والدروس",
+    "sample": "بيانات تجريبية",
+    "legend": "مفتاح الرسم",
+    "revenue": "الإيرادات",
+    "lessons": "الدروس",
+    "aria": "تطور الإيرادات والدروس، بيانات تجريبية، من {from} إلى {to}. ترتفع السلسلتان بثبات: مؤشر الإيرادات من {revenueFrom} إلى {revenueTo}، ومؤشر الدروس من {lessonsFrom} إلى {lessonsTo}.",
+    "note": "مقياس نسبي (أعلى شهر = 100). ستظهر الأرقام الفعلية بعد ربط واجهة برمجة التحليلات."
+  },
+  "refunds": {
+    "title": "طلبات الاسترداد",
+    "window": "خلال 24 ساعة بعد الدرس",
+    "lessonOn": "درس {date}",
+    "refunded": "تم الاسترداد",
+    "declined": "مرفوض",
+    "awaitingReply": "بانتظار الرد",
+    "liveRefunded": "تم استرداد {amount} إلى {name}.",
+    "liveDeclined": "تم رفض طلب الاسترداد المقدَّم من {name}.",
+    "liveContacted": "تم إرسال رسالة إلى {name}.",
+    "returned": "أُعيد مبلغ {amount} إلى وسيلة الدفع الأصلية.",
+    "notified": "تم إبلاغ الطالب.",
+    "undo": "تراجع",
+    "refund": "استرداد",
+    "contact": "تواصل",
+    "contacted": "تم التواصل",
+    "decline": "رفض",
+    "teacherWarning": "تحذير للمعلم",
+    "warningText": "الإلغاء رقم {count} هذا الشهر — تم إرسال تحذير تلقائي."
+  },
+  "bookings": {
+    "title": "الحجوزات",
+    "statusTabs": "حالة الحجز",
+    "tabs": {
+      "upcoming": "القادمة",
+      "completed": "المكتملة",
+      "cancelled": "الملغاة"
+    },
+    "status": {
+      "confirmed": "مؤكَّد",
+      "pendingPayment": "بانتظار الدفع",
+      "completed": "مكتمل",
+      "cancelled": "ملغى",
+      "refunded": "مسترَد"
+    },
+    "type": {
+      "single": "درس فردي · 50 دقيقة",
+      "trial": "درس تجريبي · 20 دقيقة",
+      "pack": "{size, plural, one {باقة درس واحد} two {باقة درسين} few {باقة # دروس} many {باقة # درسًا} other {باقة # درس}} ({used}/{size})",
+      "corporate": "باقة الشركات · {size, plural, one {درس واحد} two {درسان} few {# دروس} many {# درسًا} other {# درس}}"
+    },
+    "dateUtc": "التاريخ (UTC)",
+    "student": "الطالب",
+    "teacher": "المعلم",
+    "typeHeader": "النوع",
+    "amount": "المبلغ",
+    "statusHeader": "الحالة",
+    "actions": "الإجراءات",
+    "empty": "لا توجد حجوزات في هذا العرض.",
+    "free": "مجاني",
+    "newDate": "التاريخ والوقت الجديدان (UTC) لـ {booking}",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "reschedule": "إعادة جدولة",
+    "rescheduleAria": "إعادة جدولة {booking}",
+    "cancelAria": "إلغاء {booking}",
+    "override": "تجاوز",
+    "overrideAria": "تجاوز حالة {booking}",
+    "noticeMoved": "نُقل حجز {name} إلى {when} UTC. تم إبلاغ الطالب والمعلم.",
+    "noticeCancelled": "أُلغي حجز {name}. أصبح الآن في تبويب الملغاة.",
+    "noticePaid": "تم تسجيل استلام الدفع من {name}. سُجّل التجاوز في سجل التدقيق.",
+    "noticeRestored": "أُعيد حجز {name} إلى القادمة. سُجّل التجاوز في سجل التدقيق.",
+    "noticeOverride": "سُجّل التجاوز الخاص بـ {name} في سجل التدقيق."
+  },
+  "teachers": {
+    "metaTitle": "إدارة المعلمين · Amerivo Admin",
+    "title": "إدارة المعلمين",
+    "search": "البحث عن معلمين",
+    "searchPlaceholder": "ابحث بالاسم أو البريد الإلكتروني",
+    "statusTabs": "حالة المعلم",
+    "tabs": {
+      "all": "الكل",
+      "pending": "قيد المراجعة ({count})",
+      "approved": "المقبولون",
+      "rejected": "المرفوضون",
+      "suspended": "الموقوفون"
+    },
+    "status": {
+      "pending": "بانتظار المراجعة",
+      "interview": "طُلبت مقابلة",
+      "approved": "مقبول",
+      "rejected": "مرفوض",
+      "suspended": "موقوف"
+    },
+    "flags": {
+      "idPending": "الهوية قيد التحقق",
+      "noVideo": "لا يوجد فيديو"
+    },
+    "notice": {
+      "interview": "طُلبت مقابلة من {name}. يبقى الطلب في قيد المراجعة.",
+      "pending": "أُعيد فتح طلب {name} ونُقل إلى تبويب قيد المراجعة.",
+      "approved": "تم قبول {name} ونُقل إلى تبويب المقبولين.",
+      "rejected": "تم رفض {name} ونُقل إلى تبويب المرفوضين.",
+      "suspended": "تم إيقاف {name} ونُقل إلى تبويب الموقوفين."
+    },
+    "applicants": "المتقدمون",
+    "empty": "لا يوجد معلمون يطابقون هذا العرض.",
+    "applied": "{city} · تقدّم في {date}",
+    "since": "{city} · منذ {date}",
+    "selectPrompt": "اختر معلمًا لمراجعته.",
+    "playVideo": "تشغيل الفيديو التعريفي لـ {name} ({length})",
+    "introVideo": "فيديو تعريفي · {length}",
+    "noVideo": "لم يُرفع فيديو تعريفي",
+    "education": "المؤهل العلمي",
+    "experience": "الخبرة",
+    "experienceYears": "{count, plural, =0 {أقل من سنة} one {سنة واحدة} two {سنتان} few {# سنوات} many {# سنة} other {# سنة}}",
+    "teaches": "يُدرّس",
+    "rate": "السعر",
+    "ratePer": "{price} / 50 دقيقة",
+    "certifications": "الشهادات",
+    "noneProvided": "لم تُقدَّم أي شهادة",
+    "identity": "الهوية (Stripe Identity)",
+    "identityVerified": "تم التحقق · {document}",
+    "identityPending": "قيد التحقق · تم تقديم المستند",
+    "documents": {
+      "passport": "جواز السفر",
+      "driversLicense": "رخصة القيادة"
+    },
+    "evaluation": "التقييم",
+    "evalFields": {
+      "fluency": "الطلاقة في الإنجليزية",
+      "professionalism": "الاحترافية",
+      "teaching": "القدرة على التدريس",
+      "camera": "جودة الكاميرا",
+      "internet": "جودة الإنترنت"
+    },
+    "scores": {
+      "5": "5 – ممتاز",
+      "4": "4 – جيد",
+      "3": "3 – متوسط",
+      "2": "2 – ضعيف",
+      "1": "1 – ضعيف جدًا"
+    },
+    "internalNotes": "ملاحظات داخلية",
+    "notesPlaceholder": "مرئية للمسؤولين فقط",
+    "requestInterview": "طلب مقابلة",
+    "interviewRequested": "طُلبت مقابلة",
+    "reject": "رفض",
+    "approve": "قبول المعلم",
+    "suspend": "إيقاف",
+    "reinstate": "إعادة التفعيل",
+    "reopen": "إعادة فتح الطلب"
+  }
+}

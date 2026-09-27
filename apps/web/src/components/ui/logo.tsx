@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
 
 /** Placeholder redraw of the client's leaf mark — replace with final vector files when delivered. */
@@ -29,6 +30,7 @@ export function Logo({
   href?: string | null;
   className?: string;
 }) {
+  const t = useTranslations("common.nav");
   const s = { sm: { mark: 34, word: "text-[20px]", sub: "text-[9px] tracking-[4px]" }, md: { mark: 40, word: "text-2xl", sub: "text-[10px] tracking-[5px]" }, lg: { mark: 48, word: "text-[28px]", sub: "text-[11px] tracking-[6px]" } }[size];
   const content = (
     <>
@@ -45,7 +47,7 @@ export function Logo({
   );
   if (!href) return <span className={cn("flex items-center gap-2.5", className)}>{content}</span>;
   return (
-    <Link href={href} aria-label="Amerivo English home" className={cn("flex items-center gap-2.5", className)}>
+    <Link href={href} aria-label={t("homeLink")} className={cn("flex items-center gap-2.5", className)}>
       {content}
     </Link>
   );

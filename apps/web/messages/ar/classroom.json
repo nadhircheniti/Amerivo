@@ -1,0 +1,50 @@
+{
+  "page": {
+    "metaTitle": "درس مباشر",
+    "backToDashboard": "العودة إلى لوحة التحكم",
+    "participants": "{teacher} و{student}",
+    "connectionGood": "الاتصال جيد"
+  },
+  "timer": {
+    "label": "الوقت المنقضي {elapsed} من {total}"
+  },
+  "controls": {
+    "toolbar": "عناصر التحكم في المكالمة",
+    "muteMic": "كتم الميكروفون",
+    "cameraOff": "إيقاف الكاميرا",
+    "shareScreen": "مشاركة الشاشة",
+    "whiteboard": "السبورة",
+    "endLesson": "إنهاء الدرس"
+  },
+  "stage": {
+    "whiteboard": "السبورة المشتركة",
+    "tools": "أدوات السبورة",
+    "tool": {
+      "pen": "قلم",
+      "text": "نص",
+      "shape": "شكل",
+      "eraser": "ممحاة"
+    },
+    "videoCall": "مكالمة فيديو مع {name}",
+    "videoFeed": "بث الفيديو",
+    "sharing": "أنت تشارك شاشتك",
+    "teacherLabel": "{name} · المعلم",
+    "you": "أنت",
+    "cameraOff": "الكاميرا متوقفة",
+    "micMuted": "الميكروفون مكتوم"
+  },
+  "panel": {
+    "label": "لوحة الدرس",
+    "chat": "الدردشة",
+    "notes": "ملاحظات الدرس",
+    "files": "الملفات",
+    "chatMessages": "رسائل الدردشة",
+    "youPrefix": "أنت:",
+    "chatMessage": "رسالة الدردشة",
+    "messagePlaceholder": "اكتب رسالة إلى {name}…",
+    "send": "إرسال الرسالة",
+    "notesLabel": "ملاحظات الدرس المشتركة · تُحفظ تلقائيًا",
+    "sharedFiles": "الملفات المشتركة",
+    "upload": "رفع ملف"
+  }
+}

@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useMemo, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { ChoiceTile } from "@/components/ui/form";
@@ -9,6 +10,7 @@ import { formatUsd, packagePrice } from "@/lib/mock-data";
 import { cn } from "@/lib/cn";
 import { shortUsd } from "../../../_components/tone";
 import { API_URL } from "@/lib/api";
+import { intlTags } from "@/i18n/config";
 import { addDays, buildWeek, civilDate, dayLabel, firstMonday, groupApiSlots, timeLabel, zonedToInstant, type SlotDay } from "./slots";
 
 type LessonType = "trial" | "single" | "pack5" | "pack10";
@@ -63,6 +65,9 @@ export function BookingCard({
   offersPack10: boolean;
   teacherTimezone: string;
 }) {
+  const t = useTranslations("marketing.booking");
+  const locale = useLocale();
+  const tag = intlTags[locale];
   const ids = useId();
   const clockSnap = useViewerClockSnapshot();
   const clock = useMemo(() => {
@@ -76,17 +81,17 @@ export function BookingCard({
   const [slot, setSlot] = useState<{ iso: string; instant: number } | null>(null);
 
   const options = [
-    ...(offersTrial ? [{ value: "trial" as const, label: "Trial lesson · 20 min", price: 0 }] : []),
+    ...(offersTrial ? [{ value: "trial" as const, label: t("trial"), price: 0 }] : []),
     {
       value: "single" as const,
-      label: "Single lesson · 50 min",
+      label: t("single"),
       price: priceUsd,
     },
     ...(offersPack5
       ? [
           {
             value: "pack5" as const,
-            label: "5 lessons",
+            label: t("pack5"),
             discount: "−5%",
             price: packagePrice(priceUsd, 5),
           },
@@ -96,7 +101,7 @@ export function BookingCard({
       ? [
           {
             value: "pack10" as const,
-            label: "10 lessons",
+            label: t("pack10"),
             discount: "−10%",
             price: packagePrice(priceUsd, 10),
           },
@@ -117,14 +122,15 @@ export function BookingCard({
       viewerTz: clock.tz,
       monday,
       now: clock.now,
+      tag,
     });
-  }, [clock, monday, slug, teacherTimezone]);
-  const live = useLiveSlots(slug, clock?.tz ?? null, monday, type === "trial");
+  }, [clock, monday, slug, teacherTimezone, tag]);
+  const live = useLiveSlots(slug, clock?.tz ?? null, monday, type === "trial", tag);
   const days = API_URL ? live.days : demoDays;
 
-  const weekRange = days ? `${shortDate(days[0].date)} – ${shortDate(days[6].date)}` : "";
+  const weekRange = days ? `${shortDate(days[0].date, tag)} – ${shortDate(days[6].date, tag)}` : "";
 
-  const summary = slot && clock ? `${dayLabel(slot.instant, clock.tz)} · ${timeLabel(slot.instant, clock.tz)}–${timeLabel(slot.instant + duration * 60_000, clock.tz)}` : null;
+  const summary = slot && clock ? `${dayLabel(slot.instant, clock.tz, tag)} · ${timeLabel(slot.instant, clock.tz)}–${timeLabel(slot.instant + duration * 60_000, clock.tz)}` : null;
 
   const checkoutHref = slot && clock ? `/checkout?${new URLSearchParams({ teacher: slug, type, slot: slot.iso, tz: clock.tz }).toString()}` : null;
 
@@ -135,15 +141,15 @@ export function BookingCard({
       className="flex w-full shrink-0 flex-col gap-[22px] rounded-3xl bg-white p-6 shadow-float sm:p-7 lg:sticky lg:top-6 lg:w-[440px]"
     >
       <h2 id={`${ids}-title`} className="sr-only">
-        Book a lesson with {firstName}
+        {t("title", { name: firstName })}
       </h2>
-      <div className="flex items-baseline justify-between">
-        <p className="font-display text-[34px] font-extrabold">${priceUsd}</p>
-        <span className="text-sm text-muted">per 50-min lesson</span>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+        <p className="font-display text-[34px] font-extrabold">{shortUsd(priceUsd, locale)}</p>
+        <span className="text-sm text-muted">{t("perLesson")}</span>
       </div>
 
       <fieldset className="flex flex-col gap-2.5">
-        <legend className="mb-2.5 font-display text-[15px] font-bold">Lesson type</legend>
+        <legend className="mb-2.5 font-display text-[15px] font-bold">{t("lessonType")}</legend>
         {options.map((o) => (
           <ChoiceTile
             key={o.value}
@@ -158,7 +164,7 @@ export function BookingCard({
                 {o.label}
                 {"discount" in o && <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-normal">{o.discount}</span>}
               </span>
-              <strong>{o.price === 0 ? "Free" : shortUsd(o.price)}</strong>
+              <strong className="shrink-0">{o.price === 0 ? t("free") : shortUsd(o.price, locale)}</strong>
             </span>
           </ChoiceTile>
         ))}
@@ -167,12 +173,12 @@ export function BookingCard({
       <div className="flex flex-col gap-3" role="group" aria-labelledby={`${ids}-pick`}>
         <div className="flex items-center justify-between gap-3">
           <h3 id={`${ids}-pick`} className="text-[15px] font-bold">
-            Pick a time {weekRange && <span className="ml-1 font-sans text-[13px] font-normal text-muted">{weekRange}</span>}
+            {t("pickTime")} {weekRange && <span className="ms-1 font-sans text-[13px] font-normal text-muted">{weekRange}</span>}
           </h3>
           <div className="flex gap-1.5">
             <button
               type="button"
-              aria-label="Previous week"
+              aria-label={t("previousWeek")}
               disabled={week === 0}
               onClick={() => setWeek((w) => Math.max(0, w - 1))}
               className="flex size-9 items-center justify-center rounded-[10px] border border-line bg-white text-navy hover:bg-beige disabled:cursor-not-allowed disabled:opacity-40"
@@ -181,7 +187,7 @@ export function BookingCard({
             </button>
             <button
               type="button"
-              aria-label="Next week"
+              aria-label={t("nextWeek")}
               disabled={week >= WEEKS_AHEAD - 1}
               onClick={() => setWeek((w) => Math.min(WEEKS_AHEAD - 1, w + 1))}
               className="flex size-9 items-center justify-center rounded-[10px] border border-line bg-white text-navy hover:bg-beige disabled:cursor-not-allowed disabled:opacity-40"
@@ -192,19 +198,19 @@ export function BookingCard({
         </div>
         <p className="flex items-center gap-1.5 text-[13px] text-muted">
           <Icon name="globe" size={14} strokeWidth={2} />
-          {clock ? `Times shown in your time zone: ${clock.tz} (auto-detected)` : "Detecting your time zone…"}
+          {clock ? t("timezone", { tz: clock.tz }) : t("detecting")}
         </p>
 
         {live.error && (
           <p role="status" className="rounded-[10px] bg-cream px-3 py-2 text-[13px] text-orange-text">
-            {live.error}
+            {t(live.error)}
           </p>
         )}
-        {days && days.every((d) => d.slots.length === 0) && !live.error && <p className="text-[13px] text-muted">No free times this week — try the next week.</p>}
+        {days && days.every((d) => d.slots.length === 0) && !live.error && <p className="text-[13px] text-muted">{t("noSlots")}</p>}
         <div className="grid grid-cols-7 gap-1 text-center" aria-live="polite">
           {days
             ? days.map((d) => (
-                <div key={d.date} role="group" aria-label={dayLabel(Date.parse(`${d.date}T12:00:00Z`), "UTC")} className="flex flex-col gap-1.5">
+                <div key={d.date} role="group" aria-label={dayLabel(Date.parse(`${d.date}T12:00:00Z`), "UTC", tag)} className="flex flex-col gap-1.5">
                   <div className="text-xs text-muted" aria-hidden="true">
                     {d.weekday}
                     <br />
@@ -219,7 +225,7 @@ export function BookingCard({
                         type="button"
                         disabled={s.booked}
                         aria-pressed={selected}
-                        aria-label={`${s.label}${s.booked ? ", unavailable" : ""}`}
+                        aria-label={s.booked ? t("unavailable", { time: s.label }) : s.label}
                         onClick={() => setSlot({ iso: s.iso, instant: s.instant })}
                         className={cn(
                           "h-10 rounded-[10px] text-[12px] tabular-nums",
@@ -248,31 +254,31 @@ export function BookingCard({
       </div>
 
       <div className="flex justify-between gap-3 rounded-[14px] bg-beige px-4 py-3.5 text-sm" aria-live="polite">
-        <span>{summary ?? "Select a time to continue"}</span>
-        <strong>{current.price === 0 ? "Free" : formatUsd(current.price)}</strong>
+        <span>{summary ?? t("selectTime")}</span>
+        <strong className="shrink-0">{current.price === 0 ? t("free") : formatUsd(current.price, locale)}</strong>
       </div>
 
       {checkoutHref ? (
         <ButtonLink href={checkoutHref} size="lg" className="w-full">
-          Continue to payment
+          {t("continue")}
         </ButtonLink>
       ) : (
         <Button size="lg" className="w-full" disabled>
-          Continue to payment
+          {t("continue")}
         </Button>
       )}
       <Link href="/student/messages" className="flex items-center justify-center gap-2 text-[15px] font-semibold text-teal-dark hover:text-navy">
         <Icon name="message" size={18} />
-        Message {firstName}
+        {t("message", { name: firstName })}
       </Link>
-      <p className="text-center text-[13px] leading-normal text-muted">Free cancellation up to 24 hours before the lesson.</p>
+      <p className="text-center text-[13px] leading-normal text-muted">{t("cancellation")}</p>
     </aside>
   );
 }
 
-/** "2026-10-14" -> "Oct 14" */
-function shortDate(civil: string) {
-  return new Date(`${civil}T12:00:00Z`).toLocaleDateString("en-US", {
+/** "2026-10-14" -> "Oct 14" (in the visitor's language) */
+function shortDate(civil: string, tag: string) {
+  return new Date(`${civil}T12:00:00Z`).toLocaleDateString(tag, {
     month: "short",
     day: "numeric",
     timeZone: "UTC",
@@ -284,13 +290,14 @@ function shortDate(civil: string) {
  * viewer's time zone). The free Render plan may take up to a minute to wake up: we show the
  * loading grid meanwhile and a retry message if it fails.
  */
-function useLiveSlots(slug: string, tz: string | null, monday: string | null, trial: boolean) {
+function useLiveSlots(slug: string, tz: string | null, monday: string | null, trial: boolean, tag: string) {
   const [state, setState] = useState<{
     key: string;
     days: SlotDay[] | null;
-    error: string | null;
+    /** Message key in marketing.booking */
+    error: "loadError" | null;
   }>({ key: "", days: null, error: null });
-  const key = `${slug}|${tz}|${monday}|${trial}`;
+  const key = `${slug}|${tz}|${monday}|${trial}|${tag}`;
 
   useEffect(() => {
     if (!API_URL || !tz || !monday) return;
@@ -315,6 +322,7 @@ function useLiveSlots(slug: string, tz: string | null, monday: string | null, tr
             slots.map((s) => s.startsAt),
             tz,
             monday,
+            tag,
           ),
           error: null,
         });
@@ -324,11 +332,11 @@ function useLiveSlots(slug: string, tz: string | null, monday: string | null, tr
         setState({
           key,
           days: null,
-          error: "We couldn't load this teacher's calendar. Please refresh in a moment.",
+          error: "loadError",
         });
       });
     return () => ctrl.abort();
-  }, [key, slug, tz, monday, trial]);
+  }, [key, slug, tz, monday, trial, tag]);
 
   return state.key === key ? state : { key, days: null, error: null };
 }

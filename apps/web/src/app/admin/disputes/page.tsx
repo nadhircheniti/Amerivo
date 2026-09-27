@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
+import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { ComingSoon } from "@/components/layout/coming-soon";
 
-export const metadata = { title: "Disputes & refunds" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("admin.comingSoon");
+  return { title: t("disputesTitle") };
+}
 
 export default function Page() {
-  return <ComingSoon title="Disputes & refunds" description="Complaints and refund requests (24-hour window)." icon="shield" backHref="/admin" backLabel="Back to analytics" />;
+  const t = useTranslations("admin.comingSoon");
+  return <ComingSoon title={t("disputesTitle")} description={t("disputesDescription")} icon="shield" backHref="/admin" backLabel={t("back")} />;
 }

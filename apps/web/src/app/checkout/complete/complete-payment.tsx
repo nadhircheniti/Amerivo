@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { ButtonLink } from "@/components/ui/button";
 import { useApi } from "@/lib/use-api";
@@ -11,6 +12,7 @@ type Booking = { id: string; status: string };
 export function CompletePayment() {
   const params = useSearchParams();
   const router = useRouter();
+  const t = useTranslations("checkout.complete");
   const { call, isLoaded, isSignedIn } = useApi();
   const bookingId = params.get("booking");
   const failedAtStripe = params.get("redirect_status") === "failed";
@@ -42,32 +44,32 @@ export function CompletePayment() {
   if (!bookingId) {
     return (
       <>
-        <h1 className="text-[26px] font-extrabold">Nothing to confirm</h1>
-        <ButtonLink href="/teachers">Find a teacher</ButtonLink>
+        <h1 className="text-[26px] font-extrabold">{t("nothingTitle")}</h1>
+        <ButtonLink href="/teachers">{t("findTeacher")}</ButtonLink>
       </>
     );
   }
   if (state === "checking") {
     return (
       <p role="status" className="text-lg text-navy-soft">
-        Confirming your payment…
+        {t("confirming")}
       </p>
     );
   }
   if (state === "failed") {
     return (
       <>
-        <h1 className="text-[26px] font-extrabold">Your payment didn&apos;t go through</h1>
-        <p className="text-navy-soft">No money was taken. You can pick your time again and try another payment method.</p>
-        <ButtonLink href="/teachers">Back to teachers</ButtonLink>
+        <h1 className="text-[26px] font-extrabold">{t("failedTitle")}</h1>
+        <p className="text-navy-soft">{t("failedText")}</p>
+        <ButtonLink href="/teachers">{t("backToTeachers")}</ButtonLink>
       </>
     );
   }
   return (
     <>
-      <h1 className="text-[26px] font-extrabold">Payment being processed</h1>
-      <p className="text-navy-soft">Your bank is still confirming the payment. Your lesson will appear as confirmed in your dashboard within a few minutes.</p>
-      <ButtonLink href="/student">Go to my dashboard</ButtonLink>
+      <h1 className="text-[26px] font-extrabold">{t("processingTitle")}</h1>
+      <p className="text-navy-soft">{t("processingText")}</p>
+      <ButtonLink href="/student">{t("goToDashboard")}</ButtonLink>
     </>
   );
 }

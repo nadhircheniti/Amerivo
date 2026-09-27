@@ -18,7 +18,7 @@ export function getLessonForReport(lessonId: string) {
   return {
     id: lessonId,
     student: { name: currentStudent.name, firstName: currentStudent.firstName },
-    dateLabel: "Oct 14",
+    date: "2026-10-14", // yyyy-mm-dd
     durationMin: 50,
     returning: { lessons: 11, hours: 9.2 },
     draft: <ReportDraft>{

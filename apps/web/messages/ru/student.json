@@ -1,0 +1,178 @@
+{
+  "nav": {
+    "overview": "Обзор",
+    "lessons": "Мои уроки",
+    "findTeachers": "Найти преподавателя",
+    "messages": "Сообщения",
+    "homework": "Домашние задания",
+    "progress": "Прогресс",
+    "payments": "Платежи",
+    "settings": "Настройки",
+    "userSubtitle": "Ученик · Уровень {level}"
+  },
+  "backToOverview": "Вернуться к обзору",
+  "comingSoon": {
+    "lessons": {
+      "title": "Мои уроки",
+      "description": "Здесь появятся ваше полное расписание, прошедшие уроки и отчёты."
+    },
+    "homework": {
+      "title": "Домашние задания",
+      "description": "Все заданные, текущие и выполненные домашние задания в одном месте."
+    },
+    "progress": {
+      "title": "Прогресс",
+      "description": "Динамика вашего уровня, часы занятий и развитие навыков."
+    },
+    "payments": {
+      "title": "Платежи",
+      "description": "Счета, история платежей и ваши пакеты уроков."
+    },
+    "settings": {
+      "title": "Настройки",
+      "description": "Профиль, уведомления, часовой пояс и пароль."
+    }
+  },
+  "overview": {
+    "metaTitle": "Обзор",
+    "greeting": "Добрый вечер, {name}",
+    "encouragement": "Продолжайте в том же духе — до уровня {level} уже недалеко.",
+    "notifications": "Уведомления (есть новые)",
+    "bookLesson": "Записаться на урок",
+    "nextLesson": {
+      "eyebrow": "Следующий урок · через {minutes} мин",
+      "title": "{subject} с преподавателем {name}",
+      "details": "Сегодня · {time} (ваше время) · Тема: {topic}",
+      "join": "Войти в класс"
+    },
+    "stats": {
+      "label": "Ваш прогресс",
+      "hoursStudied": "Часов занятий",
+      "hoursHint": "+{hours} в этом месяце",
+      "lessonsCompleted": "Пройдено уроков",
+      "withTeachers": "{count, plural, one {С # преподавателем} few {С # преподавателями} many {С # преподавателями} other {С # преподавателями}}",
+      "levelProgress": "Прогресс уровня",
+      "levelProgressAria": "Прогресс от {from} до {to}",
+      "currentPlan": "Текущий тариф",
+      "pack": "Пакет из {count} уроков",
+      "lessonsLeft": "{count, plural, one {Остался # урок} few {Осталось # урока} many {Осталось # уроков} other {Осталось # урока}}"
+    },
+    "upcoming": {
+      "title": "Ближайшие уроки",
+      "viewCalendar": "Открыть календарь",
+      "reschedule": "Перенести",
+      "rescheduleAria": "Перенести урок с преподавателем {name} ({date})",
+      "nextTeacher": "<strong>Следующий преподаватель?</strong> Продолжайте заниматься с преподавателем {name} или попробуйте кого-то нового.",
+      "bookName": "Записаться к {name}",
+      "browse": "Смотреть всех"
+    },
+    "lastLesson": {
+      "title": "Итоги последнего урока",
+      "openReport": "Открыть отчёт",
+      "strengths": "Сильные стороны",
+      "toWorkOn": "Над чем поработать"
+    },
+    "payments": {
+      "title": "Платежи",
+      "allInvoices": "Все счета",
+      "free": "Бесплатно",
+      "pack": "Пакет из {count} уроков · {teacher}",
+      "single": "Разовый урок · {teacher}",
+      "trial": "Пробный урок · {teacher}"
+    }
+  },
+  "homework": {
+    "title": "Домашние задания",
+    "status": "Ожидают: {pending} · Выполнено: {done}",
+    "completed": "Выполнено",
+    "dueTomorrow": "Срок — завтра",
+    "dueOn": "Срок — {date}",
+    "from": "{due} · от {teacher}"
+  },
+  "live": {
+    "booked": "Урок забронирован! Вы найдёте его ниже, а на почту придёт письмо с подтверждением.",
+    "title": "Мои забронированные уроки",
+    "loadError": "Не удалось загрузить ваши уроки. Обновите страницу через минуту.",
+    "empty": "Предстоящих уроков пока нет — выберите преподавателя и забронируйте первый урок.",
+    "withName": {
+      "trial": "Пробный урок с преподавателем {name}",
+      "single": "Урок с преподавателем {name}",
+      "package": "Урок из пакета с преподавателем {name}"
+    },
+    "withYourTeacher": {
+      "trial": "Пробный урок с вашим преподавателем",
+      "single": "Урок с вашим преподавателем",
+      "package": "Урок из пакета с вашим преподавателем"
+    },
+    "status": {
+      "confirmed": "Подтверждён",
+      "pending_payment": "Ожидает оплаты"
+    },
+    "timeZoneNote": "Время указано в вашем часовом поясе ({tz})."
+  },
+  "lesson": {
+    "metaTitle": "Итоги урока",
+    "eyebrow": "Итоги урока",
+    "niceWork": "Отличная работа сегодня, {name}!",
+    "meta": "{teacher} · {date} · {minutes} мин · {topic}",
+    "srLesson": "(урок {id})",
+    "homeworkDue": "Домашнее задание · срок {date}",
+    "nextRecommendation": "Рекомендация на следующий урок",
+    "strengths": "Сильные стороны",
+    "toWorkOn": "Над чем поработать",
+    "howWas": "Как прошёл ваш урок с преподавателем {name}?",
+    "bookNext": "Записаться к {name} снова",
+    "tryAnother": "Попробовать другого преподавателя"
+  },
+  "review": {
+    "labels": {
+      "poor": "Плохо",
+      "fair": "Так себе",
+      "good": "Хорошо",
+      "veryGood": "Очень хорошо",
+      "excellent": "Отлично"
+    },
+    "thanks": "Спасибо за отзыв!",
+    "rated": "Вы оценили этот урок на {rating} из 5.",
+    "willAppear": "Ваш отзыв появится в публичном профиле преподавателя {name}.",
+    "helps": "Ваша оценка помогает преподавателю {name} и другим ученикам.",
+    "legend": "Оценка",
+    "starOption": "{count, plural, one {# звезда} few {# звезды} many {# звёзд} other {# звезды}} – {label}",
+    "tapToRate": "Нажмите на звезду, чтобы поставить оценку",
+    "writeReview": "Написать отзыв (необязательно)",
+    "placeholder": "Что вам понравилось? Отзыв появится в публичном профиле преподавателя {name}.",
+    "submit": "Отправить отзыв"
+  },
+  "messages": {
+    "metaTitle": "Сообщения",
+    "title": "Сообщения",
+    "searchLabel": "Поиск по сообщениям",
+    "searchPlaceholder": "Поиск",
+    "conversations": "Диалоги",
+    "unread": "Непрочитано",
+    "noMatch": "Нет диалогов по запросу «{query}».",
+    "conversationWith": "Диалог с {name}",
+    "backToList": "Назад к диалогам",
+    "attach": "Прикрепить файл",
+    "messageLabel": "Сообщение",
+    "placeholder": "Напишите сообщение…",
+    "send": "Отправить",
+    "youSr": "Вы: ",
+    "youPreview": "Вы: {text}",
+    "youSent": "Вы отправили {name}",
+    "open": "Открыть",
+    "openFile": "Открыть {name}",
+    "details": "Сведения о диалоге",
+    "viewProfile": "Открыть профиль",
+    "sharedFiles": "Общие файлы",
+    "together": "Вместе на сегодня",
+    "togetherStats": "{lessons, plural, one {# урок} few {# урока} many {# уроков} other {# урока}} · {hours} ч",
+    "joinLesson": "Войти на урок в {time}",
+    "today": "Сегодня",
+    "homeworkSubmitted": "Домашнее задание сдано",
+    "online": "В сети · {city}, {time}",
+    "lastSeen": "Был(а) в сети: {day} · {city}",
+    "repliesWithinHours": "Обычно отвечает в течение нескольких часов",
+    "supportSubtitle": "Помощь с бронированиями, оплатой и аккаунтом"
+  }
+}

@@ -42,7 +42,11 @@ function tzAbbrev(tz: string) {
   }
 }
 
-export function fromApi(t: ApiTeacher): Teacher {
+/** Texts used when a teacher left a field empty. Server pages pass translated versions; English by default. */
+export type TeacherFallbacks = { headline: string; city: string };
+const defaultFallbacks: TeacherFallbacks = { headline: "American English teacher", city: "United States" };
+
+export function fromApi(t: ApiTeacher, fallbacks: TeacherFallbacks = defaultFallbacks): Teacher {
   const name = `${t.firstName} ${t.lastName}`.trim();
   const teaches = t.teaches.map((g) => (g === "teens" ? "Teens" : "Adults")) as Teacher["teaches"];
   return {
@@ -51,8 +55,8 @@ export function fromApi(t: ApiTeacher): Teacher {
     shortName: `${t.firstName} ${t.lastName.charAt(0)}.`,
     initials: `${t.firstName.charAt(0)}${t.lastName.charAt(0)}`.toUpperCase(),
     tone: toneFor(t.slug),
-    headline: t.headline ?? t.specialties[0] ?? "American English teacher",
-    city: t.city ?? "United States",
+    headline: t.headline ?? t.specialties[0] ?? fallbacks.headline,
+    city: t.city ?? fallbacks.city,
     timezone: t.timezone,
     tzLabel: tzAbbrev(t.timezone),
     yearsExperience: t.yearsExperience,
@@ -72,16 +76,16 @@ export function fromApi(t: ApiTeacher): Teacher {
 }
 
 /** All approved teachers (API) or the sample list. */
-export async function getTeachers(): Promise<{
+export async function getTeachers(fallbacks?: TeacherFallbacks): Promise<{
   teachers: Teacher[];
   live: boolean;
 }> {
   const data = await apiGet<ApiTeacher[]>("/teachers?limit=50");
-  return data ? { teachers: data.map(fromApi), live: true } : { teachers: sampleTeachers, live: false };
+  return data ? { teachers: data.map((d) => fromApi(d, fallbacks)), live: true } : { teachers: sampleTeachers, live: false };
 }
 
-export async function getTeacherBySlug(slug: string): Promise<Teacher | null> {
+export async function getTeacherBySlug(slug: string, fallbacks?: TeacherFallbacks): Promise<Teacher | null> {
   const data = await apiGet<ApiTeacher>(`/teachers/${encodeURIComponent(slug)}`);
-  if (data) return fromApi(data);
+  if (data) return fromApi(data, fallbacks);
   return getSampleTeacher(slug) ?? null;
 }

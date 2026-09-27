@@ -1,0 +1,50 @@
+{
+  "page": {
+    "metaTitle": "Cours en direct",
+    "backToDashboard": "Retour au tableau de bord",
+    "participants": "{teacher} et {student}",
+    "connectionGood": "Bonne connexion"
+  },
+  "timer": {
+    "label": "Temps écoulé : {elapsed} sur {total}"
+  },
+  "controls": {
+    "toolbar": "Commandes de l'appel",
+    "muteMic": "Couper le micro",
+    "cameraOff": "Désactiver la caméra",
+    "shareScreen": "Partager l'écran",
+    "whiteboard": "Tableau blanc",
+    "endLesson": "Terminer le cours"
+  },
+  "stage": {
+    "whiteboard": "Tableau blanc partagé",
+    "tools": "Outils du tableau blanc",
+    "tool": {
+      "pen": "Stylo",
+      "text": "Texte",
+      "shape": "Forme",
+      "eraser": "Gomme"
+    },
+    "videoCall": "Appel vidéo avec {name}",
+    "videoFeed": "FLUX VIDÉO",
+    "sharing": "Vous partagez votre écran",
+    "teacherLabel": "{name} · Professeur",
+    "you": "Vous",
+    "cameraOff": "Caméra désactivée",
+    "micMuted": "Micro coupé"
+  },
+  "panel": {
+    "label": "Panneau du cours",
+    "chat": "Chat",
+    "notes": "Notes du cours",
+    "files": "Fichiers",
+    "chatMessages": "Messages du chat",
+    "youPrefix": "Vous :",
+    "chatMessage": "Message",
+    "messagePlaceholder": "Écrire à {name}…",
+    "send": "Envoyer le message",
+    "notesLabel": "Notes partagées du cours · enregistrées automatiquement",
+    "sharedFiles": "Fichiers partagés",
+    "upload": "Importer un fichier"
+  }
+}

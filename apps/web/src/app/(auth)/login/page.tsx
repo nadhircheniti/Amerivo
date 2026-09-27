@@ -1,35 +1,41 @@
 import type { Metadata } from "next";
+import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { AuthMain, OrDivider } from "../_components/auth-ui";
 import { SocialButtons } from "../_components/social-buttons";
 import { LoginForm } from "./login-form";
 
-export const metadata: Metadata = { title: "Log in" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("auth.login");
+  return { title: t("metaTitle") };
+}
 
 export default function LoginPage() {
+  const t = useTranslations("auth.login");
   return (
     <AuthMain
       topRight={
         <>
-          New to Amerivo?{" "}
+          {t("newHere")}{" "}
           <Link href="/signup" className="font-semibold text-teal-dark hover:text-navy">
-            Create an account
+            {t("createAccount")}
           </Link>
         </>
       }
     >
       <div className="flex w-full max-w-[560px] flex-col gap-[26px] lg:mt-10">
         <div className="flex flex-col gap-2">
-          <h1 className="text-[28px] font-extrabold sm:text-[34px]">Welcome back</h1>
-          <p className="text-base text-navy-soft">Log in to book lessons and join your classroom.</p>
+          <h1 className="text-[28px] font-extrabold sm:text-[34px]">{t("title")}</h1>
+          <p className="text-base text-navy-soft">{t("subtitle")}</p>
         </div>
         <SocialButtons mode="login" />
         <OrDivider />
         <LoginForm />
         <p className="text-center text-sm text-muted">
-          Are you a teacher?{" "}
+          {t("teacherQuestion")}{" "}
           <Link href="/teacher" className="font-semibold text-teal-dark hover:text-navy">
-            Log in
+            {t("teacherLogin")}
           </Link>
         </p>
       </div>

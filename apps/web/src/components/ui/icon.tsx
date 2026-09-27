@@ -1,4 +1,5 @@
 import type { SVGProps } from "react";
+import { cn } from "@/lib/cn";
 
 /**
  * Thin-line icon set used across Amerivo (24×24, stroke = currentColor).
@@ -29,6 +30,7 @@ const paths = {
   search: <><circle cx="11" cy="11" r="7" /><path d="M20 20l-4-4" /></>,
   arrowRight: <path d="M5 12h14M13 6l6 6-6 6" />,
   chevronLeft: <path d="M15 6l-6 6 6 6" />,
+  chevronDown: <path d="M6 9l6 6 6-6" />,
   chevronRight: <path d="M9 6l6 6-6 6" />,
   clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
   file: <><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z" /><path d="M14 3v5h5" /></>,
@@ -51,6 +53,8 @@ const filled = {
 
 export type IconName = keyof typeof paths | keyof typeof filled;
 
+const directional = new Set<IconName>(["arrowRight", "chevronLeft", "chevronRight"]);
+
 export function Icon({
   name,
   size = 20,
@@ -64,6 +68,8 @@ export function Icon({
       </svg>
     );
   }
+  // Arrows that mean "back / next" point the other way in right-to-left languages (Arabic).
+  const flip = directional.has(name) ? cn("rtl:-scale-x-100", rest.className as string | undefined) : rest.className;
   return (
     <svg
       width={size}
@@ -76,6 +82,7 @@ export function Icon({
       strokeLinejoin="round"
       aria-hidden="true"
       {...rest}
+      className={flip}
     >
       {paths[name as keyof typeof paths]}
     </svg>

@@ -158,7 +158,9 @@ export function packagePrice(unit: number, count: 1 | 5 | 10) {
 export const PLATFORM_COMMISSION = 0.2;
 export const teacherNet = (gross: number) => Math.round(gross * (1 - PLATFORM_COMMISSION) * 100) / 100;
 
-export const formatUsd = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
+import { intlTags, type Locale } from "@/i18n/config";
+/** Prices are always in US dollars; only the way they are written follows the language. */
+export const formatUsd = (n: number, locale: Locale = "en") => n.toLocaleString(intlTags[locale], { style: "currency", currency: "USD" });
 
 /* ----- Signed-in sample users ----- */
 export const currentStudent = {
@@ -177,4 +179,4 @@ export type Cefr = (typeof cefrLevels)[number];
 export type LessonStatus = "PENDING_PAYMENT" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "REFUNDED";
 
 /** "4.9", or "New" for a teacher without reviews yet. */
-export const ratingText = (t: Pick<Teacher, "rating">) => (t.rating > 0 ? t.rating.toFixed(1) : "New");
+export const ratingText = (t: Pick<Teacher, "rating">, newLabel = "New") => (t.rating > 0 ? t.rating.toFixed(1) : newLabel);
