@@ -1,0 +1,418 @@
+{
+  "page": {
+    "metaTitle": "Enseña en Amerivo",
+    "metaDescription": "Postúlate para enseñar inglés americano en línea con Amerivo. Fija tu propia tarifa y recibe tus pagos cada mes.",
+    "brandSuffix": "para profesores",
+    "saveExit": "Guardar y salir",
+    "faqEyebrow": "Preguntas frecuentes para profesores",
+    "faqTitle": "Preguntas antes de postularte",
+    "faq": {
+      "earn": {
+        "q": "¿Cuánto puedo ganar?",
+        "a": "Tú fijas tu tarifa, entre {min} y {max} por clase de 50 minutos. Amerivo retiene una comisión de plataforma del {commission}%, así que con {example} recibes {net} por clase. También puedes ofrecer paquetes de 5 y 10 clases."
+      },
+      "paid": {
+        "q": "¿Cuándo y cómo recibo mis pagos?",
+        "a": "Los pagos se envían cada mes, a más tardar el día 28, a tu cuenta bancaria a través de Stripe Connect. Cada pago cubre las clases completadas en el período anterior."
+      },
+      "who": {
+        "q": "¿Quién puede postularse?",
+        "a": "Los profesores de Amerivo son hablantes nativos de inglés de Estados Unidos. Se recomienda ampliamente contar con una certificación docente (TESOL, TEFL o CELTA) o experiencia en el aula, y todos los postulantes completan una verificación de identidad y una breve entrevista."
+      },
+      "equipment": {
+        "q": "¿Qué equipo necesito?",
+        "a": "Una computadora con cámara web, audífonos con micrófono o un buen micrófono, una conexión a internet estable (10 Mbps o más) y un espacio silencioso y bien iluminado. Las clases se dan en el navegador, sin necesidad de instalar ningún programa."
+      }
+    }
+  },
+  "steps": {
+    "personal": {
+      "title": "Datos personales",
+      "heading": "Información personal",
+      "continue": "Continuar a datos personales"
+    },
+    "professional": {
+      "title": "Datos profesionales",
+      "heading": "Información profesional",
+      "continue": "Continuar a datos profesionales"
+    },
+    "identity": {
+      "title": "Verificación de identidad",
+      "heading": "Verificación de identidad",
+      "continue": "Continuar a verificación de identidad"
+    },
+    "video": {
+      "title": "Video de presentación",
+      "heading": "Video de presentación",
+      "continue": "Continuar al video de presentación"
+    },
+    "review": {
+      "title": "Revisión y entrevista",
+      "heading": "Revisión y entrevista",
+      "continue": "Continuar a revisión y entrevista"
+    },
+    "approval": {
+      "title": "Aprobación",
+      "heading": "Estado de la solicitud",
+      "continue": "Continuar a aprobación"
+    }
+  },
+  "wizard": {
+    "navLabel": "Pasos de la solicitud",
+    "yourApplication": "Tu solicitud",
+    "completed": "(completado)",
+    "usOnly": "Solo los hablantes nativos de inglés de Estados Unidos pueden enseñar en Amerivo.",
+    "progress": "Paso {current} de {total}",
+    "back": "Atrás",
+    "submit": "Enviar solicitud",
+    "backHome": "Volver a Amerivo",
+    "saving": "Guardando…",
+    "submitting": "Enviando…",
+    "saved": "Guardado",
+    "saveError": "No pudimos guardar tu solicitud. Inténtalo de nuevo.",
+    "pickSubject": "Elige al menos una cosa que puedas enseñar.",
+    "identityRequired": "Verifica tu identidad con Stripe para continuar."
+  },
+  "options": {
+    "subjects": {
+      "businessEnglish": "Inglés de negocios",
+      "conversation": "Conversación (expresión oral)",
+      "reading": "Lectura",
+      "generalEnglish": "Inglés general",
+      "interviewPrep": "Preparación para entrevistas",
+      "examPrep": "Preparación para IELTS / TOEFL"
+    },
+    "groups": {
+      "adults": "Adultos",
+      "teens": "Adolescentes (13–17)",
+      "corporate": "Grupos corporativos"
+    },
+    "education": {
+      "bachelor": "Licenciatura",
+      "master": "Maestría",
+      "phd": "Doctorado",
+      "associate": "Título técnico (Associate degree)",
+      "other": "Otro"
+    },
+    "experience": {
+      "lessThan1": "Menos de 1 año",
+      "oneToTwo": "1–2 años",
+      "threeToFive": "3–5 años",
+      "fiveToTen": "5–10 años",
+      "tenPlus": "Más de 10 años"
+    },
+    "countryOther": "Otro",
+    "genders": {
+      "female": "Mujer",
+      "male": "Hombre",
+      "undisclosed": "Prefiero no decirlo"
+    },
+    "timeZones": {
+      "newYork": "Hora del Este (ET)",
+      "chicago": "Hora del Centro (CT)",
+      "denver": "Hora de la Montaña (MT)",
+      "phoenix": "Arizona (MST)",
+      "losAngeles": "Hora del Pacífico (PT)",
+      "anchorage": "Hora de Alaska (AKT)",
+      "honolulu": "Hora de Hawái (HT)",
+      "london": "Londres (GMT/BST)",
+      "madrid": "Europa Central (CET)",
+      "tokyo": "Tokio (JST)"
+    },
+    "idTypes": {
+      "passport": "Pasaporte",
+      "license": "Licencia de conducir",
+      "government": "Identificación oficial"
+    },
+    "interviewSlots": {
+      "weekdayMornings": "Mañanas entre semana",
+      "weekdayAfternoons": "Tardes entre semana",
+      "weekdayEvenings": "Noches entre semana",
+      "weekends": "Fines de semana"
+    }
+  },
+  "fields": {
+    "add": "Agregar…",
+    "remove": "Quitar {value}",
+    "selectedFiles": "Archivos seleccionados"
+  },
+  "personal": {
+    "photo": "Foto de perfil",
+    "photoHint": "Una foto de rostro amigable y bien iluminada. Los estudiantes la ven en tu perfil y en los resultados de búsqueda.",
+    "replacePhoto": "Cambiar foto",
+    "uploadPhoto": "Subir foto (JPG, PNG)",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "country": "País de residencia",
+    "timeZone": "Zona horaria",
+    "timeZoneHint": "Se usa para mostrar tu disponibilidad a los estudiantes en su hora local.",
+    "gender": "Género",
+    "genderHint": "Algunos estudiantes filtran por el género del profesor que prefieren. Puedes cambiarlo más adelante.",
+    "photoLater": "Agregarás tu foto de perfil más adelante.",
+    "emailHint": "La dirección de correo electrónico de tu cuenta.",
+    "selectCountry": "Selecciona tu país"
+  },
+  "professional": {
+    "education": "Nivel de estudios más alto",
+    "experience": "Años de experiencia docente",
+    "subjects": "¿Qué puedes enseñar?",
+    "groups": "Grupos a los que puedes enseñar",
+    "certifications": "Certificaciones",
+    "uploadCertificates": "Subir certificados (PDF, JPG)",
+    "languages": "Idiomas que hablas",
+    "languagesPlaceholder": "p. ej., Francés · B1",
+    "rate": "Tu tarifa por clase de 50 min",
+    "rateValue": "{price} por clase",
+    "net": "Recibes {net} después de la comisión de plataforma del {commission}%",
+    "trial": "Ofrecer una clase de prueba gratis de 20 minutos",
+    "trialHint": "Los estudiantes pueden conocerte una vez antes de reservar. Puedes cambiarlo más adelante.",
+    "headline": "Titular",
+    "headlineHint": "Una línea que los estudiantes ven en los resultados de búsqueda (máximo 120 caracteres).",
+    "headlinePlaceholder": "p. ej., Coach de inglés de negocios para profesionales de tecnología",
+    "bio": "Sobre ti",
+    "bioHint": "Tu trayectoria, tu estilo de enseñanza y a quién te encanta enseñar.",
+    "bioCount": "{count} / {max}",
+    "bioPlaceholder": "Cuéntales a los estudiantes sobre ti y cómo es una clase contigo.",
+    "selectEducation": "Selecciona tu nivel de estudios más alto",
+    "certificationsPlaceholder": "p. ej., TESOL",
+    "certificatesLater": "Agregarás los archivos de tus certificados más adelante."
+  },
+  "previews": {
+    "label": "Lo que sigue",
+    "step3": "PASO 3 · VISTA PREVIA",
+    "identityTitle": "Verificación de identidad",
+    "identityText": "Identificación oficial, pasaporte o licencia de conducir, además de una selfie. Stripe Identity lo gestiona de forma segura.",
+    "identityUpload": "Subir documento de identidad",
+    "step4": "PASO 4 · VISTA PREVIA",
+    "videoTitle": "Video de presentación de 2 minutos",
+    "videoText": "Trayectoria · Experiencia · Estilo de enseñanza. Los estudiantes lo ven en tu perfil."
+  },
+  "identity": {
+    "intro": "Verificamos a cada profesor antes de que pueda aceptar reservas. Sube una identificación con foto vigente; te pediremos una selfie rápida para compararla.",
+    "documentType": "Tipo de documento",
+    "upload": {
+      "passport": "Sube tu pasaporte",
+      "license": "Sube tu licencia de conducir",
+      "government": "Sube tu identificación oficial"
+    },
+    "uploadHint": "Frente y reverso si aplica · JPG, PNG o PDF",
+    "secure": "<strong>Stripe Identity lo gestiona de forma segura.</strong> Amerivo nunca guarda una copia de tu documento de identidad; solo recibimos el resultado de la verificación.",
+    "taxTitle": "Información fiscal (W-9)",
+    "taxText": "Recopilamos tu formulario W-9; los formularios 1099 se emiten automáticamente. Lo completarás cuando conectes tu cuenta de pagos.",
+    "liveIntro": "Verificamos a cada profesor antes de que pueda aceptar reservas. Stripe Identity revisa una identificación con foto (pasaporte, licencia de conducir o documento de identidad) y una selfie. Toma unos 2 minutos desde tu teléfono o computadora.",
+    "statusLabel": "Estado de la verificación",
+    "status": {
+      "notStarted": {
+        "label": "Sin iniciar",
+        "text": "Inicia la verificación: te llevaremos a Stripe y luego te traeremos de vuelta aquí."
+      },
+      "pending": {
+        "label": "En curso",
+        "text": "Stripe está revisando tus documentos. Mientras tanto, puedes continuar con tu solicitud."
+      },
+      "verified": {
+        "label": "Verificada",
+        "text": "Tu identidad está verificada. ¡Gracias!"
+      },
+      "failed": {
+        "label": "Fallida",
+        "text": "La verificación no se completó. Inténtalo de nuevo con una identificación con foto vigente y legible."
+      }
+    },
+    "failedReason": "Motivo indicado por Stripe: {reason}",
+    "start": "Verificar mi identidad con Stripe",
+    "retry": "Intentar de nuevo con Stripe",
+    "redirecting": "Abriendo Stripe…",
+    "checkAgain": "Volver a comprobar",
+    "checking": "Comprobando…",
+    "checked": "Estado actualizado.",
+    "stripeError": "No pudimos conectar con el servicio de verificación. Inténtalo de nuevo.",
+    "how": {
+      "document": {
+        "title": "Identificación con foto",
+        "text": "Pasaporte, licencia de conducir o identificación oficial."
+      },
+      "selfie": {
+        "title": "Una selfie",
+        "text": "Stripe la compara con la foto de tu identificación."
+      },
+      "time": {
+        "title": "Unos 2 minutos",
+        "text": "Usa la cámara de tu teléfono o tu cámara web."
+      }
+    }
+  },
+  "video": {
+    "intro": "Graba un video de hasta 2 minutos. Los estudiantes lo ven en tu perfil antes de reservar, así que habla con naturalidad y mira a la cámara.",
+    "browserRecording": "Grabación en el navegador ({duration})",
+    "recordingTime": "Tiempo de grabación",
+    "recording": "Grabando",
+    "stop": "Detener grabación",
+    "again": "Grabar de nuevo",
+    "record": "Grabar en el navegador",
+    "upload": "Subir un archivo de video",
+    "formats": "MP4, MOV o WebM · máximo 2 minutos",
+    "whatToCover": "Qué incluir",
+    "topics": {
+      "background": {
+        "title": "Trayectoria",
+        "text": "De qué parte de Estados Unidos eres y un poco sobre ti."
+      },
+      "experience": {
+        "title": "Experiencia",
+        "text": "A quién le has enseñado y qué resultados obtuvieron."
+      },
+      "style": {
+        "title": "Estilo de enseñanza",
+        "text": "Cómo es una clase contigo."
+      }
+    },
+    "topic": "{number}. {title}",
+    "liveIntro": "Los estudiantes ven tu video en tu perfil antes de reservar. Graba hasta 2 minutos, súbelo a un servicio de video y pega el enlace aquí.",
+    "urlLabel": "Enlace a tu video de presentación de 2 minutos",
+    "urlHint": "Un video no listado de YouTube, o un enlace de Vimeo, Loom o Google Drive (que empiece con https://).",
+    "urlPattern": "Ingresa un enlace que empiece con https://",
+    "preview": "Vista previa",
+    "previewTitle": "Vista previa de tu video de presentación",
+    "noPreview": "La vista previa está disponible para enlaces de YouTube y Vimeo. Asegúrate de que cualquier persona con el enlace pueda ver tu video.",
+    "tipsTitle": "Consejos para un gran video",
+    "tips": {
+      "say": {
+        "title": "Qué decir",
+        "text": "De qué parte de Estados Unidos eres, tu experiencia docente y cómo es una clase contigo."
+      },
+      "light": {
+        "title": "Buena luz",
+        "text": "Colócate frente a una ventana o una lámpara para que los estudiantes te vean con claridad."
+      },
+      "quiet": {
+        "title": "Un lugar silencioso",
+        "text": "Sin ruido de fondo; habla con naturalidad mientras miras a la cámara."
+      },
+      "share": {
+        "title": "Enlace para compartir",
+        "text": "Elige \"No listado\" en YouTube o \"Cualquier persona con el enlace\" en Google Drive."
+      }
+    }
+  },
+  "review": {
+    "notProvided": "No indicado",
+    "edit": "Editar",
+    "editSection": "Editar {section}",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "country": "País",
+    "gender": "Género",
+    "timeZone": "Zona horaria",
+    "photo": "Foto",
+    "education": "Estudios",
+    "experience": "Experiencia",
+    "teaches": "Enseña",
+    "groups": "Grupos",
+    "certifications": "Certificaciones",
+    "languages": "Idiomas",
+    "rate": "Tarifa",
+    "rateValue": "{price} por clase · recibes {net} · clase de prueba gratis {trial, select, on {activada} other {desactivada}}",
+    "document": "Documento",
+    "documentValue": "{type} · {count, plural, one {# archivo} other {# archivos}}",
+    "w9": "W-9",
+    "w9Value": "Se recopila cuando conectes tus pagos",
+    "video": "Video",
+    "interviewTitle": "Entrevista breve",
+    "interviewText": "Si tu solicitud pasa la revisión, te invitaremos a una entrevista por video de 15 minutos con nuestro equipo docente.",
+    "interviewTime": "Horario preferido para la entrevista",
+    "confirm": "Confirmo que soy hablante nativo de inglés de Estados Unidos y que la información de esta solicitud es correcta.",
+    "headline": "Titular",
+    "bio": "Sobre ti",
+    "identityStatus": "Estado",
+    "selectInterviewTime": "Selecciona un horario"
+  },
+  "approval": {
+    "submitted": "Solicitud enviada",
+    "pendingReview": "En espera de revisión",
+    "thanks": "¡Gracias!",
+    "thanksName": "¡Gracias, {name}!",
+    "emailTo": "Te escribiremos a {email} en un plazo de 3 a 5 días hábiles para programar tu entrevista.",
+    "emailYou": "Te escribiremos por correo en un plazo de 3 a 5 días hábiles para programar tu entrevista.",
+    "statusTitle": "Qué significa cada estado",
+    "current": "(tu estado actual)",
+    "statuses": {
+      "pending": {
+        "label": "Pendiente",
+        "text": "Estamos revisando tus documentos, tu video y tu entrevista. Esto suele tardar de 3 a 5 días hábiles."
+      },
+      "approved": {
+        "label": "Aprobada",
+        "text": "Tu perfil se publica. Configura tu disponibilidad y conecta Stripe para empezar a aceptar reservas."
+      },
+      "rejected": {
+        "label": "Rechazada",
+        "text": "Esta vez tu solicitud no cumplió con nuestros requisitos. Te enviaremos el motivo por correo."
+      },
+      "suspended": {
+        "label": "Suspendida",
+        "text": "Una cuenta aprobada puede pausarse si no se cumplen nuestros estándares para profesores o nuestros términos."
+      }
+    },
+    "liveEmailTo": "Estamos revisando tu solicitud y te escribiremos a {email} en un plazo de 3 a 5 días hábiles.",
+    "liveEmailYou": "Estamos revisando tu solicitud y te escribiremos por correo en un plazo de 3 a 5 días hábiles.",
+    "interviewTitle": "Te invitamos a una entrevista por video",
+    "interviewText": "Nuestro equipo docente quiere conocerte (invitación enviada el {date}). Revisa tu correo para programarla.",
+    "interviewNotes": "Mensaje del equipo de Amerivo",
+    "approvedTitle": "¡Felicidades, tu solicitud fue aprobada!",
+    "approvedTitleName": "¡Felicidades, {name}, tu solicitud fue aprobada!",
+    "approvedText": "Te damos la bienvenida al equipo docente de Amerivo. Tu perfil está listo para publicarse.",
+    "availabilityHint": "Siguiente paso: configura tu disponibilidad para que los estudiantes puedan reservar clases contigo.",
+    "goDashboard": "Ir a mi panel de profesor",
+    "rejectedTitle": "Tu solicitud no fue aprobada",
+    "rejectedText": "Puedes actualizar tu solicitud y enviarla de nuevo.",
+    "reviewerNotes": "Notas del equipo de Amerivo",
+    "editResubmit": "Editar y volver a enviar",
+    "suspendedTitle": "Tu cuenta de profesor está suspendida",
+    "suspendedText": "Comunícate con nuestro equipo de soporte para obtener más información y hablar sobre los próximos pasos.",
+    "contactSupport": "Contactar a soporte"
+  },
+  "live": {
+    "loading": "Cargando tu solicitud…",
+    "loadError": "No pudimos cargar tu solicitud en este momento. Es posible que el servicio se esté iniciando; inténtalo de nuevo en un minuto.",
+    "tryAgain": "Intentar de nuevo",
+    "intro": {
+      "eyebrow": "Hazte profesor",
+      "title": "Enseña inglés americano en Amerivo",
+      "text": "Crea tu cuenta de profesor y luego completa tu solicitud a tu propio ritmo. Tu progreso se guarda en cada paso.",
+      "create": "Crear mi cuenta de profesor",
+      "login": "Ya tengo una cuenta",
+      "needTitle": "Lo que necesitarás",
+      "needs": {
+        "native": {
+          "title": "Hablante nativo de inglés de Estados Unidos",
+          "text": "Los profesores de Amerivo son hablantes nativos de inglés americano."
+        },
+        "identity": {
+          "title": "Identificación con foto y una selfie",
+          "text": "Verificadas de forma segura por Stripe Identity."
+        },
+        "video": {
+          "title": "Un video de 2 minutos",
+          "text": "Un enlace a un video corto de presentación (YouTube, Vimeo, Loom o Google Drive)."
+        },
+        "time": {
+          "title": "Unos 10 minutos",
+          "text": "Puedes guardar y volver cuando quieras."
+        }
+      }
+    },
+    "otherAccount": {
+      "studentTitle": "Esta es una cuenta de estudiante",
+      "adminTitle": "Esta es una cuenta de administrador",
+      "text": "Los profesores necesitan su propia cuenta de Amerivo, con otra dirección de correo electrónico. Cierra sesión y luego crea tu cuenta de profesor.",
+      "signOutHint": "También puedes cerrar sesión en la parte superior de la página.",
+      "signOutCreate": "Cerrar sesión y crear una cuenta de profesor",
+      "goStudent": "Ir a mi espacio de estudiante",
+      "goAdmin": "Ir al espacio de administración"
+    }
+  }
+}

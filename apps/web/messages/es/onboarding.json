@@ -1,0 +1,87 @@
+{
+  "goals": {
+    "metaTitle": "Tus metas",
+    "step": "Paso 3 de 4 · Tus metas",
+    "saveLater": "Guardar y terminar después",
+    "title": "Cuéntanos tus metas",
+    "subtitle": "Usamos tus respuestas para recomendarte a los profesores ideales.",
+    "whyLegend": "¿Por qué estás aprendiendo inglés?",
+    "goals": {
+      "business": "Negocios",
+      "businessHint": "Reuniones, e-mails, entrevistas",
+      "travel": "Viajes",
+      "travelHint": "Muévete con facilidad",
+      "university": "Estudios",
+      "universityHint": "Escuela, universidad, exámenes",
+      "immigration": "Inmigración",
+      "immigrationHint": "Vivir y trabajar en Estados Unidos",
+      "conversation": "Conversación",
+      "conversationHint": "Habla con naturalidad, todos los días"
+    },
+    "levelQuestion": "¿Cómo describirías tu nivel?",
+    "levelLabel": "Tu nivel de inglés",
+    "levels": {
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "advanced": "Avanzado"
+    },
+    "teacherLegend": "Profesor preferido",
+    "teacherPrefs": {
+      "none": "Sin preferencia",
+      "female": "Mujer",
+      "male": "Hombre"
+    },
+    "timesLegend": "Horarios preferidos para tus clases",
+    "times": {
+      "morning": "Mañana",
+      "afternoon": "Tarde",
+      "evening": "Noche",
+      "weekend": "Fin de semana"
+    },
+    "back": "Atrás",
+    "continue": "Continuar a la prueba de nivel",
+    "aboutTest": "Sobre la prueba de nivel",
+    "nextEyebrow": "SIGUIENTE · PRUEBA DE NIVEL",
+    "duration": "Unos 15 minutos",
+    "testDescription": "Cuatro secciones breves te dan un nivel MCER de A1 a C2, que se guarda en tu perfil.",
+    "sampleLegend": "PREGUNTA DE EJEMPLO · GRAMÁTICA"
+  },
+  "skills": {
+    "grammar": "Gramática",
+    "reading": "Lectura",
+    "listening": "Comprensión auditiva",
+    "speaking": "Expresión oral"
+  },
+  "results": {
+    "metaTitle": "Tu nivel y tus profesores recomendados",
+    "step": "Paso 4 de 4 · Completado",
+    "dashboard": "Ir a mi panel",
+    "levelAria": "Tu nivel: {level}, {label}",
+    "eyebrow": "Tu resultado de la prueba de nivel",
+    "title": "¡Excelente trabajo, {name}! Tu nivel es {level}.",
+    "description": "Puedes desenvolverte en la mayoría de las situaciones cotidianas. Próxima meta: hablar con más fluidez en reuniones y entender a hablantes nativos a velocidad natural (B2).",
+    "cefrScale": "Escala MCER",
+    "bySkill": "Nivel por habilidad",
+    "recommendedTitle": "Profesores recomendados para ti",
+    "recommendedSubtitle": "Elegidos según tu meta ({goal}), tu nivel, tu disponibilidad por las noches y su calificación.",
+    "seeAll": "Ver todos los profesores",
+    "bestMatch": "EL MÁS ADECUADO",
+    "perLesson": "{price} / clase",
+    "reasons": {
+      "specialist": "Especialista en {specialty}",
+      "evenings": "Disponible en tus noches",
+      "speaksSpanish": "Habla español",
+      "negotiation": "Negociación y presentaciones",
+      "experience": "{years, plural, one {# año de experiencia} other {# años de experiencia}}",
+      "weekend": "Horarios de fin de semana",
+      "fluency": "Enfoque en la fluidez oral",
+      "budget": "Económico"
+    },
+    "bookTrial": "Reservar clase de prueba gratis",
+    "bookTrialWith": "Reservar clase de prueba gratis con {name}",
+    "bookLesson": "Reservar una clase",
+    "bookLessonWith": "Reservar una clase con {name}",
+    "profile": "Perfil",
+    "profileOf": "Perfil de {name}"
+  }
+}

@@ -13,7 +13,7 @@ import "@fontsource/noto-sans-arabic/600.css";
 import "@fontsource/noto-sans-arabic/700.css";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import { arSA, enUS, frFR, ruRU, zhCN } from "@clerk/localizations";
+import { arSA, enUS, esMX, frFR, ruRU, zhCN } from "@clerk/localizations";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { CLERK_PUBLISHABLE_KEY, clerkEnabled } from "@/lib/auth-config";
@@ -25,7 +25,7 @@ import { isRtl, type Locale } from "@/i18n/config";
  */
 function clerkTexts(locale: Locale) {
   if (locale === "en") return undefined;
-  const all = { fr: frFR, ar: arSA, zh: zhCN, ru: ruRU }[locale] as Record<string, unknown>;
+  const all = { es: esMX, fr: frFR, ar: arSA, zh: zhCN, ru: ruRU }[locale] as Record<string, unknown>;
   const used = (k: string) => ["locale", "userButton", "userProfile", "badge__primary", "badge__you", "unstable__errors"].includes(k) || k.startsWith("formField") || k.startsWith("formButton");
   return Object.fromEntries(Object.entries(all).filter(([k]) => used(k))) as typeof enUS;
 }

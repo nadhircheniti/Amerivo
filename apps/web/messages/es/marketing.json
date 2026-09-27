@@ -1,0 +1,251 @@
+{
+  "home": {
+    "eyebrow": "Inglés en línea",
+    "title": "Aprende inglés<br></br>a tu manera",
+    "tagline": "Flexible. Personalizado. Global.",
+    "intro": "Clases individuales en vivo con profesores estadounidenses de inglés cuidadosamente seleccionados. Conversa con soltura y alcanza tus metas, estés donde estés.",
+    "searchLabel": "¿Qué quieres aprender?",
+    "searchPlaceholder": "¿Qué quieres aprender? Ej.: inglés de negocios",
+    "searchSubmit": "Buscar profesores",
+    "perks": {
+      "placementTest": "Prueba de nivel gratis",
+      "trialLessons": "Clases de prueba gratis",
+      "usTeachers": "Solo profesores de Estados Unidos"
+    },
+    "photoLabel": "Horizonte de Nueva York al atardecer",
+    "handwritten": "Mejor<br></br>inglés,<br></br>más<br></br>oportunidades",
+    "whyLabel": "Por qué Amerivo",
+    "values": {
+      "teachers": {
+        "title": "Profesores expertos",
+        "body": "Nativos y titulados,<br></br>de Estados Unidos."
+      },
+      "scheduling": {
+        "title": "Horarios flexibles",
+        "body": "Clases que se adaptan a tu vida,<br></br>en tu propia zona horaria."
+      },
+      "personalized": {
+        "title": "Aprendizaje personalizado",
+        "body": "Un plan hecho a la medida de tu nivel<br></br>y de tus metas."
+      },
+      "community": {
+        "title": "Comunidad global",
+        "body": "Aprende, conecta, crece,<br></br>en comunidad."
+      }
+    },
+    "how": {
+      "eyebrow": "Cómo funciona",
+      "title": "De la primera prueba a conversar con fluidez",
+      "steps": {
+        "test": {
+          "title": "Haz la prueba de nivel",
+          "body": "Cuéntanos tus metas y descubre tu nivel MCER, de A1 a C2."
+        },
+        "match": {
+          "title": "Encuentra a tu profesor",
+          "body": "Te recomendamos profesores según tus metas, tu disponibilidad, su especialidad y su calificación."
+        },
+        "book": {
+          "title": "Reserva y paga con seguridad",
+          "body": "Elige un horario en tu zona horaria. Paga con tarjeta, Apple Pay, Google Pay o PayPal."
+        },
+        "learn": {
+          "title": "Aprende en vivo",
+          "body": "Entra a tu aula virtual con un clic y recibe después tus apuntes y tareas."
+        }
+      }
+    },
+    "teachers": {
+      "eyebrow": "Conoce a nuestros profesores",
+      "title": "Gente real. Conversaciones reales.",
+      "browseAll": "Ver todos los profesores",
+      "introVideo": "Video de presentación",
+      "perLesson": "/50 min",
+      "meta": "{city} · {years, plural, one {# año} other {# años}} de experiencia"
+    },
+    "pricing": {
+      "eyebrow": "Precios claros",
+      "title": "Paga por clase o ahorra con un paquete",
+      "intro": "Cada profesor fija su tarifa, de $20 a $50 por sesión de 50 minutos. Cancela hasta 24 horas antes y recibe un reembolso completo.",
+      "popular": "Popular",
+      "plans": {
+        "trial": {
+          "title": "Clase de prueba",
+          "price": "20 min",
+          "body": "Gratis con los profesores que la ofrecen: conócelos y háblales de tus metas antes de reservar."
+        },
+        "single": {
+          "title": "Clase individual",
+          "price": "$20–50",
+          "body": "Una clase en vivo de 50 minutos a la tarifa del profesor."
+        },
+        "pack5": {
+          "title": "Paquete de 5 clases",
+          "price": "Hasta 5 % de descuento",
+          "body": "Disponible con los profesores participantes."
+        },
+        "pack10": {
+          "title": "Paquete de 10 clases",
+          "price": "Hasta 10 % de descuento",
+          "body": "La mejor opción para avanzar a buen ritmo."
+        }
+      }
+    },
+    "business": {
+      "title": "Inglés para tu equipo",
+      "body": "Cuéntanos qué necesita tu empresa y reserva 10, 20 o más sesiones para tus colaboradores.",
+      "cta": "Solicitar un plan para empresas"
+    },
+    "teach": {
+      "title": "Enseña inglés americano",
+      "body": "Fija tu propia tarifa, enseña desde cualquier lugar y cobra cada mes. Postúlate con un video de presentación de 2 minutos.",
+      "cta": "Hazte profesor"
+    }
+  },
+  "pages": {
+    "backHome": "Volver al inicio",
+    "about": {
+      "title": "Quiénes somos",
+      "description": "Historia de la empresa y equipo: contenido que proporcionará Amerivo."
+    },
+    "terms": {
+      "title": "Términos del servicio",
+      "description": "Los términos definitivos serán proporcionados por el asesor legal de Amerivo."
+    },
+    "privacy": {
+      "title": "Política de privacidad",
+      "description": "Política de privacidad RGPD / CCPA: la proporcionará el asesor legal de Amerivo."
+    }
+  },
+  "search": {
+    "metaTitle": "Encuentra un profesor",
+    "metaDescription": "Explora profesores de inglés nativos de Estados Unidos, verificados, por especialidad, precio y tipo de estudiante.",
+    "title": "Encuentra a tu profesor de inglés americano",
+    "subtitle": "Todos los profesores son nativos de Estados Unidos, verificados y entrevistados por nuestro equipo.",
+    "sortBy": "Ordenar por",
+    "sort": {
+      "best": "Más adecuados",
+      "rating": "Mejor calificados",
+      "price": "Precio: de menor a mayor",
+      "experience": "Más experiencia"
+    },
+    "showFilters": "Mostrar filtros",
+    "hideFilters": "Ocultar filtros",
+    "filters": "Filtros",
+    "wantToLearn": "Quiero aprender",
+    "specialties": {
+      "businessEnglish": "Inglés de negocios",
+      "conversation": "Conversación",
+      "interviewPrep": "Preparación de entrevistas",
+      "ieltsPrep": "Preparación IELTS",
+      "toeflPrep": "Preparación TOEFL",
+      "teens": "Adolescentes (13+)"
+    },
+    "pricePerLesson": "Precio por clase",
+    "priceRange": "{min} – {max}",
+    "upTo": "Hasta {price}",
+    "availability": "Disponibilidad",
+    "yourTime": "(tu hora)",
+    "slots": {
+      "Morning": "Mañana",
+      "Afternoon": "Tarde",
+      "Evening": "Noche",
+      "Weekend": "Fin de semana"
+    },
+    "teaches": "Enseña a",
+    "gender": "Género del profesor",
+    "genderAny": "Sin preferencia",
+    "genderFemale": "Mujer",
+    "genderMale": "Hombre",
+    "alsoSpeaks": "También habla",
+    "anyLanguage": "Cualquier idioma",
+    "clearFilters": "Borrar todos los filtros",
+    "results": "Resultados",
+    "count": "{count, plural, one {# profesor} other {# profesores}}",
+    "countFor": "{count, plural, one {# profesor} other {# profesores}} de <strong>{specialties}</strong>",
+    "listSeparator": ", ",
+    "pricesNote": "precios en USD por clase de 50 min",
+    "matching": "Resultados para “<strong>{text}</strong>”",
+    "clearSearch": "Borrar búsqueda",
+    "emptyTitle": "Ningún profesor coincide con estos filtros",
+    "emptyBody": "Prueba con un precio máximo más alto o con menos especialidades.",
+    "pagination": "Paginación",
+    "previousPage": "Página anterior",
+    "nextPage": "Página siguiente",
+    "verified": "Verificado",
+    "cardMeta": "{city} ({tz}) · {years, plural, one {# año} other {# años}}",
+    "speaks": "Habla {languages}",
+    "reviewsPlaceholder": "[N] reseñas",
+    "lessonsPlaceholder": "[N] clases",
+    "perLesson": "por clase de 50 min",
+    "bookLesson": "Reservar clase",
+    "bookLessonWith": "Reservar clase con {name}",
+    "freeTrial": "Prueba gratis de 20 min",
+    "freeTrialWith": "Prueba gratis de 20 min con {name}"
+  },
+  "languages": {
+    "English": "inglés",
+    "Spanish": "español",
+    "French": "francés",
+    "Arabic": "árabe",
+    "Portuguese": "portugués",
+    "native": "nativo"
+  },
+  "profile": {
+    "breadcrumb": "Ruta de navegación",
+    "idVerified": "Identidad verificada",
+    "averageRating": "Calificación promedio",
+    "lessonsCompleted": "Clases impartidas",
+    "experience": "Experiencia",
+    "yearsShort": "{count, plural, one {# año} other {# años}}",
+    "timeZones": {
+      "EST": "Hora del Este",
+      "EDT": "Hora del Este",
+      "CST": "Hora del Centro",
+      "CDT": "Hora del Centro",
+      "MST": "Hora de la Montaña",
+      "MDT": "Hora de la Montaña",
+      "PST": "Hora del Pacífico",
+      "PDT": "Hora del Pacífico"
+    },
+    "videoSection": "Video de presentación",
+    "playVideo": "Reproducir el video de presentación de {name}",
+    "meet": "Conoce a {name} · presentación de 2 min",
+    "aboutMe": "Sobre mí",
+    "bioPlaceholder": "[Biografía del profesor] — Trayectoria, experiencia y estilo de enseñanza, redactados por el profesor durante su registro.",
+    "specialties": "Especialidades",
+    "teaches": "Enseña a",
+    "languages": "Idiomas",
+    "certifications": "Certificaciones",
+    "reviews": "Reseñas de estudiantes",
+    "noReviews": "Aún no hay reseñas",
+    "reviewsSummary": "{rating} de promedio · {count, plural, one {# reseña} other {# reseñas}}",
+    "reviewsSummaryUnknown": "{rating} de promedio · [N] reseñas",
+    "reviewPlaceholder": "[Texto de la reseña del estudiante — se muestra tras una clase completada]",
+    "reviewMeta": "Nombre del estudiante · País · Fecha",
+    "fallbackHeadline": "Profesor de inglés americano",
+    "fallbackCity": "Estados Unidos"
+  },
+  "booking": {
+    "title": "Reserva una clase con {name}",
+    "perLesson": "por clase de 50 min",
+    "lessonType": "Tipo de clase",
+    "trial": "Clase de prueba · 20 min",
+    "single": "Clase individual · 50 min",
+    "pack5": "5 clases",
+    "pack10": "10 clases",
+    "free": "Gratis",
+    "pickTime": "Elige un horario",
+    "previousWeek": "Semana anterior",
+    "nextWeek": "Semana siguiente",
+    "timezone": "Horarios en tu zona horaria: {tz} (detectada automáticamente)",
+    "detecting": "Detectando tu zona horaria…",
+    "noSlots": "No hay horarios libres esta semana: prueba con la siguiente.",
+    "unavailable": "{time}, no disponible",
+    "selectTime": "Elige un horario para continuar",
+    "continue": "Continuar al pago",
+    "message": "Enviar mensaje a {name}",
+    "cancellation": "Cancelación gratuita hasta 24 horas antes de la clase.",
+    "loadError": "No pudimos cargar el calendario de este profesor. Actualiza la página en un momento."
+  }
+}

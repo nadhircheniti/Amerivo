@@ -116,7 +116,7 @@ apps/
 
 ## Languages (i18n)
 
-The interface is available in **English, French, Arabic (right-to-left), Chinese (Simplified / Mandarin) and Russian**
+The interface is available in **English, Spanish, French, Arabic (right-to-left), Chinese (Simplified / Mandarin) and Russian**
 ([next-intl](https://next-intl.dev), no URL prefixes: the language comes from the visitor's choice — cookie
 `NEXT_LOCALE`, set by the language switcher — or from the browser's language, else English).
 

@@ -4,7 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 const dir = path.join(import.meta.dirname, "..", "messages");
-const locales = ["en", "fr", "ar", "zh", "ru"];
+const locales = ["en", "es", "fr", "ar", "zh", "ru"];
 const all = fs.readdirSync(path.join(dir, "en")).map((f) => f.replace(/\.json$/, ""));
 const namespaces = process.argv.slice(2).length ? process.argv.slice(2) : all;
 

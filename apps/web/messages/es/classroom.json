@@ -1,0 +1,99 @@
+{
+  "page": {
+    "metaTitle": "Clase en vivo",
+    "backToDashboard": "Volver al panel",
+    "participants": "{teacher} y {student}",
+    "connectionGood": "Buena conexión"
+  },
+  "timer": {
+    "label": "Tiempo transcurrido: {elapsed} de {total}"
+  },
+  "controls": {
+    "toolbar": "Controles de la llamada",
+    "muteMic": "Silenciar micrófono",
+    "cameraOff": "Apagar cámara",
+    "shareScreen": "Compartir pantalla",
+    "whiteboard": "Pizarra",
+    "endLesson": "Terminar clase"
+  },
+  "stage": {
+    "whiteboard": "Pizarra compartida",
+    "tools": "Herramientas de la pizarra",
+    "tool": {
+      "pen": "Lápiz",
+      "text": "Texto",
+      "shape": "Forma",
+      "eraser": "Borrador"
+    },
+    "videoCall": "Videollamada con {name}",
+    "videoFeed": "VIDEO",
+    "sharing": "Estás compartiendo tu pantalla",
+    "teacherLabel": "{name} · Profesor",
+    "you": "Tú",
+    "cameraOff": "Cámara apagada",
+    "micMuted": "Micrófono silenciado"
+  },
+  "panel": {
+    "label": "Panel de la clase",
+    "chat": "Chat",
+    "notes": "Notas de la clase",
+    "files": "Archivos",
+    "chatMessages": "Mensajes del chat",
+    "youPrefix": "Tú:",
+    "chatMessage": "Mensaje del chat",
+    "messagePlaceholder": "Mensaje para {name}…",
+    "send": "Enviar mensaje",
+    "notesLabel": "Notas compartidas de la clase · se guardan automáticamente",
+    "sharedFiles": "Archivos compartidos",
+    "upload": "Subir un archivo"
+  },
+  "live": {
+    "classroom": "Aula",
+    "loading": "Preparando tu aula…",
+    "lessonTitle": "{type, select, trial {Clase de prueba con {name}} package {Clase del paquete con {name}} other {Clase con {name}}}",
+    "when": "{date} · {start}–{end} (tu hora)",
+    "topic": "Tema: {topic}",
+    "tip": "Usa audífonos y busca un lugar tranquilo para escuchar mejor. Tu navegador te pedirá permiso para usar la cámara y el micrófono.",
+    "join": "Entrar a la clase",
+    "joining": "Conectando…",
+    "back": "Volver a mi panel",
+    "opensAt": "El aula abre a las {time} ({date}). Vuelve unos minutos antes de tu clase.",
+    "ended": "Esta clase ya terminó.",
+    "notConfirmed": "Esta clase no está confirmada (pago pendiente o cancelada).",
+    "notParticipant": "Solo el profesor y el estudiante de esta clase pueden entrar al aula.",
+    "notFound": "No encontramos esta clase.",
+    "unavailable": "El aula virtual no está disponible en este momento. Inténtalo de nuevo en unos minutos.",
+    "callError": "La llamada no pudo iniciar o se interrumpió. Recarga la página para volver a entrar.",
+    "participants": "{teacher} y {student}",
+    "stage": "Video",
+    "waiting": "Esperando a que {name} se una…",
+    "left": "{name} salió de la clase.",
+    "you": "Tú",
+    "status": {
+      "connecting": "Conectando…",
+      "good": "Buena conexión",
+      "poor": "Conexión débil",
+      "error": "Se perdió la conexión"
+    },
+    "deviceError": "No podemos acceder a tu cámara o micrófono. Permite el acceso en la configuración de tu navegador y luego recarga la página.",
+    "micOff": "Apagar micrófono",
+    "micOn": "Encender micrófono",
+    "camOff": "Apagar cámara",
+    "camOn": "Encender cámara",
+    "stopShare": "Dejar de compartir",
+    "leave": "Salir",
+    "endConfirm": "¿Terminar la clase para ambos? Después escribirás el informe de la clase.",
+    "panel": "Herramientas de la clase",
+    "tabs": {
+      "chat": "Chat",
+      "notes": "Notas"
+    },
+    "chatEmpty": "Los mensajes solo se ven durante la clase.",
+    "chatPlaceholder": "Mensaje para {name}…",
+    "send": "Enviar",
+    "notesPlaceholder": "Notas compartidas: palabras nuevas, correcciones, enlaces… Ambos pueden escribir aquí.",
+    "notesHint": "Se guardan con la clase.",
+    "notesSaving": "Guardando…",
+    "notesSaved": "Guardado"
+  }
+}
