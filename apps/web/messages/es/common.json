@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "title": "Amerivo English — Aprende inglés a tu manera",
+    "description": "Clases individuales en vivo con profesores estadounidenses de inglés cuidadosamente seleccionados. Flexibles, personalizadas y desde cualquier lugar."
+  },
+  "language": {
+    "label": "Idioma"
+  },
+  "nav": {
+    "main": "Principal",
+    "home": "Inicio",
+    "teachers": "Profesores",
+    "howItWorks": "Cómo funciona",
+    "pricing": "Precios",
+    "business": "Para empresas",
+    "becomeTeacher": "Hazte profesor",
+    "logIn": "Iniciar sesión",
+    "getStarted": "Empieza ya",
+    "mySpace": "Mi espacio",
+    "logOut": "Cerrar sesión",
+    "homeLink": "Inicio de Amerivo English"
+  },
+  "footer": {
+    "tagline": "Gente real. Conversaciones reales. Tu mejor versión.",
+    "learn": "Aprende",
+    "findTeacher": "Encuentra un profesor",
+    "placementTest": "Prueba de nivel",
+    "pricing": "Precios",
+    "teach": "Enseña",
+    "becomeTeacher": "Hazte profesor",
+    "teacherFaq": "Preguntas frecuentes para profesores",
+    "company": "Empresa",
+    "about": "Quiénes somos",
+    "support": "Ayuda",
+    "privacy": "Privacidad y RGPD",
+    "terms": "Términos",
+    "rights": "© {year} Amerivo English LLC. Todos los derechos reservados.",
+    "motto": "APRENDE · CONECTA · CRECE"
+  },
+  "sidebar": {
+    "nav": "Panel",
+    "viewing": "{role} · espacio {space}"
+  },
+  "roles": {
+    "student": "Estudiante",
+    "teacher": "Profesor",
+    "admin": "Administrador"
+  },
+  "spaces": {
+    "student": "estudiante",
+    "teacher": "profesor",
+    "admin": "administración"
+  },
+  "gate": {
+    "loading": "Cargando tu espacio…",
+    "unreachable": "No pudimos conectar con Amerivo en este momento. Es posible que el servicio se esté iniciando; vuelve a intentarlo en un minuto.",
+    "tryAgain": "Reintentar"
+  },
+  "rating": {
+    "new": "Nuevo",
+    "outOf5": "de 5",
+    "stars": "{count} de 5 estrellas"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "description": "La página que buscas no existe o se ha movido.",
+    "back": "Volver al inicio"
+  },
+  "progress": "Progreso",
+  "loading": "Cargando…",
+  "specialties": {
+    "Business English": "Inglés de negocios",
+    "Conversation": "Conversación",
+    "Interview Prep": "Preparación de entrevistas",
+    "IELTS Prep": "Preparación IELTS",
+    "TOEFL Prep": "Preparación TOEFL",
+    "Teens": "Adolescentes",
+    "General English": "Inglés general",
+    "Travel": "Viajes",
+    "Corporate": "Empresas",
+    "Reading": "Lectura",
+    "Grammar": "Gramática"
+  },
+  "audiences": {
+    "Adults": "Adultos",
+    "Teens": "Adolescentes"
+  }
+}
