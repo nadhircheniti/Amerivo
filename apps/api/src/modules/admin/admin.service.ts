@@ -20,13 +20,70 @@ export class AdminService {
     private readonly notifications: NotificationsService,
   ) {}
 
-  listTeachers(status?: "pending" | "approved" | "rejected" | "suspended") {
-    return this.db
-      .select({ id: teacherProfiles.userId, slug: teacherProfiles.slug, status: teacherProfiles.status, firstName: users.firstName, lastName: users.lastName, email: users.email, city: teacherProfiles.city, identityStatus: teacherProfiles.identityStatus, introVideoUrl: teacherProfiles.introVideoUrl, createdAt: teacherProfiles.createdAt })
+  /** Applications and teachers, with everything the admin needs to decide. */
+  async listTeachers(status?: "draft" | "pending" | "approved" | "rejected" | "suspended") {
+    const rows = await this.db
+      .select({
+        id: teacherProfiles.userId,
+        slug: teacherProfiles.slug,
+        status: teacherProfiles.status,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        email: users.email,
+        phone: users.phone,
+        country: users.country,
+        city: teacherProfiles.city,
+        timezone: teacherProfiles.timezone,
+        gender: teacherProfiles.gender,
+        headline: teacherProfiles.headline,
+        bio: teacherProfiles.bio,
+        education: teacherProfiles.education,
+        yearsExperience: teacherProfiles.yearsExperience,
+        specialties: teacherProfiles.specialties,
+        teaches: teacherProfiles.teaches,
+        languages: teacherProfiles.languages,
+        certifications: teacherProfiles.certifications,
+        priceCents: teacherProfiles.priceCents,
+        offersTrial: teacherProfiles.offersTrial,
+        identityStatus: teacherProfiles.identityStatus,
+        introVideoUrl: teacherProfiles.introVideoUrl,
+        interviewPreference: teacherProfiles.interviewPreference,
+        ratingAvgX100: teacherProfiles.ratingAvg,
+        lessonsCompleted: teacherProfiles.lessonsCompleted,
+        approvedAt: teacherProfiles.approvedAt,
+        createdAt: teacherProfiles.createdAt,
+      })
       .from(teacherProfiles)
       .innerJoin(users, eq(users.id, teacherProfiles.userId))
       .where(status ? eq(teacherProfiles.status, status) : undefined)
       .orderBy(desc(teacherProfiles.createdAt));
+    if (!rows.length) return [];
+    // Latest application event per teacher (submission, interview request, decision, notes).
+    const history = await this.db.select().from(teacherApplications).orderBy(desc(teacherApplications.createdAt));
+    return rows.map((r) => {
+      const mine = history.filter((h) => h.teacherId === r.id);
+      const submitted = mine.find((h) => h.submittedAt);
+      const decided = mine.find((h) => h.decidedAt);
+      const interview = mine.find((h) => h.interviewRequestedAt);
+      return {
+        ...r,
+        submittedAt: submitted?.submittedAt ?? null,
+        interviewRequestedAt: interview?.interviewRequestedAt ?? null,
+        lastDecision: decided ? { decision: decided.decision, notes: decided.adminNotes, evaluation: decided.evaluation, decidedAt: decided.decidedAt } : null,
+      };
+    });
+  }
+
+  /** Asks the applicant for a video interview (the application stays pending). */
+  async requestInterview(admin: AuthUser, teacherId: string, notes?: string) {
+    const [t] = await this.db.select({ status: teacherProfiles.status }).from(teacherProfiles).where(eq(teacherProfiles.userId, teacherId));
+    if (!t) throw notFound("Teacher");
+    if (t.status !== "pending") throw badRequest("Only pending applications can be invited to an interview");
+    const now = this.clock.now();
+    await this.db.insert(teacherApplications).values({ teacherId, interviewRequestedAt: now, adminNotes: notes, decidedBy: admin.id });
+    await this.db.insert(auditLogs).values({ actorId: admin.id, action: "teacher.interview", entity: "teacher", entityId: teacherId, data: { notes } });
+    await this.notifications.notify(teacherId, { type: "teacher_interview", title: "Next step: a short video interview", body: notes });
+    return { teacherId, interviewRequestedAt: now };
   }
 
   /** Approve / reject / suspend / reinstate a teacher, with evaluation scores (spec §4 step 5–6). */

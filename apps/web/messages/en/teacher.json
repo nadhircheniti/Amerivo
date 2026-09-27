@@ -11,7 +11,10 @@
   "modes": {
     "vacation": "Vacation mode",
     "holiday": "Holiday mode",
-    "hiddenNote": "Hidden from new bookings"
+    "hiddenNote": "Hidden from new bookings",
+    "saveError": "Couldn't change vacation mode. Please try again.",
+    "loadError": "Couldn't load vacation mode.",
+    "retry": "Try again"
   },
   "dashboard": {
     "metaTitle": "Teacher dashboard · Amerivo English",
@@ -74,7 +77,17 @@
       "captionWeek": "Availability for this week only, {tz}",
       "slotBooked": "{day} {time} booked by {name}",
       "slotOpen": "{day} {time} open",
-      "slotClosed": "{day} {time} closed"
+      "slotClosed": "{day} {time} closed",
+      "yourTimeZone": "Times in your time zone: <strong>{tz}</strong>",
+      "captionLive": "Your recurring weekly availability, {tz}",
+      "liveHelp": "Students only see free slots at least 1 hour ahead. A lesson needs a free 50-minute window (20 minutes for a trial lesson).",
+      "save": "Save availability",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "unsaved": "You have unsaved changes.",
+      "emptyWarning": "No open slots yet: students can't book you until you open some.",
+      "misaligned": "Some of your saved times don't start or end on the hour. When you save, only the whole hours shown in the grid are kept.",
+      "saveError": "Couldn't save your availability. Please try again."
     },
     "blocked": {
       "title": "Blocked dates",
@@ -83,10 +96,17 @@
       "holidays": "Holidays",
       "withNote": "{dates} · {note}",
       "remove": "Remove blocked date {label}",
-      "dateToBlock": "Date to block",
       "add": "Add",
       "cancel": "Cancel",
-      "blockDate": "Block a date"
+      "blockDate": "Block a date",
+      "firstDay": "First day",
+      "lastDay": "Last day",
+      "endBeforeStart": "The last day can't be before the first day.",
+      "reason": "Reason (optional)",
+      "reasonPlaceholder": "e.g. Family trip",
+      "adding": "Adding…",
+      "addError": "Couldn't block these dates. Please try again.",
+      "removeError": "Couldn't remove this date. Please try again."
     },
     "settings": {
       "title": "Lesson settings",
@@ -97,7 +117,20 @@
       "trialHidden": "20 min · once per student · hidden from students",
       "packages": "Packages (opt-in)",
       "pack": "{count, plural, one {{count} lesson} other {{count} lessons}} (−{discount}%)",
-      "total": "{price} total"
+      "total": "{price} total",
+      "price": "Price per {minutes}-min lesson (USD)",
+      "priceHint": "Whole dollars, from {min} to {max}.",
+      "priceInvalid": "Enter a whole number from {min} to {max}.",
+      "trialExplain": "The trial is a free 20-minute lesson. Each student can take it only once with you.",
+      "save": "Save settings",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "saveError": "Couldn't save your settings. Please try again."
+    },
+    "live": {
+      "loading": "Loading your schedule…",
+      "loadError": "We couldn't load your schedule. The service may be waking up, which can take up to a minute.",
+      "retry": "Try again"
     }
   },
   "earnings": {

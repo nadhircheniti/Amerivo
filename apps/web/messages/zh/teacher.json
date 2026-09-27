@@ -11,7 +11,10 @@
   "modes": {
     "vacation": "休假模式",
     "holiday": "节假日模式",
-    "hiddenNote": "不接受新的预约"
+    "hiddenNote": "不接受新的预约",
+    "saveError": "无法切换休假模式，请重试。",
+    "loadError": "无法加载休假模式。",
+    "retry": "重试"
   },
   "dashboard": {
     "metaTitle": "老师控制面板 · Amerivo English",
@@ -74,7 +77,17 @@
       "captionWeek": "仅限本周的可预约时间，{tz}",
       "slotBooked": "{day} {time}，已被 {name} 预约",
       "slotOpen": "{day} {time}，开放",
-      "slotClosed": "{day} {time}，关闭"
+      "slotClosed": "{day} {time}，关闭",
+      "yourTimeZone": "以下时间为你所在时区：<strong>{tz}</strong>",
+      "captionLive": "你每周重复的可预约时间，{tz}",
+      "liveHelp": "学生只能看到至少 1 小时后的空闲时段。一节课需要连续 50 分钟的空闲时间（试听课为 20 分钟）。",
+      "save": "保存可预约时间",
+      "saving": "正在保存…",
+      "saved": "已保存",
+      "unsaved": "你有尚未保存的更改。",
+      "emptyWarning": "目前没有开放的时段：开放时段后学生才能预约你。",
+      "misaligned": "你已保存的部分时间不是从整点开始或结束的。保存时只会保留表格中显示的整点时段。",
+      "saveError": "无法保存可预约时间，请重试。"
     },
     "blocked": {
       "title": "不可预约日期",
@@ -83,10 +96,17 @@
       "holidays": "年末假期",
       "withNote": "{dates} · {note}",
       "remove": "移除不可预约日期 {label}",
-      "dateToBlock": "要屏蔽的日期",
       "add": "添加",
       "cancel": "取消",
-      "blockDate": "屏蔽日期"
+      "blockDate": "屏蔽日期",
+      "firstDay": "开始日期",
+      "lastDay": "结束日期",
+      "endBeforeStart": "结束日期不能早于开始日期。",
+      "reason": "原因（可选）",
+      "reasonPlaceholder": "例如：家庭旅行",
+      "adding": "正在添加…",
+      "addError": "无法屏蔽这些日期，请重试。",
+      "removeError": "无法移除该日期，请重试。"
     },
     "settings": {
       "title": "课程设置",
@@ -97,7 +117,20 @@
       "trialHidden": "20 分钟 · 每位学生限一次 · 对学生隐藏",
       "packages": "课时包（可选）",
       "pack": "{count, plural, other {{count} 节课}}（−{discount}%）",
-      "total": "共 {price}"
+      "total": "共 {price}",
+      "price": "每节 {minutes} 分钟课程的价格（美元）",
+      "priceHint": "整数美元，{min} 至 {max}。",
+      "priceInvalid": "请输入 {min} 至 {max} 之间的整数。",
+      "trialExplain": "试听课是一节 20 分钟的免费课程，每位学生只能和你上一次。",
+      "save": "保存设置",
+      "saving": "正在保存…",
+      "saved": "已保存",
+      "saveError": "无法保存设置，请重试。"
+    },
+    "live": {
+      "loading": "正在加载你的课表…",
+      "loadError": "无法加载你的课表。服务可能正在启动，最多需要一分钟。",
+      "retry": "重试"
     }
   },
   "earnings": {

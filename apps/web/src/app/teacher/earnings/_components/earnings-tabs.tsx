@@ -32,8 +32,7 @@ export function EarningsTabs({ lessons, payouts }: { lessons: LessonEarning[]; p
   const usd = (n: number) => formatUsd(n, locale);
   const fmtDate = (iso: string) => new Intl.DateTimeFormat(tag, { month: "short", day: "numeric", timeZone: "UTC" }).format(new Date(`${iso}T12:00:00Z`));
   const fmtMonth = (ym: string) => new Intl.DateTimeFormat(tag, { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(`${ym}-15T12:00:00Z`));
-  const lessonLabel = (k: LessonKind) =>
-    k.type === "pack" ? t("pack", { size: k.size, index: k.index }) : t(k.type, { minutes: k.minutes });
+  const lessonLabel = (k: LessonKind) => (k.type === "pack" ? t("pack", { size: k.size, index: k.index }) : t(k.type, { minutes: k.minutes }));
   const [tab, setTab] = useState<TabId>("lessons");
   const base = useId();
   const refs = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -82,13 +81,27 @@ export function EarningsTabs({ lessons, payouts }: { lessons: LessonEarning[]; p
           <caption className="sr-only">{t("lessonsCaption", { percent: Math.round(PLATFORM_COMMISSION * 100) })}</caption>
           <thead>
             <tr>
-              <th scope="col" className={th}>{t("date")}</th>
-              <th scope="col" className={th}>{t("student")}</th>
-              <th scope="col" className={th}>{t("lesson")}</th>
-              <th scope="col" className={th}>{t("price")}</th>
-              <th scope="col" className={th}>{t("commission")}</th>
-              <th scope="col" className={th}>{t("youEarn")}</th>
-              <th scope="col" className={th}>{t("status")}</th>
+              <th scope="col" className={th}>
+                {t("date")}
+              </th>
+              <th scope="col" className={th}>
+                {t("student")}
+              </th>
+              <th scope="col" className={th}>
+                {t("lesson")}
+              </th>
+              <th scope="col" className={th}>
+                {t("price")}
+              </th>
+              <th scope="col" className={th}>
+                {t("commission")}
+              </th>
+              <th scope="col" className={th}>
+                {t("youEarn")}
+              </th>
+              <th scope="col" className={th}>
+                {t("status")}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -119,12 +132,24 @@ export function EarningsTabs({ lessons, payouts }: { lessons: LessonEarning[]; p
           <caption className="sr-only">{t("payoutsCaption")}</caption>
           <thead>
             <tr>
-              <th scope="col" className={th}>{t("paidOn")}</th>
-              <th scope="col" className={th}>{t("period")}</th>
-              <th scope="col" className={th}>{t("lessonsCol")}</th>
-              <th scope="col" className={th}>{t("destination")}</th>
-              <th scope="col" className={th}>{t("amount")}</th>
-              <th scope="col" className={th}>{t("status")}</th>
+              <th scope="col" className={th}>
+                {t("paidOn")}
+              </th>
+              <th scope="col" className={th}>
+                {t("period")}
+              </th>
+              <th scope="col" className={th}>
+                {t("lessonsCol")}
+              </th>
+              <th scope="col" className={th}>
+                {t("destination")}
+              </th>
+              <th scope="col" className={th}>
+                {t("amount")}
+              </th>
+              <th scope="col" className={th}>
+                {t("status")}
+              </th>
             </tr>
           </thead>
           <tbody>

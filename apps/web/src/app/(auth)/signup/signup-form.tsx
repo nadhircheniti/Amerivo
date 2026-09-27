@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { clerkMessage, useSignUpFlow } from "@/lib/auth-flows";
+import { clerkMessage, useSignUpFlow, type SignupRole } from "@/lib/auth-flows";
 import Link from "next/link";
 import { Field, Input } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { ageOn, latestBirthDate, MIN_STUDENT_AGE } from "@/lib/age";
 import { CountrySelect, DialCodeSelect, dialCodeFromEvent, LanguageSelect } from "@/components/ui/geo-selects";
 
-export function SignupForm() {
+/** Teachers (`role="teacher"`) skip the date of birth (13+ rule is for students) and the native language. */
+export function SignupForm({ role = "student" }: { role?: SignupRole }) {
+  const teacher = role === "teacher";
   const t = useTranslations("auth");
   const flow = useSignUpFlow();
   const [ageError, setAgeError] = useState<string | null>(null);
@@ -25,7 +27,7 @@ export function SignupForm() {
         e.preventDefault();
         const data = new FormData(e.currentTarget);
         const birthDate = String(data.get("birthDate") ?? "");
-        if (!birthDate || ageOn(birthDate) < MIN_STUDENT_AGE) {
+        if (!teacher && (!birthDate || ageOn(birthDate) < MIN_STUDENT_AGE)) {
           setAgeError(t("errors.minAgeSignup", { age: MIN_STUDENT_AGE }));
           return;
         }
@@ -35,13 +37,13 @@ export function SignupForm() {
         setPending(true);
         flow
           .start({
+            role,
             firstName: get("firstName"),
             lastName: get("lastName"),
             email: get("email"),
             password: String(data.get("password") ?? ""),
-            birthDate,
+            ...(teacher ? {} : { birthDate, nativeLanguage: get("nativeLanguage") }),
             country: get("country"),
-            nativeLanguage: get("nativeLanguage"),
             phone,
           })
           .catch((err) => setError(clerkMessage(err, t("errors.generic"))))
@@ -60,31 +62,33 @@ export function SignupForm() {
       <Field label={t("fields.password")}>
         <Input name="password" type="password" autoComplete="new-password" placeholder={t("signup.passwordPlaceholder")} minLength={8} required />
       </Field>
-      <Field
-        label={t("fields.birthDate")}
-        className="sm:col-span-2"
-        hint={
-          ageError ? (
-            <span role="alert" className="font-semibold text-danger-text">
-              {ageError}
-            </span>
-          ) : (
-            t("fields.birthDateHint", { age: MIN_STUDENT_AGE })
-          )
-        }
-      >
-        <Input
-          name="birthDate"
-          type="date"
-          autoComplete="bday"
-          max={latestBirthDate()}
-          required
-          aria-invalid={ageError ? true : undefined}
-          onChange={() => setAgeError(null)}
-          className="sm:max-w-[260px]"
-        />
-      </Field>
-      <Field label={t("fields.country")}>
+      {!teacher && (
+        <Field
+          label={t("fields.birthDate")}
+          className="sm:col-span-2"
+          hint={
+            ageError ? (
+              <span role="alert" className="font-semibold text-danger-text">
+                {ageError}
+              </span>
+            ) : (
+              t("fields.birthDateHint", { age: MIN_STUDENT_AGE })
+            )
+          }
+        >
+          <Input
+            name="birthDate"
+            type="date"
+            autoComplete="bday"
+            max={latestBirthDate()}
+            required
+            aria-invalid={ageError ? true : undefined}
+            onChange={() => setAgeError(null)}
+            className="sm:max-w-[260px]"
+          />
+        </Field>
+      )}
+      <Field label={t("fields.country")} className={teacher ? "sm:col-span-2" : undefined}>
         <CountrySelect
           name="country"
           autoComplete="country-name"
@@ -94,9 +98,11 @@ export function SignupForm() {
           onChange={(e) => setDialCode(dialCodeFromEvent(e))}
         />
       </Field>
-      <Field label={t("fields.nativeLanguage")}>
-        <LanguageSelect name="nativeLanguage" defaultValue="" required placeholder={t("fields.selectLanguage")} />
-      </Field>
+      {!teacher && (
+        <Field label={t("fields.nativeLanguage")}>
+          <LanguageSelect name="nativeLanguage" defaultValue="" required placeholder={t("fields.selectLanguage")} />
+        </Field>
+      )}
       <fieldset className="flex min-w-0 flex-col gap-1.5 sm:col-span-2">
         <legend className="mb-1.5 text-sm font-semibold">{t("fields.phone")}</legend>
         <div className="flex gap-2">
@@ -134,7 +140,7 @@ export function SignupForm() {
         </p>
       )}
       <Button type="submit" variant="teal" size="lg" className="mt-2.5 font-bold sm:col-span-2" disabled={pending || !flow.ready}>
-        {pending ? t("signup.submitting") : t("signup.submit")}
+        {pending ? t("signup.submitting") : teacher ? t("signup.teacherSubmit") : t("signup.submit")}
       </Button>
     </form>
   );

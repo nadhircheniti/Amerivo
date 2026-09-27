@@ -65,7 +65,13 @@
     "progress": "Step {current} of {total}",
     "back": "Back",
     "submit": "Submit application",
-    "backHome": "Back to Amerivo"
+    "backHome": "Back to Amerivo",
+    "saving": "Saving…",
+    "submitting": "Submitting…",
+    "saved": "Saved",
+    "saveError": "We couldn't save your application. Please try again.",
+    "pickSubject": "Choose at least one thing you can teach.",
+    "identityRequired": "Verify your identity with Stripe to continue."
   },
   "options": {
     "subjects": {
@@ -143,7 +149,10 @@
     "timeZone": "Time zone",
     "timeZoneHint": "Used to show your availability to students in their local time.",
     "gender": "Gender",
-    "genderHint": "Some students filter by a preferred teacher gender. You can change this later."
+    "genderHint": "Some students filter by a preferred teacher gender. You can change this later.",
+    "photoLater": "You'll add your profile photo later.",
+    "emailHint": "The email address of your account.",
+    "selectCountry": "Select your country"
   },
   "professional": {
     "education": "Highest education",
@@ -158,7 +167,17 @@
     "rateValue": "{price} per lesson",
     "net": "You receive {net} after the {commission}% platform commission",
     "trial": "Offer a free 20-minute trial lesson",
-    "trialHint": "Students can meet you once before booking. You can change this later."
+    "trialHint": "Students can meet you once before booking. You can change this later.",
+    "headline": "Headline",
+    "headlineHint": "One line students see in search results (120 characters max).",
+    "headlinePlaceholder": "e.g. Business English coach for tech professionals",
+    "bio": "About you",
+    "bioHint": "Your background, your teaching style and who you love to teach.",
+    "bioCount": "{count} / {max}",
+    "bioPlaceholder": "Tell students about yourself and what a lesson with you looks like.",
+    "selectEducation": "Select your highest education",
+    "certificationsPlaceholder": "e.g. TESOL",
+    "certificatesLater": "You'll add your certificate files later."
   },
   "previews": {
     "label": "Coming up next",
@@ -181,7 +200,49 @@
     "uploadHint": "Front and back if applicable · JPG, PNG or PDF",
     "secure": "<strong>Handled securely by Stripe Identity.</strong> Amerivo never stores a copy of your ID document; we only receive the verification result.",
     "taxTitle": "Tax information (W-9)",
-    "taxText": "We collect your W-9; 1099 forms are issued automatically. You'll complete it when you connect your payout account."
+    "taxText": "We collect your W-9; 1099 forms are issued automatically. You'll complete it when you connect your payout account.",
+    "liveIntro": "We verify every teacher before they can accept bookings. Stripe Identity checks a photo ID (passport, driver's license or ID card) and a selfie. It takes about 2 minutes on your phone or computer.",
+    "statusLabel": "Verification status",
+    "status": {
+      "notStarted": {
+        "label": "Not started",
+        "text": "Start the verification: you'll be taken to Stripe, then brought back here."
+      },
+      "pending": {
+        "label": "In progress",
+        "text": "Stripe is checking your documents. You can continue your application in the meantime."
+      },
+      "verified": {
+        "label": "Verified",
+        "text": "Your identity is verified. Thank you!"
+      },
+      "failed": {
+        "label": "Failed",
+        "text": "The verification didn't go through. Please try again with a valid, readable photo ID."
+      }
+    },
+    "failedReason": "Reason given by Stripe: {reason}",
+    "start": "Verify my identity with Stripe",
+    "retry": "Try again with Stripe",
+    "redirecting": "Opening Stripe…",
+    "checkAgain": "Check again",
+    "checking": "Checking…",
+    "checked": "Status updated.",
+    "stripeError": "We couldn't reach the verification service. Please try again.",
+    "how": {
+      "document": {
+        "title": "Photo ID",
+        "text": "Passport, driver's license or government ID card."
+      },
+      "selfie": {
+        "title": "A selfie",
+        "text": "Stripe matches it with the photo on your ID."
+      },
+      "time": {
+        "title": "About 2 minutes",
+        "text": "Use your phone's camera or your webcam."
+      }
+    }
   },
   "video": {
     "intro": "Record a video of up to 2 minutes. Students watch it on your profile before booking, so speak naturally and look at the camera.",
@@ -208,7 +269,33 @@
         "text": "What a lesson with you feels like."
       }
     },
-    "topic": "{number}. {title}"
+    "topic": "{number}. {title}",
+    "liveIntro": "Students watch your video on your profile before booking. Record up to 2 minutes, upload it to a video service, and paste the link here.",
+    "urlLabel": "Link to your 2-minute introduction video",
+    "urlHint": "An unlisted YouTube video, or a Vimeo, Loom or Google Drive link (starting with https://).",
+    "urlPattern": "Enter a link starting with https://",
+    "preview": "Preview",
+    "previewTitle": "Preview of your introduction video",
+    "noPreview": "Preview is available for YouTube and Vimeo links. Make sure anyone with the link can watch your video.",
+    "tipsTitle": "Tips for a great video",
+    "tips": {
+      "say": {
+        "title": "What to say",
+        "text": "Where you're from in the U.S., your teaching experience and what a lesson with you feels like."
+      },
+      "light": {
+        "title": "Good light",
+        "text": "Face a window or a lamp so students can see you clearly."
+      },
+      "quiet": {
+        "title": "A quiet room",
+        "text": "No background noise, and speak naturally while looking at the camera."
+      },
+      "share": {
+        "title": "Shareable link",
+        "text": "Choose \"unlisted\" on YouTube, or \"anyone with the link\" on Google Drive."
+      }
+    }
   },
   "review": {
     "notProvided": "Not provided",
@@ -237,7 +324,11 @@
     "interviewTitle": "Short interview",
     "interviewText": "If your application passes review, we'll invite you to a 15-minute video interview with our teaching team.",
     "interviewTime": "Preferred interview time",
-    "confirm": "I confirm that I am a U.S. native English speaker and that the information in this application is accurate."
+    "confirm": "I confirm that I am a U.S. native English speaker and that the information in this application is accurate.",
+    "headline": "Headline",
+    "bio": "About you",
+    "identityStatus": "Status",
+    "selectInterviewTime": "Select a time"
   },
   "approval": {
     "submitted": "Application submitted",
@@ -265,6 +356,63 @@
         "label": "Suspended",
         "text": "An approved account can be paused if our teacher standards or terms aren't met."
       }
+    },
+    "liveEmailTo": "We're reviewing your application and will email {email} within 3–5 business days.",
+    "liveEmailYou": "We're reviewing your application and will email you within 3–5 business days.",
+    "interviewTitle": "You're invited to a video interview",
+    "interviewText": "Our teaching team would like to meet you (invitation sent on {date}). Check your email to schedule it.",
+    "interviewNotes": "Message from the Amerivo team",
+    "approvedTitle": "Congratulations, you're approved!",
+    "approvedTitleName": "Congratulations, {name}, you're approved!",
+    "approvedText": "Welcome to the Amerivo teaching team. Your profile is ready to go live.",
+    "availabilityHint": "Next step: set your availability so students can book lessons with you.",
+    "goDashboard": "Go to my teacher dashboard",
+    "rejectedTitle": "Your application wasn't approved",
+    "rejectedText": "You can update your application and submit it again.",
+    "reviewerNotes": "Notes from the Amerivo team",
+    "editResubmit": "Edit and resubmit",
+    "suspendedTitle": "Your teacher account is suspended",
+    "suspendedText": "Please contact our support team to learn more and discuss next steps.",
+    "contactSupport": "Contact support"
+  },
+  "live": {
+    "loading": "Loading your application…",
+    "loadError": "We couldn't load your application right now. The service may be waking up — please try again in a minute.",
+    "tryAgain": "Try again",
+    "intro": {
+      "eyebrow": "Become a teacher",
+      "title": "Teach American English on Amerivo",
+      "text": "Create your teacher account, then complete your application at your own pace. Your progress is saved at every step.",
+      "create": "Create my teacher account",
+      "login": "I already have an account",
+      "needTitle": "What you'll need",
+      "needs": {
+        "native": {
+          "title": "U.S. native English speaker",
+          "text": "Amerivo teachers are native speakers of American English."
+        },
+        "identity": {
+          "title": "Photo ID and a selfie",
+          "text": "Verified securely by Stripe Identity."
+        },
+        "video": {
+          "title": "A 2-minute video",
+          "text": "A link to a short introduction video (YouTube, Vimeo, Loom or Google Drive)."
+        },
+        "time": {
+          "title": "About 10 minutes",
+          "text": "You can save and come back at any time."
+        }
+      }
+    },
+    "otherAccount": {
+      "studentTitle": "This is a student account",
+      "adminTitle": "This is an admin account",
+      "text": "Teachers need their own Amerivo account, with a different email address. Log out, then create your teacher account.",
+      "signOutHint": "You can also log out at the top of the page.",
+      "signOutCreate": "Log out and create a teacher account",
+      "goStudent": "Go to my student space",
+      "goAdmin": "Go to the admin space"
     }
   }
 }

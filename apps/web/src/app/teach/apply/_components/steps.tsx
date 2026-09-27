@@ -3,13 +3,16 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
-import { ChoiceTile, Field, Input, Segmented, Select } from "@/components/ui/form";
+import { ChoiceTile, Field, Input, Segmented, Select, Textarea } from "@/components/ui/form";
 import { CountrySelect } from "@/components/ui/geo-selects";
-import { Badge, type BadgeTone } from "@/components/ui/primitives";
+import { Badge } from "@/components/ui/primitives";
 import { intlTags, type Locale } from "@/i18n/config";
+import { countryCodeOf } from "@/lib/countries";
 import { formatUsd, PLATFORM_COMMISSION, teacherNet } from "@/lib/mock-data";
 import { educationLevels, experienceLevels, genders, groups, idTypes, interviewSlots, steps, subjects, timeZones, type Application } from "../_data";
 import { SectionTitle, TagInput, UploadButton } from "./fields";
+import { useLive } from "./live-context";
+import { identityKey, identityTones, LiveApproval, LiveIdentity, LiveVideo, StatusList } from "./live-steps";
 
 type StepProps = { app: Application; update: (patch: Partial<Application>) => void };
 
@@ -28,25 +31,46 @@ function useCountryName() {
   } catch {
     names = null;
   }
-  return (code: string) => (code === "other" ? t("countryOther") : (names?.of(code) ?? code));
+  // Demo stores ISO codes, live mode English names (as saved by the API).
+  return (value: string) => {
+    if (value === "other") return t("countryOther");
+    const code = /^[A-Z]{2}$/.test(value) ? value : countryCodeOf(value);
+    return (code && names?.of(code)) || value;
+  };
+}
+
+/** "Coming later" note replacing file uploads in live mode (no file storage yet). */
+function LaterNote({ children }: { children: ReactNode }) {
+  return (
+    <p className="flex items-start gap-2 rounded-xl bg-beige px-4 py-3 text-[13px] leading-normal text-navy-soft">
+      <Icon name="clock" size={16} className="mt-0.5 shrink-0 text-teal-dark" />
+      {children}
+    </p>
+  );
 }
 
 /* ---------------- 1 · Personal info ---------------- */
 export function PersonalStep({ app, update }: StepProps) {
   const t = useTranslations("apply.personal");
   const to = useTranslations("apply.options");
+  const live = useLive();
+  const knownZone = timeZones.some((z) => z.value === app.timeZone);
   return (
     <>
-      <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
-        <span className="flex size-24 shrink-0 items-center justify-center rounded-full bg-beige text-muted" aria-hidden="true">
-          {app.photo.length ? <Icon name="check" size={32} strokeWidth={2.4} className="text-teal-dark" /> : <Icon name="user" size={40} />}
-        </span>
-        <div className="flex flex-col gap-2">
-          <p className="text-sm font-semibold">{t("photo")}</p>
-          <p className="text-[13px] text-muted">{t("photoHint")}</p>
-          <UploadButton label={app.photo.length ? t("replacePhoto") : t("uploadPhoto")} accept="image/jpeg,image/png" files={app.photo} onFiles={(photo) => update({ photo })} />
+      {live ? (
+        <LaterNote>{t("photoLater")}</LaterNote>
+      ) : (
+        <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+          <span className="flex size-24 shrink-0 items-center justify-center rounded-full bg-beige text-muted" aria-hidden="true">
+            {app.photo.length ? <Icon name="check" size={32} strokeWidth={2.4} className="text-teal-dark" /> : <Icon name="user" size={40} />}
+          </span>
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-semibold">{t("photo")}</p>
+            <p className="text-[13px] text-muted">{t("photoHint")}</p>
+            <UploadButton label={app.photo.length ? t("replacePhoto") : t("uploadPhoto")} accept="image/jpeg,image/png" files={app.photo} onFiles={(photo) => update({ photo })} />
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label={t("firstName")}>
@@ -55,17 +79,34 @@ export function PersonalStep({ app, update }: StepProps) {
         <Field label={t("lastName")}>
           <Input required autoComplete="family-name" value={app.lastName} onChange={(e) => update({ lastName: e.target.value })} />
         </Field>
-        <Field label={t("email")}>
-          <Input required type="email" autoComplete="email" value={app.email} onChange={(e) => update({ email: e.target.value })} />
+        <Field label={t("email")} hint={live ? t("emailHint") : undefined}>
+          {live ? (
+            <Input type="email" value={app.email} readOnly aria-readonly="true" className="bg-beige text-navy-soft" />
+          ) : (
+            <Input required type="email" autoComplete="email" value={app.email} onChange={(e) => update({ email: e.target.value })} />
+          )}
         </Field>
         <Field label={t("phone")}>
           <Input type="tel" autoComplete="tel" placeholder="+1 (555) 000-0000" value={app.phone} onChange={(e) => update({ phone: e.target.value })} />
         </Field>
         <Field label={t("country")}>
-          <CountrySelect required valueAs="code" autoComplete="country" value={app.country} onChange={(e) => update({ country: e.target.value })} placeholder={t("country")} />
+          {live ? (
+            <CountrySelect
+              required
+              valueAs="name"
+              autoComplete="country-name"
+              value={app.country}
+              onChange={(e) => update({ country: e.target.value })}
+              placeholder={t("selectCountry")}
+            />
+          ) : (
+            <CountrySelect required valueAs="code" autoComplete="country" value={app.country} onChange={(e) => update({ country: e.target.value })} placeholder={t("country")} />
+          )}
         </Field>
         <Field label={t("timeZone")} hint={t("timeZoneHint")}>
           <Select value={app.timeZone} onChange={(e) => update({ timeZone: e.target.value })}>
+            {/* A zone saved outside the short list (e.g. detected at sign-up) stays selectable. */}
+            {!knownZone && <option value={app.timeZone}>{app.timeZone.replace(/_/g, " ")}</option>}
             {timeZones.map((z) => (
               <option key={z.value} value={z.value}>
                 {to(`timeZones.${z.key}`)}
@@ -93,11 +134,46 @@ export function ProfessionalStep({ app, update }: StepProps) {
   const t = useTranslations("apply.professional");
   const to = useTranslations("apply.options");
   const locale = useLocale() as Locale;
+  const live = useLive();
   return (
     <>
+      {live && (
+        <div className="flex flex-col gap-4">
+          <Field label={t("headline")} hint={t("headlineHint")}>
+            <Input required maxLength={120} value={app.headline} placeholder={t("headlinePlaceholder")} onChange={(e) => update({ headline: e.target.value })} />
+          </Field>
+          <Field
+            label={t("bio")}
+            hint={
+              <span className="flex flex-wrap justify-between gap-2">
+                <span>{t("bioHint")}</span>
+                <span aria-live="polite" className="tabular-nums">
+                  {t("bioCount", { count: app.bio.length.toLocaleString(intlTags[locale]), max: (3000).toLocaleString(intlTags[locale]) })}
+                </span>
+              </span>
+            }
+          >
+            <Textarea
+              required
+              maxLength={3000}
+              rows={7}
+              value={app.bio}
+              placeholder={t("bioPlaceholder")}
+              onChange={(e) => update({ bio: e.target.value })}
+              className="resize-y text-[15px]"
+            />
+          </Field>
+        </div>
+      )}
+
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label={t("education")}>
-          <Select value={app.education} onChange={(e) => update({ education: e.target.value as Application["education"] })}>
+          <Select required value={app.education} onChange={(e) => update({ education: e.target.value as Application["education"] })}>
+            {app.education === "" && (
+              <option value="" disabled>
+                {t("selectEducation")}
+              </option>
+            )}
             {educationLevels.map((o) => (
               <option key={o} value={o}>
                 {to(`education.${o}`)}
@@ -138,14 +214,23 @@ export function ProfessionalStep({ app, update }: StepProps) {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
-          <TagInput label={t("certifications")} values={app.certifications} onChange={(certifications) => update({ certifications })} />
-          <UploadButton
-            label={t("uploadCertificates")}
-            accept="application/pdf,image/jpeg"
-            multiple
-            files={app.certificateFiles}
-            onFiles={(certificateFiles) => update({ certificateFiles })}
+          <TagInput
+            label={t("certifications")}
+            placeholder={live ? t("certificationsPlaceholder") : undefined}
+            values={app.certifications}
+            onChange={(certifications) => update({ certifications })}
           />
+          {live ? (
+            <LaterNote>{t("certificatesLater")}</LaterNote>
+          ) : (
+            <UploadButton
+              label={t("uploadCertificates")}
+              accept="application/pdf,image/jpeg"
+              multiple
+              files={app.certificateFiles}
+              onFiles={(certificateFiles) => update({ certificateFiles })}
+            />
+          )}
         </div>
         <TagInput label={t("languages")} tone="orange" placeholder={t("languagesPlaceholder")} values={app.languages} onChange={(languages) => update({ languages })} />
       </div>
@@ -213,32 +298,38 @@ export function StepPreviews() {
 export function IdentityStep({ app, update }: StepProps) {
   const t = useTranslations("apply.identity");
   const to = useTranslations("apply.options");
+  const live = useLive();
   return (
     <>
-      <p className="text-[15px] leading-relaxed text-navy-soft">{t("intro")}</p>
+      {live ? (
+        <LiveIdentity />
+      ) : (
+        <>
+          <p className="text-[15px] leading-relaxed text-navy-soft">{t("intro")}</p>
 
-      <div className="flex flex-col gap-3">
-        <span className="text-sm font-semibold">{t("documentType")}</span>
-        <Segmented
-          label={t("documentType")}
-          options={idTypes.map((id) => ({ value: id, label: to(`idTypes.${id}`) }))}
-          value={app.idType}
-          onChange={(idType) => update({ idType })}
-          className="max-w-[560px] flex-wrap"
-        />
-      </div>
+          <div className="flex flex-col gap-3">
+            <span className="text-sm font-semibold">{t("documentType")}</span>
+            <Segmented
+              label={t("documentType")}
+              options={idTypes.map((id) => ({ value: id, label: to(`idTypes.${id}`) }))}
+              value={app.idType}
+              onChange={(idType) => update({ idType })}
+              className="max-w-[560px] flex-wrap"
+            />
+          </div>
 
-      <UploadButton
-        variant="tile"
-        icon="shieldCheck"
-        label={t(`upload.${app.idType}`)}
-        hint={t("uploadHint")}
-        accept="image/jpeg,image/png,application/pdf"
-        multiple
-        files={app.idFiles}
-        onFiles={(idFiles) => update({ idFiles })}
-      />
-      {/* TODO(stripe): replace the upload tile with a Stripe Identity VerificationSession (client secret from apps/api). */}
+          <UploadButton
+            variant="tile"
+            icon="shieldCheck"
+            label={t(`upload.${app.idType}`)}
+            hint={t("uploadHint")}
+            accept="image/jpeg,image/png,application/pdf"
+            multiple
+            files={app.idFiles}
+            onFiles={(idFiles) => update({ idFiles })}
+          />
+        </>
+      )}
 
       <div className="flex items-start gap-3 rounded-2xl bg-teal-50 p-4 text-sm leading-normal">
         <Icon name="lock" size={20} className="mt-0.5 shrink-0 text-teal-dark" />
@@ -259,7 +350,12 @@ export function IdentityStep({ app, update }: StepProps) {
 /* ---------------- 4 · Video introduction ---------------- */
 const videoTopics = ["background", "experience", "style"] as const;
 
-export function VideoStep({ app, update }: StepProps) {
+export function VideoStep(props: StepProps) {
+  // Live mode: a link to a hosted video; the in-browser recorder below is the demo mock.
+  return useLive() ? <LiveVideo {...props} /> : <DemoVideoStep {...props} />;
+}
+
+function DemoVideoStep({ app, update }: StepProps) {
   const t = useTranslations("apply.video");
   const [recording, setRecording] = useState(false);
   const [seconds, setSeconds] = useState(0);
@@ -369,6 +465,9 @@ export function ReviewStep({ app, update, onEdit }: StepProps & { onEdit: (step:
   const zone = timeZones.find((z) => z.value === app.timeZone);
   const tz = zone ? to(`timeZones.${zone.key}`) : app.timeZone;
   const dash = <span className="text-muted">{t("notProvided")}</span>;
+  const live = useLive();
+  const ti = useTranslations("apply.identity");
+  const identity = live?.profile.identityStatus;
 
   return (
     <>
@@ -377,13 +476,15 @@ export function ReviewStep({ app, update, onEdit }: StepProps & { onEdit: (step:
           <Row label={t("name")}>{`${app.firstName} ${app.lastName}`.trim() || dash}</Row>
           <Row label={t("email")}>{app.email || dash}</Row>
           <Row label={t("phone")}>{app.phone || dash}</Row>
-          <Row label={t("country")}>{countryName(app.country)}</Row>
+          <Row label={t("country")}>{app.country ? countryName(app.country) : dash}</Row>
           <Row label={t("gender")}>{app.gender ? to(`genders.${app.gender}`) : dash}</Row>
           <Row label={t("timeZone")}>{tz}</Row>
-          <Row label={t("photo")}>{app.photo[0] ?? dash}</Row>
+          {!live && <Row label={t("photo")}>{app.photo[0] ?? dash}</Row>}
         </ReviewCard>
         <ReviewCard title={ts(`${steps[1].id}.title`)} onEdit={() => onEdit(1)}>
-          <Row label={t("education")}>{to(`education.${app.education}`)}</Row>
+          {live && <Row label={t("headline")}>{app.headline || dash}</Row>}
+          {live && <Row label={t("bio")}>{app.bio ? <span className="line-clamp-4 whitespace-pre-line">{app.bio}</span> : dash}</Row>}
+          <Row label={t("education")}>{app.education ? to(`education.${app.education}`) : dash}</Row>
           <Row label={t("experience")}>{to(`experience.${app.experience}`)}</Row>
           <Row label={t("teaches")}>{list(app.subjects.map((s) => to(`subjects.${s}`))) || dash}</Row>
           <Row label={t("groups")}>{list(app.groups.map((g) => to(`groups.${g}`))) || dash}</Row>
@@ -392,11 +493,29 @@ export function ReviewStep({ app, update, onEdit }: StepProps & { onEdit: (step:
           <Row label={t("rate")}>{t("rateValue", { price: wholeUsd(app.rate, locale), net: formatUsd(teacherNet(app.rate), locale), trial: app.offersTrial ? "on" : "off" })}</Row>
         </ReviewCard>
         <ReviewCard title={ts(`${steps[2].id}.title`)} onEdit={() => onEdit(2)}>
-          <Row label={t("document")}>{app.idFiles.length ? t("documentValue", { type: to(`idTypes.${app.idType}`), count: app.idFiles.length }) : dash}</Row>
+          {identity ? (
+            <Row label={t("identityStatus")}>
+              <Badge tone={identityTones[identity]}>{ti(`status.${identityKey(identity)}.label`)}</Badge>
+            </Row>
+          ) : (
+            <Row label={t("document")}>{app.idFiles.length ? t("documentValue", { type: to(`idTypes.${app.idType}`), count: app.idFiles.length }) : dash}</Row>
+          )}
           <Row label={t("w9")}>{t("w9Value")}</Row>
         </ReviewCard>
         <ReviewCard title={ts(`${steps[3].id}.title`)} onEdit={() => onEdit(3)}>
-          <Row label={t("video")}>{app.video[0] ?? dash}</Row>
+          {live ? (
+            <Row label={t("video")}>
+              {app.videoUrl ? (
+                <a href={app.videoUrl} target="_blank" rel="noopener noreferrer" dir="ltr" className="break-all font-semibold text-teal-dark underline-offset-2 hover:underline">
+                  {app.videoUrl}
+                </a>
+              ) : (
+                dash
+              )}
+            </Row>
+          ) : (
+            <Row label={t("video")}>{app.video[0] ?? dash}</Row>
+          )}
         </ReviewCard>
       </div>
 
@@ -409,7 +528,12 @@ export function ReviewStep({ app, update, onEdit }: StepProps & { onEdit: (step:
           </div>
         </div>
         <Field label={t("interviewTime")} className="max-w-[320px]">
-          <Select value={app.interviewSlot} onChange={(e) => update({ interviewSlot: e.target.value as Application["interviewSlot"] })}>
+          <Select required value={app.interviewSlot} onChange={(e) => update({ interviewSlot: e.target.value as Application["interviewSlot"] })}>
+            {app.interviewSlot === "" && (
+              <option value="" disabled>
+                {t("selectInterviewTime")}
+              </option>
+            )}
             {interviewSlots.map((s) => (
               <option key={s} value={s}>
                 {to(`interviewSlots.${s}`)}
@@ -452,15 +576,9 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
 }
 
 /* ---------------- 6 · Approval ---------------- */
-const statuses: { id: "pending" | "approved" | "rejected" | "suspended"; tone: BadgeTone }[] = [
-  { id: "pending", tone: "warning" },
-  { id: "approved", tone: "success" },
-  { id: "rejected", tone: "danger" },
-  { id: "suspended", tone: "neutral" },
-];
-
-export function ApprovalStep({ app }: { app: Application }) {
+export function ApprovalStep({ app, onEdit }: { app: Application; onEdit: () => void }) {
   const t = useTranslations("apply.approval");
+  if (useLive()) return <LiveApproval onEdit={onEdit} />;
   return (
     <>
       <div className="flex flex-col items-start gap-4 rounded-2xl bg-orange-100 p-6 sm:flex-row sm:items-center" role="status">
@@ -478,29 +596,7 @@ export function ApprovalStep({ app }: { app: Application }) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-3">
-        <h2 className="font-display text-[15px] font-bold">{t("statusTitle")}</h2>
-        <ul className="flex flex-col gap-2.5">
-          {statuses.map((s, i) => (
-            <li
-              key={s.id}
-              className={
-                i === 0
-                  ? "flex flex-col gap-2 rounded-2xl border-2 border-orange p-4 sm:flex-row sm:items-center sm:gap-4"
-                  : "flex flex-col gap-2 rounded-2xl border border-line-soft p-4 sm:flex-row sm:items-center sm:gap-4"
-              }
-            >
-              <Badge tone={s.tone} className="w-fit shrink-0 sm:w-[96px] sm:justify-center">
-                {t(`statuses.${s.id}.label`)}
-              </Badge>
-              <span className="text-sm leading-normal text-navy-soft">
-                {t(`statuses.${s.id}.text`)}
-                {i === 0 && <span className="sr-only"> {t("current")}</span>}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <StatusList current="pending" />
     </>
   );
 }

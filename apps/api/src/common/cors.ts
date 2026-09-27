@@ -12,3 +12,16 @@ export function corsOrigins(list: string): (string | RegExp)[] {
 }
 
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/**
+ * Public address of the site for links sent to Stripe (return pages): the first WEB_URL entry
+ * without a wildcard. WEB_URL=https://amerivoenglish.com,https://www.amerivoenglish.com → the first one.
+ */
+export function webOrigin(list = process.env.WEB_URL ?? "http://localhost:3000") {
+  return (
+    list
+      .split(",")
+      .map((s) => s.trim().replace(/\/$/, ""))
+      .find((o) => o && !o.includes("*")) ?? "http://localhost:3000"
+  );
+}

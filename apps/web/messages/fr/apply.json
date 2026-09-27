@@ -65,7 +65,13 @@
     "progress": "Étape {current} sur {total}",
     "back": "Retour",
     "submit": "Envoyer ma candidature",
-    "backHome": "Retour à Amerivo"
+    "backHome": "Retour à Amerivo",
+    "saving": "Enregistrement…",
+    "submitting": "Envoi en cours…",
+    "saved": "Enregistré",
+    "saveError": "Nous n'avons pas pu enregistrer votre candidature. Veuillez réessayer.",
+    "pickSubject": "Choisissez au moins une matière que vous pouvez enseigner.",
+    "identityRequired": "Vérifiez votre identité avec Stripe pour continuer."
   },
   "options": {
     "subjects": {
@@ -143,7 +149,10 @@
     "timeZone": "Fuseau horaire",
     "timeZoneHint": "Permet d'afficher vos disponibilités aux élèves dans leur heure locale.",
     "gender": "Genre",
-    "genderHint": "Certains élèves filtrent selon le genre du professeur. Vous pourrez modifier ce choix plus tard."
+    "genderHint": "Certains élèves filtrent selon le genre du professeur. Vous pourrez modifier ce choix plus tard.",
+    "photoLater": "Vous ajouterez votre photo de profil plus tard.",
+    "emailHint": "L'adresse e-mail de votre compte.",
+    "selectCountry": "Sélectionnez votre pays"
   },
   "professional": {
     "education": "Diplôme le plus élevé",
@@ -158,7 +167,17 @@
     "rateValue": "{price} par cours",
     "net": "Vous recevez {net} après la commission de {commission} % de la plateforme",
     "trial": "Proposer un cours d'essai gratuit de 20 minutes",
-    "trialHint": "Les élèves peuvent vous rencontrer une fois avant de réserver. Vous pourrez modifier ce choix plus tard."
+    "trialHint": "Les élèves peuvent vous rencontrer une fois avant de réserver. Vous pourrez modifier ce choix plus tard.",
+    "headline": "Titre du profil",
+    "headlineHint": "Une ligne visible par les élèves dans les résultats de recherche (120 caractères max.).",
+    "headlinePlaceholder": "ex. Coach en anglais des affaires pour les professionnels de la tech",
+    "bio": "À propos de vous",
+    "bioHint": "Votre parcours, votre style d'enseignement et le public que vous aimez accompagner.",
+    "bioCount": "{count} / {max}",
+    "bioPlaceholder": "Présentez-vous aux élèves et décrivez comment se déroule un cours avec vous.",
+    "selectEducation": "Sélectionnez votre niveau d'études",
+    "certificationsPlaceholder": "ex. TESOL",
+    "certificatesLater": "Vous ajouterez les fichiers de vos certificats plus tard."
   },
   "previews": {
     "label": "Prochaines étapes",
@@ -181,7 +200,49 @@
     "uploadHint": "Recto et verso si nécessaire · JPG, PNG ou PDF",
     "secure": "<strong>Traité de façon sécurisée par Stripe Identity.</strong> Amerivo ne conserve jamais de copie de votre pièce d'identité ; nous recevons uniquement le résultat de la vérification.",
     "taxTitle": "Informations fiscales (W-9)",
-    "taxText": "Nous recueillons votre formulaire W-9 ; les formulaires 1099 sont émis automatiquement. Vous le remplirez en connectant votre compte de versement."
+    "taxText": "Nous recueillons votre formulaire W-9 ; les formulaires 1099 sont émis automatiquement. Vous le remplirez en connectant votre compte de versement.",
+    "liveIntro": "Nous vérifions chaque professeur avant qu'il puisse accepter des réservations. Stripe Identity contrôle une pièce d'identité avec photo (passeport, permis de conduire ou carte d'identité) et un selfie. Cela prend environ 2 minutes sur votre téléphone ou votre ordinateur.",
+    "statusLabel": "Statut de la vérification",
+    "status": {
+      "notStarted": {
+        "label": "Non commencée",
+        "text": "Lancez la vérification : vous serez redirigé vers Stripe, puis ramené ici."
+      },
+      "pending": {
+        "label": "En cours",
+        "text": "Stripe vérifie vos documents. Vous pouvez poursuivre votre candidature en attendant."
+      },
+      "verified": {
+        "label": "Vérifiée",
+        "text": "Votre identité est vérifiée. Merci !"
+      },
+      "failed": {
+        "label": "Échec",
+        "text": "La vérification n'a pas abouti. Veuillez réessayer avec une pièce d'identité valide et lisible."
+      }
+    },
+    "failedReason": "Motif indiqué par Stripe : {reason}",
+    "start": "Vérifier mon identité avec Stripe",
+    "retry": "Réessayer avec Stripe",
+    "redirecting": "Ouverture de Stripe…",
+    "checkAgain": "Vérifier à nouveau",
+    "checking": "Vérification…",
+    "checked": "Statut mis à jour.",
+    "stripeError": "Impossible de joindre le service de vérification. Veuillez réessayer.",
+    "how": {
+      "document": {
+        "title": "Pièce d'identité",
+        "text": "Passeport, permis de conduire ou carte d'identité officielle."
+      },
+      "selfie": {
+        "title": "Un selfie",
+        "text": "Stripe le compare à la photo de votre pièce d'identité."
+      },
+      "time": {
+        "title": "Environ 2 minutes",
+        "text": "Utilisez l'appareil photo de votre téléphone ou votre webcam."
+      }
+    }
   },
   "video": {
     "intro": "Enregistrez une vidéo de 2 minutes maximum. Les élèves la regardent sur votre profil avant de réserver : parlez naturellement et regardez la caméra.",
@@ -208,7 +269,33 @@
         "text": "À quoi ressemble un cours avec vous."
       }
     },
-    "topic": "{number}. {title}"
+    "topic": "{number}. {title}",
+    "liveIntro": "Les élèves regardent votre vidéo sur votre profil avant de réserver. Enregistrez jusqu'à 2 minutes, publiez la vidéo sur un service d'hébergement et collez le lien ici.",
+    "urlLabel": "Lien vers votre vidéo de présentation de 2 minutes",
+    "urlHint": "Une vidéo YouTube non répertoriée, ou un lien Vimeo, Loom ou Google Drive (commençant par https://).",
+    "urlPattern": "Saisissez un lien commençant par https://",
+    "preview": "Aperçu",
+    "previewTitle": "Aperçu de votre vidéo de présentation",
+    "noPreview": "L'aperçu est disponible pour les liens YouTube et Vimeo. Vérifiez que toute personne disposant du lien peut regarder votre vidéo.",
+    "tipsTitle": "Conseils pour une vidéo réussie",
+    "tips": {
+      "say": {
+        "title": "Quoi dire",
+        "text": "D'où vous venez aux États-Unis, votre expérience d'enseignement et à quoi ressemble un cours avec vous."
+      },
+      "light": {
+        "title": "Un bon éclairage",
+        "text": "Placez-vous face à une fenêtre ou à une lampe pour que les élèves vous voient bien."
+      },
+      "quiet": {
+        "title": "Une pièce calme",
+        "text": "Pas de bruit de fond ; parlez naturellement en regardant la caméra."
+      },
+      "share": {
+        "title": "Un lien partageable",
+        "text": "Choisissez « Non répertoriée » sur YouTube, ou « Tous les utilisateurs disposant du lien » sur Google Drive."
+      }
+    }
   },
   "review": {
     "notProvided": "Non renseigné",
@@ -237,7 +324,11 @@
     "interviewTitle": "Court entretien",
     "interviewText": "Si votre candidature est retenue, nous vous inviterons à un entretien vidéo de 15 minutes avec notre équipe pédagogique.",
     "interviewTime": "Créneau d'entretien préféré",
-    "confirm": "Je confirme être anglophone natif des États-Unis et que les informations de cette candidature sont exactes."
+    "confirm": "Je confirme être anglophone natif des États-Unis et que les informations de cette candidature sont exactes.",
+    "headline": "Titre du profil",
+    "bio": "À propos de vous",
+    "identityStatus": "Statut",
+    "selectInterviewTime": "Choisissez un créneau"
   },
   "approval": {
     "submitted": "Candidature envoyée",
@@ -265,6 +356,63 @@
         "label": "Suspendu",
         "text": "Un compte validé peut être suspendu si nos standards pédagogiques ou nos conditions ne sont pas respectés."
       }
+    },
+    "liveEmailTo": "Nous examinons votre candidature et vous écrirons à {email} sous 3 à 5 jours ouvrés.",
+    "liveEmailYou": "Nous examinons votre candidature et vous écrirons sous 3 à 5 jours ouvrés.",
+    "interviewTitle": "Vous êtes invité à un entretien vidéo",
+    "interviewText": "Notre équipe pédagogique souhaite vous rencontrer (invitation envoyée le {date}). Consultez vos e-mails pour fixer le rendez-vous.",
+    "interviewNotes": "Message de l'équipe Amerivo",
+    "approvedTitle": "Félicitations, votre candidature est acceptée !",
+    "approvedTitleName": "Félicitations {name}, votre candidature est acceptée !",
+    "approvedText": "Bienvenue dans l'équipe de professeurs Amerivo. Votre profil est prêt à être mis en ligne.",
+    "availabilityHint": "Prochaine étape : indiquez vos disponibilités pour que les élèves puissent réserver des cours avec vous.",
+    "goDashboard": "Aller à mon tableau de bord",
+    "rejectedTitle": "Votre candidature n'a pas été acceptée",
+    "rejectedText": "Vous pouvez modifier votre candidature et la soumettre à nouveau.",
+    "reviewerNotes": "Remarques de l'équipe Amerivo",
+    "editResubmit": "Modifier et soumettre à nouveau",
+    "suspendedTitle": "Votre compte professeur est suspendu",
+    "suspendedText": "Veuillez contacter notre équipe d'assistance pour en savoir plus et convenir de la suite.",
+    "contactSupport": "Contacter l'assistance"
+  },
+  "live": {
+    "loading": "Chargement de votre candidature…",
+    "loadError": "Impossible de charger votre candidature pour le moment. Le service est peut-être en train de redémarrer — réessayez dans une minute.",
+    "tryAgain": "Réessayer",
+    "intro": {
+      "eyebrow": "Devenir professeur",
+      "title": "Enseignez l'anglais américain sur Amerivo",
+      "text": "Créez votre compte professeur, puis complétez votre candidature à votre rythme. Votre progression est enregistrée à chaque étape.",
+      "create": "Créer mon compte professeur",
+      "login": "J'ai déjà un compte",
+      "needTitle": "Ce dont vous aurez besoin",
+      "needs": {
+        "native": {
+          "title": "Anglais américain langue maternelle",
+          "text": "Les professeurs Amerivo sont des locuteurs natifs de l'anglais américain."
+        },
+        "identity": {
+          "title": "Une pièce d'identité et un selfie",
+          "text": "Vérifiés en toute sécurité par Stripe Identity."
+        },
+        "video": {
+          "title": "Une vidéo de 2 minutes",
+          "text": "Le lien d'une courte vidéo de présentation (YouTube, Vimeo, Loom ou Google Drive)."
+        },
+        "time": {
+          "title": "Environ 10 minutes",
+          "text": "Vous pouvez enregistrer et revenir à tout moment."
+        }
+      }
+    },
+    "otherAccount": {
+      "studentTitle": "Ce compte est un compte élève",
+      "adminTitle": "Ce compte est un compte administrateur",
+      "text": "Les professeurs ont besoin de leur propre compte Amerivo, avec une autre adresse e-mail. Déconnectez-vous, puis créez votre compte professeur.",
+      "signOutHint": "Vous pouvez aussi vous déconnecter en haut de la page.",
+      "signOutCreate": "Me déconnecter et créer un compte professeur",
+      "goStudent": "Aller à mon espace élève",
+      "goAdmin": "Aller à l'espace administrateur"
     }
   }
 }

@@ -51,6 +51,8 @@ const useUserLite = clerkEnabled ? useClerkUserLite : useNoUser;
  * - existing Amerivo account → its space (student / teacher / admin), or ?next=
  * - new account with a complete sign-up profile → created automatically
  * - Google/Apple first sign-in → asks the missing details (date of birth for the 13+ rule…)
+ * - teacher applicants (unsafeMetadata.role "teacher" or ?as=teacher) → teacher account (no birth date),
+ *   then /teach/apply
  */
 export function WelcomeFlow() {
   const t = useTranslations("auth");
@@ -65,25 +67,27 @@ export function WelcomeFlow() {
   const next = typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get("next");
   const safeNext = next && next.startsWith("/") && !next.startsWith("//") ? next : null;
 
+  // Teacher applicants: role chosen at sign-up (unsafeMetadata) or ?as=teacher (Google/Apple from /signup?as=teacher).
+  const asTeacher = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("as") === "teacher";
+  const teacher = user?.meta.role === "teacher" || asTeacher;
+
   const register = useCallback(
-    async (p: Required<Pick<Meta, "firstName" | "lastName" | "birthDate">> & Meta) => {
+    async (p: Required<Pick<Meta, "firstName" | "lastName">> & Meta) => {
+      const common = {
+        email: user?.email,
+        firstName: p.firstName,
+        lastName: p.lastName,
+        country: p.country || undefined,
+        phone: p.phone || undefined,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+      };
       const created = await call<{ role: string }>("/me/register", {
         method: "POST",
-        body: JSON.stringify({
-          role: "student",
-          email: user?.email,
-          firstName: p.firstName,
-          lastName: p.lastName,
-          birthDate: p.birthDate,
-          country: p.country || undefined,
-          nativeLanguage: p.nativeLanguage || undefined,
-          phone: p.phone || undefined,
-          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
-        }),
+        body: JSON.stringify(teacher ? { role: "teacher", ...common } : { role: "student", ...common, birthDate: p.birthDate, nativeLanguage: p.nativeLanguage || undefined }),
       });
-      router.replace(created.role === "admin" ? "/admin" : (safeNext ?? "/onboarding/goals"));
+      router.replace(created.role === "admin" ? "/admin" : teacher ? "/teach/apply" : (safeNext ?? "/onboarding/goals"));
     },
-    [call, user, router, safeNext],
+    [call, user, router, safeNext, teacher],
   );
 
   useEffect(() => {
@@ -95,14 +99,14 @@ export function WelcomeFlow() {
     }
     (async () => {
       try {
-        const me = await call<{ role: string }>("/me");
+        const me = await call<{ role: string; teacherStatus?: string | null }>("/me");
         // Only follow ?next= when it belongs to this role's space (an admin isn't sent to the student questionnaire).
         const nextSpace = safeNext ? spaceOf(safeNext) : null;
         // Admins may open every space for support, but after signing in they always start in /admin.
         const followNext =
           safeNext &&
           (me.role === "admin" ? nextSpace === "admin" : (nextSpace === null || canOpen(me.role, nextSpace)) && !(me.role !== "student" && safeNext.startsWith("/onboarding")));
-        router.replace(followNext ? safeNext : homeForRole(me.role));
+        router.replace(followNext ? safeNext : homeForRole(me.role, me.teacherStatus));
       } catch (e) {
         if (!(e instanceof ApiError) || e.status !== 401 || !/no amerivo account/i.test(e.message)) {
           setError(t("errors.unreachable"));
@@ -110,14 +114,10 @@ export function WelcomeFlow() {
           return;
         }
         const m = user?.meta ?? {};
-        if (m.birthDate && m.firstName && m.lastName) {
+        // Students need their birth date (13+ rule); teachers don't give one.
+        if (m.firstName && m.lastName && (teacher ? m.country : m.birthDate)) {
           try {
-            await register({
-              ...m,
-              firstName: m.firstName,
-              lastName: m.lastName,
-              birthDate: m.birthDate,
-            });
+            await register({ ...m, firstName: m.firstName, lastName: m.lastName });
           } catch (err) {
             setError((err as Error).message);
             setPhase("form");
@@ -127,7 +127,7 @@ export function WelcomeFlow() {
         }
       }
     })();
-  }, [loaded, call, user, router, safeNext, register, t]);
+  }, [loaded, call, user, router, safeNext, register, t, teacher]);
 
   if (phase === "checking") {
     return (
@@ -154,7 +154,7 @@ export function WelcomeFlow() {
     <div className="flex w-full max-w-[600px] flex-col gap-6">
       <div className="flex flex-col gap-2">
         <h1 className="text-[28px] font-extrabold sm:text-[34px]">{t("welcome.title")}</h1>
-        <p className="text-base text-navy-soft">{t("welcome.subtitle")}</p>
+        <p className="text-base text-navy-soft">{teacher ? t("welcome.teacherSubtitle") : t("welcome.subtitle")}</p>
       </div>
       <form
         className="grid grid-cols-1 gap-4 sm:grid-cols-2"
@@ -162,7 +162,7 @@ export function WelcomeFlow() {
           e.preventDefault();
           const d = new FormData(e.currentTarget);
           const get = (k: string) => String(d.get(k) ?? "").trim();
-          if (ageOn(get("birthDate")) < MIN_STUDENT_AGE) {
+          if (!teacher && ageOn(get("birthDate")) < MIN_STUDENT_AGE) {
             setError(t("errors.minAgeUse", { age: MIN_STUDENT_AGE }));
             return;
           }
@@ -174,6 +174,7 @@ export function WelcomeFlow() {
             birthDate: get("birthDate"),
             country: get("country"),
             nativeLanguage: get("nativeLanguage"),
+            phone: user?.meta.phone,
           })
             .catch((err) => setError((err as Error).message))
             .finally(() => setPending(false));
@@ -185,15 +186,20 @@ export function WelcomeFlow() {
         <Field label={t("fields.lastName")}>
           <Input name="lastName" autoComplete="family-name" defaultValue={user?.meta.lastName || user?.lastName} required />
         </Field>
-        <Field label={t("fields.birthDate")} hint={t("fields.birthDateHint", { age: MIN_STUDENT_AGE })}>
-          <Input name="birthDate" type="date" autoComplete="bday" max={latestBirthDate()} required />
+        {!teacher && (
+          <Field label={t("fields.birthDate")} hint={t("fields.birthDateHint", { age: MIN_STUDENT_AGE })}>
+            <Input name="birthDate" type="date" autoComplete="bday" max={latestBirthDate()} required />
+          </Field>
+        )}
+        {/* Teachers: first name, last name and country only. */}
+        <Field label={t("fields.country")} className={teacher ? "sm:col-span-2" : undefined}>
+          <CountrySelect name="country" autoComplete="country-name" defaultValue={user?.meta.country ?? ""} required placeholder={t("fields.selectCountry")} />
         </Field>
-        <Field label={t("fields.country")}>
-          <CountrySelect name="country" autoComplete="country-name" defaultValue="" required placeholder={t("fields.selectCountry")} />
-        </Field>
-        <Field label={t("fields.nativeLanguage")} className="sm:col-span-2">
-          <LanguageSelect name="nativeLanguage" defaultValue="" placeholder={t("fields.selectLanguage")} />
-        </Field>
+        {!teacher && (
+          <Field label={t("fields.nativeLanguage")} className="sm:col-span-2">
+            <LanguageSelect name="nativeLanguage" defaultValue="" placeholder={t("fields.selectLanguage")} />
+          </Field>
+        )}
         {error && (
           <p role="alert" className="rounded-xl bg-danger-100 px-4 py-3 text-sm font-semibold text-danger-text sm:col-span-2">
             {error}

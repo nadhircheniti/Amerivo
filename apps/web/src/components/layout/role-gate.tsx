@@ -13,7 +13,7 @@ import { useTranslations } from "next-intl";
  * Demo mode (no Clerk or no API): screens stay open so the design can be reviewed.
  */
 /** The signed-in Amerivo account (from GET /me), available inside a RoleGate. */
-export type Me = { id: string; role: Role; firstName: string; lastName: string; email: string };
+export type Me = { id: string; role: Role; firstName: string; lastName: string; email: string; teacherStatus?: string | null };
 const MeContext = createContext<Me | null>(null);
 export const useMe = () => useContext(MeContext);
 
@@ -41,8 +41,10 @@ function CheckedGate({ space, children }: { space: Role; children: ReactNode }) 
       .then((account) => {
         if (cancelled) return;
         setMe(account);
-        if (canOpen(account.role, space)) setState("ok");
-        else router.replace(homeForRole(account.role));
+        // A teacher whose application isn't approved yet goes back to the application.
+        if (account.role === "teacher" && space === "teacher" && account.teacherStatus !== "approved") router.replace("/teach/apply");
+        else if (canOpen(account.role, space)) setState("ok");
+        else router.replace(homeForRole(account.role, account.teacherStatus));
       })
       .catch((e) => {
         if (cancelled) return;

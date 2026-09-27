@@ -50,9 +50,7 @@ export function ReportForm({ lesson }: { lesson: ReportLesson }) {
           <Icon name="check" size={30} strokeWidth={2.4} />
         </span>
         <h1 className="text-[26px] font-extrabold">{t("sentTitle", { name: first })}</h1>
-        <p className="text-[15px] text-muted">
-          {due ? t("sentBodyDue", { name: first, date: due }) : t("sentBody", { name: first })}
-        </p>
+        <p className="text-[15px] text-muted">{due ? t("sentBodyDue", { name: first, date: due }) : t("sentBody", { name: first })}</p>
         <ButtonLink href="/teacher" variant="teal" className="mt-2">
           {t("back")}
         </ButtonLink>

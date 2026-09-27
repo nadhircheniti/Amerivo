@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
+import { API_URL } from "@/lib/api";
 import { currentTeacher } from "@/lib/mock-data";
 import { ModeToggle } from "../_components/mode-toggle";
 import { AvailabilityGrid } from "./_components/availability-grid";
 import { BlockedDates } from "./_components/blocked-dates";
 import { LessonSettings } from "./_components/lesson-settings";
+import { LiveSchedule } from "./_components/live-schedule";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("teacher.availability");
@@ -15,6 +17,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function AvailabilityPage() {
   const t = useTranslations("teacher.availability");
   const tm = useTranslations("teacher.modes");
+
+  // Connected to the API: the teacher's real schedule and settings.
+  if (API_URL) return <LiveSchedule />;
+
+  // Demo mode: sample data, nothing is saved.
   return (
     <div className="flex flex-col gap-6 px-4 py-8 sm:px-6 lg:px-10 xl:flex-row">
       <AvailabilityGrid />

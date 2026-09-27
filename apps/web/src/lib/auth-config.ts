@@ -11,7 +11,8 @@ export const authMode: "clerk" | "dev" | "demo" = clerkEnabled ? "clerk" : proce
 export type Role = "student" | "teacher" | "admin";
 
 /** Where each role lands after signing in. */
-export const homeForRole = (role: string | undefined) => (role === "teacher" ? "/teacher" : role === "admin" ? "/admin" : "/student");
+export const homeForRole = (role: string | undefined, teacherStatus?: string | null) =>
+  role === "teacher" ? (teacherStatus === "approved" ? "/teacher" : "/teach/apply") : role === "admin" ? "/admin" : "/student";
 
 /** Each role opens its own space; admins can also open the others (support / checking screens). */
 export const canOpen = (role: string | undefined, space: Role) => role === space || role === "admin";
