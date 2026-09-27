@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/form";
 import { Icon } from "@/components/ui/icon";
 import { API_URL } from "@/lib/api";
+import { getStripe, stripeAppearance, stripeEnabled } from "@/lib/stripe";
 import { useApi } from "@/lib/use-api";
 
 type BookingRequest = {
@@ -18,25 +20,39 @@ type BookingResponse = {
   payment: null | { clientSecret: string | null; simulated?: boolean };
 };
 
-/** Test environment: the API confirms bookings without charging (PAYMENTS_SIMULATED=1). */
-const simulatedPayments = !!API_URL && !process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+/** Test environment without Stripe: the API confirms bookings without charging (PAYMENTS_SIMULATED=1). */
+const simulatedPayments = !!API_URL && !stripeEnabled;
 
-const methods = [
-  { id: "card", label: "Card" },
-  { id: "apple", label: "Apple Pay" },
-  { id: "google", label: "Google Pay" },
-  { id: "paypal", label: "PayPal" },
-] as const;
-type Method = (typeof methods)[number]["id"];
+function Policy() {
+  return (
+    <div className="flex items-start gap-3.5 rounded-2xl bg-cream px-5 py-[18px] text-sm leading-relaxed">
+      <Icon name="clock" size={22} className="shrink-0 text-orange-dark" />
+      <p>
+        <strong>Cancellation policy.</strong> Cancel more than 24 hours before the lesson for a full refund. Lessons cancelled less than 24 hours before are not refunded. If your
+        teacher cancels, you are refunded automatically.
+      </p>
+    </div>
+  );
+}
+
+function ErrorNote({ error }: { error: string | null }) {
+  if (!error) return null;
+  return (
+    <p role="alert" className="rounded-2xl bg-danger-100 px-5 py-4 text-sm font-semibold text-danger-text">
+      {error}
+    </p>
+  );
+}
 
 export function PaymentForm({ ctaLabel, free, booking }: { ctaLabel: string; free: boolean; booking: BookingRequest | null }) {
   const router = useRouter();
-  const [method, setMethod] = useState<Method>("card");
+  const api = useApi();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const api = useApi();
+  const [intent, setIntent] = useState<{ bookingId: string; clientSecret: string } | null>(null);
 
-  async function submit() {
+  /** Step 1 — reserve the slot (and create the payment) with the API. */
+  async function reserve() {
     // Demo mode (no API) or an old sample link: keep the prototype behaviour.
     if (!API_URL || !booking) return router.push("/student");
     if (!api.isSignedIn) {
@@ -45,16 +61,16 @@ export function PaymentForm({ ctaLabel, free, booking }: { ctaLabel: string; fre
     setPending(true);
     setError(null);
     try {
-      const res = await api.call<BookingResponse>("/bookings", {
-        method: "POST",
-        body: JSON.stringify(booking),
-      });
-      if (res.payment && !res.payment.simulated && res.payment.clientSecret) {
-        // TODO(stripe): confirm the PaymentIntent with Stripe's Payment Element (next step).
-        setError("Card payments are being connected. Your booking is reserved and awaiting payment.");
+      const res = await api.call<BookingResponse>("/bookings", { method: "POST", body: JSON.stringify(booking) });
+      if (res.payment?.clientSecret && !res.payment.simulated) {
+        if (!stripeEnabled) {
+          setError("Card payments aren't available yet on this site. Please try again later.");
+          return;
+        }
+        setIntent({ bookingId: res.booking.id, clientSecret: res.payment.clientSecret });
         return;
       }
-      router.push(`/student?booked=${res.booking.id}`);
+      router.push(`/student?booked=${res.booking.id}`); // free trial or simulated payment
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -62,41 +78,41 @@ export function PaymentForm({ ctaLabel, free, booking }: { ctaLabel: string; fre
     }
   }
 
+  // Step 2 — Stripe's secure form (card, Apple Pay, Google Pay…). Card data never reaches our servers.
+  if (intent) {
+    return (
+      <div className="flex flex-col gap-[26px]">
+        <Elements stripe={getStripe()} options={{ clientSecret: intent.clientSecret, appearance: stripeAppearance, loader: "always" }}>
+          <StripePay bookingId={intent.bookingId} ctaLabel={ctaLabel} />
+        </Elements>
+      </div>
+    );
+  }
+
+  const showPrototypeFields = !free && !API_URL; // design demo only
+
   return (
     <form
       className="flex flex-col gap-[26px]"
       onSubmit={(e) => {
         e.preventDefault();
-        void submit();
+        void reserve();
       }}
     >
-      <fieldset hidden={free}>
-        <legend className="sr-only">Payment method</legend>
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-          {methods.map((m) => (
-            <label
-              key={m.id}
-              className="flex h-16 cursor-pointer items-center justify-center gap-2 rounded-[14px] border border-line bg-white text-[15px] font-semibold text-navy has-[:checked]:border-2 has-[:checked]:border-teal-dark has-[:checked]:bg-teal-50 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-teal"
-            >
-              <input type="radio" name="method" value={m.id} checked={method === m.id} onChange={() => setMethod(m.id)} className="sr-only" />
-              {m.id === "card" && <Icon name="card" />}
-              {m.label}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
       {simulatedPayments && !free && (
         <p className="rounded-2xl bg-teal-50 px-5 py-4 text-sm text-teal-deep">
           <strong>Test environment:</strong> no card is charged — the lesson is confirmed as if the payment succeeded.
         </p>
       )}
 
-      {free ? null : method === "card" ? (
-        /*
-         * Placeholder fields for the design milestone. In production these are replaced by
-         * Stripe's Payment Element (card data never touches our servers — PCI SAQ A).
-         */
+      {stripeEnabled && !free && (
+        <p className="flex items-center gap-2.5 rounded-2xl bg-beige px-5 py-4 text-sm text-navy-soft">
+          <Icon name="lock" size={18} className="shrink-0 text-teal-dark" />
+          Card, Apple Pay or Google Pay — secured by Stripe. Your time slot is held for 30 minutes while you pay.
+        </p>
+      )}
+
+      {showPrototypeFields && (
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Name on card" className="sm:col-span-2">
             <Input name="cardName" placeholder="Full name" autoComplete="cc-name" />
@@ -110,33 +126,61 @@ export function PaymentForm({ ctaLabel, free, booking }: { ctaLabel: string; fre
           <Field label="CVC">
             <Input name="cardCvc" placeholder="123" inputMode="numeric" autoComplete="cc-csc" />
           </Field>
-          <label className="flex items-center gap-2.5 text-sm text-navy-soft sm:col-span-2">
-            <input type="checkbox" name="saveCard" defaultChecked className="size-[18px]" />
-            Save this card for future lessons
-          </label>
         </div>
-      ) : (
-        <p className="rounded-2xl bg-beige px-5 py-4 text-sm text-navy-soft">
-          You&apos;ll confirm the payment with {methods.find((m) => m.id === method)?.label} in the next step.
-        </p>
       )}
 
-      <div className="flex items-start gap-3.5 rounded-2xl bg-cream px-5 py-[18px] text-sm leading-relaxed">
-        <Icon name="clock" size={22} className="shrink-0 text-orange-dark" />
-        <p>
-          <strong>Cancellation policy.</strong> Cancel more than 24 hours before the lesson for a full refund. Lessons cancelled less than 24 hours before are not refunded. If your
-          teacher cancels, you are refunded automatically.
-        </p>
-      </div>
-
-      {error && (
-        <p role="alert" className="rounded-2xl bg-danger-100 px-5 py-4 text-sm font-semibold text-danger-text">
-          {error}
-        </p>
-      )}
+      <Policy />
+      <ErrorNote error={error} />
 
       <Button type="submit" size="lg" className="h-auto py-[18px] text-[17px]" disabled={pending}>
-        {pending ? "Confirming…" : ctaLabel}
+        {pending ? "One moment…" : stripeEnabled && !free ? "Continue to secure payment" : ctaLabel}
+      </Button>
+    </form>
+  );
+}
+
+function StripePay({ bookingId, ctaLabel }: { bookingId: string; ctaLabel: string }) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const router = useRouter();
+  const { call } = useApi();
+  const [ready, setReady] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function pay() {
+    if (!stripe || !elements) return;
+    setPending(true);
+    setError(null);
+    const returnUrl = `${window.location.origin}/checkout/complete?${new URLSearchParams({ booking: bookingId })}`;
+    // Cards finish here; methods that need a bank page (3-D Secure redirect, PayPal…) come back to returnUrl.
+    const { error: stripeError } = await stripe.confirmPayment({ elements, confirmParams: { return_url: returnUrl }, redirect: "if_required" });
+    if (stripeError) {
+      setError(stripeError.message ?? "Your payment could not be completed. Please try another method.");
+      setPending(false);
+      return;
+    }
+    try {
+      await call(`/bookings/${bookingId}/sync-payment`, { method: "POST" });
+    } catch {
+      // The Stripe webhook confirms the booking anyway; the dashboard shows it once it arrives.
+    }
+    router.push(`/student?booked=${bookingId}`);
+  }
+
+  return (
+    <form
+      className="flex flex-col gap-[26px]"
+      onSubmit={(e) => {
+        e.preventDefault();
+        void pay();
+      }}
+    >
+      <PaymentElement options={{ layout: "tabs" }} onReady={() => setReady(true)} />
+      <Policy />
+      <ErrorNote error={error} />
+      <Button type="submit" size="lg" className="h-auto py-[18px] text-[17px]" disabled={!ready || pending}>
+        {pending ? "Processing payment…" : ctaLabel}
       </Button>
     </form>
   );

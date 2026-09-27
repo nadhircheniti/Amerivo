@@ -109,7 +109,7 @@ apps/
 - API with the core business rules, database schema and migrations, fully tested.
 
 **Next milestones**
-1. ~~Teachers, slots and bookings from the API; Clerk sign-in~~ (done). Stripe Payment Element + webhook; Daily.co call frame in the classroom; teacher application → API.
+1. ~~Teachers, slots and bookings from the API; Clerk sign-in~~ (done). ~~Stripe Payment Element + webhook~~ (done). Stripe Connect payouts; Daily.co call frame in the classroom; teacher application → API.
 2. Messaging in real time, file uploads (S3), notification e-mails/SMS, scheduled jobs (lesson reminders, monthly payouts).
 3. Remaining screens: student lessons/homework/progress/payments, teacher students & messages, admin students/bookings/payments/disputes/settings, corporate request form.
 4. Legal pages (Terms, Privacy/GDPR/CCPA), production deployment, monitoring (Sentry).

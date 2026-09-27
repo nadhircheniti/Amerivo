@@ -1,10 +1,11 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { and, arrayOverlaps, asc, desc, eq, gte, inArray, lte, sql } from "drizzle-orm";
+import { and, arrayOverlaps, asc, desc, eq, gte, inArray, lte, or, sql } from "drizzle-orm";
 import { DB, type Db } from "../../db/db";
 import { availabilityRules, blockedDates, bookings, teacherProfiles, users } from "../../db/schema";
 import { CLOCK, type Clock } from "../../common/clock";
 import { badRequest, notFound } from "../../common/errors";
 import { generateSlots } from "../../domain/availability";
+import { holdCutoff } from "../../domain/holds";
 import { LESSON_MINUTES, TRIAL_MINUTES } from "../../domain/pricing";
 
 export interface TeacherSearch {
@@ -99,7 +100,8 @@ export class TeachersService {
         .where(
           and(
             eq(bookings.teacherId, teacherId),
-            inArray(bookings.status, ["pending_payment", "confirmed"]),
+            // Unpaid bookings only block the slot during their payment hold.
+            or(eq(bookings.status, "confirmed"), and(eq(bookings.status, "pending_payment"), gte(bookings.createdAt, holdCutoff(this.clock.now())))),
             gte(bookings.startsAt, new Date(from.getTime() - 24 * 3600_000)),
             lte(bookings.startsAt, to),
           ),

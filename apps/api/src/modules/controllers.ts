@@ -175,6 +175,10 @@ export class BookingsController {
   @Get() list(@CurrentUser() u: AuthUser, @Query("scope") scope: "upcoming" | "past" = "upcoming") {
     return this.bookings.listForUser(u, scope === "past" ? "past" : "upcoming");
   }
+  /** Called by the payment page right after Stripe confirms: no need to wait for the webhook. */
+  @Post(":id/sync-payment") syncPayment(@CurrentUser() u: AuthUser, @Param("id", ParseUUIDPipe) id: string) {
+    return this.bookings.syncPayment(u, id);
+  }
   @Post(":id/cancel") cancel(@CurrentUser() u: AuthUser, @Param("id", ParseUUIDPipe) id: string, @Body() dto: CancelDto) {
     return this.bookings.cancel(u, id, dto.reason);
   }
@@ -245,6 +249,7 @@ export class WebhooksController {
       case "payment_intent.succeeded":
         return this.bookings.onPaymentSucceeded(event.id, event.data.object.id);
       case "payment_intent.payment_failed":
+      case "payment_intent.canceled":
         return this.bookings.onPaymentFailed(event.id, event.data.object.id);
       default:
         return { ignored: event.type };
