@@ -268,7 +268,7 @@ export function BookingCard({
           {t("continue")}
         </Button>
       )}
-      <Link href="/student/messages" className="flex items-center justify-center gap-2 text-[15px] font-semibold text-teal-dark hover:text-navy">
+      <Link href={`/student/messages?${new URLSearchParams({ with: slug })}`} className="flex items-center justify-center gap-2 text-[15px] font-semibold text-teal-dark hover:text-navy">
         <Icon name="message" size={18} />
         {t("message", { name: firstName })}
       </Link>

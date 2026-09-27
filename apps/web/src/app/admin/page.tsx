@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { useLocale, useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { intlTags } from "@/i18n/config";
+import { API_URL } from "@/lib/api";
 import { PLATFORM_COMMISSION } from "@/lib/mock-data";
 import { cn } from "@/lib/cn";
 import { BookingsTable } from "./_components/bookings-table";
 import { ExportCsvButton } from "./_components/export-csv-button";
 import { RefundRequests } from "./_components/refund-requests";
+import { LiveOverview } from "./_components/live/overview";
 import { RevenueChart } from "./_components/revenue-chart";
 import { bookings } from "./_data";
 
@@ -20,6 +22,11 @@ const PAYOUT_DUE = new Date("2026-10-28T00:00:00Z");
 const PENDING_APPLICATIONS = 5;
 
 export default function AdminOverviewPage() {
+  // Live mode: real figures from the API. Demo mode (no API): the sample dashboard below.
+  return API_URL ? <LiveOverview /> : <SampleOverview />;
+}
+
+function SampleOverview() {
   const t = useTranslations("admin.overview");
   const locale = useLocale();
   const payoutDue = new Intl.DateTimeFormat(intlTags[locale], { month: "short", day: "numeric", timeZone: "UTC" }).format(PAYOUT_DUE);
@@ -44,10 +51,7 @@ export default function AdminOverviewPage() {
         <div className="flex gap-2.5">
           <label>
             <span className="sr-only">{t("period")}</span>
-            <select
-              defaultValue="30d"
-              className="h-11 rounded-[10px] border border-line bg-white px-3 text-sm text-navy focus:border-teal-dark focus:outline-none"
-            >
+            <select defaultValue="30d" className="h-11 rounded-[10px] border border-line bg-white px-3 text-sm text-navy focus:border-teal-dark focus:outline-none">
               <option value="30d">{t("last30")}</option>
               <option value="90d">{t("last90")}</option>
               <option value="ytd">{t("thisYear")}</option>

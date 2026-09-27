@@ -13,7 +13,7 @@ import { useTranslations } from "next-intl";
  * Demo mode (no Clerk or no API): screens stay open so the design can be reviewed.
  */
 /** The signed-in Amerivo account (from GET /me), available inside a RoleGate. */
-export type Me = { id: string; role: Role; firstName: string; lastName: string; email: string; teacherStatus?: string | null };
+export type Me = { id: string; role: Role; firstName: string; lastName: string; email: string; teacherStatus?: string | null; avatarUrl?: string | null };
 const MeContext = createContext<Me | null>(null);
 export const useMe = () => useContext(MeContext);
 

@@ -150,7 +150,6 @@
     "timeZoneHint": "用于按学生的当地时间显示您的可预约时间。",
     "gender": "性别",
     "genderHint": "部分学生会按偏好的老师性别进行筛选。您之后可以更改。",
-    "photoLater": "您可以稍后再添加头像。",
     "emailHint": "您账户的邮箱地址。",
     "selectCountry": "选择您的国家/地区"
   },
@@ -176,8 +175,7 @@
     "bioCount": "{count} / {max}",
     "bioPlaceholder": "向学生介绍您自己，并描述一下您的课是什么样的。",
     "selectEducation": "选择您的最高学历",
-    "certificationsPlaceholder": "例如：TESOL",
-    "certificatesLater": "您可以稍后再上传证书文件。"
+    "certificationsPlaceholder": "例如：TESOL"
   },
   "previews": {
     "label": "接下来",

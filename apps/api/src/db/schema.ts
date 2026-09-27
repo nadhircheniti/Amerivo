@@ -5,6 +5,7 @@
  */
 import { sql } from "drizzle-orm";
 import {
+  customType,
   boolean,
   check,
   date,
@@ -439,6 +440,60 @@ export const auditLogs = pgTable("audit_logs", {
   data: jsonb("data"),
   createdAt: createdAt(),
 });
+
+/* ------------------------------------------------------------------ disputes */
+export const disputeStatus = pgEnum("dispute_status", ["open", "refunded", "rejected"]);
+
+/** A student reports a problem with a lesson (within 24 h after it); an admin refunds or rejects. */
+export const disputes = pgTable(
+  "disputes",
+  {
+    id: id(),
+    bookingId: uuid("booking_id")
+      .notNull()
+      .references(() => bookings.id),
+    studentId: uuid("student_id")
+      .notNull()
+      .references(() => users.id),
+    teacherId: uuid("teacher_id")
+      .notNull()
+      .references(() => users.id),
+    reason: text("reason").notNull(),
+    status: disputeStatus("status").notNull().default("open"),
+    resolution: text("resolution"),
+    resolvedBy: uuid("resolved_by").references(() => users.id),
+    resolvedAt: timestamp("resolved_at", { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => [uniqueIndex("dispute_booking_uq").on(t.bookingId), index("dispute_status_idx").on(t.status)],
+);
+
+/* ------------------------------------------------------------------ files */
+const bytea = customType<{ data: Buffer; driverData: Buffer }>({ dataType: () => "bytea" });
+
+/**
+ * Small uploaded files (profile photos, certificates) kept in the database for now.
+ * Move to object storage (S3/R2) when volumes grow; the /files/:id URLs can stay the same.
+ */
+export const files = pgTable(
+  "files",
+  {
+    id: id(),
+    ownerId: uuid("owner_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    /** avatar | certificate */
+    purpose: text("purpose").notNull(),
+    fileName: text("file_name").notNull(),
+    contentType: text("content_type").notNull(),
+    sizeBytes: integer("size_bytes").notNull(),
+    data: bytea("data").notNull(),
+    /** Avatars are public (shown on profiles); certificates only to their owner and admins. */
+    isPublic: boolean("is_public").notNull().default(false),
+    createdAt: createdAt(),
+  },
+  (t) => [index("files_owner_idx").on(t.ownerId)],
+);
 
 /** Stripe/PayPal webhook idempotency. */
 export const processedEvents = pgTable(

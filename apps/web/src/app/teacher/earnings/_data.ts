@@ -1,7 +1,7 @@
 import { currentTeacher, packagePrice } from "@/lib/mock-data";
 
 /** Status ids; labels live in messages/<locale>/teacher.json → earnings.status. */
-export type EarningStatus = "pending" | "available" | "trial" | "refunded";
+export type EarningStatus = "pending" | "available" | "trial" | "refunded" | "paid";
 
 /** What was taught: a single lesson, one lesson of a pack, or a free trial. */
 export type LessonKind = { type: "single"; minutes: number } | { type: "pack"; size: number; index: number } | { type: "trial"; minutes: number };
@@ -15,6 +15,9 @@ export type LessonEarning = {
   /** Gross price paid by the student for this lesson (USD). */
   price: number;
   status: EarningStatus;
+  /** Exact amounts from the API (USD); computed from `price` when absent (sample data). */
+  commission?: number;
+  net?: number;
 };
 
 const unit = currentTeacher.priceUsd;
@@ -31,7 +34,7 @@ export const lessonEarnings: LessonEarning[] = [
 ];
 
 /** date: yyyy-mm-dd · period: yyyy-mm */
-export type Payout = { id: string; date: string; period: string; method: string; lessons: number; amount: number };
+export type Payout = { id: string; date: string; period: string; method: string; lessons: number; amount: number; status?: "requested" | "processing" | "paid" | "failed" };
 
 export const payouts: Payout[] = [
   { id: "p9", date: "2026-09-28", period: "2026-09", method: "Chase •••• 4821", lessons: 43, amount: 1190 },

@@ -3,13 +3,19 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { API_URL } from "@/lib/api";
+import { useApi } from "@/lib/use-api";
 import { Field, Textarea } from "@/components/ui/form";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 
 const labels = ["poor", "fair", "good", "veryGood", "excellent"] as const;
 
-export function ReviewForm({ teacherFirstName }: { teacherFirstName: string }) {
+/** Star rating + optional comment → POST /bookings/:id/review (demo: local only). */
+export function ReviewForm({ teacherFirstName, bookingId, onSubmitted }: { teacherFirstName: string; bookingId?: string; onSubmitted?: (r: { rating: number; comment: string | null }) => void }) {
+  const { call } = useApi();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [review, setReview] = useState("");
@@ -34,11 +40,24 @@ export function ReviewForm({ teacherFirstName }: { teacherFirstName: string }) {
   return (
     <form
       className="flex flex-col gap-[18px]"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        if (!rating) return;
-        // TODO(api): POST /lessons/:id/review
+        if (!rating || busy) return;
+        const comment = review.trim() || null;
+        if (API_URL && bookingId) {
+          setBusy(true);
+          setError(null);
+          try {
+            await call(`/bookings/${bookingId}/review`, { method: "POST", body: JSON.stringify(comment ? { rating, comment } : { rating }) });
+          } catch (err) {
+            setError(err instanceof Error ? err.message : String(err));
+            setBusy(false);
+            return;
+          }
+          setBusy(false);
+        }
         setSubmitted(true);
+        onSubmitted?.({ rating, comment });
       }}
     >
       <fieldset>
@@ -64,11 +83,16 @@ export function ReviewForm({ teacherFirstName }: { teacherFirstName: string }) {
       </fieldset>
 
       <Field label={t("writeReview")}>
-        <Textarea rows={4} value={review} onChange={(e) => setReview(e.target.value)} placeholder={t("placeholder", { name: teacherFirstName })} className="text-[15px]" />
+        <Textarea rows={4} maxLength={2000} value={review} onChange={(e) => setReview(e.target.value)} placeholder={t("placeholder", { name: teacherFirstName })} className="text-[15px]" />
       </Field>
 
-      <Button type="submit" disabled={!rating} className="h-auto py-[15px]">
-        {t("submit")}
+      {error && (
+        <p className="text-sm text-danger-text" role="alert">
+          {error}
+        </p>
+      )}
+      <Button type="submit" disabled={!rating || busy} className="h-auto py-[15px]">
+        {busy ? t("sending") : t("submit")}
       </Button>
     </form>
   );

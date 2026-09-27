@@ -150,7 +150,6 @@
     "timeZoneHint": "Permet d'afficher vos disponibilités aux élèves dans leur heure locale.",
     "gender": "Genre",
     "genderHint": "Certains élèves filtrent selon le genre du professeur. Vous pourrez modifier ce choix plus tard.",
-    "photoLater": "Vous ajouterez votre photo de profil plus tard.",
     "emailHint": "L'adresse e-mail de votre compte.",
     "selectCountry": "Sélectionnez votre pays"
   },
@@ -176,8 +175,7 @@
     "bioCount": "{count} / {max}",
     "bioPlaceholder": "Présentez-vous aux élèves et décrivez comment se déroule un cours avec vous.",
     "selectEducation": "Sélectionnez votre niveau d'études",
-    "certificationsPlaceholder": "ex. TESOL",
-    "certificatesLater": "Vous ajouterez les fichiers de vos certificats plus tard."
+    "certificationsPlaceholder": "ex. TESOL"
   },
   "previews": {
     "label": "Prochaines étapes",

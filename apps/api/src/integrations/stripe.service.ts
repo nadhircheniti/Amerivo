@@ -71,6 +71,17 @@ export class StripeService {
     return { accountId, url: link.url };
   }
 
+  /** Connected account state (details submitted, payouts / transfers enabled). */
+  retrieveAccount(accountId: string) {
+    return this.stripe.accounts.retrieve(accountId);
+  }
+
+  /** One-time link to the teacher's Stripe Express dashboard (bank account, payouts, tax forms). */
+  async dashboardLink(accountId: string) {
+    const link = await this.stripe.accounts.createLoginLink(accountId);
+    return { url: link.url };
+  }
+
   /** Stripe Identity session for teacher ID verification (spec §4 step 3). */
   identitySession(p: { teacherId: string; returnUrl: string }) {
     return this.stripe.identity.verificationSessions.create({

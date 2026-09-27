@@ -13,7 +13,9 @@ const statusTone: Record<EarningStatus, BadgeTone> = {
   available: "success",
   trial: "neutral",
   refunded: "danger",
+  paid: "info",
 };
+const payoutTone: Record<NonNullable<Payout["status"]>, BadgeTone> = { requested: "warning", processing: "warning", paid: "success", failed: "danger" };
 
 const TABS = [
   { id: "lessons", label: "lessons", title: "recentLessons" },
@@ -105,17 +107,24 @@ export function EarningsTabs({ lessons, payouts }: { lessons: LessonEarning[]; p
             </tr>
           </thead>
           <tbody>
+            {lessons.length === 0 && (
+              <tr>
+                <td colSpan={7} className="px-3 py-6 text-center text-sm text-muted">
+                  {t("noLessons")}
+                </td>
+              </tr>
+            )}
             {lessons.map((l) => {
               const noCommission = l.status === "trial" || l.status === "refunded" || l.price === 0;
-              const commission = noCommission ? 0 : l.price - teacherNet(l.price);
-              const net = noCommission ? 0 : teacherNet(l.price);
+              const commission = l.commission ?? (noCommission ? 0 : l.price - teacherNet(l.price));
+              const net = l.net ?? (noCommission ? 0 : teacherNet(l.price));
               return (
                 <tr key={l.id}>
                   <td className={td}>{fmtDate(l.date)}</td>
                   <td className={td}>{l.student}</td>
                   <td className={td}>{lessonLabel(l.lesson)}</td>
                   <td className={td}>{usd(l.price)}</td>
-                  <td className={td}>{noCommission ? <span aria-label={t("none")}>—</span> : <bdi>−{usd(commission)}</bdi>}</td>
+                  <td className={td}>{noCommission || commission === 0 ? <span aria-label={t("none")}>—</span> : <bdi>−{usd(commission)}</bdi>}</td>
                   <td className={cn(td, "font-semibold")}>{usd(net)}</td>
                   <td className={td}>
                     <Badge tone={statusTone[l.status]}>{tStatus(l.status)}</Badge>
@@ -153,6 +162,13 @@ export function EarningsTabs({ lessons, payouts }: { lessons: LessonEarning[]; p
             </tr>
           </thead>
           <tbody>
+            {payouts.length === 0 && (
+              <tr>
+                <td colSpan={6} className="px-3 py-6 text-center text-sm text-muted">
+                  {t("noPayouts")}
+                </td>
+              </tr>
+            )}
             {payouts.map((p) => (
               <tr key={p.id}>
                 <td className={td}>{fmtDate(p.date)}</td>
@@ -161,7 +177,7 @@ export function EarningsTabs({ lessons, payouts }: { lessons: LessonEarning[]; p
                 <td className={td}>{p.method}</td>
                 <td className={cn(td, "font-semibold")}>{usd(p.amount)}</td>
                 <td className={td}>
-                  <Badge tone="success">{tStatus("paid")}</Badge>
+                  <Badge tone={payoutTone[p.status ?? "paid"]}>{tStatus(p.status ?? "paid")}</Badge>
                 </td>
               </tr>
             ))}

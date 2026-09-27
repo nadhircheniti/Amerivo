@@ -33,7 +33,7 @@ export function Tag({ children, className }: { children: ReactNode; className?: 
   return <span className={cn("rounded-full bg-beige px-2.5 py-1 text-xs text-navy", className)}>{children}</span>;
 }
 
-/* ---------- Avatar (initials until real photos exist) ---------- */
+/* ---------- Avatar (photo when available, initials otherwise) ---------- */
 export type AvatarTone = "teal" | "orange" | "sky" | "lilac" | "yellow" | "sand" | "navy";
 const avatarTones: Record<AvatarTone, string> = {
   teal: "bg-teal-100 text-teal-dark",
@@ -44,6 +44,10 @@ const avatarTones: Record<AvatarTone, string> = {
   sand: "bg-sand text-navy",
   navy: "bg-[#2e5872] text-white",
 };
+/**
+ * `src`: absolute image URL (for API files, build it with `fileSrc()` from "@/components/ui/file-upload").
+ * Decorative by default (the name is written next to it); pass `alt` when the photo carries meaning.
+ */
 export function Avatar({
   initials,
   tone = "teal",
@@ -51,6 +55,8 @@ export function Avatar({
   className,
   online,
   square = false,
+  src,
+  alt,
 }: {
   initials: string;
   tone?: AvatarTone;
@@ -58,15 +64,22 @@ export function Avatar({
   className?: string;
   online?: boolean;
   square?: boolean;
+  src?: string | null;
+  alt?: string;
 }) {
   return (
     <span
       className={cn("relative inline-flex shrink-0 items-center justify-center font-display font-bold", square ? "rounded-[20px]" : "rounded-full", avatarTones[tone], className)}
       style={{ width: size, height: size, fontSize: Math.round(size * 0.32) }}
-      aria-hidden="true"
+      aria-hidden={alt ? undefined : "true"}
     >
-      {initials}
-      {online && <span className="absolute right-0 bottom-0 size-3 rounded-full border-2 border-white bg-online" />}
+      {src ? (
+        // eslint-disable-next-line @next/next/no-img-element -- photos come from the API origin, sized by the parent
+        <img src={src} alt={alt ?? ""} width={size} height={size} loading="lazy" className={cn("size-full object-cover", square ? "rounded-[20px]" : "rounded-full")} />
+      ) : (
+        initials
+      )}
+      {online && <span className="absolute end-0 bottom-0 size-3 rounded-full border-2 border-white bg-online" />}
     </span>
   );
 }

@@ -33,7 +33,7 @@ export type Conversation = {
   thread: ThreadItem[];
 };
 
-/** Sample conversations for the UI milestone (TODO(api): /conversations). */
+/** Sample conversations for demo mode (live mode uses the messaging API). */
 export const conversations: Conversation[] = [
   {
     id: "sarah-mitchell",

@@ -1,27 +1,28 @@
 import { RoleGate } from "@/components/layout/role-gate";
-import { AppSidebar, type SidebarItem } from "@/components/layout/app-sidebar";
+import type { SidebarItem } from "@/components/layout/app-sidebar";
 import { Icon } from "@/components/ui/icon";
 import { useTranslations } from "next-intl";
+import { AdminSidebar } from "./_components/admin-sidebar";
 
 type NavKey = "analytics" | "teachers" | "students" | "bookings" | "payments" | "disputes" | "settings";
 const nav: (Omit<SidebarItem, "label"> & { key: NavKey })[] = [
   { key: "analytics", href: "/admin", icon: "chart", exact: true },
-  { key: "teachers", href: "/admin/teachers", icon: "user", badge: { text: "5" } },
+  { key: "teachers", href: "/admin/teachers", icon: "user" },
   { key: "students", href: "/admin/students", icon: "users" },
   { key: "bookings", href: "/admin/bookings", icon: "calendar" },
   { key: "payments", href: "/admin/payments", icon: "wallet" },
-  { key: "disputes", href: "/admin/disputes", icon: "shield", badge: { text: "2", tone: "danger" } },
+  { key: "disputes", href: "/admin/disputes", icon: "shield" },
   { key: "settings", href: "/admin/settings", icon: "settings" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const t = useTranslations("admin.nav");
-  const items: SidebarItem[] = nav.map(({ key, ...item }) => ({ ...item, label: t(key) }));
+  const items = nav.map((item) => ({ ...item, label: t(item.key) }));
   return (
     <RoleGate space="admin">
       <div className="flex min-h-screen bg-beige-2">
-        <AppSidebar
-          variant="admin"
+        {/* Live badges: pending applications and open disputes. */}
+        <AdminSidebar
           items={items}
           footer={
             <div className="flex items-center gap-2 rounded-xl bg-beige-2 p-3 text-xs text-muted">

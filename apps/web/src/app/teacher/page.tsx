@@ -7,8 +7,8 @@ import { Icon } from "@/components/ui/icon";
 import { Avatar, StatTile, type AvatarTone } from "@/components/ui/primitives";
 import { intlTags, type Locale } from "@/i18n/config";
 import { currentTeacher, formatUsd } from "@/lib/mock-data";
-import { Suspense } from "react";
-import { LiveLessons } from "@/app/student/_components/live-lessons";
+import { API_URL } from "@/lib/api";
+import { LiveDashboard } from "./_components/live-dashboard";
 import { VacationToggle } from "./_components/vacation-toggle";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -35,6 +35,13 @@ const firstName = currentTeacher.name.split(" ")[0];
 const sr = (c: React.ReactNode) => <span className="sr-only">{c}</span>;
 
 export default function TeacherDashboardPage() {
+  // Connected to the API: real lessons, figures and notifications.
+  if (API_URL) return <LiveDashboard />;
+  return <DemoDashboard />;
+}
+
+/** Demo mode: sample data. */
+function DemoDashboard() {
   const t = useTranslations("teacher.dashboard");
   const ts = useTranslations("common.specialties");
   const locale = useLocale() as Locale;
@@ -63,11 +70,6 @@ export default function TeacherDashboardPage() {
         </div>
         <VacationToggle />
       </header>
-
-      {/* Real bookings (API) with the classroom link; the tiles below are still sample data. */}
-      <Suspense>
-        <LiveLessons forTeacher />
-      </Suspense>
 
       <section aria-label={t("keyFigures")} className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatTile label={t("todaysLessons")} value={num(3)} hint={t("nextAt", { time: "11:00" })} />

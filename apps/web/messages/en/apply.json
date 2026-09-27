@@ -150,7 +150,6 @@
     "timeZoneHint": "Used to show your availability to students in their local time.",
     "gender": "Gender",
     "genderHint": "Some students filter by a preferred teacher gender. You can change this later.",
-    "photoLater": "You'll add your profile photo later.",
     "emailHint": "The email address of your account.",
     "selectCountry": "Select your country"
   },
@@ -176,8 +175,7 @@
     "bioCount": "{count} / {max}",
     "bioPlaceholder": "Tell students about yourself and what a lesson with you looks like.",
     "selectEducation": "Select your highest education",
-    "certificationsPlaceholder": "e.g. TESOL",
-    "certificatesLater": "You'll add your certificate files later."
+    "certificationsPlaceholder": "e.g. TESOL"
   },
   "previews": {
     "label": "Coming up next",

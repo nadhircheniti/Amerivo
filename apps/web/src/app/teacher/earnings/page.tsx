@@ -4,8 +4,10 @@ import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { intlTags, type Locale } from "@/i18n/config";
 import { PLATFORM_COMMISSION, formatUsd } from "@/lib/mock-data";
-import { cn } from "@/lib/cn";
+import { API_URL } from "@/lib/api";
 import { EarningsTabs } from "./_components/earnings-tabs";
+import { LiveEarnings } from "./_components/live-earnings";
+import { NetChart } from "./_components/net-chart";
 import { PayoutMethod } from "./_components/payout-method";
 import { WithdrawCard } from "./_components/withdraw-card";
 import { lessonEarnings, monthlyNet, payouts } from "./_data";
@@ -15,15 +17,17 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("metaTitle") };
 }
 
-const CHART_HEIGHT = 160; // px of the tallest bar
-
 export default function EarningsPage() {
+  // Connected to the API: real balances, lessons, payouts and Stripe Connect.
+  if (API_URL) return <LiveEarnings />;
+  return <DemoEarnings />;
+}
+
+/** Demo mode: sample ledger. */
+function DemoEarnings() {
   const t = useTranslations("teacher.earnings");
   const locale = useLocale() as Locale;
   const tag = intlTags[locale];
-  const max = Math.max(...monthlyNet.map((m) => m.value));
-  const fmt0 = (n: number) => formatUsd(n, locale).replace(/[.,]00(?!\d)/, "");
-  const monthName = (ym: string, month: "short" | "long") => new Intl.DateTimeFormat(tag, { month, timeZone: "UTC" }).format(new Date(`${ym}-15T12:00:00Z`));
   const nextPayout = new Intl.DateTimeFormat(tag, { month: "short", day: "numeric", timeZone: "UTC" }).format(new Date("2026-10-28T12:00:00Z"));
 
   return (
@@ -57,35 +61,7 @@ export default function EarningsPage() {
           <h2 id="chart-heading" className="text-[17px] font-bold">
             {t("chartTitle")}
           </h2>
-          <figure className="m-0">
-            <ul
-              className="flex h-[200px] items-end gap-3.5 border-b border-line-soft pb-0.5"
-              aria-label={t("chartLabel", { from: monthName(monthlyNet[0].month, "long"), to: monthName(monthlyNet[monthlyNet.length - 1].month, "long") })}
-            >
-              {monthlyNet.map((m) => (
-                <li key={m.month} className="flex grow basis-0 flex-col items-center gap-1.5">
-                  <span className={cn("text-[11px]", m.current ? "font-bold text-navy" : "text-muted")}>
-                    <span className="sr-only">{monthName(m.month, "long")}: </span>
-                    {fmt0(m.value)}
-                    {m.current && <span className="sr-only"> {t("currentMonth")}</span>}
-                  </span>
-                  <div
-                    className={cn("w-full rounded-t-md", m.current ? "bg-teal-dark" : "bg-teal-200")}
-                    style={{ height: Math.round((m.value / max) * CHART_HEIGHT) }}
-                    aria-hidden="true"
-                  />
-                </li>
-              ))}
-            </ul>
-            <div className="mt-2 flex gap-3.5 text-xs text-muted" aria-hidden="true">
-              {monthlyNet.map((m) => (
-                <span key={m.month} className={cn("grow basis-0 text-center", m.current && "font-bold text-navy")}>
-                  {monthName(m.month, "short")}
-                </span>
-              ))}
-            </div>
-            <figcaption className="sr-only">{t("chartCaption")}</figcaption>
-          </figure>
+          <NetChart months={monthlyNet} />
           <PayoutMethod />
         </section>
 

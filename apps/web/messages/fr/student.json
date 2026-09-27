@@ -11,57 +11,88 @@
     "userSubtitle": "Élève · Niveau {level}"
   },
   "backToOverview": "Retour à la vue d'ensemble",
-  "comingSoon": {
-    "lessons": {
-      "title": "Mes cours",
-      "description": "Votre calendrier complet, vos cours passés et vos comptes rendus apparaîtront ici."
+  "states": {
+    "loading": "Chargement…",
+    "errorTitle": "Impossible de charger cette page",
+    "errorText": "Le service est peut-être en train de redémarrer — cela peut prendre jusqu'à une minute. Veuillez réessayer.",
+    "tryAgain": "Réessayer",
+    "studentsOnlyTitle": "Réservé aux comptes élèves",
+    "studentsOnly": "Cette page affiche les cours et les données d'un élève. Connectez-vous avec un compte élève pour la voir.",
+    "close": "Fermer"
+  },
+  "join": {
+    "join": "Rejoindre la salle de classe",
+    "opensSoon": "Ouverture 10 minutes avant le cours",
+    "opensAt": "Ouverture à {time}",
+    "opensOn": "Ouverture le {date} à {time}"
+  },
+  "cancel": {
+    "button": "Annuler",
+    "title": "Annuler ce cours ?",
+    "lesson": "Cours avec {name} · {date} · {time}",
+    "outcome": {
+      "unpaid": "Ce cours n'a pas encore été payé — rien ne vous sera facturé.",
+      "money": "Vous serez intégralement remboursé de {amount} sur votre moyen de paiement d'origine.",
+      "packageCredit": "Le cours est recrédité sur votre forfait avec {name} : vous pourrez le réserver à nouveau.",
+      "free": "Ce cours gratuit sera simplement annulé.",
+      "late": "Il reste moins de 24 heures avant le cours : il ne peut pas être remboursé."
     },
-    "homework": {
-      "title": "Devoirs",
-      "description": "Tous vos devoirs — à faire, en cours et terminés — au même endroit."
-    },
-    "progress": {
-      "title": "Progression",
-      "description": "L'évolution de votre niveau, de vos heures d'étude et de vos compétences."
-    },
-    "payments": {
-      "title": "Paiements",
-      "description": "Factures, historique des paiements et vos forfaits."
-    },
-    "settings": {
-      "title": "Paramètres",
-      "description": "Profil, notifications, fuseau horaire et mot de passe."
-    }
+    "freeUntil": "Annulation gratuite jusqu'au {date} à {time}.",
+    "policy": "Les cours annulés plus de 24 heures à l'avance sont intégralement remboursés.",
+    "reason": "Motif (facultatif)",
+    "reasonPlaceholder": "Expliquez la raison à votre professeur",
+    "keep": "Garder le cours",
+    "confirm": "Annuler le cours",
+    "cancelling": "Annulation…"
   },
   "overview": {
     "metaTitle": "Vue d'ensemble",
-    "greeting": "Bonsoir, {name}",
+    "booked": "Votre cours est réservé ! Vous le trouverez ci-dessous et recevrez un e-mail de confirmation.",
+    "greeting": {
+      "morning": "Bonjour, {name}",
+      "afternoon": "Bon après-midi, {name}",
+      "evening": "Bonsoir, {name}"
+    },
     "encouragement": "Continuez comme ça — le niveau {level} se rapproche.",
-    "notifications": "Notifications (nouvelles)",
+    "encouragementGeneric": "Chaque cours compte. Continuez sur cette lancée !",
     "bookLesson": "Réserver un cours",
     "nextLesson": {
       "eyebrow": "Prochain cours · dans {minutes} min",
-      "title": "{subject} avec {name}",
-      "details": "Aujourd'hui · {time} (votre heure) · Sujet : {topic}",
-      "join": "Rejoindre la salle de classe"
+      "eyebrowNow": "En cours",
+      "eyebrowToday": "Prochain cours · aujourd'hui",
+      "eyebrowPlain": "Prochain cours",
+      "eyebrowNone": "Prochain cours",
+      "details": "{day} · {time} (votre heure) · Sujet : {topic}",
+      "detailsNoTopic": "{day} · {time} (votre heure)",
+      "noneTitle": "Aucun cours réservé pour l'instant",
+      "noneText": "Choisissez un professeur et réservez un créneau qui vous convient.",
+      "findTeacher": "Trouver un professeur"
     },
     "stats": {
       "label": "Votre progression",
       "hoursStudied": "Heures d'étude",
       "hoursHint": "+{hours} ce mois-ci",
+      "hoursNone": "Aucun cours ce mois-ci pour l'instant",
       "lessonsCompleted": "Cours terminés",
       "withTeachers": "{count, plural, one {Avec # professeur} other {Avec # professeurs}}",
+      "noLessonsYet": "Votre premier cours vous attend",
       "levelProgress": "Progression de niveau",
-      "levelProgressAria": "Progression de {from} à {to}",
+      "levelScaleAria": "Niveau actuel {level} sur l'échelle de A1 à C2",
+      "takeTest": "Passer le test de niveau",
       "currentPlan": "Formule actuelle",
       "pack": "Forfait de {count} cours",
-      "lessonsLeft": "{count, plural, one {# cours restant} other {# cours restants}}"
+      "lessonsLeftWith": "{count, plural, one {# cours restant avec {name}} other {# cours restants avec {name}}}",
+      "morePacks": "{count, plural, one {+ # autre forfait} other {+ # autres forfaits}}",
+      "payAsYouGo": "Paiement à l'unité",
+      "noPack": "Aucun forfait actif"
     },
     "upcoming": {
       "title": "Cours à venir",
-      "viewCalendar": "Voir le calendrier",
-      "reschedule": "Reprogrammer",
-      "rescheduleAria": "Reprogrammer le cours avec {name} le {date}",
+      "viewAll": "Tous les cours",
+      "noOthers": "Aucun autre cours réservé après celui-ci.",
+      "empty": "Aucun cours à venir pour l'instant.",
+      "manage": "Gérer",
+      "manageAria": "Gérer le cours avec {name} le {date}",
       "nextTeacher": "<strong>Un autre professeur ?</strong> Continuez avec {name} ou essayez quelqu'un de nouveau.",
       "bookName": "Réserver avec {name}",
       "browse": "Parcourir"
@@ -70,24 +101,291 @@
       "title": "Résumé du dernier cours",
       "openReport": "Ouvrir le compte rendu",
       "strengths": "Points forts",
-      "toWorkOn": "À travailler"
+      "toWorkOn": "À travailler",
+      "empty": "Après chaque cours, votre professeur envoie un court compte rendu. Il apparaîtra ici."
     },
     "payments": {
       "title": "Paiements",
-      "allInvoices": "Toutes les factures",
+      "allPayments": "Tous les paiements",
+      "empty": "Aucun paiement pour l'instant.",
       "free": "Gratuit",
       "pack": "Forfait de {count} cours · {teacher}",
       "single": "Cours à l'unité · {teacher}",
-      "trial": "Cours d'essai · {teacher}"
+      "trial": "Cours d'essai · {teacher}",
+      "package": "Cours du forfait · {teacher}",
+      "refunded": "{amount} remboursés"
     }
+  },
+  "lessons": {
+    "title": "Mes cours",
+    "description": "Vos cours réservés, vos cours passés et les comptes rendus de vos professeurs.",
+    "bookLesson": "Réserver un cours",
+    "tabsLabel": "Afficher les cours",
+    "tabs": {
+      "upcoming": "À venir",
+      "past": "Passés et annulés"
+    },
+    "cancelled": {
+      "money": "Cours annulé. {amount} vous seront remboursés sur votre moyen de paiement d'origine.",
+      "packageCredit": "Cours annulé. Il a été recrédité sur votre forfait.",
+      "none": "Cours annulé."
+    },
+    "empty": {
+      "upcomingTitle": "Aucun cours à venir",
+      "upcomingText": "Choisissez un professeur et réservez votre prochain cours — il apparaîtra ici.",
+      "pastTitle": "Aucun cours passé pour l'instant",
+      "pastText": "Après votre premier cours, vous le retrouverez ici avec le compte rendu de votre professeur."
+    },
+    "findTeacher": "Trouver un professeur",
+    "timeZoneNote": "Horaires affichés dans votre fuseau horaire ({tz}).",
+    "with": {
+      "trial": "Cours d'essai avec {name}",
+      "single": "Cours avec {name}",
+      "package": "Cours du forfait avec {name}"
+    },
+    "withFull": {
+      "trial": "Cours d'essai · {name}",
+      "single": "Cours · {name}",
+      "package": "Cours du forfait · {name}"
+    },
+    "status": {
+      "pending_payment": "En attente de paiement",
+      "confirmed": "Confirmé",
+      "completed": "Terminé",
+      "cancelled": "Annulé",
+      "refunded": "Annulé · remboursé",
+      "no_show": "Manqué"
+    },
+    "minutes": "{count} min",
+    "cancelledByTeacher": "Annulé par le professeur",
+    "cancelledByAdmin": "Annulé par Amerivo",
+    "reportReady": "Compte rendu",
+    "viewReport": "Voir le compte rendu",
+    "details": "Détails",
+    "review": "Laisser un avis",
+    "reviewTitle": "Comment s'est passé votre cours avec {name} ?",
+    "bookAgain": "Réserver à nouveau"
   },
   "homework": {
     "title": "Devoirs",
+    "description": "Tout ce que vos professeurs vous ont donné, au même endroit.",
     "status": "{pending} à faire · {done, plural, one {# terminé} other {# terminés}}",
     "completed": "Terminé",
+    "submitted": "Rendu",
+    "dueToday": "Pour aujourd'hui",
     "dueTomorrow": "Pour demain",
     "dueOn": "Pour le {date}",
-    "from": "{due} · de {teacher}"
+    "overdue": "En retard · {date}",
+    "noDueDate": "Sans date limite",
+    "from": "{due} · de {teacher}",
+    "fromTeacher": "De {name}",
+    "lessonOf": "Cours du {date}",
+    "allDone": "Vous êtes à jour — aucun devoir en attente.",
+    "seeAll": "Tous les devoirs",
+    "fromThisLesson": "Devoirs de ce cours",
+    "filterLabel": "Afficher les devoirs",
+    "filters": {
+      "todo": "À faire ({count})",
+      "done": "Terminés ({count})",
+      "all": "Tous"
+    },
+    "empty": {
+      "title": "Aucun devoir pour l'instant",
+      "text": "Quand un professeur vous donne des devoirs après un cours, ils apparaissent ici.",
+      "allDoneTitle": "Vous êtes à jour !",
+      "allDoneText": "Vous avez terminé tous vos devoirs. Bravo."
+    },
+    "markDone": "Marquer comme fait",
+    "markNotDone": "Marquer comme non fait"
+  },
+  "lesson": {
+    "metaTitle": "Résumé du cours",
+    "backToLessons": "Retour à mes cours",
+    "eyebrow": "Résumé du cours",
+    "eyebrowLesson": "Cours",
+    "niceWork": "Beau travail, {name} !",
+    "niceWorkNoName": "Beau travail !",
+    "meta": "{teacher} · {date} · {minutes} min · {topic}",
+    "metaNoTopic": "{teacher} · {date} · {minutes} min",
+    "homework": "Devoirs",
+    "homeworkDue": "Devoirs · pour le {date}",
+    "nextRecommendation": "Conseil pour le prochain cours",
+    "strengths": "Points forts",
+    "toWorkOn": "À travailler",
+    "noReport": "{name} n'a pas encore envoyé le compte rendu du cours. Vous recevrez une notification dès qu'il sera prêt.",
+    "howWas": "Comment s'est passé votre cours avec {name} ?",
+    "reviewedOn": "Avis donné le {date}",
+    "noReviewNoShow": "Seuls les cours qui ont eu lieu peuvent être notés.",
+    "cancelledText": "Ce cours a été annulé.",
+    "bookNext": "Réserver le prochain avec {name}",
+    "tryAnother": "Essayer un autre professeur"
+  },
+  "dispute": {
+    "title": "Un problème ?",
+    "intro": "En cas de problème pendant ce cours (professeur absent, souci technique…), signalez-le avant le {date} à {time}. Notre équipe l'examinera.",
+    "button": "Signaler un problème",
+    "dialogTitle": "Signaler un problème",
+    "dialogText": "Décrivez ce qui s'est passé. Un administrateur Amerivo examinera votre signalement et pourra rembourser le cours.",
+    "reason": "Que s'est-il passé ?",
+    "reasonHint": "10 caractères minimum.",
+    "reasonPlaceholder": "Ex. : le professeur est arrivé avec 25 minutes de retard et le cours a été écourté.",
+    "back": "Retour",
+    "send": "Envoyer le signalement",
+    "sending": "Envoi…",
+    "reportedTitle": "Problème signalé",
+    "status": {
+      "open": "En cours d'examen",
+      "refunded": "Remboursé",
+      "rejected": "Clôturé"
+    },
+    "statusText": {
+      "open": "Merci de nous avoir prévenus. Notre équipe examine votre signalement.",
+      "refunded": "Votre signalement a été accepté et le cours a été remboursé.",
+      "rejected": "Notre équipe a examiné votre signalement et l'a clôturé sans remboursement."
+    },
+    "resolution": "Notre réponse : {text}",
+    "sentOn": "Signalé le {date}"
+  },
+  "review": {
+    "labels": {
+      "poor": "Décevant",
+      "fair": "Passable",
+      "good": "Bien",
+      "veryGood": "Très bien",
+      "excellent": "Excellent"
+    },
+    "thanks": "Merci pour votre avis !",
+    "rated": "Vous avez noté ce cours {rating} sur 5.",
+    "willAppear": "Votre avis apparaîtra sur le profil public de {name}.",
+    "helps": "Votre note aide {name} et les autres élèves.",
+    "legend": "Note",
+    "starOption": "{count, plural, one {# étoile} other {# étoiles}} – {label}",
+    "tapToRate": "Touchez une étoile pour noter",
+    "writeReview": "Écrire un avis (facultatif)",
+    "placeholder": "Qu'avez-vous apprécié ? Votre avis apparaîtra sur le profil public de {name}.",
+    "submit": "Envoyer mon avis",
+    "sending": "Envoi…"
+  },
+  "progress": {
+    "title": "Progression",
+    "description": "Votre niveau, vos cours et ce que vos professeurs ont remarqué.",
+    "statsLabel": "Votre progression en chiffres",
+    "totalHours": "Heures d'étude",
+    "thisMonth": "{hours} h ce mois-ci",
+    "lessonsCompleted": "Cours terminés",
+    "teachers": "Professeurs",
+    "currentLevel": "Niveau actuel",
+    "nextGoal": "Prochain objectif : {level}",
+    "levelTitle": "Votre niveau",
+    "scaleAria": "Échelle CECRL, niveau actuel {level}",
+    "skillsTitle": "Test de niveau par compétence",
+    "skills": {
+      "grammar": "Grammaire",
+      "reading": "Lecture",
+      "listening": "Écoute",
+      "speaking": "Expression orale"
+    },
+    "source": {
+      "placement": "Niveau indiqué à l'inscription",
+      "placement_test": "Test de niveau"
+    },
+    "noLevel": "Passez le court test de niveau pour connaître votre niveau et suivre vos progrès.",
+    "takeTest": "Passer le test de niveau",
+    "perMonthTitle": "Cours par mois",
+    "lessonsCount": "{count}",
+    "perMonthCaption": "Cours terminés au cours des 6 derniers mois.",
+    "reportsTitle": "Comptes rendus des professeurs",
+    "noReports": "Aucun compte rendu pour l'instant. Après chaque cours, votre professeur envoie un résumé avec vos points forts et les points à travailler.",
+    "openReport": "Ouvrir",
+    "strengths": "Points forts",
+    "toWorkOn": "À travailler",
+    "recommendation": "Conseil"
+  },
+  "payments": {
+    "title": "Paiements",
+    "description": "Votre historique de paiements et vos forfaits.",
+    "totalsLabel": "Totaux",
+    "totalSpent": "Total dépensé",
+    "totalRefunded": "Remboursé",
+    "lessonsInPacks": "Cours restants dans vos forfaits",
+    "lessonsInPacksHint": "Déjà payés, prêts à réserver",
+    "packsTitle": "Forfaits",
+    "noPacks": "Vous n'avez aucun forfait. Les forfaits de 5 ou 10 cours bénéficient d'une réduction.",
+    "packWith": "Forfait de {count} cours · {name}",
+    "boughtOn": "Acheté le {date} · {amount}",
+    "packStatus": {
+      "pending_payment": "En attente de paiement",
+      "active": "Actif",
+      "exhausted": "Épuisé",
+      "refunded": "Remboursé",
+      "expired": "Expiré"
+    },
+    "usedAria": "{used} cours réservés sur {total}",
+    "remaining": "{count, plural, =0 {Plus aucun cours à réserver} one {# cours à réserver} other {# cours à réserver}}",
+    "bookFromPack": "Réserver un cours",
+    "historyTitle": "Historique des paiements",
+    "emptyTitle": "Aucun paiement pour l'instant",
+    "emptyText": "Vos paiements et remboursements apparaîtront ici.",
+    "colDate": "Date",
+    "colWhat": "Description",
+    "colStatus": "Statut",
+    "colAmount": "Montant",
+    "note": "Tous les prix sont en dollars américains (USD). Les paiements par carte sont traités en toute sécurité par Stripe.",
+    "what": {
+      "package": "Forfait de {count} cours · {name}",
+      "trial": "Cours d'essai · {name}",
+      "single": "Cours à l'unité · {name}"
+    },
+    "lessonOn": "Cours du {date}",
+    "status": {
+      "requires_payment": "En attente",
+      "succeeded": "Payé",
+      "failed": "Échoué",
+      "refunded": "Remboursé",
+      "partially_refunded": "Partiellement remboursé"
+    },
+    "refunded": "{amount} remboursés"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "description": "Votre profil, votre fuseau horaire, votre langue et votre compte.",
+    "profileTitle": "Profil",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "E-mail",
+    "emailHint": "L'e-mail de connexion. Il ne peut pas être modifié ici.",
+    "phone": "Téléphone (facultatif)",
+    "country": "Pays",
+    "countryPlaceholder": "Sélectionnez votre pays",
+    "nativeLanguage": "Langue maternelle",
+    "nativeLanguagePlaceholder": "Sélectionnez votre langue maternelle",
+    "timezone": "Fuseau horaire",
+    "timezoneHint": "Les horaires des cours sont affichés dans ce fuseau horaire.",
+    "useDeviceTz": "Utiliser le fuseau horaire de cet appareil ({tz})",
+    "namesRequired": "Veuillez indiquer votre prénom et votre nom.",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "saved": "Modifications enregistrées",
+    "languageTitle": "Langue de l'interface",
+    "languageText": "Choisissez la langue du site Amerivo. Vos cours restent en anglais !",
+    "delete": {
+      "title": "Supprimer mon compte",
+      "text": "Supprimer définitivement votre compte Amerivo et vos données personnelles.",
+      "button": "Supprimer mon compte",
+      "dialogTitle": "Supprimer votre compte ?",
+      "consequence1": "Votre nom, votre e-mail, votre téléphone et votre profil seront effacés. Cette action est irréversible.",
+      "consequence2": "Les cours restants de vos forfaits seront perdus.",
+      "consequence3": "Vous devez d'abord annuler vos cours à venir.",
+      "consequence4": "Les paiements sont conservés de façon anonyme, comme l'exige la comptabilité.",
+      "understand": "Je comprends que mon compte sera supprimé définitivement.",
+      "confirmWord": "SUPPRIMER",
+      "typeToConfirm": "Tapez {word} pour confirmer",
+      "hasLessons": "Vous avez encore des cours à venir. Veuillez d'abord les annuler.",
+      "goToLessons": "Voir mes cours",
+      "keep": "Garder mon compte",
+      "confirm": "Supprimer définitivement",
+      "deleting": "Suppression…"
+    }
   },
   "live": {
     "booked": "Votre cours est réservé ! Vous le trouverez ci-dessous et recevrez un e-mail de confirmation.",
@@ -111,39 +409,6 @@
     "timeZoneNote": "Heures affichées dans votre fuseau horaire ({tz}).",
     "classroom": "Salle de classe",
     "emptyTeacher": "Aucun cours à venir pour l'instant. Les nouvelles réservations apparaîtront ici."
-  },
-  "lesson": {
-    "metaTitle": "Résumé du cours",
-    "eyebrow": "Résumé du cours",
-    "niceWork": "Beau travail aujourd'hui, {name} !",
-    "meta": "{teacher} · {date} · {minutes} min · {topic}",
-    "srLesson": "(cours {id})",
-    "homeworkDue": "Devoirs · pour le {date}",
-    "nextRecommendation": "Conseil pour le prochain cours",
-    "strengths": "Points forts",
-    "toWorkOn": "À travailler",
-    "howWas": "Comment s'est passé votre cours avec {name} ?",
-    "bookNext": "Réserver le prochain avec {name}",
-    "tryAnother": "Essayer un autre professeur"
-  },
-  "review": {
-    "labels": {
-      "poor": "Décevant",
-      "fair": "Passable",
-      "good": "Bien",
-      "veryGood": "Très bien",
-      "excellent": "Excellent"
-    },
-    "thanks": "Merci pour votre avis !",
-    "rated": "Vous avez noté ce cours {rating} sur 5.",
-    "willAppear": "Votre avis apparaîtra sur le profil public de {name}.",
-    "helps": "Votre note aide {name} et les autres élèves.",
-    "legend": "Note",
-    "starOption": "{count, plural, one {# étoile} other {# étoiles}} – {label}",
-    "tapToRate": "Touchez une étoile pour noter",
-    "writeReview": "Écrire un avis (facultatif)",
-    "placeholder": "Qu'avez-vous apprécié ? Votre avis apparaîtra sur le profil public de {name}.",
-    "submit": "Envoyer mon avis"
   },
   "messages": {
     "metaTitle": "Messages",

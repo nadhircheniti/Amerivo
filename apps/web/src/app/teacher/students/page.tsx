@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
-import { ComingSoon } from "@/components/layout/coming-soon";
+import { API_URL } from "@/lib/api";
+import { DemoStudents, LiveStudents } from "./_components/students-view";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("teacher.comingSoon");
-  return { title: t("studentsTitle") };
+  const t = await getTranslations("teacher.students");
+  return { title: t("metaTitle") };
 }
 
-export default function Page() {
-  const t = useTranslations("teacher.comingSoon");
-  return <ComingSoon title={t("studentsTitle")} description={t("studentsDescription")} icon="users" backHref="/teacher" backLabel={t("back")} />;
+export default function StudentsPage() {
+  // Connected to the API: the teacher's real students; otherwise sample data.
+  return API_URL ? <LiveStudents /> : <DemoStudents />;
 }
