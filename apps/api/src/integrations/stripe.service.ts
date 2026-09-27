@@ -73,7 +73,17 @@ export class StripeService {
 
   /** Stripe Identity session for teacher ID verification (spec §4 step 3). */
   identitySession(p: { teacherId: string; returnUrl: string }) {
-    return this.stripe.identity.verificationSessions.create({ type: "document", metadata: { teacherId: p.teacherId }, return_url: p.returnUrl });
+    return this.stripe.identity.verificationSessions.create({
+      type: "document",
+      // A selfie is compared with the ID photo: the person applying is the owner of the document.
+      options: { document: { require_matching_selfie: true } },
+      metadata: { teacherId: p.teacherId },
+      return_url: p.returnUrl,
+    });
+  }
+
+  retrieveIdentitySession(id: string) {
+    return this.stripe.identity.verificationSessions.retrieve(id);
   }
 
   constructEvent(rawBody: Buffer, signature: string) {

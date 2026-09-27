@@ -112,7 +112,7 @@ export class TeacherProfileDto {
   @IsOptional() @IsString() @MaxLength(120) headline?: string;
   @IsOptional() @IsString() @MaxLength(3000) bio?: string;
   @IsOptional() @IsString() @MaxLength(80) city?: string;
-  @IsOptional() @IsIn(["female", "male", "other"]) gender?: "female" | "male" | "other";
+  @IsOptional() @IsIn(["female", "male", "other"]) gender?: "female" | "male" | "other" | null;
   @IsOptional() @IsString() timezone?: string;
   @IsOptional() @IsString() @MaxLength(200) education?: string;
   @IsOptional() @IsInt() @Min(0) @Max(60) yearsExperience?: number;
@@ -124,12 +124,22 @@ export class TeacherProfileDto {
   @IsOptional() @IsBoolean() offersPack5?: boolean;
   @IsOptional() @IsBoolean() offersPack10?: boolean;
   @IsOptional() @IsBoolean() offersTrial?: boolean;
-  @IsOptional() @IsUrl() introVideoUrl?: string;
+  @IsOptional() @IsUrl({ protocols: ["https"], require_protocol: true }) introVideoUrl?: string | null;
+  @IsOptional() @IsIn(["weekdayMornings", "weekdayAfternoons", "weekdayEvenings", "weekends"]) interviewPreference?: string;
+  // Applicant details stored on the account
+  @IsOptional() @IsString() @MaxLength(80) firstName?: string;
+  @IsOptional() @IsString() @MaxLength(80) lastName?: string;
+  @IsOptional() @IsString() @MaxLength(40) phone?: string;
+  @IsOptional() @IsString() @MaxLength(80) country?: string;
 }
 
 export class DecisionDto {
   @IsIn(["approved", "rejected", "suspended", "pending"]) decision!: "approved" | "rejected" | "suspended" | "pending";
   @IsOptional() evaluation?: Record<string, number>;
+  @IsOptional() @IsString() @MaxLength(2000) notes?: string;
+}
+
+export class InterviewDto {
   @IsOptional() @IsString() @MaxLength(2000) notes?: string;
 }
 

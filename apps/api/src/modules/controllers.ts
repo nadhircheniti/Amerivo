@@ -18,6 +18,7 @@ import {
   CompleteDto,
   CreateBookingDto,
   DecisionDto,
+  InterviewDto,
   NotesDto,
   PlacementDto,
   RefundDto,
@@ -110,15 +111,21 @@ export class TeacherSpaceController {
     private readonly stripe: StripeService,
   ) {}
 
+  /** The teacher's own profile, application status, availability and blocked dates. */
+  @Get("profile") own(@CurrentUser() u: AuthUser) {
+    return this.applications.getOwn(u.id);
+  }
   @Put("profile") profile(@CurrentUser() u: AuthUser, @Body() dto: TeacherProfileDto) {
     return this.applications.updateProfile(u.id, dto);
   }
   @Post("application/submit") submit(@CurrentUser() u: AuthUser) {
     return this.applications.submit(u.id);
   }
-  @Post("identity/session") async identity(@CurrentUser() u: AuthUser) {
-    const s = await this.stripe.identitySession({ teacherId: u.id, returnUrl: `${process.env.WEB_URL}/teach/apply?step=identity` });
-    return { url: s.url };
+  @Post("identity/session") identity(@CurrentUser() u: AuthUser) {
+    return this.applications.startIdentity(u.id);
+  }
+  @Post("identity/sync") identitySync(@CurrentUser() u: AuthUser) {
+    return this.applications.syncIdentity(u.id);
   }
   @Put("availability") availability(@CurrentUser() u: AuthUser, @Body() dto: RulesDto) {
     for (const r of dto.rules) if (r.startMinute >= r.endMinute) throw badRequest("Each window must end after it starts");
@@ -219,8 +226,11 @@ export class AdminController {
   @Get("analytics") analytics(@Query("days") days?: string) {
     return this.admin.analytics(days ? Math.min(Number(days), 365) : 30);
   }
-  @Get("teachers") teachers(@Query("status") status?: "pending" | "approved" | "rejected" | "suspended") {
+  @Get("teachers") teachers(@Query("status") status?: "draft" | "pending" | "approved" | "rejected" | "suspended") {
     return this.admin.listTeachers(status);
+  }
+  @Post("teachers/:id/interview") interview(@CurrentUser() u: AuthUser, @Param("id", ParseUUIDPipe) id: string, @Body() dto: InterviewDto) {
+    return this.admin.requestInterview(u, id, dto.notes);
   }
   @Post("teachers/:id/decision") decide(@CurrentUser() u: AuthUser, @Param("id", ParseUUIDPipe) id: string, @Body() dto: DecisionDto) {
     return this.admin.decideTeacher(u, id, dto.decision, { evaluation: dto.evaluation, notes: dto.notes });
@@ -242,6 +252,7 @@ export class WebhooksController {
   constructor(
     private readonly stripe: StripeService,
     private readonly bookings: BookingsService,
+    private readonly applications: ApplicationsService,
   ) {}
 
   @Public() @Post("stripe") @HttpCode(200)
@@ -254,6 +265,11 @@ export class WebhooksController {
       case "payment_intent.payment_failed":
       case "payment_intent.canceled":
         return this.bookings.onPaymentFailed(event.id, event.data.object.id);
+      case "identity.verification_session.verified":
+      case "identity.verification_session.requires_input":
+      case "identity.verification_session.processing":
+      case "identity.verification_session.canceled":
+        return this.applications.onIdentityEvent(event.data.object);
       default:
         return { ignored: event.type };
     }

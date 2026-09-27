@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { eq } from "drizzle-orm";
+import { eq, getTableColumns } from "drizzle-orm";
 import { DB, type Db } from "../../db/db";
 import { studentProfiles, teacherProfiles, users } from "../../db/schema";
 import { badRequest, conflict } from "../../common/errors";
@@ -80,14 +80,23 @@ export class AccountsService {
   }
 
   async me(userId: string) {
-    const [u] = await this.db.select().from(users).where(eq(users.id, userId));
+    const [u] = await this.withTeacherStatus(userId);
     // An account created before its e-mail was added to ADMIN_EMAILS is promoted on its next visit,
     // once Clerk confirms the e-mail is verified (e-mail code, Google or Apple).
     if (u && u.role !== "admin" && isAdminEmail(u.email) && (await clerkClient.isEmailVerified(u.clerkId, u.email))) {
-      const [promoted] = await this.db.update(users).set({ role: "admin", status: "active" }).where(eq(users.id, u.id)).returning();
-      return promoted;
+      await this.db.update(users).set({ role: "admin", status: "active" }).where(eq(users.id, u.id));
+      return (await this.withTeacherStatus(userId))[0];
     }
     return u;
+  }
+
+  /** The account, plus the teacher's application status (draft, pending, approved…) for teachers. */
+  private withTeacherStatus(userId: string) {
+    return this.db
+      .select({ ...getTableColumns(users), teacherStatus: teacherProfiles.status })
+      .from(users)
+      .leftJoin(teacherProfiles, eq(teacherProfiles.userId, users.id))
+      .where(eq(users.id, userId));
   }
 
   /** Clerk confirms the email → the student becomes Active (spec §3 step 2). */

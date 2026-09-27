@@ -15,6 +15,13 @@
       "when": 1790430233836,
       "tag": "0001_trial_optin_min_age",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790517519795,
+      "tag": "0002_teacher_onboarding",
+      "breakpoints": true
     }
   ]
 }

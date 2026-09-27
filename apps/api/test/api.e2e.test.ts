@@ -28,6 +28,7 @@ const clock = { t: new Date("2026-10-01T00:00:00Z"), now() { return this.t; }, s
 const stripeCalls = { intents: 0, refunds: [] as { pi: string; amount: number }[], transfers: [] as { account: string; amount: number }[] };
 let stripeConfigured = true;
 let failNextIntent = false;
+let identityResult = "processing";
 const intentStatus: Record<string, string> = {};
 const uncancellable = new Set<string>();
 const fakeStripe = {
@@ -49,7 +50,8 @@ const fakeStripe = {
     return { id, status: "canceled" };
   },
   constructEvent: (raw: Buffer) => JSON.parse(raw.toString()),
-  identitySession: async () => ({ url: "https://verify.stripe.test/session" }),
+  identitySession: async () => ({ id: "vs_test_1", url: "https://verify.stripe.test/session" }),
+  retrieveIdentitySession: async (id: string) => ({ id, status: identityResult, last_error: null }),
 };
 const fakeDaily = {
   createRoom: async (p: { name: string }) => ({ name: p.name, url: `https://amerivo.daily.co/${p.name}` }),
@@ -382,5 +384,58 @@ describe("Amerivo API", () => {
     const confirmed = await book().expect(201);
     assert.equal(confirmed.body.booking.id, again.body.booking.id);
     assert.equal(confirmed.body.booking.status, "confirmed");
+  });
+
+  it("teacher onboarding: application saved step by step, Stripe identity, submit, interview, approval", async () => {
+    // A teacher account (no date of birth needed) starts as a draft.
+    await http().post("/api/me/register").set(as("clerk_emma")).send({ role: "teacher", email: "emma@example.com", firstName: "Emma", lastName: "Stone", timezone: "America/New_York" }).expect(201);
+    let me = await http().get("/api/me").set(as("clerk_emma")).expect(200);
+    assert.equal(me.body.role, "teacher");
+    assert.equal(me.body.teacherStatus, "draft");
+
+    // Step by step: account details + profile in one call.
+    await http().put("/api/teacher/profile").set(as("clerk_emma")).send({ country: "United States", phone: "+1 555 010 2030", gender: null, headline: "IELTS coach", bio: "Former examiner.", specialties: ["IELTS Prep"], teaches: ["adults"], yearsExperience: 6, priceCents: 4000, offersTrial: true, interviewPreference: "weekends" }).expect(200);
+    await http().put("/api/teacher/profile").set(as("clerk_emma")).send({ introVideoUrl: "http://not-https.example" }).expect(400);
+    const early = await http().post("/api/teacher/application/submit").set(as("clerk_emma")).expect(400);
+    assert.match(early.body.message, /introduction video, identity verification/);
+    await http().put("/api/teacher/profile").set(as("clerk_emma")).send({ introVideoUrl: "https://youtu.be/abc123" }).expect(200);
+
+    // Identity: Stripe page, then the result read back (webhook or return page).
+    const idv = await http().post("/api/teacher/identity/session").set(as("clerk_emma")).expect(201);
+    assert.equal(idv.body.url, "https://verify.stripe.test/session");
+    let own = await http().get("/api/teacher/profile").set(as("clerk_emma")).expect(200);
+    assert.equal(own.body.identityStatus, "pending");
+    assert.equal(own.body.country, "United States");
+    assert.equal(own.body.interviewPreference, "weekends");
+    assert.equal(own.body.stripeIdentitySessionId, undefined, "internal ids are not exposed");
+    identityResult = "verified";
+    const synced = await http().post("/api/teacher/identity/sync").set(as("clerk_emma")).expect(201);
+    assert.equal(synced.body.identityStatus, "verified");
+    await http().post("/api/teacher/identity/session").set(as("clerk_emma")).expect(400);
+
+    // Submit → pending, visible to the admin with all details; not public yet.
+    await http().post("/api/teacher/application/submit").set(as("clerk_emma")).expect(201);
+    const pending = await http().get("/api/admin/teachers?status=pending").set(as("clerk_admin")).expect(200);
+    const app = pending.body.find((t: { email: string }) => t.email === "emma@example.com");
+    assert.equal(app.headline, "IELTS coach");
+    assert.equal(app.introVideoUrl, "https://youtu.be/abc123");
+    assert.ok(app.submittedAt);
+    const hidden = await http().get("/api/teachers?limit=50").expect(200);
+    assert.ok(!hidden.body.some((t: { slug: string }) => t.slug === app.slug));
+
+    // Interview request, then approval with evaluation → public profile.
+    await http().post(`/api/admin/teachers/${app.id}/interview`).set(as("clerk_admin")).send({ notes: "Saturday 10:00 ET?" }).expect(201);
+    own = await http().get("/api/teacher/profile").set(as("clerk_emma")).expect(200);
+    assert.ok(own.body.review.interviewRequestedAt);
+    assert.equal(own.body.review.adminNotes, "Saturday 10:00 ET?");
+    await http().post(`/api/admin/teachers/${app.id}/decision`).set(as("clerk_admin")).send({ decision: "approved", evaluation: { fluency: 5 }, notes: "Great" }).expect(201);
+    me = await http().get("/api/me").set(as("clerk_emma")).expect(200);
+    assert.equal(me.body.teacherStatus, "approved");
+    const pub = await http().get(`/api/teachers/${app.slug}`).expect(200);
+    assert.equal(pub.body.headline, "IELTS coach");
+
+    // Webhook path for identity events is accepted too.
+    const ev = await http().post("/api/webhooks/stripe").set("stripe-signature", "t").send({ id: "evt_idv", type: "identity.verification_session.verified", data: { object: { id: "vs_test_1", status: "verified", metadata: {} } } }).expect(200);
+    assert.equal(ev.body.updated, 1);
   });
 });

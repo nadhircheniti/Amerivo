@@ -118,6 +118,8 @@ export const teacherProfiles = pgTable(
     /** Free 20-min trial is opt-in per teacher */
     offersTrial: boolean("offers_trial").notNull().default(false),
     introVideoUrl: text("intro_video_url"),
+    /** When the applicant prefers the interview (weekdayMornings, weekends…). */
+    interviewPreference: text("interview_preference"),
     identityStatus: identityStatus("identity_status").notNull().default("not_started"),
     stripeIdentitySessionId: text("stripe_identity_session_id"),
     stripeAccountId: text("stripe_account_id"),
