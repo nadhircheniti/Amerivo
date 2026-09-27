@@ -1,3 +1,4 @@
+import { RoleGate } from "@/components/layout/role-gate";
 import { AppSidebar, type SidebarItem } from "@/components/layout/app-sidebar";
 import { currentStudent } from "@/lib/mock-data";
 
@@ -14,13 +15,15 @@ const items: SidebarItem[] = [
 
 export default function StudentLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-beige">
-      <AppSidebar
-        variant="student"
-        items={items}
-        user={{ name: currentStudent.name, subtitle: `Student · Level ${currentStudent.level}`, initials: currentStudent.initials, tone: currentStudent.tone }}
-      />
-      <main className="min-w-0 flex-1">{children}</main>
-    </div>
+    <RoleGate space="student">
+      <div className="flex min-h-screen bg-beige">
+        <AppSidebar
+          variant="student"
+          items={items}
+          user={{ name: currentStudent.name, subtitle: `Student · Level ${currentStudent.level}`, initials: currentStudent.initials, tone: currentStudent.tone }}
+        />
+        <main className="min-w-0 flex-1">{children}</main>
+      </div>
+    </RoleGate>
   );
 }

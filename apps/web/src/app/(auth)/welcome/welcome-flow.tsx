@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Field, Input, Select } from "@/components/ui/form";
 import { ageOn, latestBirthDate, MIN_STUDENT_AGE } from "@/lib/age";
 import { ApiError, API_URL } from "@/lib/api";
-import { clerkEnabled, homeForRole } from "@/lib/auth-config";
+import { canOpen, clerkEnabled, homeForRole, spaceOf } from "@/lib/auth-config";
 import { useApi } from "@/lib/use-api";
 
 type Meta = {
@@ -64,7 +64,7 @@ export function WelcomeFlow() {
 
   const register = useCallback(
     async (p: Required<Pick<Meta, "firstName" | "lastName" | "birthDate">> & Meta) => {
-      await call("/me/register", {
+      const created = await call<{ role: string }>("/me/register", {
         method: "POST",
         body: JSON.stringify({
           role: "student",
@@ -78,7 +78,7 @@ export function WelcomeFlow() {
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
         }),
       });
-      router.replace(safeNext ?? "/onboarding/goals");
+      router.replace(created.role === "admin" ? "/admin" : (safeNext ?? "/onboarding/goals"));
     },
     [call, user, router, safeNext],
   );
@@ -93,7 +93,10 @@ export function WelcomeFlow() {
     (async () => {
       try {
         const me = await call<{ role: string }>("/me");
-        router.replace(safeNext ?? homeForRole(me.role));
+        // Only follow ?next= when it belongs to this role's space (an admin isn't sent to the student questionnaire).
+        const nextSpace = safeNext ? spaceOf(safeNext) : null;
+        const followNext = safeNext && (nextSpace === null || canOpen(me.role, nextSpace)) && !(me.role !== "student" && safeNext.startsWith("/onboarding"));
+        router.replace(followNext ? safeNext : homeForRole(me.role));
       } catch (e) {
         if (!(e instanceof ApiError) || e.status !== 401 || !/no amerivo account/i.test(e.message)) {
           setError("We couldn't reach Amerivo right now. The service may be waking up — please try again in a minute.");
