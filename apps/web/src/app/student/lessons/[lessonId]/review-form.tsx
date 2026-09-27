@@ -64,13 +64,7 @@ export function ReviewForm({ teacherFirstName }: { teacherFirstName: string }) {
       </fieldset>
 
       <Field label={t("writeReview")}>
-        <Textarea
-          rows={4}
-          value={review}
-          onChange={(e) => setReview(e.target.value)}
-          placeholder={t("placeholder", { name: teacherFirstName })}
-          className="text-[15px]"
-        />
+        <Textarea rows={4} value={review} onChange={(e) => setReview(e.target.value)} placeholder={t("placeholder", { name: teacherFirstName })} className="text-[15px]" />
       </Field>
 
       <Button type="submit" disabled={!rating} className="h-auto py-[15px]">

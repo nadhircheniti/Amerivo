@@ -86,6 +86,24 @@ Cartes de test : `4242 4242 4242 4242` (acceptée), `4000 0027 6000 3184` (valid
 Fonctionnement : le créneau est réservé 30 minutes pendant le paiement ; passé ce délai il est
 libéré et le paiement annulé. Un paiement arrivé après annulation est remboursé automatiquement.
 
+## 6. Salle de classe vidéo — Daily.co
+
+Chaque cours a sa salle privée (2 personnes max, ouverte peu avant le cours, fermée 30 min après la fin).
+Seuls le professeur et l'élève du cours peuvent entrer (pas l'admin) ; le professeur est « propriétaire » de la salle.
+
+1. dashboard.daily.co → créer le compte (gratuit : 10 000 minutes-participant par mois).
+   Le nom choisi à l'inscription donne l'adresse `https://<nom>.daily.co`.
+2. **Developers** → copier la **API key**.
+3. **Render** : `DAILY_API_KEY` = la clé ; `DAILY_DOMAIN` = `<nom>.daily.co` (facultatif, trouvé automatiquement sinon)
+   → **Save, rebuild and deploy**. Rien à faire sur Vercel.
+4. Test : `CLASSROOM_EARLY_MIN=1440` (déjà dans render.yaml) ouvre la salle dès la veille du cours pour tester sans
+   attendre. **En production, supprimer cette variable** (retour à 10 minutes avant le cours).
+
+Pour tester : réserver un cours avec un compte élève, puis ouvrir la salle depuis deux navigateurs (ou un ordinateur
+et un téléphone) : l'élève via « My booked lessons → Classroom », le professeur via son tableau de bord.
+Dans la salle : caméra, micro, partage d'écran, discussion (non conservée) et notes partagées (enregistrées avec le cours).
+Le professeur termine le cours (« End lesson ») puis rédige le compte rendu.
+
 ## Fonctionnement au quotidien
 
 - Chaque fusion sur `main` redéploie automatiquement Render et Vercel.

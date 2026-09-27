@@ -142,7 +142,7 @@
       "teens": "المراهقون (13+)"
     },
     "pricePerLesson": "سعر الدرس",
-    "priceRange": "{min} – {max}",
+    "priceRange": "⁦{min} – {max}⁩",
     "upTo": "حتى {price}",
     "availability": "أوقات التوفر",
     "yourTime": "(بتوقيتك)",

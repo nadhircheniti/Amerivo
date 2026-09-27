@@ -38,8 +38,10 @@ services:
         sync: false
       - key: DAILY_API_KEY
         sync: false
-      - key: DAILY_DOMAIN
+      - key: DAILY_DOMAIN        # optional, e.g. amerivo.daily.co (found automatically when empty)
         sync: false
+      - key: CLASSROOM_EARLY_MIN # staging only: minutes before a lesson when the classroom opens (default 10; 1440 = the day before)
+        value: "1440"
       - key: RESEND_API_KEY
         sync: false
       - key: EMAIL_FROM

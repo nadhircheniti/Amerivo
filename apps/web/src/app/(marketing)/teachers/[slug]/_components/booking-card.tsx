@@ -130,7 +130,8 @@ export function BookingCard({
 
   const weekRange = days ? `${shortDate(days[0].date, tag)} – ${shortDate(days[6].date, tag)}` : "";
 
-  const summary = slot && clock ? `${dayLabel(slot.instant, clock.tz, tag)} · ${timeLabel(slot.instant, clock.tz)}–${timeLabel(slot.instant + duration * 60_000, clock.tz)}` : null;
+  const summary =
+    slot && clock ? `${dayLabel(slot.instant, clock.tz, tag)} · \u2066${timeLabel(slot.instant, clock.tz)}–${timeLabel(slot.instant + duration * 60_000, clock.tz)}\u2069` : null;
 
   const checkoutHref = slot && clock ? `/checkout?${new URLSearchParams({ teacher: slug, type, slot: slot.iso, tz: clock.tz }).toString()}` : null;
 

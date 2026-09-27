@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 import { DB, type Db } from "../../db/db";
 import { bookings, homework, lessonReports, lessons, reviews, teacherProfiles, users } from "../../db/schema";
 import { CLOCK, type Clock } from "../../common/clock";
@@ -9,7 +9,15 @@ import { DailyService } from "../../integrations/daily.service";
 import { NotificationsService } from "../../integrations/notifications.service";
 import { BookingsService } from "../bookings/bookings.service";
 
-const JOIN_EARLY_MIN = 10;
+/**
+ * How early the classroom opens before the lesson: 10 minutes by default.
+ * CLASSROOM_EARLY_MIN can widen it on the test site (e.g. 1440 = the day before) so testers
+ * don't have to wait for the exact time. Capped at 24 hours.
+ */
+export const classroomEarlyMin = () => {
+  const v = Number(process.env.CLASSROOM_EARLY_MIN);
+  return Number.isFinite(v) && v >= 0 ? Math.min(v, 1440) : 10;
+};
 
 export interface ReportInput {
   topicsCovered: string;
@@ -33,19 +41,54 @@ export class LessonsService {
     private readonly notifications: NotificationsService,
   ) {}
 
-  /** Returns a Daily.co room URL + meeting token. Opens 10 minutes before the start. */
+  private windowFor(b: { startsAt: Date; durationMin: number }) {
+    return {
+      opensAt: new Date(b.startsAt.getTime() - classroomEarlyMin() * 60_000),
+      closesAt: new Date(b.startsAt.getTime() + (b.durationMin + 30) * 60_000),
+    };
+  }
+
+  /** Everything the classroom page needs before joining (participants only). */
+  async classroom(user: AuthUser, bookingId: string) {
+    const b = await this.bookings.assertParticipant(user, bookingId);
+    const people = await this.db
+      .select({ id: users.id, firstName: users.firstName, lastName: users.lastName })
+      .from(users)
+      .where(inArray(users.id, [b.studentId, b.teacherId]));
+    const person = (id: string) => people.find((u) => u.id === id) ?? { id, firstName: "", lastName: "" };
+    const [lesson] = await this.db.select({ sharedNotes: lessons.sharedNotes }).from(lessons).where(eq(lessons.bookingId, b.id));
+    const { opensAt, closesAt } = this.windowFor(b);
+    return {
+      bookingId: b.id,
+      status: b.status,
+      type: b.type,
+      topic: b.topic,
+      startsAt: b.startsAt,
+      durationMin: b.durationMin,
+      opensAt,
+      closesAt,
+      role: user.id === b.teacherId ? "teacher" : user.id === b.studentId ? "student" : "admin",
+      teacher: person(b.teacherId),
+      student: person(b.studentId),
+      notes: lesson?.sharedNotes ?? "",
+    };
+  }
+
+  /** Returns a Daily.co room URL + meeting token for the student or the teacher of the lesson. */
   async join(user: AuthUser, bookingId: string) {
     const b = await this.bookings.assertParticipant(user, bookingId);
+    // Lessons are private: only their teacher and student can enter (not admins).
+    if (user.id !== b.studentId && user.id !== b.teacherId) throw forbidden();
     if (b.status !== "confirmed") throw badRequest(`Lesson is ${b.status}`);
     const now = this.clock.now();
-    const opensAt = new Date(b.startsAt.getTime() - JOIN_EARLY_MIN * 60_000);
-    const closesAt = new Date(b.startsAt.getTime() + (b.durationMin + 30) * 60_000);
+    const { opensAt, closesAt } = this.windowFor(b);
     if (now < opensAt) throw badRequest(`The classroom opens at ${opensAt.toISOString()}`);
     if (now > closesAt) throw badRequest("This lesson has ended");
 
     let [lesson] = await this.db.select().from(lessons).where(eq(lessons.bookingId, b.id));
     if (!lesson?.dailyRoomName) {
-      const room = await this.daily.createRoom({ name: `amerivo-${b.id}`, startsAt: b.startsAt, durationMin: b.durationMin });
+      // Daily room names: short and unique per lesson.
+      const room = await this.daily.createRoom({ name: `amerivo-${b.id.replace(/-/g, "").slice(0, 24)}`, opensAt, startsAt: b.startsAt, durationMin: b.durationMin });
       [lesson] = await this.db
         .insert(lessons)
         .values({ bookingId: b.id, dailyRoomName: room.name })
@@ -55,7 +98,7 @@ export class LessonsService {
     if (user.id === b.teacherId && !lesson.startedAt) await this.db.update(lessons).set({ startedAt: now }).where(eq(lessons.id, lesson.id));
 
     const { token } = await this.daily.meetingToken({ room: lesson.dailyRoomName!, userName: user.firstName, isOwner: user.id === b.teacherId, exp: closesAt });
-    return { roomUrl: `https://${process.env.DAILY_DOMAIN}/${lesson.dailyRoomName}`, token, lessonId: lesson.id };
+    return { roomUrl: await this.daily.roomUrl(lesson.dailyRoomName!), token, lessonId: lesson.id };
   }
 
   async saveNotes(user: AuthUser, bookingId: string, notes: string) {

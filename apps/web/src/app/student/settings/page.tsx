@@ -11,12 +11,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function Page() {
   const t = useTranslations("student");
   return (
-    <ComingSoon
-      title={t("comingSoon.settings.title")}
-      description={t("comingSoon.settings.description")}
-      icon="settings"
-      backHref="/student"
-      backLabel={t("backToOverview")}
-    />
+    <ComingSoon title={t("comingSoon.settings.title")} description={t("comingSoon.settings.description")} icon="settings" backHref="/student" backLabel={t("backToOverview")} />
   );
 }

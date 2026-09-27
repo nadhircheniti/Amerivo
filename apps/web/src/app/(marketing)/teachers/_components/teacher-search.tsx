@@ -326,7 +326,10 @@ function TeacherCard({ t: teacher }: { t: Teacher }) {
   const locale = useLocale();
   const langs = otherLanguages(teacher).map(tl);
   const tags = [...teacher.specialties.slice(0, 2).map((s) => (ts.has(s as never) ? ts(s as never) : s)), ta.has(teacher.teaches[0]) ? ta(teacher.teaches[0]) : teacher.teaches[0]];
-  const meta = [t("cardMeta", { city: teacher.city, tz: teacher.tzLabel, years: teacher.yearsExperience }), ...(langs.length > 0 ? [t("speaks", { languages: langs.join(t("listSeparator")) })] : [])];
+  const meta = [
+    t("cardMeta", { city: teacher.city, tz: teacher.tzLabel, years: teacher.yearsExperience }),
+    ...(langs.length > 0 ? [t("speaks", { languages: langs.join(t("listSeparator")) })] : []),
+  ];
   return (
     <article className="flex flex-col gap-6 rounded-[20px] bg-white p-6 sm:flex-row">
       <div className={cn("flex size-[132px] shrink-0 items-center justify-center rounded-[20px] font-display text-[40px] font-bold", toneTile[teacher.tone])} aria-hidden="true">

@@ -182,6 +182,9 @@ export class BookingsController {
   @Post(":id/cancel") cancel(@CurrentUser() u: AuthUser, @Param("id", ParseUUIDPipe) id: string, @Body() dto: CancelDto) {
     return this.bookings.cancel(u, id, dto.reason);
   }
+  @Get(":id/classroom") classroom(@CurrentUser() u: AuthUser, @Param("id", ParseUUIDPipe) id: string) {
+    return this.lessons.classroom(u, id);
+  }
   @Post(":id/join") join(@CurrentUser() u: AuthUser, @Param("id", ParseUUIDPipe) id: string) {
     return this.lessons.join(u, id);
   }

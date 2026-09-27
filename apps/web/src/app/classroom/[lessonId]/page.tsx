@@ -5,6 +5,8 @@ import { LogoMark } from "@/components/ui/logo";
 import { getClassroomLesson } from "./_data";
 import { ElapsedTimer } from "./_components/elapsed-timer";
 import { ClassroomShell } from "./_components/classroom-shell";
+import { LiveClassroom } from "./_live/live-classroom";
+import { API_URL } from "@/lib/api";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("classroom.page");
@@ -13,6 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ClassroomPage({ params }: { params: Promise<{ lessonId: string }> }) {
   const { lessonId } = await params;
+  // Connected to the API: the real Daily.co classroom. Otherwise the design demo below.
+  if (API_URL) return <LiveClassroom bookingId={lessonId} />;
   const lesson = getClassroomLesson(lessonId);
   const t = await getTranslations("classroom.page");
 

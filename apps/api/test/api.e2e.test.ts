@@ -46,6 +46,7 @@ const fakeStripe = {
 };
 const fakeDaily = {
   createRoom: async (p: { name: string }) => ({ name: p.name, url: `https://amerivo.daily.co/${p.name}` }),
+  roomUrl: async (name: string) => `https://amerivo.daily.co/${name}`,
   meetingToken: async (p: { isOwner: boolean }) => ({ token: p.isOwner ? "owner-token" : "guest-token" }),
 };
 
@@ -205,6 +206,19 @@ describe("Amerivo API", () => {
   it("classroom → end lesson → report → review → earnings → payout", async () => {
     clock.set("2026-10-14T15:45:00Z"); // 15 min before: too early
     await http().post(`/api/bookings/${singleId}/join`).set(as("clerk_maria")).expect(400);
+    // The classroom page gets names, times and the opening time before joining.
+    const info = await http().get(`/api/bookings/${singleId}/classroom`).set(as("clerk_maria")).expect(200);
+    assert.equal(info.body.role, "student");
+    assert.equal(info.body.teacher.firstName, "Sarah");
+    assert.equal(info.body.opensAt, "2026-10-14T15:50:00.000Z");
+    await http().get(`/api/bookings/${singleId}/classroom`).set(as("clerk_ana")).expect(403);
+    // Test site: CLASSROOM_EARLY_MIN opens it earlier.
+    process.env.CLASSROOM_EARLY_MIN = "60";
+    const early = await http().get(`/api/bookings/${singleId}/classroom`).set(as("clerk_maria")).expect(200);
+    assert.equal(early.body.opensAt, "2026-10-14T15:00:00.000Z");
+    delete process.env.CLASSROOM_EARLY_MIN;
+    // Lessons are private: an admin can't enter the room.
+    await http().post(`/api/bookings/${singleId}/join`).set(as("clerk_admin")).expect(403);
     clock.set("2026-10-14T15:52:00Z"); // 8 min before: open
     const join = await http().post(`/api/bookings/${singleId}/join`).set(as("clerk_sarah")).expect(201);
     assert.equal(join.body.token, "owner-token");

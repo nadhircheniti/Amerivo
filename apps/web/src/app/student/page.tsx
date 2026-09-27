@@ -140,13 +140,11 @@ export default function StudentDashboardPage() {
         <div className="pointer-events-none absolute -top-20 -end-[60px] size-[260px] rounded-full bg-teal opacity-[0.22]" aria-hidden="true" />
         <Avatar initials={nextLesson.teacher.initials} tone={nextLesson.teacher.tone} size={76} />
         <div className="relative flex flex-1 flex-col gap-1.5">
-          <span className="font-display text-xs font-semibold tracking-[3px] text-yellow uppercase">
-            {t("nextLesson.eyebrow", { minutes: nextLesson.startsInMin })}
-          </span>
+          <span className="font-display text-xs font-semibold tracking-[3px] text-yellow uppercase">{t("nextLesson.eyebrow", { minutes: nextLesson.startsInMin })}</span>
           <h2 id="next-lesson" className="text-[22px] font-bold text-white sm:text-[26px]">
             {t("nextLesson.title", { subject: specialty(nextLesson.subject), name: nextLesson.teacher.name.split(" ")[0] })}
           </h2>
-          <p className="text-[15px] text-ink-soft">{t("nextLesson.details", { time: nextLesson.time, topic: nextLesson.topic })}</p>
+          <p className="text-[15px] text-ink-soft">{t("nextLesson.details", { time: `\u2066${nextLesson.time}\u2069`, topic: nextLesson.topic })}</p>
         </div>
         <ButtonLink href={`/classroom/${nextLesson.id}`} size="lg" className="relative shrink-0 px-7">
           <Icon name="video" strokeWidth={2} />
@@ -196,7 +194,7 @@ export default function StudentDashboardPage() {
                     {l.teacher} · {specialty(l.subject)}
                   </p>
                   <p className="text-sm text-muted">
-                    {l.time} · {l.topic}
+                    <bdi dir="ltr">{l.time}</bdi> · {l.topic}
                   </p>
                 </div>
                 <button

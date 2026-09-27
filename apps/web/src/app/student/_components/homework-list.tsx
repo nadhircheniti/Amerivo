@@ -38,12 +38,7 @@ export function HomeworkList({ items, previouslyDone }: { items: HomeworkItem[];
           return (
             <li key={hw.id}>
               <label className={cn("flex cursor-pointer items-start gap-3 rounded-[14px] p-3.5", hw.urgent && !checked ? "bg-cream" : "bg-beige")}>
-                <input
-                  type="checkbox"
-                  checked={checked}
-                  onChange={(e) => setDone((d) => ({ ...d, [hw.id]: e.target.checked }))}
-                  className="mt-0.5 size-[18px] shrink-0"
-                />
+                <input type="checkbox" checked={checked} onChange={(e) => setDone((d) => ({ ...d, [hw.id]: e.target.checked }))} className="mt-0.5 size-[18px] shrink-0" />
                 <span className="flex flex-col gap-0.5">
                   <span className={cn("text-[15px] font-semibold", checked && "text-muted line-through")}>{hw.title}</span>
                   <span className={cn("text-[13px]", hw.urgent && !checked ? "text-orange-text" : "text-muted")}>
