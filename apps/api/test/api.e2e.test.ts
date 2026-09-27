@@ -27,11 +27,18 @@ const clock = { t: new Date("2026-10-01T00:00:00Z"), now() { return this.t; }, s
 
 const stripeCalls = { intents: 0, refunds: [] as { pi: string; amount: number }[], transfers: [] as { account: string; amount: number }[] };
 let stripeConfigured = true;
+let failNextIntent = false;
 const intentStatus: Record<string, string> = {};
 const uncancellable = new Set<string>();
 const fakeStripe = {
   isConfigured: () => stripeConfigured,
-  createPaymentIntent: async (p: { amountCents: number }) => ({ id: `pi_${++stripeCalls.intents}`, client_secret: `secret_${stripeCalls.intents}`, amount: p.amountCents }),
+  createPaymentIntent: async (p: { amountCents: number }) => {
+    if (failNextIntent) {
+      failNextIntent = false;
+      throw new Error("This API call cannot be made with a publishable API key.");
+    }
+    return { id: `pi_${++stripeCalls.intents}`, client_secret: `secret_${stripeCalls.intents}`, amount: p.amountCents };
+  },
   refund: async (pi: string, amount: number) => { stripeCalls.refunds.push({ pi, amount }); return { id: `re_${stripeCalls.refunds.length}` }; },
   transferToTeacher: async (p: { accountId: string; amountCents: number }) => { stripeCalls.transfers.push({ account: p.accountId, amount: p.amountCents }); return { id: `tr_${stripeCalls.transfers.length}` }; },
   // PaymentIntent statuses as Stripe would report them (default: waiting for the card).
@@ -348,5 +355,32 @@ describe("Amerivo API", () => {
     assert.deepEqual(stripeCalls.refunds.at(-1), { pi: pi3, amount: 3500 });
     const [p3] = await db.select().from(schema.payments).where(eq(schema.payments.providerRef, pi3));
     assert.equal(p3.status, "refunded");
+  });
+
+  it("a failed Stripe call frees the slot at once; an old stuck booking is replaced on retry", async () => {
+    clock.set("2026-10-20T00:00:00Z");
+    const book = () => http().post("/api/bookings").set(as("clerk_ana")).send({ teacherSlug: "sarah-mitchell", offer: "single", startsAt: "2026-11-11T17:00:00.000Z" });
+
+    // Wrong key on the server: clear error, and the slot is not left blocked.
+    failNextIntent = true;
+    const failed = await book().expect(503);
+    assert.match(failed.body.message, /temporarily unavailable/);
+    const ok = await book().expect(201);
+    assert.equal(ok.body.booking.status, "pending_payment");
+    assert.ok(ok.body.payment.clientSecret);
+
+    // A booking stuck before this fix (unpaid, no PaymentIntent): the same student can book again.
+    await db.update(schema.payments).set({ providerRef: null }).where(eq(schema.payments.bookingId, ok.body.booking.id));
+    const again = await book().expect(201);
+    assert.notEqual(again.body.booking.id, ok.body.booking.id);
+    const [old] = await db.select().from(schema.bookings).where(eq(schema.bookings.id, ok.body.booking.id));
+    assert.equal(old.status, "cancelled");
+
+    // Paid meanwhile (page closed before confirmation): retrying confirms instead of blocking.
+    const pi = (await db.select().from(schema.payments).where(eq(schema.payments.bookingId, again.body.booking.id)))[0].providerRef!;
+    intentStatus[pi] = "succeeded";
+    const confirmed = await book().expect(201);
+    assert.equal(confirmed.body.booking.id, again.body.booking.id);
+    assert.equal(confirmed.body.booking.status, "confirmed");
   });
 });
