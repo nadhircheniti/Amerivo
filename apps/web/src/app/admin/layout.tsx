@@ -1,3 +1,4 @@
+import { RoleGate } from "@/components/layout/role-gate";
 import { AppSidebar, type SidebarItem } from "@/components/layout/app-sidebar";
 import { Icon } from "@/components/ui/icon";
 
@@ -13,18 +14,20 @@ const items: SidebarItem[] = [
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-beige-2">
-      <AppSidebar
-        variant="admin"
-        items={items}
-        footer={
-          <div className="flex items-center gap-2 rounded-xl bg-beige-2 p-3 text-xs text-muted">
-            <Icon name="shieldCheck" size={16} className="text-teal-dark" strokeWidth={2} />
-            Signed in with 2FA
-          </div>
-        }
-      />
-      <main className="min-w-0 flex-1">{children}</main>
-    </div>
+    <RoleGate space="admin">
+      <div className="flex min-h-screen bg-beige-2">
+        <AppSidebar
+          variant="admin"
+          items={items}
+          footer={
+            <div className="flex items-center gap-2 rounded-xl bg-beige-2 p-3 text-xs text-muted">
+              <Icon name="shieldCheck" size={16} className="text-teal-dark" strokeWidth={2} />
+              Signed in with 2FA
+            </div>
+          }
+        />
+        <main className="min-w-0 flex-1">{children}</main>
+      </div>
+    </RoleGate>
   );
 }

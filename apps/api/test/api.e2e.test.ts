@@ -276,6 +276,10 @@ describe("Amerivo API", () => {
     const res = await http().post("/api/me/register").set(as("clerk_owner")).send({ role: "student", email: "Owner@amerivo.test", firstName: "Olivia", lastName: "Owner", timezone: "Europe/Zurich" }).expect(201);
     assert.equal(res.body.role, "admin");
     await http().get("/api/admin/analytics?days=30").set(as("clerk_owner")).expect(200);
+    // An existing verified student whose e-mail is added later becomes admin on the next GET /me.
+    process.env.ADMIN_EMAILS = "maria@example.com";
+    const promoted = await http().get("/api/me").set(as("clerk_maria")).expect(200);
+    assert.equal(promoted.body.role, "admin");
     delete process.env.ADMIN_EMAILS;
     await http().post("/api/me/register").set(as("clerk_other")).send({ role: "student", email: "other@amerivo.test", firstName: "O", lastName: "T", timezone: "Europe/Zurich" }).expect(400);
   });

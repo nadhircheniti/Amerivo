@@ -80,6 +80,12 @@ export class AccountsService {
 
   async me(userId: string) {
     const [u] = await this.db.select().from(users).where(eq(users.id, userId));
+    // An account created before its e-mail was added to ADMIN_EMAILS is promoted on its next visit.
+    // "active" means the e-mail was verified with Clerk at sign-up.
+    if (u && u.role !== "admin" && u.status === "active" && isAdminEmail(u.email)) {
+      const [promoted] = await this.db.update(users).set({ role: "admin" }).where(eq(users.id, u.id)).returning();
+      return promoted;
+    }
     return u;
   }
 
