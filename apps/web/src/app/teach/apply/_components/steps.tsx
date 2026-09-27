@@ -4,22 +4,11 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { ChoiceTile, Field, Input, Segmented, Select } from "@/components/ui/form";
+import { CountrySelect } from "@/components/ui/geo-selects";
 import { Badge, type BadgeTone } from "@/components/ui/primitives";
 import { intlTags, type Locale } from "@/i18n/config";
 import { formatUsd, PLATFORM_COMMISSION, teacherNet } from "@/lib/mock-data";
-import {
-  countries,
-  educationLevels,
-  experienceLevels,
-  genders,
-  groups,
-  idTypes,
-  interviewSlots,
-  steps,
-  subjects,
-  timeZones,
-  type Application,
-} from "../_data";
+import { educationLevels, experienceLevels, genders, groups, idTypes, interviewSlots, steps, subjects, timeZones, type Application } from "../_data";
 import { SectionTitle, TagInput, UploadButton } from "./fields";
 
 type StepProps = { app: Application; update: (patch: Partial<Application>) => void };
@@ -39,14 +28,13 @@ function useCountryName() {
   } catch {
     names = null;
   }
-  return (code: (typeof countries)[number]) => (code === "other" ? t("countryOther") : (names?.of(code) ?? code));
+  return (code: string) => (code === "other" ? t("countryOther") : (names?.of(code) ?? code));
 }
 
 /* ---------------- 1 · Personal info ---------------- */
 export function PersonalStep({ app, update }: StepProps) {
   const t = useTranslations("apply.personal");
   const to = useTranslations("apply.options");
-  const countryName = useCountryName();
   return (
     <>
       <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
@@ -74,13 +62,7 @@ export function PersonalStep({ app, update }: StepProps) {
           <Input type="tel" autoComplete="tel" placeholder="+1 (555) 000-0000" value={app.phone} onChange={(e) => update({ phone: e.target.value })} />
         </Field>
         <Field label={t("country")}>
-          <Select required value={app.country} onChange={(e) => update({ country: e.target.value as Application["country"] })}>
-            {countries.map((c) => (
-              <option key={c} value={c}>
-                {countryName(c)}
-              </option>
-            ))}
-          </Select>
+          <CountrySelect required valueAs="code" autoComplete="country" value={app.country} onChange={(e) => update({ country: e.target.value })} placeholder={t("country")} />
         </Field>
         <Field label={t("timeZone")} hint={t("timeZoneHint")}>
           <Select value={app.timeZone} onChange={(e) => update({ timeZone: e.target.value })}>
@@ -233,13 +215,17 @@ export function IdentityStep({ app, update }: StepProps) {
   const to = useTranslations("apply.options");
   return (
     <>
-      <p className="text-[15px] leading-relaxed text-navy-soft">
-        {t("intro")}
-      </p>
+      <p className="text-[15px] leading-relaxed text-navy-soft">{t("intro")}</p>
 
       <div className="flex flex-col gap-3">
         <span className="text-sm font-semibold">{t("documentType")}</span>
-        <Segmented label={t("documentType")} options={idTypes.map((id) => ({ value: id, label: to(`idTypes.${id}`) }))} value={app.idType} onChange={(idType) => update({ idType })} className="max-w-[560px] flex-wrap" />
+        <Segmented
+          label={t("documentType")}
+          options={idTypes.map((id) => ({ value: id, label: to(`idTypes.${id}`) }))}
+          value={app.idType}
+          onChange={(idType) => update({ idType })}
+          className="max-w-[560px] flex-wrap"
+        />
       </div>
 
       <UploadButton
@@ -403,9 +389,7 @@ export function ReviewStep({ app, update, onEdit }: StepProps & { onEdit: (step:
           <Row label={t("groups")}>{list(app.groups.map((g) => to(`groups.${g}`))) || dash}</Row>
           <Row label={t("certifications")}>{list(app.certifications) || dash}</Row>
           <Row label={t("languages")}>{list(app.languages) || dash}</Row>
-          <Row label={t("rate")}>
-            {t("rateValue", { price: wholeUsd(app.rate, locale), net: formatUsd(teacherNet(app.rate), locale), trial: app.offersTrial ? "on" : "off" })}
-          </Row>
+          <Row label={t("rate")}>{t("rateValue", { price: wholeUsd(app.rate, locale), net: formatUsd(teacherNet(app.rate), locale), trial: app.offersTrial ? "on" : "off" })}</Row>
         </ReviewCard>
         <ReviewCard title={ts(`${steps[2].id}.title`)} onEdit={() => onEdit(2)}>
           <Row label={t("document")}>{app.idFiles.length ? t("documentValue", { type: to(`idTypes.${app.idType}`), count: app.idFiles.length }) : dash}</Row>
@@ -498,7 +482,14 @@ export function ApprovalStep({ app }: { app: Application }) {
         <h2 className="font-display text-[15px] font-bold">{t("statusTitle")}</h2>
         <ul className="flex flex-col gap-2.5">
           {statuses.map((s, i) => (
-            <li key={s.id} className={i === 0 ? "flex flex-col gap-2 rounded-2xl border-2 border-orange p-4 sm:flex-row sm:items-center sm:gap-4" : "flex flex-col gap-2 rounded-2xl border border-line-soft p-4 sm:flex-row sm:items-center sm:gap-4"}>
+            <li
+              key={s.id}
+              className={
+                i === 0
+                  ? "flex flex-col gap-2 rounded-2xl border-2 border-orange p-4 sm:flex-row sm:items-center sm:gap-4"
+                  : "flex flex-col gap-2 rounded-2xl border border-line-soft p-4 sm:flex-row sm:items-center sm:gap-4"
+              }
+            >
               <Badge tone={s.tone} className="w-fit shrink-0 sm:w-[96px] sm:justify-center">
                 {t(`statuses.${s.id}.label`)}
               </Badge>

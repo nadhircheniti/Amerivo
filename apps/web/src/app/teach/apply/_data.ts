@@ -10,7 +10,6 @@ export const groups = ["adults", "teens", "corporate"] as const;
 export const educationLevels = ["bachelor", "master", "phd", "associate", "other"] as const;
 export const experienceLevels = ["lessThan1", "oneToTwo", "threeToFive", "fiveToTen", "tenPlus"] as const;
 /** ISO 3166 region codes (names come from Intl.DisplayNames), plus "other". */
-export const countries = ["US", "CA", "MX", "GB", "ES", "PT", "DE", "JP", "other"] as const;
 export const genders = ["female", "male", "undisclosed"] as const;
 export const timeZones = [
   { value: "America/New_York", key: "newYork" },
@@ -33,7 +32,8 @@ export type Application = {
   lastName: string;
   email: string;
   phone: string;
-  country: (typeof countries)[number];
+  /** ISO 3166-1 alpha-2 code of the country of residence. */
+  country: string;
   gender: (typeof genders)[number] | "";
   timeZone: string;
   education: (typeof educationLevels)[number];

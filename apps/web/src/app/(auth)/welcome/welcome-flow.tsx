@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { Field, Input, Select } from "@/components/ui/form";
+import { Field, Input } from "@/components/ui/form";
+import { CountrySelect, LanguageSelect } from "@/components/ui/geo-selects";
 import { ageOn, latestBirthDate, MIN_STUDENT_AGE } from "@/lib/age";
 import { ApiError, API_URL } from "@/lib/api";
 import { canOpen, clerkEnabled, homeForRole, spaceOf } from "@/lib/auth-config";
@@ -44,7 +45,6 @@ const useNoUser = () => ({ loaded: true, user: null as ClerkUserLite });
 const useUserLite = clerkEnabled ? useClerkUserLite : useNoUser;
 
 /** Option values stay in English (stored on the profile); only the labels are translated. */
-const COUNTRIES = ["Brazil", "France", "Germany", "Italy", "Japan", "Mexico", "Morocco", "Saudi Arabia", "South Korea", "Spain", "Switzerland", "Tunisia", "Turkey", "Other"] as const;
 
 /**
  * Single landing page after any sign-in:
@@ -189,19 +189,10 @@ export function WelcomeFlow() {
           <Input name="birthDate" type="date" autoComplete="bday" max={latestBirthDate()} required />
         </Field>
         <Field label={t("fields.country")}>
-          <Select name="country" defaultValue="" required>
-            <option value="" disabled>
-              {t("fields.selectCountry")}
-            </option>
-            {COUNTRIES.map((c) => (
-              <option key={c} value={c}>
-                {t(`countries.${c}`)}
-              </option>
-            ))}
-          </Select>
+          <CountrySelect name="country" autoComplete="country-name" defaultValue="" required placeholder={t("fields.selectCountry")} />
         </Field>
         <Field label={t("fields.nativeLanguage")} className="sm:col-span-2">
-          <Input name="nativeLanguage" placeholder={t("fields.nativeLanguagePlaceholder")} />
+          <LanguageSelect name="nativeLanguage" defaultValue="" placeholder={t("fields.selectLanguage")} />
         </Field>
         {error && (
           <p role="alert" className="rounded-xl bg-danger-100 px-4 py-3 text-sm font-semibold text-danger-text sm:col-span-2">

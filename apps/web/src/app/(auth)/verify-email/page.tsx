@@ -43,13 +43,7 @@ export default async function VerifyEmailPage({ searchParams }: { searchParams: 
           </Badge>
           <h1 className="text-[28px] font-extrabold sm:text-[34px]">{t("title")}</h1>
           <p className="text-base leading-relaxed text-navy-soft">
-            {clerkEnabled
-              ? email
-                ? t.rich("sentCode", { email, strong })
-                : t("sentCodeNoEmail")
-              : email
-                ? t.rich("sentLink", { email, strong })
-                : t("sentLinkNoEmail")}
+            {clerkEnabled ? (email ? t.rich("sentCode", { email, strong }) : t("sentCodeNoEmail")) : email ? t.rich("sentLink", { email, strong }) : t("sentLinkNoEmail")}
           </p>
         </div>
         <ul className="flex flex-col gap-2 rounded-2xl bg-beige p-5 text-[15px] text-navy-soft">
