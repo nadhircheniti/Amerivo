@@ -7,7 +7,7 @@ const items = [
   { href: "/student", key: "overview", icon: "home", exact: true },
   { href: "/student/lessons", key: "lessons", icon: "calendar" },
   { href: "/teachers", key: "findTeachers", icon: "search" },
-  { href: "/student/messages", key: "messages", icon: "message", badge: { text: "2" } },
+  { href: "/student/messages", key: "messages", icon: "message" },
   { href: "/student/homework", key: "homework", icon: "book" },
   { href: "/student/progress", key: "progress", icon: "chart" },
   { href: "/student/payments", key: "payments", icon: "wallet" },

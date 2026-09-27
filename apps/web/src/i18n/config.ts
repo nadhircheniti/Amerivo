@@ -23,7 +23,7 @@ export const isRtl = (l: Locale) => l === "ar";
 export const isLocale = (v: unknown): v is Locale => typeof v === "string" && (locales as readonly string[]).includes(v);
 
 /** Message files: one JSON per area and language (messages/<locale>/<namespace>.json). */
-export const namespaces = ["common", "marketing", "auth", "onboarding", "checkout", "student", "teacher", "apply", "admin", "classroom"] as const;
+export const namespaces = ["common", "marketing", "auth", "onboarding", "checkout", "student", "teacher", "apply", "admin", "classroom", "messaging"] as const;
 export type Namespace = (typeof namespaces)[number];
 
 /** Best supported language from an Accept-Language header. */

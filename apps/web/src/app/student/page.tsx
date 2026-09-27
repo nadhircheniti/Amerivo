@@ -11,6 +11,7 @@ import { Suspense } from "react";
 import { intlTags, type Locale } from "@/i18n/config";
 import { HomeworkList, type HomeworkItem } from "./_components/homework-list";
 import { LiveLessons } from "./_components/live-lessons";
+import { NotificationBell } from "@/components/messaging/notification-bell";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("student.overview");
@@ -116,14 +117,7 @@ export default function StudentDashboardPage() {
           <p className="mt-1 text-[15px] text-muted">{t("encouragement", { level: "B2" })}</p>
         </div>
         <div className="flex items-center gap-3">
-          <button
-            type="button"
-            aria-label={t("notifications")}
-            className="relative inline-flex size-12 items-center justify-center rounded-full border border-sand bg-white text-navy hover:bg-beige"
-          >
-            <Icon name="bell" />
-            <span className="absolute top-2.5 end-3 size-2 rounded-full bg-orange-dark" aria-hidden="true" />
-          </button>
+          <NotificationBell />
           <ButtonLink href="/teachers">{t("bookLesson")}</ButtonLink>
         </div>
       </div>

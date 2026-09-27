@@ -6,11 +6,11 @@ import { useTranslations } from "next-intl";
 type NavKey = "analytics" | "teachers" | "students" | "bookings" | "payments" | "disputes" | "settings";
 const nav: (Omit<SidebarItem, "label"> & { key: NavKey })[] = [
   { key: "analytics", href: "/admin", icon: "chart", exact: true },
-  { key: "teachers", href: "/admin/teachers", icon: "user", badge: { text: "5" } },
+  { key: "teachers", href: "/admin/teachers", icon: "user" },
   { key: "students", href: "/admin/students", icon: "users" },
   { key: "bookings", href: "/admin/bookings", icon: "calendar" },
   { key: "payments", href: "/admin/payments", icon: "wallet" },
-  { key: "disputes", href: "/admin/disputes", icon: "shield", badge: { text: "2", tone: "danger" } },
+  { key: "disputes", href: "/admin/disputes", icon: "shield" },
   { key: "settings", href: "/admin/settings", icon: "settings" },
 ];
 
