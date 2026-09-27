@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Icon } from "@/components/ui/icon";
 import { Badge, Divider, Rating, Tag } from "@/components/ui/primitives";
 import { Button, ButtonLink } from "@/components/ui/button";
-import { teachers, type Specialty, type Teacher } from "@/lib/mock-data";
+import type { Specialty, Teacher } from "@/lib/mock-data";
 import { cn } from "@/lib/cn";
 import { toneTile } from "../../_components/tone";
 
@@ -54,7 +54,7 @@ function matchesText(t: Teacher, text: string) {
     .every((w) => hay.includes(w));
 }
 
-export function TeacherSearch({ initialQuery }: { initialQuery: string }) {
+export function TeacherSearch({ initialQuery, teachers }: { initialQuery: string; teachers: Teacher[] }) {
   const initial = useMemo(() => parseQuery(initialQuery), [initialQuery]);
   const [specialties, setSpecialties] = useState<Specialty[]>(initial.specialties);
   const [text, setText] = useState(initial.text);
@@ -82,7 +82,7 @@ export function TeacherSearch({ initialQuery }: { initialQuery: string }) {
     if (sort === "price") return [...list].sort((a, b) => a.priceUsd - b.priceUsd);
     if (sort === "experience") return [...list].sort((a, b) => b.yearsExperience - a.yearsExperience);
     return list;
-  }, [specialties, maxPrice, teaches, language, text, sort]);
+  }, [teachers, specialties, maxPrice, teaches, language, text, sort]);
 
   const resetFilters = () => {
     setSpecialties([]);
@@ -145,12 +145,7 @@ export function TeacherSearch({ initialQuery }: { initialQuery: string }) {
             <legend className="mb-3 font-display text-[15px] font-bold">I want to learn</legend>
             {specialtyOptions.map((o) => (
               <label key={o.value} className="flex cursor-pointer items-center gap-2.5 text-[15px]">
-                <input
-                  type="checkbox"
-                  className="size-4"
-                  checked={specialties.includes(o.value)}
-                  onChange={() => setSpecialties((s) => toggle(s, o.value))}
-                />
+                <input type="checkbox" className="size-4" checked={specialties.includes(o.value)} onChange={() => setSpecialties((s) => toggle(s, o.value))} />
                 {o.label}
               </label>
             ))}
@@ -289,13 +284,23 @@ export function TeacherSearch({ initialQuery }: { initialQuery: string }) {
           )}
 
           <nav aria-label="Pagination" className="mt-3 flex justify-center gap-2">
-            <button type="button" disabled aria-label="Previous page" className="flex size-11 items-center justify-center rounded-xl border border-line bg-white text-navy disabled:opacity-40">
+            <button
+              type="button"
+              disabled
+              aria-label="Previous page"
+              className="flex size-11 items-center justify-center rounded-xl border border-line bg-white text-navy disabled:opacity-40"
+            >
               <Icon name="chevronLeft" size={18} />
             </button>
             <button type="button" aria-current="page" className="size-11 rounded-xl bg-navy font-semibold text-white">
               1
             </button>
-            <button type="button" disabled aria-label="Next page" className="flex size-11 items-center justify-center rounded-xl border border-line bg-white text-navy disabled:opacity-40">
+            <button
+              type="button"
+              disabled
+              aria-label="Next page"
+              className="flex size-11 items-center justify-center rounded-xl border border-line bg-white text-navy disabled:opacity-40"
+            >
               <Icon name="chevronRight" size={18} />
             </button>
           </nav>
@@ -323,7 +328,8 @@ function TeacherCard({ t }: { t: Teacher }) {
           <Badge tone="success">Verified</Badge>
         </div>
         <p className="text-sm text-muted">
-          {t.city} ({t.tzLabel}) · {t.yearsExperience} years{langs.length > 0 && ` · Speaks ${langs.join(", ")}`}
+          {t.city} ({t.tzLabel}) · {t.yearsExperience} years
+          {langs.length > 0 && ` · Speaks ${langs.join(", ")}`}
         </p>
         <div className="flex flex-wrap items-center gap-4 text-sm">
           <Rating value={t.rating} />

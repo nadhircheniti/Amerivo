@@ -10,6 +10,12 @@ import Stripe from "stripe";
 export class StripeService {
   private client?: Stripe;
 
+  /** True when a real Stripe key is configured. */
+  isConfigured() {
+    const key = process.env.STRIPE_SECRET_KEY;
+    return !!key && !key.endsWith("xxx");
+  }
+
   get stripe(): Stripe {
     if (!this.client) {
       const key = process.env.STRIPE_SECRET_KEY;

@@ -5,16 +5,7 @@
  */
 import type { AvatarTone } from "@/components/ui/primitives";
 
-export type Specialty =
-  | "Business English"
-  | "Conversation"
-  | "Interview Prep"
-  | "IELTS Prep"
-  | "TOEFL Prep"
-  | "Teens"
-  | "General English"
-  | "Travel"
-  | "Corporate";
+export type Specialty = "Business English" | "Conversation" | "Interview Prep" | "IELTS Prep" | "TOEFL Prep" | "Teens" | "General English" | "Travel" | "Corporate";
 
 export type Teacher = {
   slug: string;
@@ -36,7 +27,9 @@ export type Teacher = {
   offersTrial: boolean; // free 20-min trial, opt-in per teacher
   offersPack5: boolean; // 5% off
   offersPack10: boolean; // 10% off
-  rating: number;
+  rating: number; // 0 = no reviews yet
+  reviewCount?: number;
+  lessonsCompleted?: number;
   summary: string;
 };
 
@@ -168,10 +161,20 @@ export const teacherNet = (gross: number) => Math.round(gross * (1 - PLATFORM_CO
 export const formatUsd = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 
 /* ----- Signed-in sample users ----- */
-export const currentStudent = { name: "Maria Silva", firstName: "Maria", initials: "MS", tone: "yellow" as AvatarTone, level: "B1" as const, timezone: "Europe/Zurich" };
+export const currentStudent = {
+  name: "Maria Silva",
+  firstName: "Maria",
+  initials: "MS",
+  tone: "yellow" as AvatarTone,
+  level: "B1" as const,
+  timezone: "Europe/Zurich",
+};
 export const currentTeacher = teachers[0];
 
 export const cefrLevels = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
 export type Cefr = (typeof cefrLevels)[number];
 
 export type LessonStatus = "PENDING_PAYMENT" | "CONFIRMED" | "COMPLETED" | "CANCELLED" | "REFUNDED";
+
+/** "4.9", or "New" for a teacher without reviews yet. */
+export const ratingText = (t: Pick<Teacher, "rating">) => (t.rating > 0 ? t.rating.toFixed(1) : "New");

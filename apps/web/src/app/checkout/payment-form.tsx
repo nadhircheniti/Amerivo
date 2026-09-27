@@ -5,6 +5,21 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/form";
 import { Icon } from "@/components/ui/icon";
+import { API_URL } from "@/lib/api";
+import { useApi } from "@/lib/use-api";
+
+type BookingRequest = {
+  teacherSlug: string;
+  offer: "trial" | "single" | "pack5" | "pack10";
+  startsAt: string;
+};
+type BookingResponse = {
+  booking: { id: string; status: string };
+  payment: null | { clientSecret: string | null; simulated?: boolean };
+};
+
+/** Test environment: the API confirms bookings without charging (PAYMENTS_SIMULATED=1). */
+const simulatedPayments = !!API_URL && !process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
 const methods = [
   { id: "card", label: "Card" },
@@ -14,20 +29,48 @@ const methods = [
 ] as const;
 type Method = (typeof methods)[number]["id"];
 
-export function PaymentForm({ ctaLabel }: { ctaLabel: string }) {
+export function PaymentForm({ ctaLabel, free, booking }: { ctaLabel: string; free: boolean; booking: BookingRequest | null }) {
   const router = useRouter();
   const [method, setMethod] = useState<Method>("card");
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const api = useApi();
+
+  async function submit() {
+    // Demo mode (no API) or an old sample link: keep the prototype behaviour.
+    if (!API_URL || !booking) return router.push("/student");
+    if (!api.isSignedIn) {
+      return router.push(`/login?${new URLSearchParams({ redirect_url: window.location.pathname + window.location.search })}`);
+    }
+    setPending(true);
+    setError(null);
+    try {
+      const res = await api.call<BookingResponse>("/bookings", {
+        method: "POST",
+        body: JSON.stringify(booking),
+      });
+      if (res.payment && !res.payment.simulated && res.payment.clientSecret) {
+        // TODO(stripe): confirm the PaymentIntent with Stripe's Payment Element (next step).
+        setError("Card payments are being connected. Your booking is reserved and awaiting payment.");
+        return;
+      }
+      router.push(`/student?booked=${res.booking.id}`);
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setPending(false);
+    }
+  }
 
   return (
     <form
       className="flex flex-col gap-[26px]"
       onSubmit={(e) => {
         e.preventDefault();
-        // TODO(api): confirm the PaymentIntent with Stripe, then create the booking.
-        router.push("/student");
+        void submit();
       }}
     >
-      <fieldset>
+      <fieldset hidden={free}>
         <legend className="sr-only">Payment method</legend>
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
           {methods.map((m) => (
@@ -43,7 +86,13 @@ export function PaymentForm({ ctaLabel }: { ctaLabel: string }) {
         </div>
       </fieldset>
 
-      {method === "card" ? (
+      {simulatedPayments && !free && (
+        <p className="rounded-2xl bg-teal-50 px-5 py-4 text-sm text-teal-deep">
+          <strong>Test environment:</strong> no card is charged — the lesson is confirmed as if the payment succeeded.
+        </p>
+      )}
+
+      {free ? null : method === "card" ? (
         /*
          * Placeholder fields for the design milestone. In production these are replaced by
          * Stripe's Payment Element (card data never touches our servers — PCI SAQ A).
@@ -75,13 +124,19 @@ export function PaymentForm({ ctaLabel }: { ctaLabel: string }) {
       <div className="flex items-start gap-3.5 rounded-2xl bg-cream px-5 py-[18px] text-sm leading-relaxed">
         <Icon name="clock" size={22} className="shrink-0 text-orange-dark" />
         <p>
-          <strong>Cancellation policy.</strong> Cancel more than 24 hours before the lesson for a full refund. Lessons cancelled less than 24 hours before are
-          not refunded. If your teacher cancels, you are refunded automatically.
+          <strong>Cancellation policy.</strong> Cancel more than 24 hours before the lesson for a full refund. Lessons cancelled less than 24 hours before are not refunded. If your
+          teacher cancels, you are refunded automatically.
         </p>
       </div>
 
-      <Button type="submit" size="lg" className="h-auto py-[18px] text-[17px]">
-        {ctaLabel}
+      {error && (
+        <p role="alert" className="rounded-2xl bg-danger-100 px-5 py-4 text-sm font-semibold text-danger-text">
+          {error}
+        </p>
+      )}
+
+      <Button type="submit" size="lg" className="h-auto py-[18px] text-[17px]" disabled={pending}>
+        {pending ? "Confirming…" : ctaLabel}
       </Button>
     </form>
   );

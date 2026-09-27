@@ -4,8 +4,18 @@
  * Deterministic per teacher + date so the grid is stable between renders.
  */
 
-export type Slot = { iso: string; instant: number; label: string; booked: boolean };
-export type SlotDay = { date: string; weekday: string; dayOfMonth: number; slots: Slot[] };
+export type Slot = {
+  iso: string;
+  instant: number;
+  label: string;
+  booked: boolean;
+};
+export type SlotDay = {
+  date: string;
+  weekday: string;
+  dayOfMonth: number;
+  slots: Slot[];
+};
 
 const TEACHER_HOURS = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 const SLOTS_PER_DAY = 3;
@@ -22,27 +32,60 @@ function fmt(key: string, make: () => Intl.DateTimeFormat) {
 }
 
 const partsFmt = (tz: string) =>
-  fmt(`parts:${tz}`, () =>
-    new Intl.DateTimeFormat("en-US", { timeZone: tz, hourCycle: "h23", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" }),
+  fmt(
+    `parts:${tz}`,
+    () =>
+      new Intl.DateTimeFormat("en-US", {
+        timeZone: tz,
+        hourCycle: "h23",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      }),
   );
 
 /** Civil date "YYYY-MM-DD" of an instant in a zone. */
 export const civilDate = (instant: number, tz: string) => fmt(`date:${tz}`, () => new Intl.DateTimeFormat("en-CA", { timeZone: tz })).format(instant);
 
 export const timeLabel = (instant: number, tz: string) =>
-  fmt(`time:${tz}`, () => new Intl.DateTimeFormat("en-GB", { timeZone: tz, hour: "2-digit", minute: "2-digit", hourCycle: "h23" })).format(instant);
+  fmt(
+    `time:${tz}`,
+    () =>
+      new Intl.DateTimeFormat("en-GB", {
+        timeZone: tz,
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+      }),
+  ).format(instant);
 
 export const dayLabel = (instant: number, tz: string) =>
-  fmt(`day:${tz}`, () => new Intl.DateTimeFormat("en-US", { timeZone: tz, weekday: "short", month: "short", day: "numeric" })).format(instant);
+  fmt(
+    `day:${tz}`,
+    () =>
+      new Intl.DateTimeFormat("en-US", {
+        timeZone: tz,
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      }),
+  ).format(instant);
 
 function offsetMs(instant: number, tz: string) {
-  const p = Object.fromEntries(partsFmt(tz).formatToParts(instant).map((x) => [x.type, x.value]));
+  const p = Object.fromEntries(
+    partsFmt(tz)
+      .formatToParts(instant)
+      .map((x) => [x.type, x.value]),
+  );
   const asUtc = Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute, +p.second);
   return asUtc - instant;
 }
 
 /** Wall-clock time in `tz` -> UTC instant. */
-function zonedToInstant(civil: string, hour: number, tz: string) {
+export function zonedToInstant(civil: string, hour: number, tz: string) {
   const [y, m, d] = civil.split("-").map(Number);
   const guess = Date.UTC(y, m - 1, d, hour);
   const off = offsetMs(guess, tz);
@@ -75,7 +118,7 @@ export function firstMonday(todayCivil: string) {
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export function buildWeek({ seed, teacherTz, viewerTz, monday, now }: { seed: string; teacherTz: string; viewerTz: string; monday: string; now: number }): SlotDay[] {
-  return [0, 1, 2, 3, 4].map((i) => {
+  return [0, 1, 2, 3, 4, 5, 6].map((i) => {
     const date = addDays(monday, i);
     const candidates: Slot[] = [];
     // A teacher-local day can spill into the previous/next viewer day.
@@ -101,8 +144,37 @@ export function buildWeek({ seed, teacherTz, viewerTz, monday, now }: { seed: st
       candidates.length <= SLOTS_PER_DAY
         ? candidates
         : Array.from({ length: SLOTS_PER_DAY }, (_, k) => candidates[Math.round((k * (candidates.length - 1)) / (SLOTS_PER_DAY - 1))]);
-    return { date, weekday: WEEKDAYS[weekdayOf(date)], dayOfMonth: Number(date.slice(8, 10)), slots: picked };
+    return {
+      date,
+      weekday: WEEKDAYS[weekdayOf(date)],
+      dayOfMonth: Number(date.slice(8, 10)),
+      slots: picked,
+    };
   });
 }
 
 export { addDays };
+
+/** Groups API slots (UTC instants) into the 7 viewer-local days starting on `monday`. */
+export function groupApiSlots(startsAt: string[], viewerTz: string, monday: string): SlotDay[] {
+  const days: SlotDay[] = [0, 1, 2, 3, 4, 5, 6].map((i) => {
+    const date = addDays(monday, i);
+    return {
+      date,
+      weekday: WEEKDAYS[weekdayOf(date)],
+      dayOfMonth: Number(date.slice(8, 10)),
+      slots: [],
+    };
+  });
+  for (const iso of startsAt) {
+    const instant = Date.parse(iso);
+    const day = days.find((d) => d.date === civilDate(instant, viewerTz));
+    day?.slots.push({
+      iso: new Date(instant).toISOString(),
+      instant,
+      label: timeLabel(instant, viewerTz),
+      booked: false,
+    });
+  }
+  return days;
+}

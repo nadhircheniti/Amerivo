@@ -26,6 +26,16 @@ const slugify = (s: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
+/** E-mails listed in ADMIN_EMAILS (comma-separated) become admins when they register with that verified address. */
+export function isAdminEmail(email: string | undefined, list = process.env.ADMIN_EMAILS ?? "") {
+  if (!email) return false;
+  const wanted = email.trim().toLowerCase();
+  return list
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .some((e) => e && e === wanted);
+}
+
 @Injectable()
 export class AccountsService {
   constructor(
@@ -40,12 +50,19 @@ export class AccountsService {
     } catch {
       throw badRequest("Invalid time zone");
     }
+    const [existing] = await this.db.select({ id: users.id }).from(users).where(eq(users.clerkId, clerkId));
+    if (existing) throw conflict("Account already exists");
+    if (emailVerified && isAdminEmail(input.email)) {
+      const [admin] = await this.db
+        .insert(users)
+        .values({ clerkId, ...input, birthDate: input.birthDate ?? null, role: "admin", status: "active" })
+        .returning();
+      return admin;
+    }
     if (input.role === "student") {
       if (!input.birthDate) throw badRequest("Date of birth is required");
       if (!isOldEnough(input.birthDate, this.clock.now())) throw badRequest(`You must be at least ${MIN_STUDENT_AGE} years old to use Amerivo`);
     }
-    const [existing] = await this.db.select({ id: users.id }).from(users).where(eq(users.clerkId, clerkId));
-    if (existing) throw conflict("Account already exists");
     return this.db.transaction(async (tx) => {
       const [u] = await tx
         .insert(users)

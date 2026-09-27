@@ -9,11 +9,7 @@ export function Card({ className, ...props }: ComponentProps<"div">) {
 
 /* ---------- Eyebrow (small uppercase label) ---------- */
 export function Eyebrow({ children, className, onDark = false }: { children: ReactNode; className?: string; onDark?: boolean }) {
-  return (
-    <span className={cn("font-display text-[13px] font-semibold tracking-[4px] uppercase", onDark ? "text-yellow" : "text-teal-dark", className)}>
-      {children}
-    </span>
-  );
+  return <span className={cn("font-display text-[13px] font-semibold tracking-[4px] uppercase", onDark ? "text-yellow" : "text-teal-dark", className)}>{children}</span>;
 }
 
 /* ---------- Badge / status pill ---------- */
@@ -79,8 +75,8 @@ export function Rating({ value, className, size = 16 }: { value: number; classNa
   return (
     <span className={cn("inline-flex items-center gap-1 font-semibold", className)}>
       <Icon name="star" size={size} className="text-orange" />
-      {value.toFixed(1)}
-      <span className="sr-only"> out of 5</span>
+      {value > 0 ? value.toFixed(1) : "New"}
+      {value > 0 && <span className="sr-only"> out of 5</span>}
     </span>
   );
 }

@@ -23,7 +23,7 @@ export default function LoginPage() {
           <h1 className="text-[28px] font-extrabold sm:text-[34px]">Welcome back</h1>
           <p className="text-base text-navy-soft">Log in to book lessons and join your classroom.</p>
         </div>
-        <SocialButtons next="/student" />
+        <SocialButtons mode="login" />
         <OrDivider />
         <LoginForm />
         <p className="text-center text-sm text-muted">

@@ -23,7 +23,7 @@ export default function SignupPage() {
         <h1 className="text-[28px] font-extrabold sm:text-[34px]">Create your student account</h1>
         <p className="text-base text-navy-soft">It takes less than a minute.</p>
       </div>
-      <SocialButtons next="/onboarding/goals" />
+      <SocialButtons mode="signup" />
       <OrDivider />
       <SignupForm />
       <p className="text-center text-sm text-muted">

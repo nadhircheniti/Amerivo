@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/cn";
 import { Logo } from "@/components/ui/logo";
-import { ButtonLink } from "@/components/ui/button";
+import { HeaderAuth } from "./auth-nav";
 
 const nav = [
   { href: "/", label: "Home" },
@@ -36,12 +36,7 @@ export function SiteHeader({ translucent = false }: { translucent?: boolean }) {
           ))}
         </nav>
         <div className="ml-auto flex items-center gap-5 lg:ml-0">
-          <Link href="/login" className="font-medium text-navy hover:text-teal-dark">
-            Log In
-          </Link>
-          <ButtonLink href="/signup" size="sm" className="px-6 font-semibold">
-            Get Started
-          </ButtonLink>
+          <HeaderAuth />
         </div>
       </div>
     </header>

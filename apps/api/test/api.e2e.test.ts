@@ -26,7 +26,9 @@ process.env.DAILY_DOMAIN = "amerivo.daily.co";
 const clock = { t: new Date("2026-10-01T00:00:00Z"), now() { return this.t; }, set(iso: string) { this.t = new Date(iso); } };
 
 const stripeCalls = { intents: 0, refunds: [] as { pi: string; amount: number }[], transfers: [] as { account: string; amount: number }[] };
+let stripeConfigured = true;
 const fakeStripe = {
+  isConfigured: () => stripeConfigured,
   createPaymentIntent: async (p: { amountCents: number }) => ({ id: `pi_${++stripeCalls.intents}`, client_secret: `secret_${stripeCalls.intents}`, amount: p.amountCents }),
   refund: async (pi: string, amount: number) => { stripeCalls.refunds.push({ pi, amount }); return { id: `re_${stripeCalls.refunds.length}` }; },
   transferToTeacher: async (p: { accountId: string; amountCents: number }) => { stripeCalls.transfers.push({ account: p.accountId, amount: p.amountCents }); return { id: `tr_${stripeCalls.transfers.length}` }; },
@@ -140,7 +142,9 @@ describe("Amerivo API", () => {
     assert.equal(dup.body.duplicate, true);
 
     const upcoming = await http().get("/api/bookings").set(as("clerk_maria")).expect(200);
-    assert.equal(upcoming.body.find((b: { id: string }) => b.id === singleId).status, "confirmed");
+    const single = upcoming.body.find((b: { id: string }) => b.id === singleId);
+    assert.equal(single.status, "confirmed");
+    assert.equal(single.withFirstName, "Sarah");
     const notes = await db.select().from(schema.notifications).where(eq(schema.notifications.userId, ids.sarah));
     assert.ok(notes.some((n) => n.type === "new_booking"));
   });
@@ -245,11 +249,34 @@ describe("Amerivo API", () => {
     assert.match(missing.body.message, /introduction video/);
   });
 
+  it("staging without Stripe: PAYMENTS_SIMULATED confirms bookings immediately", async () => {
+    stripeConfigured = false;
+    process.env.PAYMENTS_SIMULATED = "1";
+    clock.set("2026-10-20T00:00:00Z");
+    const res = await http().post("/api/bookings").set(as("clerk_maria")).send({ teacherSlug: "sarah-mitchell", offer: "single", startsAt: "2026-10-28T17:00:00.000Z" }).expect(201);
+    assert.equal(res.body.booking.status, "confirmed");
+    assert.equal(res.body.payment.simulated, true);
+    delete process.env.PAYMENTS_SIMULATED;
+    const without = await http().post("/api/bookings").set(as("clerk_maria")).send({ teacherSlug: "sarah-mitchell", offer: "single", startsAt: "2026-10-28T16:00:00.000Z" }).expect(201);
+    assert.equal(without.body.booking.status, "pending_payment", "without the flag nothing is auto-confirmed");
+    stripeConfigured = true;
+    clock.set("2026-10-15T17:00:00Z");
+  });
+
   it("admin analytics", async () => {
     const a = await http().get("/api/admin/analytics?days=60").set(as("clerk_admin")).expect(200);
     assert.equal(a.body.totalTeachers, 1);
     assert.equal(a.body.lessonsCompleted, 1);
     assert.ok(a.body.revenueCents >= 3500 + 16625);
     assert.equal(a.body.commissionCents, 700);
+  });
+
+  it("ADMIN_EMAILS: a listed, verified e-mail registers as admin (no date of birth needed)", async () => {
+    process.env.ADMIN_EMAILS = "owner@amerivo.test, other@amerivo.test";
+    const res = await http().post("/api/me/register").set(as("clerk_owner")).send({ role: "student", email: "Owner@amerivo.test", firstName: "Olivia", lastName: "Owner", timezone: "Europe/Zurich" }).expect(201);
+    assert.equal(res.body.role, "admin");
+    await http().get("/api/admin/analytics?days=30").set(as("clerk_owner")).expect(200);
+    delete process.env.ADMIN_EMAILS;
+    await http().post("/api/me/register").set(as("clerk_other")).send({ role: "student", email: "other@amerivo.test", firstName: "O", lastName: "T", timezone: "Europe/Zurich" }).expect(400);
   });
 });
