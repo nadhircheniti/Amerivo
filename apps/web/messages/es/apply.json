@@ -150,7 +150,6 @@
     "timeZoneHint": "Se usa para mostrar tu disponibilidad a los estudiantes en su hora local.",
     "gender": "Género",
     "genderHint": "Algunos estudiantes filtran por el género del profesor que prefieren. Puedes cambiarlo más adelante.",
-    "photoLater": "Agregarás tu foto de perfil más adelante.",
     "emailHint": "La dirección de correo electrónico de tu cuenta.",
     "selectCountry": "Selecciona tu país"
   },
@@ -176,8 +175,7 @@
     "bioCount": "{count} / {max}",
     "bioPlaceholder": "Cuéntales a los estudiantes sobre ti y cómo es una clase contigo.",
     "selectEducation": "Selecciona tu nivel de estudios más alto",
-    "certificationsPlaceholder": "p. ej., TESOL",
-    "certificatesLater": "Agregarás los archivos de tus certificados más adelante."
+    "certificationsPlaceholder": "p. ej., TESOL"
   },
   "previews": {
     "label": "Lo que sigue",

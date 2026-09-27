@@ -7,6 +7,7 @@ import { Field, Input, Textarea } from "@/components/ui/form";
 import { Icon } from "@/components/ui/icon";
 import { Card, Eyebrow } from "@/components/ui/primitives";
 import { intlTags, type Locale } from "@/i18n/config";
+import { ApiError } from "@/lib/api";
 import { cn } from "@/lib/cn";
 import type { ReportDraft, ReportLesson } from "../_data";
 
@@ -24,11 +25,21 @@ function formatDate(iso: string, tag: string) {
   return Number.isNaN(d.getTime()) ? null : new Intl.DateTimeFormat(tag, { month: "short", day: "numeric", timeZone: "UTC" }).format(d);
 }
 
-export function ReportForm({ lesson }: { lesson: ReportLesson }) {
+/** Live mode: how the report is saved (demo mode: nothing is sent). */
+export type ReportLive = {
+  /** Attendance was recorded when the lesson ended ("End lesson" in the classroom). */
+  attendanceLocked: boolean;
+  send: (r: ReportDraft) => Promise<void>;
+  /** Local draft storage key (this browser only). */
+  draftKey: string;
+};
+
+export function ReportForm({ lesson, live }: { lesson: ReportLesson; live?: ReportLive }) {
   const t = useTranslations("teacher.report");
   const tag = intlTags[useLocale() as Locale];
   const [r, setR] = useState<ReportDraft>(lesson.draft);
-  const [status, setStatus] = useState<"editing" | "draft-saved" | "sent">("editing");
+  const [status, setStatus] = useState<"editing" | "draft-saved" | "sending" | "sent">("editing");
+  const [error, setError] = useState("");
   const set = <K extends keyof ReportDraft>(key: K, value: ReportDraft[K]) => {
     setR((cur) => ({ ...cur, [key]: value }));
     if (status === "draft-saved") setStatus("editing");
@@ -36,11 +47,37 @@ export function ReportForm({ lesson }: { lesson: ReportLesson }) {
   const first = lesson.student.firstName;
   const due = formatDate(r.dueDate, tag);
 
-  function send(e: FormEvent) {
+  async function send(e: FormEvent) {
     e.preventDefault();
-    // TODO(api): POST the report; the student summary + review request are sent by apps/api.
+    if (live) {
+      setStatus("sending");
+      setError("");
+      try {
+        await live.send(r);
+      } catch (err) {
+        setError(err instanceof ApiError && err.status ? err.message : t("sendError"));
+        setStatus("editing");
+        return;
+      }
+      try {
+        localStorage.removeItem(live.draftKey);
+      } catch {
+        /* storage unavailable */
+      }
+    }
     setStatus("sent");
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function saveDraft() {
+    if (live) {
+      try {
+        localStorage.setItem(live.draftKey, JSON.stringify(r));
+      } catch {
+        /* storage unavailable: the draft stays on screen */
+      }
+    }
+    setStatus("draft-saved");
   }
 
   if (status === "sent") {
@@ -65,13 +102,15 @@ export function ReportForm({ lesson }: { lesson: ReportLesson }) {
           <Eyebrow className="text-xs tracking-[3px]">{t("eyebrow")}</Eyebrow>
           <h1 className="text-[28px] font-extrabold">{t("title")}</h1>
           <p className="text-[15px] text-muted">
-            {t("meta", {
-              name: lesson.student.name,
-              date: formatDate(lesson.date, tag) ?? "",
-              minutes: lesson.durationMin,
-              lessons: lesson.returning.lessons,
-              hours: lesson.returning.hours.toLocaleString(tag),
-            })}
+            {lesson.returning.lessons > 0
+              ? t("meta", {
+                  name: lesson.student.name,
+                  date: formatDate(lesson.date, tag) ?? "",
+                  minutes: lesson.durationMin,
+                  lessons: lesson.returning.lessons,
+                  hours: lesson.returning.hours.toLocaleString(tag),
+                })
+              : t("metaNew", { name: lesson.student.name, date: formatDate(lesson.date, tag) ?? "", minutes: lesson.durationMin })}
           </p>
         </div>
 
@@ -82,33 +121,34 @@ export function ReportForm({ lesson }: { lesson: ReportLesson }) {
               key={o.value}
               className="flex cursor-pointer items-center gap-2 rounded-full border border-line px-4 py-2.5 text-sm has-[:checked]:border-2 has-[:checked]:border-teal-dark has-[:checked]:bg-teal-50 has-[:checked]:font-semibold has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-teal"
             >
-              <input type="radio" name="attendance" value={o.value} checked={r.attendance === o.value} onChange={() => set("attendance", o.value)} />
+              <input type="radio" name="attendance" value={o.value} checked={r.attendance === o.value} disabled={live?.attendanceLocked} onChange={() => set("attendance", o.value)} />
               {t(o.label)}
             </label>
           ))}
+          {live?.attendanceLocked && <p className="w-full text-[13px] text-muted">{t("attendanceLocked")}</p>}
         </fieldset>
 
         <Field label={t("topics")}>
-          <Textarea rows={2} value={r.topics} onChange={(e) => set("topics", e.target.value)} />
+          <Textarea rows={2} required maxLength={2000} value={r.topics} onChange={(e) => set("topics", e.target.value)} />
         </Field>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label={t("strengths")}>
-            <Textarea rows={3} value={r.strengths} onChange={(e) => set("strengths", e.target.value)} />
+            <Textarea rows={3} maxLength={2000} value={r.strengths} onChange={(e) => set("strengths", e.target.value)} />
           </Field>
           <Field label={t("development")}>
-            <Textarea rows={3} value={r.development} onChange={(e) => set("development", e.target.value)} />
+            <Textarea rows={3} maxLength={2000} value={r.development} onChange={(e) => set("development", e.target.value)} />
           </Field>
         </div>
         <div className="grid gap-4 sm:grid-cols-[2fr_1fr]">
           <Field label={t("homework")}>
-            <Textarea rows={2} value={r.homework} onChange={(e) => set("homework", e.target.value)} />
+            <Textarea rows={2} maxLength={2000} value={r.homework} onChange={(e) => set("homework", e.target.value)} />
           </Field>
           <Field label={t("dueDate")}>
             <Input type="date" value={r.dueDate} onChange={(e) => set("dueDate", e.target.value)} className="h-12 text-sm" />
           </Field>
         </div>
         <Field label={t("recommendation")}>
-          <Textarea rows={2} value={r.recommendation} onChange={(e) => set("recommendation", e.target.value)} />
+          <Textarea rows={2} maxLength={2000} value={r.recommendation} onChange={(e) => set("recommendation", e.target.value)} />
         </Field>
 
         <fieldset className="flex flex-col gap-3 rounded-2xl bg-beige p-[18px]">
@@ -141,6 +181,11 @@ export function ReportForm({ lesson }: { lesson: ReportLesson }) {
 
         <div className="mt-2 flex flex-wrap items-center justify-end gap-3">
           <span role="status" className="me-auto text-sm text-teal-deep">
+            {error && (
+              <span role="alert" className="text-danger-text">
+                {error}
+              </span>
+            )}
             {status === "draft-saved" && (
               <span className="flex items-center gap-1.5">
                 <Icon name="check" size={16} strokeWidth={2.4} />
@@ -148,12 +193,12 @@ export function ReportForm({ lesson }: { lesson: ReportLesson }) {
               </span>
             )}
           </span>
-          {/* TODO(api): persist the draft. */}
-          <Button variant="outline" className="h-[52px]" onClick={() => setStatus("draft-saved")}>
+          {/* Live mode keeps the draft in this browser until the report is sent. */}
+          <Button variant="outline" className="h-[52px]" onClick={saveDraft} disabled={status === "sending"}>
             {t("saveDraft")}
           </Button>
-          <Button type="submit" variant="teal" className="h-[52px] px-7 font-bold">
-            {t("send", { name: first })}
+          <Button type="submit" variant="teal" className="h-[52px] px-7 font-bold" disabled={status === "sending"}>
+            {status === "sending" ? t("sending") : t("send", { name: first })}
           </Button>
         </div>
       </form>

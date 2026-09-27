@@ -11,57 +11,88 @@
     "userSubtitle": "学生 · {level} 级"
   },
   "backToOverview": "返回概览",
-  "comingSoon": {
-    "lessons": {
-      "title": "我的课程",
-      "description": "你的完整课表、历史课程和课后报告将显示在这里。"
+  "states": {
+    "loading": "加载中…",
+    "errorTitle": "无法加载此页面",
+    "errorText": "服务可能正在启动，最多需要一分钟。请重试。",
+    "tryAgain": "重试",
+    "studentsOnlyTitle": "仅限学生账户",
+    "studentsOnly": "此页面显示学生本人的课程和数据。请使用学生账户登录后查看。",
+    "close": "关闭"
+  },
+  "join": {
+    "join": "进入课堂",
+    "opensSoon": "课前 10 分钟开放",
+    "opensAt": "{time} 开放",
+    "opensOn": "{date} {time} 开放"
+  },
+  "cancel": {
+    "button": "取消",
+    "title": "要取消这节课吗？",
+    "lesson": "与{name}的课程 · {date} · {time}",
+    "outcome": {
+      "unpaid": "这节课尚未付款，不会向你收取任何费用。",
+      "money": "你将获得 {amount} 的全额退款，退回原支付方式。",
+      "packageCredit": "这节课将退回你与{name}的课时包，你可以重新预约。",
+      "free": "这节免费课程将直接取消。",
+      "late": "距离上课已不足 24 小时，因此无法退款。"
     },
-    "homework": {
-      "title": "作业",
-      "description": "所有已布置、待完成和已完成的作业，一目了然。"
-    },
-    "progress": {
-      "title": "学习进度",
-      "description": "查看你的水平变化、学习时长和各项技能的成长。"
-    },
-    "payments": {
-      "title": "付款",
-      "description": "发票、付款记录和你的课时包。"
-    },
-    "settings": {
-      "title": "设置",
-      "description": "个人资料、通知、时区和密码。"
-    }
+    "freeUntil": "{date} {time} 前可免费取消。",
+    "policy": "提前 24 小时以上取消的课程可全额退款。",
+    "reason": "原因（选填）",
+    "reasonPlaceholder": "告诉老师取消的原因",
+    "keep": "保留课程",
+    "confirm": "取消课程",
+    "cancelling": "正在取消…"
   },
   "overview": {
     "metaTitle": "概览",
-    "greeting": "晚上好，{name}",
+    "booked": "课程预约成功！你可以在下方看到它，并会收到一封确认邮件。",
+    "greeting": {
+      "morning": "早上好，{name}",
+      "afternoon": "下午好，{name}",
+      "evening": "晚上好，{name}"
+    },
     "encouragement": "继续加油——你离 {level} 越来越近了。",
-    "notifications": "通知（有新消息）",
+    "encouragementGeneric": "每一节课都算数。继续保持！",
     "bookLesson": "预约课程",
     "nextLesson": {
       "eyebrow": "下一节课 · {minutes} 分钟后开始",
-      "title": "{name}老师的{subject}课",
-      "details": "今天 · {time}（你的时间）· 主题：{topic}",
-      "join": "进入课堂"
+      "eyebrowNow": "正在上课",
+      "eyebrowToday": "下一节课 · 今天",
+      "eyebrowPlain": "下一节课",
+      "eyebrowNone": "下一节课",
+      "details": "{day} · {time}（你的时间）· 主题：{topic}",
+      "detailsNoTopic": "{day} · {time}（你的时间）",
+      "noneTitle": "还没有预约课程",
+      "noneText": "选择一位老师，预约适合你的时间。",
+      "findTeacher": "寻找老师"
     },
     "stats": {
       "label": "你的进度",
       "hoursStudied": "学习时长（小时）",
       "hoursHint": "本月 +{hours}",
+      "hoursNone": "本月还没有上课",
       "lessonsCompleted": "已完成课程",
       "withTeachers": "{count, plural, other {跟随 # 位老师}}",
+      "noLessonsYet": "你的第一节课正在等你",
       "levelProgress": "等级进度",
-      "levelProgressAria": "从 {from} 到 {to} 的进度",
+      "levelScaleAria": "当前等级 {level}（等级范围 A1 至 C2）",
+      "takeTest": "参加水平测试",
       "currentPlan": "当前方案",
       "pack": "{count} 节课时包",
-      "lessonsLeft": "{count, plural, other {剩余 # 节课}}"
+      "lessonsLeftWith": "{count, plural, other {与{name}还剩 # 节课}}",
+      "morePacks": "{count, plural, other {另有 # 个课时包}}",
+      "payAsYouGo": "按节付费",
+      "noPack": "没有生效中的课时包"
     },
     "upcoming": {
       "title": "即将开始的课程",
-      "viewCalendar": "查看日历",
-      "reschedule": "改期",
-      "rescheduleAria": "将与{name}的课程（{date}）改期",
+      "viewAll": "全部课程",
+      "noOthers": "这节课之后暂无其他预约。",
+      "empty": "暂无即将开始的课程。",
+      "manage": "管理",
+      "manageAria": "管理与{name}的课程（{date}）",
       "nextTeacher": "<strong>下一位老师？</strong>继续跟{name}学习，或者试试新老师。",
       "bookName": "预约{name}",
       "browse": "浏览"
@@ -70,24 +101,291 @@
       "title": "上节课总结",
       "openReport": "查看报告",
       "strengths": "优点",
-      "toWorkOn": "待提高"
+      "toWorkOn": "待提高",
+      "empty": "每节课后，老师都会发送一份简短总结，届时会显示在这里。"
     },
     "payments": {
       "title": "付款",
-      "allInvoices": "全部发票",
+      "allPayments": "全部付款",
+      "empty": "暂无付款记录。",
       "free": "免费",
       "pack": "{count} 节课时包 · {teacher}",
       "single": "单节课 · {teacher}",
-      "trial": "试听课 · {teacher}"
+      "trial": "试听课 · {teacher}",
+      "package": "课时包课程 · {teacher}",
+      "refunded": "已退款 {amount}"
     }
+  },
+  "lessons": {
+    "title": "我的课程",
+    "description": "已预约的课程、过往课程以及老师的课程报告。",
+    "bookLesson": "预约课程",
+    "tabsLabel": "显示课程",
+    "tabs": {
+      "upcoming": "即将开始",
+      "past": "已结束和已取消"
+    },
+    "cancelled": {
+      "money": "课程已取消。{amount} 将退回你的原支付方式。",
+      "packageCredit": "课程已取消，课时已退回你的课时包。",
+      "none": "课程已取消。"
+    },
+    "empty": {
+      "upcomingTitle": "暂无即将开始的课程",
+      "upcomingText": "选择一位老师预约下一节课，它会显示在这里。",
+      "pastTitle": "还没有过往课程",
+      "pastText": "上完第一节课后，你可以在这里找到它和老师的报告。"
+    },
+    "findTeacher": "寻找老师",
+    "timeZoneNote": "时间按你的时区（{tz}）显示。",
+    "with": {
+      "trial": "{name}老师的试听课",
+      "single": "{name}老师的课程",
+      "package": "{name}老师的课时包课程"
+    },
+    "withFull": {
+      "trial": "试听课 · {name}",
+      "single": "课程 · {name}",
+      "package": "课时包课程 · {name}"
+    },
+    "status": {
+      "pending_payment": "待付款",
+      "confirmed": "已确认",
+      "completed": "已完成",
+      "cancelled": "已取消",
+      "refunded": "已取消 · 已退款",
+      "no_show": "缺席"
+    },
+    "minutes": "{count} 分钟",
+    "cancelledByTeacher": "老师已取消",
+    "cancelledByAdmin": "Amerivo 已取消",
+    "reportReady": "报告",
+    "viewReport": "查看报告",
+    "details": "详情",
+    "review": "写评价",
+    "reviewTitle": "你和{name}的这节课怎么样？",
+    "bookAgain": "再次预约"
   },
   "homework": {
     "title": "作业",
+    "description": "老师布置的所有作业，集中在这里。",
     "status": "待完成 {pending} · 已完成 {done}",
     "completed": "已完成",
+    "submitted": "已提交",
+    "dueToday": "今天截止",
     "dueTomorrow": "明天截止",
     "dueOn": "{date}截止",
-    "from": "{due} · 来自{teacher}"
+    "overdue": "已逾期 · {date}",
+    "noDueDate": "无截止日期",
+    "from": "{due} · 来自{teacher}",
+    "fromTeacher": "来自{name}",
+    "lessonOf": "{date}的课程",
+    "allDone": "全部完成——没有待做的作业。",
+    "seeAll": "全部作业",
+    "fromThisLesson": "本节课的作业",
+    "filterLabel": "显示作业",
+    "filters": {
+      "todo": "待完成（{count}）",
+      "done": "已完成（{count}）",
+      "all": "全部"
+    },
+    "empty": {
+      "title": "暂无作业",
+      "text": "老师在课后布置作业时，会显示在这里。",
+      "allDoneTitle": "全部完成！",
+      "allDoneText": "你已完成所有作业，做得好。"
+    },
+    "markDone": "标记为已完成",
+    "markNotDone": "标记为未完成"
+  },
+  "lesson": {
+    "metaTitle": "课程总结",
+    "backToLessons": "返回我的课程",
+    "eyebrow": "课程总结",
+    "eyebrowLesson": "课程",
+    "niceWork": "表现很棒，{name}！",
+    "niceWorkNoName": "表现很棒！",
+    "meta": "{teacher} · {date} · {minutes} 分钟 · {topic}",
+    "metaNoTopic": "{teacher} · {date} · {minutes} 分钟",
+    "homework": "作业",
+    "homeworkDue": "作业 · {date}截止",
+    "nextRecommendation": "下节课建议",
+    "strengths": "优点",
+    "toWorkOn": "待提高",
+    "noReport": "{name}还没有发送课程总结。总结准备好后你会收到通知。",
+    "howWas": "你和{name}的这节课怎么样？",
+    "reviewedOn": "评价于 {date}",
+    "noReviewNoShow": "只有实际上过的课程才能评价。",
+    "cancelledText": "这节课已取消。",
+    "bookNext": "继续预约{name}",
+    "tryAnother": "试试其他老师"
+  },
+  "dispute": {
+    "title": "遇到问题了吗？",
+    "intro": "如果这节课出现问题（老师未出席、技术故障等），请在 {date} {time} 前告诉我们。我们的团队会进行审核。",
+    "button": "反馈问题",
+    "dialogTitle": "反馈问题",
+    "dialogText": "请描述发生了什么。Amerivo 管理员会审核你的反馈，并可能为这节课退款。",
+    "reason": "发生了什么？",
+    "reasonHint": "至少 10 个字符。",
+    "reasonPlaceholder": "例如：老师迟到了 25 分钟，课程被缩短。",
+    "back": "返回",
+    "send": "提交反馈",
+    "sending": "正在提交…",
+    "reportedTitle": "问题已反馈",
+    "status": {
+      "open": "审核中",
+      "refunded": "已退款",
+      "rejected": "已关闭"
+    },
+    "statusText": {
+      "open": "感谢告知。我们的团队正在审核你的反馈。",
+      "refunded": "你的反馈已被受理，这节课已退款。",
+      "rejected": "我们的团队已审核你的反馈，并在未退款的情况下关闭。"
+    },
+    "resolution": "我们的答复：{text}",
+    "sentOn": "反馈于 {date}"
+  },
+  "review": {
+    "labels": {
+      "poor": "很差",
+      "fair": "一般",
+      "good": "不错",
+      "veryGood": "很好",
+      "excellent": "非常棒"
+    },
+    "thanks": "感谢你的评价！",
+    "rated": "你给这节课打了 {rating} 分（满分 5 分）。",
+    "willAppear": "你的评价将显示在{name}的公开主页上。",
+    "helps": "你的评分能帮助{name}和其他学生。",
+    "legend": "评分",
+    "starOption": "{count, plural, other {# 星}} – {label}",
+    "tapToRate": "点击星星进行评分",
+    "writeReview": "写评价（选填）",
+    "placeholder": "你喜欢这节课的哪些方面？评价将显示在{name}的公开主页上。",
+    "submit": "提交评价",
+    "sending": "正在提交…"
+  },
+  "progress": {
+    "title": "学习进度",
+    "description": "你的水平、课程以及老师的观察。",
+    "statsLabel": "进度数据",
+    "totalHours": "学习时长（小时）",
+    "thisMonth": "本月 {hours} 小时",
+    "lessonsCompleted": "已完成课程",
+    "teachers": "老师",
+    "currentLevel": "当前等级",
+    "nextGoal": "下一个目标：{level}",
+    "levelTitle": "你的水平",
+    "scaleAria": "欧洲语言共同参考框架（CEFR），当前等级 {level}",
+    "skillsTitle": "水平测试各项技能",
+    "skills": {
+      "grammar": "语法",
+      "reading": "阅读",
+      "listening": "听力",
+      "speaking": "口语"
+    },
+    "source": {
+      "placement": "注册时填写的水平",
+      "placement_test": "水平测试"
+    },
+    "noLevel": "参加简短的水平测试，了解你的水平并跟踪进步。",
+    "takeTest": "参加水平测试",
+    "perMonthTitle": "每月课程数",
+    "lessonsCount": "{count}",
+    "perMonthCaption": "最近 6 个月完成的课程。",
+    "reportsTitle": "老师的课程报告",
+    "noReports": "暂无报告。每节课后，老师会发送一份总结，包括你的优点和需要提高的地方。",
+    "openReport": "查看",
+    "strengths": "优点",
+    "toWorkOn": "待提高",
+    "recommendation": "建议"
+  },
+  "payments": {
+    "title": "付款",
+    "description": "你的付款记录和课时包。",
+    "totalsLabel": "合计",
+    "totalSpent": "累计支付",
+    "totalRefunded": "已退款",
+    "lessonsInPacks": "课时包剩余课程",
+    "lessonsInPacksHint": "已付款，可随时预约",
+    "packsTitle": "课时包",
+    "noPacks": "你还没有课时包。购买 5 节或 10 节课时包可享受折扣。",
+    "packWith": "{count} 节课时包 · {name}",
+    "boughtOn": "购买于 {date} · {amount}",
+    "packStatus": {
+      "pending_payment": "待付款",
+      "active": "生效中",
+      "exhausted": "已用完",
+      "refunded": "已退款",
+      "expired": "已过期"
+    },
+    "usedAria": "已预约 {used}/{total} 节课",
+    "remaining": "{count, plural, =0 {没有剩余课程} other {还可预约 # 节课}}",
+    "bookFromPack": "预约课程",
+    "historyTitle": "付款记录",
+    "emptyTitle": "暂无付款记录",
+    "emptyText": "你的付款和退款会显示在这里。",
+    "colDate": "日期",
+    "colWhat": "说明",
+    "colStatus": "状态",
+    "colAmount": "金额",
+    "note": "所有价格均以美元（USD）计价。银行卡付款由 Stripe 安全处理。",
+    "what": {
+      "package": "{count} 节课时包 · {name}",
+      "trial": "试听课 · {name}",
+      "single": "单节课 · {name}"
+    },
+    "lessonOn": "{date}的课程",
+    "status": {
+      "requires_payment": "待处理",
+      "succeeded": "已支付",
+      "failed": "失败",
+      "refunded": "已退款",
+      "partially_refunded": "部分退款"
+    },
+    "refunded": "已退款 {amount}"
+  },
+  "settings": {
+    "title": "设置",
+    "description": "你的个人资料、时区、语言和账户。",
+    "profileTitle": "个人资料",
+    "firstName": "名",
+    "lastName": "姓",
+    "email": "电子邮箱",
+    "emailHint": "这是你的登录邮箱，无法在此修改。",
+    "phone": "电话（选填）",
+    "country": "国家/地区",
+    "countryPlaceholder": "选择你的国家/地区",
+    "nativeLanguage": "母语",
+    "nativeLanguagePlaceholder": "选择你的母语",
+    "timezone": "时区",
+    "timezoneHint": "课程时间将按此时区显示。",
+    "useDeviceTz": "使用此设备的时区（{tz}）",
+    "namesRequired": "请填写你的名和姓。",
+    "save": "保存更改",
+    "saving": "正在保存…",
+    "saved": "更改已保存",
+    "languageTitle": "界面语言",
+    "languageText": "选择 Amerivo 网站的显示语言。你的课程仍然用英语上课！",
+    "delete": {
+      "title": "删除我的账户",
+      "text": "永久删除你的 Amerivo 账户和个人数据。",
+      "button": "删除我的账户",
+      "dialogTitle": "要删除你的账户吗？",
+      "consequence1": "你的姓名、邮箱、电话和个人资料将被清除，且无法恢复。",
+      "consequence2": "课时包中剩余的课程将作废。",
+      "consequence3": "必须先取消即将开始的课程。",
+      "consequence4": "付款记录将以匿名方式保留，以满足财务要求。",
+      "understand": "我明白我的账户将被永久删除。",
+      "confirmWord": "删除",
+      "typeToConfirm": "输入“{word}”以确认",
+      "hasLessons": "你还有即将开始的课程，请先取消。",
+      "goToLessons": "前往我的课程",
+      "keep": "保留我的账户",
+      "confirm": "永久删除",
+      "deleting": "正在删除…"
+    }
   },
   "live": {
     "booked": "课程预约成功！你可以在下方看到它，确认邮件也会发送到你的邮箱。",
@@ -111,39 +409,6 @@
     "timeZoneNote": "时间按你所在的时区显示（{tz}）。",
     "classroom": "进入课堂",
     "emptyTeacher": "暂无即将开始的课程。新的预约会显示在这里。"
-  },
-  "lesson": {
-    "metaTitle": "课程总结",
-    "eyebrow": "课程总结",
-    "niceWork": "今天表现很棒，{name}！",
-    "meta": "{teacher} · {date} · {minutes} 分钟 · {topic}",
-    "srLesson": "（课程 {id}）",
-    "homeworkDue": "作业 · {date}截止",
-    "nextRecommendation": "下节课建议",
-    "strengths": "优点",
-    "toWorkOn": "待提高",
-    "howWas": "你和{name}的这节课怎么样？",
-    "bookNext": "继续预约{name}",
-    "tryAnother": "试试其他老师"
-  },
-  "review": {
-    "labels": {
-      "poor": "很差",
-      "fair": "一般",
-      "good": "不错",
-      "veryGood": "很好",
-      "excellent": "非常棒"
-    },
-    "thanks": "感谢你的评价！",
-    "rated": "你给这节课打了 {rating} 分（满分 5 分）。",
-    "willAppear": "你的评价将显示在{name}的公开主页上。",
-    "helps": "你的评分能帮助{name}和其他学生。",
-    "legend": "评分",
-    "starOption": "{count, plural, other {# 星}} – {label}",
-    "tapToRate": "点击星星进行评分",
-    "writeReview": "写评价（选填）",
-    "placeholder": "你喜欢这节课的哪些方面？评价将显示在{name}的公开主页上。",
-    "submit": "提交评价"
   },
   "messages": {
     "metaTitle": "消息",

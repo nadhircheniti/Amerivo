@@ -11,57 +11,88 @@
     "userSubtitle": "Estudiante · Nivel {level}"
   },
   "backToOverview": "Volver al resumen",
-  "comingSoon": {
-    "lessons": {
-      "title": "Mis clases",
-      "description": "Aquí verás tu calendario completo de clases, tus clases anteriores y sus informes."
+  "states": {
+    "loading": "Cargando…",
+    "errorTitle": "No pudimos cargar esta página",
+    "errorText": "Es posible que el servicio se esté iniciando; esto puede tardar hasta un minuto. Inténtalo de nuevo.",
+    "tryAgain": "Intentar de nuevo",
+    "studentsOnlyTitle": "Solo para cuentas de estudiante",
+    "studentsOnly": "Esta página muestra las clases y los datos de un estudiante. Inicia sesión con una cuenta de estudiante para verla.",
+    "close": "Cerrar"
+  },
+  "join": {
+    "join": "Entrar al aula",
+    "opensSoon": "Se abre 10 minutos antes de la clase",
+    "opensAt": "Se abre a las {time}",
+    "opensOn": "Se abre el {date} a las {time}"
+  },
+  "cancel": {
+    "button": "Cancelar",
+    "title": "¿Cancelar esta clase?",
+    "lesson": "Clase con {name} · {date} · {time}",
+    "outcome": {
+      "unpaid": "Esta clase aún no se ha pagado, así que no se te cobrará nada.",
+      "money": "Recibirás un reembolso total de {amount} en tu método de pago original.",
+      "packageCredit": "La clase vuelve a tu paquete con {name}, así que podrás reservarla otra vez.",
+      "free": "Esta clase gratuita simplemente se cancelará.",
+      "late": "Faltan menos de 24 horas para la clase, por lo que no se puede reembolsar."
     },
-    "homework": {
-      "title": "Tareas",
-      "description": "Todas tus tareas asignadas, pendientes y completadas en un solo lugar."
-    },
-    "progress": {
-      "title": "Progreso",
-      "description": "Tu historial de niveles, las horas de estudio y la evolución de tus habilidades."
-    },
-    "payments": {
-      "title": "Pagos",
-      "description": "Facturas, historial de pagos y tus paquetes de clases."
-    },
-    "settings": {
-      "title": "Configuración",
-      "description": "Perfil, notificaciones, zona horaria y contraseña."
-    }
+    "freeUntil": "Cancelación gratuita hasta el {date} a las {time}.",
+    "policy": "Las clases canceladas con más de 24 horas de anticipación se reembolsan por completo.",
+    "reason": "Motivo (opcional)",
+    "reasonPlaceholder": "Cuéntale a tu profesor por qué",
+    "keep": "Mantener la clase",
+    "confirm": "Cancelar la clase",
+    "cancelling": "Cancelando…"
   },
   "overview": {
     "metaTitle": "Resumen",
-    "greeting": "Buenas noches, {name}",
+    "booked": "¡Tu clase está reservada! La verás abajo y recibirás un correo de confirmación.",
+    "greeting": {
+      "morning": "Buenos días, {name}",
+      "afternoon": "Buenas tardes, {name}",
+      "evening": "Buenas noches, {name}"
+    },
     "encouragement": "¡Sigue así! Cada vez estás más cerca de {level}.",
-    "notifications": "Notificaciones (nuevas)",
+    "encouragementGeneric": "Cada clase cuenta. ¡Sigue con ese gran trabajo!",
     "bookLesson": "Reservar una clase",
     "nextLesson": {
       "eyebrow": "Próxima clase · empieza en {minutes} min",
-      "title": "{subject} con {name}",
-      "details": "Hoy · {time} (tu hora) · Tema: {topic}",
-      "join": "Entrar al aula"
+      "eyebrowNow": "En curso",
+      "eyebrowToday": "Próxima clase · hoy",
+      "eyebrowPlain": "Próxima clase",
+      "eyebrowNone": "Próxima clase",
+      "details": "{day} · {time} (tu hora) · Tema: {topic}",
+      "detailsNoTopic": "{day} · {time} (tu hora)",
+      "noneTitle": "Todavía no tienes clases reservadas",
+      "noneText": "Elige un profesor y reserva el horario que mejor te quede.",
+      "findTeacher": "Buscar profesor"
     },
     "stats": {
       "label": "Tu progreso",
       "hoursStudied": "Horas de estudio",
       "hoursHint": "+{hours} este mes",
+      "hoursNone": "Aún no tienes clases este mes",
       "lessonsCompleted": "Clases completadas",
       "withTeachers": "{count, plural, one {Con # profesor} other {Con # profesores}}",
+      "noLessonsYet": "Tu primera clase te espera",
       "levelProgress": "Progreso de nivel",
-      "levelProgressAria": "Progreso de {from} a {to}",
+      "levelScaleAria": "Nivel actual {level} en la escala de A1 a C2",
+      "takeTest": "Hacer la prueba de nivel",
       "currentPlan": "Plan actual",
       "pack": "Paquete de {count} clases",
-      "lessonsLeft": "{count, plural, one {Te queda # clase} other {Te quedan # clases}}"
+      "lessonsLeftWith": "{count, plural, one {Te queda # clase con {name}} other {Te quedan # clases con {name}}}",
+      "morePacks": "{count, plural, one {+ # paquete más} other {+ # paquetes más}}",
+      "payAsYouGo": "Pago por clase",
+      "noPack": "Sin paquete de clases activo"
     },
     "upcoming": {
       "title": "Próximas clases",
-      "viewCalendar": "Ver calendario",
-      "reschedule": "Reprogramar",
-      "rescheduleAria": "Reprogramar la clase con {name} del {date}",
+      "viewAll": "Todas las clases",
+      "noOthers": "No tienes más clases reservadas después de esta.",
+      "empty": "Aún no tienes próximas clases.",
+      "manage": "Gestionar",
+      "manageAria": "Gestionar la clase con {name} del {date}",
       "nextTeacher": "<strong>¿Quién será tu próximo profesor?</strong> Sigue aprendiendo con {name} o prueba con alguien nuevo.",
       "bookName": "Reservar con {name}",
       "browse": "Explorar"
@@ -70,24 +101,291 @@
       "title": "Resumen de la última clase",
       "openReport": "Ver informe",
       "strengths": "Fortalezas",
-      "toWorkOn": "Por mejorar"
+      "toWorkOn": "Por mejorar",
+      "empty": "Después de cada clase, tu profesor te envía un breve informe. Aparecerá aquí."
     },
     "payments": {
       "title": "Pagos",
-      "allInvoices": "Todas las facturas",
+      "allPayments": "Todos los pagos",
+      "empty": "Aún no tienes pagos.",
       "free": "Gratis",
       "pack": "Paquete de {count} clases · {teacher}",
       "single": "Clase individual · {teacher}",
-      "trial": "Clase de prueba · {teacher}"
+      "trial": "Clase de prueba · {teacher}",
+      "package": "Clase del paquete · {teacher}",
+      "refunded": "{amount} reembolsados"
     }
+  },
+  "lessons": {
+    "title": "Mis clases",
+    "description": "Tus clases reservadas, tus clases anteriores y los informes de tus profesores.",
+    "bookLesson": "Reservar una clase",
+    "tabsLabel": "Mostrar clases",
+    "tabs": {
+      "upcoming": "Próximas",
+      "past": "Anteriores y canceladas"
+    },
+    "cancelled": {
+      "money": "Clase cancelada. Se te reembolsarán {amount} en tu método de pago original.",
+      "packageCredit": "Clase cancelada. Volvió a tu paquete.",
+      "none": "Clase cancelada."
+    },
+    "empty": {
+      "upcomingTitle": "No tienes próximas clases",
+      "upcomingText": "Elige un profesor y reserva tu próxima clase: aparecerá aquí.",
+      "pastTitle": "Aún no tienes clases anteriores",
+      "pastText": "Cuando tengas tu primera clase, la encontrarás aquí con el informe de tu profesor."
+    },
+    "findTeacher": "Buscar profesor",
+    "timeZoneNote": "Horarios mostrados en tu zona horaria ({tz}).",
+    "with": {
+      "trial": "Clase de prueba con {name}",
+      "single": "Clase con {name}",
+      "package": "Clase del paquete con {name}"
+    },
+    "withFull": {
+      "trial": "Clase de prueba · {name}",
+      "single": "Clase · {name}",
+      "package": "Clase del paquete · {name}"
+    },
+    "status": {
+      "pending_payment": "Pago pendiente",
+      "confirmed": "Confirmada",
+      "completed": "Completada",
+      "cancelled": "Cancelada",
+      "refunded": "Cancelada · reembolsada",
+      "no_show": "Perdida"
+    },
+    "minutes": "{count} min",
+    "cancelledByTeacher": "Cancelada por el profesor",
+    "cancelledByAdmin": "Cancelada por Amerivo",
+    "reportReady": "Informe",
+    "viewReport": "Ver informe",
+    "details": "Detalles",
+    "review": "Dejar una reseña",
+    "reviewTitle": "¿Qué tal tu clase con {name}?",
+    "bookAgain": "Reservar de nuevo"
   },
   "homework": {
     "title": "Tareas",
+    "description": "Todo lo que te asignaron tus profesores, en un solo lugar.",
     "status": "{pending} pendientes · {done} completadas",
     "completed": "Completada",
+    "submitted": "Entregada",
+    "dueToday": "Vence hoy",
     "dueTomorrow": "Vence mañana",
     "dueOn": "Vence el {date}",
-    "from": "{due} · de {teacher}"
+    "overdue": "Atrasada · {date}",
+    "noDueDate": "Sin fecha límite",
+    "from": "{due} · de {teacher}",
+    "fromTeacher": "De {name}",
+    "lessonOf": "Clase del {date}",
+    "allDone": "¡Estás al día! No tienes tareas pendientes.",
+    "seeAll": "Todas las tareas",
+    "fromThisLesson": "Tareas de esta clase",
+    "filterLabel": "Mostrar tareas",
+    "filters": {
+      "todo": "Pendientes ({count})",
+      "done": "Completadas ({count})",
+      "all": "Todas"
+    },
+    "empty": {
+      "title": "Aún no tienes tareas",
+      "text": "Cuando un profesor te asigne una tarea después de una clase, aparecerá aquí.",
+      "allDoneTitle": "¡Estás al día!",
+      "allDoneText": "Terminaste todas tus tareas. ¡Buen trabajo!"
+    },
+    "markDone": "Marcar como hecha",
+    "markNotDone": "Marcar como no hecha"
+  },
+  "lesson": {
+    "metaTitle": "Resumen de la clase",
+    "backToLessons": "Volver a mis clases",
+    "eyebrow": "Resumen de la clase",
+    "eyebrowLesson": "Clase",
+    "niceWork": "¡Buen trabajo, {name}!",
+    "niceWorkNoName": "¡Buen trabajo!",
+    "meta": "{teacher} · {date} · {minutes} min · {topic}",
+    "metaNoTopic": "{teacher} · {date} · {minutes} min",
+    "homework": "Tarea",
+    "homeworkDue": "Tarea · vence el {date}",
+    "nextRecommendation": "Recomendación para la próxima clase",
+    "strengths": "Fortalezas",
+    "toWorkOn": "Por mejorar",
+    "noReport": "{name} aún no envía el informe de la clase. Recibirás una notificación cuando esté listo.",
+    "howWas": "¿Qué tal tu clase con {name}?",
+    "reviewedOn": "Reseña del {date}",
+    "noReviewNoShow": "Solo se pueden reseñar las clases que se llevaron a cabo.",
+    "cancelledText": "Esta clase fue cancelada.",
+    "bookNext": "Reservar otra clase con {name}",
+    "tryAnother": "Probar con otro profesor"
+  },
+  "dispute": {
+    "title": "¿Algo salió mal?",
+    "intro": "Si hubo un problema con esta clase (el profesor no se presentó, una falla técnica…), avísanos antes del {date} a las {time}. Nuestro equipo lo revisará.",
+    "button": "Reportar un problema",
+    "dialogTitle": "Reportar un problema",
+    "dialogText": "Describe lo que pasó. Un administrador de Amerivo revisará tu reporte y podría reembolsar la clase.",
+    "reason": "¿Qué pasó?",
+    "reasonHint": "Mínimo 10 caracteres.",
+    "reasonPlaceholder": "Ej.: El profesor se conectó 25 minutos tarde y la clase se acortó.",
+    "back": "Volver",
+    "send": "Enviar reporte",
+    "sending": "Enviando…",
+    "reportedTitle": "Problema reportado",
+    "status": {
+      "open": "En revisión",
+      "refunded": "Reembolsado",
+      "rejected": "Cerrado"
+    },
+    "statusText": {
+      "open": "Gracias por avisarnos. Nuestro equipo está revisando tu reporte.",
+      "refunded": "Tu reporte fue aceptado y la clase fue reembolsada.",
+      "rejected": "Nuestro equipo revisó tu reporte y lo cerró sin reembolso."
+    },
+    "resolution": "Nuestra respuesta: {text}",
+    "sentOn": "Reportado el {date}"
+  },
+  "review": {
+    "labels": {
+      "poor": "Mala",
+      "fair": "Regular",
+      "good": "Buena",
+      "veryGood": "Muy buena",
+      "excellent": "Excelente"
+    },
+    "thanks": "¡Gracias por tu reseña!",
+    "rated": "Calificaste esta clase con {rating} de 5.",
+    "willAppear": "Tu reseña aparecerá en el perfil público de {name}.",
+    "helps": "Tu calificación ayuda a {name} y a otros estudiantes.",
+    "legend": "Calificación",
+    "starOption": "{count, plural, one {# estrella} other {# estrellas}} – {label}",
+    "tapToRate": "Toca una estrella para calificar",
+    "writeReview": "Escribe una reseña (opcional)",
+    "placeholder": "¿Qué te gustó? Esto aparecerá en el perfil público de {name}.",
+    "submit": "Enviar reseña",
+    "sending": "Enviando…"
+  },
+  "progress": {
+    "title": "Progreso",
+    "description": "Tu nivel, tus clases y lo que notaron tus profesores.",
+    "statsLabel": "Tu progreso en cifras",
+    "totalHours": "Horas de estudio",
+    "thisMonth": "{hours} h este mes",
+    "lessonsCompleted": "Clases completadas",
+    "teachers": "Profesores",
+    "currentLevel": "Nivel actual",
+    "nextGoal": "Próxima meta: {level}",
+    "levelTitle": "Tu nivel",
+    "scaleAria": "Escala MCER, nivel actual {level}",
+    "skillsTitle": "Prueba de nivel por habilidad",
+    "skills": {
+      "grammar": "Gramática",
+      "reading": "Lectura",
+      "listening": "Comprensión auditiva",
+      "speaking": "Expresión oral"
+    },
+    "source": {
+      "placement": "Nivel indicado al registrarte",
+      "placement_test": "Prueba de nivel"
+    },
+    "noLevel": "Haz la breve prueba de nivel para conocer tu nivel y seguir tu progreso.",
+    "takeTest": "Hacer la prueba de nivel",
+    "perMonthTitle": "Clases por mes",
+    "lessonsCount": "{count}",
+    "perMonthCaption": "Clases completadas en los últimos 6 meses.",
+    "reportsTitle": "Informes de tus profesores",
+    "noReports": "Aún no tienes informes. Después de cada clase, tu profesor te envía un resumen con tus fortalezas y lo que puedes mejorar.",
+    "openReport": "Abrir",
+    "strengths": "Fortalezas",
+    "toWorkOn": "Por mejorar",
+    "recommendation": "Recomendación"
+  },
+  "payments": {
+    "title": "Pagos",
+    "description": "Tu historial de pagos y tus paquetes de clases.",
+    "totalsLabel": "Totales",
+    "totalSpent": "Total pagado",
+    "totalRefunded": "Reembolsado",
+    "lessonsInPacks": "Clases disponibles en paquetes",
+    "lessonsInPacksHint": "Ya pagadas, listas para reservar",
+    "packsTitle": "Paquetes de clases",
+    "noPacks": "No tienes paquetes de clases. Los paquetes de 5 o 10 clases tienen descuento.",
+    "packWith": "Paquete de {count} clases · {name}",
+    "boughtOn": "Comprado el {date} · {amount}",
+    "packStatus": {
+      "pending_payment": "Pago pendiente",
+      "active": "Activo",
+      "exhausted": "Agotado",
+      "refunded": "Reembolsado",
+      "expired": "Vencido"
+    },
+    "usedAria": "{used} de {total} clases reservadas",
+    "remaining": "{count, plural, =0 {No quedan clases} one {Te queda # clase por reservar} other {Te quedan # clases por reservar}}",
+    "bookFromPack": "Reservar una clase",
+    "historyTitle": "Historial de pagos",
+    "emptyTitle": "Aún no tienes pagos",
+    "emptyText": "Tus pagos y reembolsos aparecerán aquí.",
+    "colDate": "Fecha",
+    "colWhat": "Descripción",
+    "colStatus": "Estado",
+    "colAmount": "Monto",
+    "note": "Todos los precios están en dólares estadounidenses (USD). Los pagos con tarjeta se procesan de forma segura con Stripe.",
+    "what": {
+      "package": "Paquete de {count} clases · {name}",
+      "trial": "Clase de prueba · {name}",
+      "single": "Clase individual · {name}"
+    },
+    "lessonOn": "Clase del {date}",
+    "status": {
+      "requires_payment": "Pendiente",
+      "succeeded": "Pagado",
+      "failed": "Fallido",
+      "refunded": "Reembolsado",
+      "partially_refunded": "Reembolso parcial"
+    },
+    "refunded": "{amount} reembolsados"
+  },
+  "settings": {
+    "title": "Configuración",
+    "description": "Tu perfil, zona horaria, idioma y cuenta.",
+    "profileTitle": "Perfil",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo electrónico",
+    "emailHint": "Es el correo con el que inicias sesión. No se puede cambiar aquí.",
+    "phone": "Teléfono (opcional)",
+    "country": "País",
+    "countryPlaceholder": "Selecciona tu país",
+    "nativeLanguage": "Idioma materno",
+    "nativeLanguagePlaceholder": "Selecciona tu idioma materno",
+    "timezone": "Zona horaria",
+    "timezoneHint": "Los horarios de las clases se muestran en esta zona horaria.",
+    "useDeviceTz": "Usar la zona horaria de este dispositivo ({tz})",
+    "namesRequired": "Escribe tu nombre y tu apellido.",
+    "save": "Guardar cambios",
+    "saving": "Guardando…",
+    "saved": "Cambios guardados",
+    "languageTitle": "Idioma de la interfaz",
+    "languageText": "Elige el idioma del sitio de Amerivo. ¡Tus clases siguen siendo en inglés!",
+    "delete": {
+      "title": "Eliminar mi cuenta",
+      "text": "Elimina de forma permanente tu cuenta de Amerivo y tus datos personales.",
+      "button": "Eliminar mi cuenta",
+      "dialogTitle": "¿Eliminar tu cuenta?",
+      "consequence1": "Se borrarán tu nombre, correo, teléfono y perfil. Esta acción no se puede deshacer.",
+      "consequence2": "Perderás las clases que te queden en tus paquetes.",
+      "consequence3": "Primero debes cancelar tus próximas clases.",
+      "consequence4": "Los registros de pago se conservan de forma anónima, como exige la contabilidad.",
+      "understand": "Entiendo que mi cuenta se eliminará de forma permanente.",
+      "confirmWord": "ELIMINAR",
+      "typeToConfirm": "Escribe {word} para confirmar",
+      "hasLessons": "Todavía tienes próximas clases. Cancélalas primero.",
+      "goToLessons": "Ir a mis clases",
+      "keep": "Conservar mi cuenta",
+      "confirm": "Eliminar definitivamente",
+      "deleting": "Eliminando…"
+    }
   },
   "live": {
     "booked": "¡Tu clase está reservada! La encontrarás abajo y recibirás un correo de confirmación.",
@@ -111,39 +409,6 @@
     "timeZoneNote": "Horarios mostrados en tu zona horaria ({tz}).",
     "classroom": "Aula",
     "emptyTeacher": "Aún no hay clases próximas. Las nuevas reservas aparecerán aquí."
-  },
-  "lesson": {
-    "metaTitle": "Resumen de la clase",
-    "eyebrow": "Resumen de la clase",
-    "niceWork": "¡Buen trabajo hoy, {name}!",
-    "meta": "{teacher} · {date} · {minutes} min · {topic}",
-    "srLesson": "(clase {id})",
-    "homeworkDue": "Tarea · vence el {date}",
-    "nextRecommendation": "Recomendación para la próxima clase",
-    "strengths": "Fortalezas",
-    "toWorkOn": "Por mejorar",
-    "howWas": "¿Qué tal tu clase con {name}?",
-    "bookNext": "Reservar otra clase con {name}",
-    "tryAnother": "Probar con otro profesor"
-  },
-  "review": {
-    "labels": {
-      "poor": "Mala",
-      "fair": "Regular",
-      "good": "Buena",
-      "veryGood": "Muy buena",
-      "excellent": "Excelente"
-    },
-    "thanks": "¡Gracias por tu reseña!",
-    "rated": "Calificaste esta clase con {rating} de 5.",
-    "willAppear": "Tu reseña aparecerá en el perfil público de {name}.",
-    "helps": "Tu calificación ayuda a {name} y a otros estudiantes.",
-    "legend": "Calificación",
-    "starOption": "{count, plural, one {# estrella} other {# estrellas}} – {label}",
-    "tapToRate": "Toca una estrella para calificar",
-    "writeReview": "Escribe una reseña (opcional)",
-    "placeholder": "¿Qué te gustó? Esto aparecerá en el perfil público de {name}.",
-    "submit": "Enviar reseña"
   },
   "messages": {
     "metaTitle": "Mensajes",

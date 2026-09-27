@@ -150,7 +150,6 @@
     "timeZoneHint": "تُستخدم لعرض أوقات توفرك للطلاب بتوقيتهم المحلي.",
     "gender": "الجنس",
     "genderHint": "يبحث بعض الطلاب عن معلم بحسب الجنس المفضّل. يمكنك تغيير ذلك لاحقًا.",
-    "photoLater": "ستضيف صورة ملفك الشخصي لاحقًا.",
     "emailHint": "عنوان البريد الإلكتروني لحسابك.",
     "selectCountry": "اختر بلدك"
   },
@@ -176,8 +175,7 @@
     "bioCount": "{count} / {max}",
     "bioPlaceholder": "عرّف الطلاب بنفسك وصِف كيف يبدو الدرس معك.",
     "selectEducation": "اختر أعلى مؤهل دراسي لديك",
-    "certificationsPlaceholder": "مثال: TESOL",
-    "certificatesLater": "ستضيف ملفات شهاداتك لاحقًا."
+    "certificationsPlaceholder": "مثال: TESOL"
   },
   "previews": {
     "label": "الخطوات القادمة",

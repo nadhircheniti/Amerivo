@@ -87,7 +87,7 @@ function Bubble({ item, name }: { item: ThreadItem; name: string }) {
         <p className={cn("text-xs", mine ? "text-ink-soft" : "text-muted")}>{fileMeta(item.name, item.size, locale)}</p>
       </div>
       {!mine && (
-        // TODO(api): signed download URL for the attachment.
+        // Demo mode only: sample attachments have no file behind them.
         <a href="#" className="text-sm font-semibold text-teal-dark hover:text-navy" aria-label={t("openFile", { name: item.name })}>
           {t("open")}
         </a>
@@ -279,7 +279,7 @@ export function MessagesView() {
             e.preventDefault();
             const text = draft.trim();
             if (!text) return;
-            // TODO(api): POST /conversations/:id/messages (optimistic append for now).
+            // Demo mode: local append only (live mode: components/messaging/conversations-view.tsx).
             append({ id: `local-${Date.now()}`, kind: "text", from: "me", text });
             setDraft("");
           }}

@@ -1,7 +1,8 @@
 import { RoleGate } from "@/components/layout/role-gate";
-import { AppSidebar, type SidebarItem } from "@/components/layout/app-sidebar";
+import type { SidebarItem } from "@/components/layout/app-sidebar";
 import { Icon } from "@/components/ui/icon";
 import { useTranslations } from "next-intl";
+import { AdminSidebar } from "./_components/admin-sidebar";
 
 type NavKey = "analytics" | "teachers" | "students" | "bookings" | "payments" | "disputes" | "settings";
 const nav: (Omit<SidebarItem, "label"> & { key: NavKey })[] = [
@@ -16,12 +17,12 @@ const nav: (Omit<SidebarItem, "label"> & { key: NavKey })[] = [
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const t = useTranslations("admin.nav");
-  const items: SidebarItem[] = nav.map(({ key, ...item }) => ({ ...item, label: t(key) }));
+  const items = nav.map((item) => ({ ...item, label: t(item.key) }));
   return (
     <RoleGate space="admin">
       <div className="flex min-h-screen bg-beige-2">
-        <AppSidebar
-          variant="admin"
+        {/* Live badges: pending applications and open disputes. */}
+        <AdminSidebar
           items={items}
           footer={
             <div className="flex items-center gap-2 rounded-xl bg-beige-2 p-3 text-xs text-muted">

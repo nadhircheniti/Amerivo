@@ -11,57 +11,88 @@
     "userSubtitle": "Student · Level {level}"
   },
   "backToOverview": "Back to overview",
-  "comingSoon": {
-    "lessons": {
-      "title": "My lessons",
-      "description": "Your full lesson calendar, past lessons and reports will live here."
+  "states": {
+    "loading": "Loading…",
+    "errorTitle": "We couldn't load this page",
+    "errorText": "The service may be waking up — this can take up to a minute. Please try again.",
+    "tryAgain": "Try again",
+    "studentsOnlyTitle": "Student accounts only",
+    "studentsOnly": "This page shows a student's own lessons and data. Sign in with a student account to see it.",
+    "close": "Close"
+  },
+  "join": {
+    "join": "Join classroom",
+    "opensSoon": "Opens 10 minutes before the lesson",
+    "opensAt": "Opens at {time}",
+    "opensOn": "Opens {date} at {time}"
+  },
+  "cancel": {
+    "button": "Cancel",
+    "title": "Cancel this lesson?",
+    "lesson": "Lesson with {name} · {date} · {time}",
+    "outcome": {
+      "unpaid": "This lesson hasn't been paid yet — nothing will be charged.",
+      "money": "You'll get a full refund of {amount} to your original payment method.",
+      "packageCredit": "The lesson goes back to your pack with {name}, so you can book it again.",
+      "free": "This free lesson will simply be cancelled.",
+      "late": "It's less than 24 hours before the lesson, so it can't be refunded."
     },
-    "homework": {
-      "title": "Homework",
-      "description": "All assigned, pending and completed homework in one place."
-    },
-    "progress": {
-      "title": "Progress",
-      "description": "Your level history, hours studied and skills over time."
-    },
-    "payments": {
-      "title": "Payments",
-      "description": "Invoices, payment history and your lesson packages."
-    },
-    "settings": {
-      "title": "Settings",
-      "description": "Profile, notifications, time zone and password."
-    }
+    "freeUntil": "Free cancellation until {date} at {time}.",
+    "policy": "Lessons cancelled more than 24 hours ahead are fully refunded.",
+    "reason": "Reason (optional)",
+    "reasonPlaceholder": "Let your teacher know why",
+    "keep": "Keep lesson",
+    "confirm": "Cancel lesson",
+    "cancelling": "Cancelling…"
   },
   "overview": {
     "metaTitle": "Overview",
-    "greeting": "Good evening, {name}",
+    "booked": "Your lesson is booked! You'll find it below and receive a confirmation e-mail.",
+    "greeting": {
+      "morning": "Good morning, {name}",
+      "afternoon": "Good afternoon, {name}",
+      "evening": "Good evening, {name}"
+    },
     "encouragement": "Keep going — you're getting closer to {level}.",
-    "notifications": "Notifications (new)",
+    "encouragementGeneric": "Every lesson counts. Keep up the great work!",
     "bookLesson": "Book a lesson",
     "nextLesson": {
       "eyebrow": "Next lesson · starts in {minutes} min",
-      "title": "{subject} with {name}",
-      "details": "Today · {time} (your time) · Topic: {topic}",
-      "join": "Join classroom"
+      "eyebrowNow": "Happening now",
+      "eyebrowToday": "Next lesson · today",
+      "eyebrowPlain": "Next lesson",
+      "eyebrowNone": "Next lesson",
+      "details": "{day} · {time} (your time) · Topic: {topic}",
+      "detailsNoTopic": "{day} · {time} (your time)",
+      "noneTitle": "No lesson booked yet",
+      "noneText": "Pick a teacher and book a time that suits you.",
+      "findTeacher": "Find a teacher"
     },
     "stats": {
       "label": "Your progress",
       "hoursStudied": "Hours studied",
       "hoursHint": "+{hours} this month",
+      "hoursNone": "No lessons this month yet",
       "lessonsCompleted": "Lessons completed",
       "withTeachers": "{count, plural, one {With # teacher} other {With # teachers}}",
+      "noLessonsYet": "Your first lesson is waiting",
       "levelProgress": "Level progress",
-      "levelProgressAria": "Progress from {from} to {to}",
+      "levelScaleAria": "Current level {level} on the scale from A1 to C2",
+      "takeTest": "Take the placement test",
       "currentPlan": "Current plan",
       "pack": "{count}-lesson pack",
-      "lessonsLeft": "{count, plural, one {# lesson left} other {# lessons left}}"
+      "lessonsLeftWith": "{count, plural, one {# lesson left with {name}} other {# lessons left with {name}}}",
+      "morePacks": "{count, plural, one {+ # more pack} other {+ # more packs}}",
+      "payAsYouGo": "Pay as you go",
+      "noPack": "No active lesson pack"
     },
     "upcoming": {
       "title": "Upcoming lessons",
-      "viewCalendar": "View calendar",
-      "reschedule": "Reschedule",
-      "rescheduleAria": "Reschedule lesson with {name} on {date}",
+      "viewAll": "All lessons",
+      "noOthers": "No other lessons booked after this one.",
+      "empty": "No upcoming lessons yet.",
+      "manage": "Manage",
+      "manageAria": "Manage lesson with {name} on {date}",
       "nextTeacher": "<strong>Next teacher?</strong> Keep learning with {name} or try someone new.",
       "bookName": "Book {name}",
       "browse": "Browse"
@@ -70,24 +101,291 @@
       "title": "Last lesson summary",
       "openReport": "Open report",
       "strengths": "Strengths",
-      "toWorkOn": "To work on"
+      "toWorkOn": "To work on",
+      "empty": "After each lesson, your teacher sends a short summary. It will appear here."
     },
     "payments": {
       "title": "Payments",
-      "allInvoices": "All invoices",
+      "allPayments": "All payments",
+      "empty": "No payments yet.",
       "free": "Free",
       "pack": "{count}-lesson pack · {teacher}",
       "single": "Single lesson · {teacher}",
-      "trial": "Trial lesson · {teacher}"
+      "trial": "Trial lesson · {teacher}",
+      "package": "Pack lesson · {teacher}",
+      "refunded": "{amount} refunded"
     }
+  },
+  "lessons": {
+    "title": "My lessons",
+    "description": "Your booked lessons, past lessons and teacher reports.",
+    "bookLesson": "Book a lesson",
+    "tabsLabel": "Show lessons",
+    "tabs": {
+      "upcoming": "Upcoming",
+      "past": "Past & cancelled"
+    },
+    "cancelled": {
+      "money": "Lesson cancelled. {amount} will be refunded to your original payment method.",
+      "packageCredit": "Lesson cancelled. It's back in your pack.",
+      "none": "Lesson cancelled."
+    },
+    "empty": {
+      "upcomingTitle": "No upcoming lessons",
+      "upcomingText": "Pick a teacher and book your next lesson — it will appear here.",
+      "pastTitle": "No past lessons yet",
+      "pastText": "Once you've had a lesson, you'll find it here with your teacher's report."
+    },
+    "findTeacher": "Find a teacher",
+    "timeZoneNote": "Times shown in your time zone ({tz}).",
+    "with": {
+      "trial": "Trial lesson with {name}",
+      "single": "Lesson with {name}",
+      "package": "Pack lesson with {name}"
+    },
+    "withFull": {
+      "trial": "Trial lesson · {name}",
+      "single": "Lesson · {name}",
+      "package": "Pack lesson · {name}"
+    },
+    "status": {
+      "pending_payment": "Awaiting payment",
+      "confirmed": "Confirmed",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "refunded": "Cancelled · refunded",
+      "no_show": "Missed"
+    },
+    "minutes": "{count} min",
+    "cancelledByTeacher": "Cancelled by the teacher",
+    "cancelledByAdmin": "Cancelled by Amerivo",
+    "reportReady": "Report",
+    "viewReport": "View report",
+    "details": "Details",
+    "review": "Leave a review",
+    "reviewTitle": "How was your lesson with {name}?",
+    "bookAgain": "Book again"
   },
   "homework": {
     "title": "Homework",
+    "description": "Everything your teachers assigned, in one place.",
     "status": "{pending} pending · {done} done",
     "completed": "Completed",
+    "submitted": "Submitted",
+    "dueToday": "Due today",
     "dueTomorrow": "Due tomorrow",
     "dueOn": "Due {date}",
-    "from": "{due} · from {teacher}"
+    "overdue": "Overdue · {date}",
+    "noDueDate": "No due date",
+    "from": "{due} · from {teacher}",
+    "fromTeacher": "From {name}",
+    "lessonOf": "Lesson of {date}",
+    "allDone": "All caught up — no homework waiting.",
+    "seeAll": "All homework",
+    "fromThisLesson": "Homework from this lesson",
+    "filterLabel": "Show homework",
+    "filters": {
+      "todo": "To do ({count})",
+      "done": "Done ({count})",
+      "all": "All"
+    },
+    "empty": {
+      "title": "No homework yet",
+      "text": "When a teacher assigns homework after a lesson, it will appear here.",
+      "allDoneTitle": "All caught up!",
+      "allDoneText": "You've finished all your homework. Nice work."
+    },
+    "markDone": "Mark as done",
+    "markNotDone": "Mark as not done"
+  },
+  "lesson": {
+    "metaTitle": "Lesson summary",
+    "backToLessons": "Back to my lessons",
+    "eyebrow": "Lesson summary",
+    "eyebrowLesson": "Lesson",
+    "niceWork": "Nice work, {name}!",
+    "niceWorkNoName": "Nice work!",
+    "meta": "{teacher} · {date} · {minutes} min · {topic}",
+    "metaNoTopic": "{teacher} · {date} · {minutes} min",
+    "homework": "Homework",
+    "homeworkDue": "Homework · due {date}",
+    "nextRecommendation": "Next lesson recommendation",
+    "strengths": "Strengths",
+    "toWorkOn": "To work on",
+    "noReport": "{name} hasn't sent the lesson summary yet. You'll get a notification when it's ready.",
+    "howWas": "How was your lesson with {name}?",
+    "reviewedOn": "Reviewed on {date}",
+    "noReviewNoShow": "Reviews are only possible for lessons that took place.",
+    "cancelledText": "This lesson was cancelled.",
+    "bookNext": "Book next with {name}",
+    "tryAnother": "Try another teacher"
+  },
+  "dispute": {
+    "title": "Something went wrong?",
+    "intro": "If there was a problem with this lesson (the teacher didn't show up, a technical issue…), tell us before {date} at {time}. Our team will review it.",
+    "button": "Report a problem",
+    "dialogTitle": "Report a problem",
+    "dialogText": "Describe what happened. An Amerivo admin will review your report and may refund the lesson.",
+    "reason": "What happened?",
+    "reasonHint": "At least 10 characters.",
+    "reasonPlaceholder": "e.g. The teacher joined 25 minutes late and the lesson was cut short.",
+    "back": "Back",
+    "send": "Send report",
+    "sending": "Sending…",
+    "reportedTitle": "Problem reported",
+    "status": {
+      "open": "Under review",
+      "refunded": "Refunded",
+      "rejected": "Closed"
+    },
+    "statusText": {
+      "open": "Thanks for letting us know. Our team is reviewing your report.",
+      "refunded": "Your report was accepted and the lesson was refunded.",
+      "rejected": "Our team reviewed your report and closed it without a refund."
+    },
+    "resolution": "Our answer: {text}",
+    "sentOn": "Reported on {date}"
+  },
+  "review": {
+    "labels": {
+      "poor": "Poor",
+      "fair": "Fair",
+      "good": "Good",
+      "veryGood": "Very good",
+      "excellent": "Excellent"
+    },
+    "thanks": "Thanks for your review!",
+    "rated": "You rated this lesson {rating} out of 5.",
+    "willAppear": "Your review will appear on {name}'s public profile.",
+    "helps": "Your rating helps {name} and other students.",
+    "legend": "Rating",
+    "starOption": "{count, plural, one {# star} other {# stars}} – {label}",
+    "tapToRate": "Tap a star to rate",
+    "writeReview": "Write a review (optional)",
+    "placeholder": "What did you like? This will appear on {name}'s public profile.",
+    "submit": "Submit review",
+    "sending": "Sending…"
+  },
+  "progress": {
+    "title": "Progress",
+    "description": "Your level, lessons and what your teachers noticed.",
+    "statsLabel": "Progress in numbers",
+    "totalHours": "Hours studied",
+    "thisMonth": "{hours} h this month",
+    "lessonsCompleted": "Lessons completed",
+    "teachers": "Teachers",
+    "currentLevel": "Current level",
+    "nextGoal": "Next goal: {level}",
+    "levelTitle": "Your level",
+    "scaleAria": "CEFR scale, current level {level}",
+    "skillsTitle": "Placement test by skill",
+    "skills": {
+      "grammar": "Grammar",
+      "reading": "Reading",
+      "listening": "Listening",
+      "speaking": "Speaking"
+    },
+    "source": {
+      "placement": "Level set at sign-up",
+      "placement_test": "Placement test"
+    },
+    "noLevel": "Take the short placement test to see your level and track your progress.",
+    "takeTest": "Take the placement test",
+    "perMonthTitle": "Lessons per month",
+    "lessonsCount": "{count}",
+    "perMonthCaption": "Completed lessons over the last 6 months.",
+    "reportsTitle": "Teacher reports",
+    "noReports": "No reports yet. After each lesson your teacher sends a summary with strengths and points to work on.",
+    "openReport": "Open",
+    "strengths": "Strengths",
+    "toWorkOn": "To work on",
+    "recommendation": "Recommendation"
+  },
+  "payments": {
+    "title": "Payments",
+    "description": "Your payment history and lesson packs.",
+    "totalsLabel": "Totals",
+    "totalSpent": "Total spent",
+    "totalRefunded": "Refunded",
+    "lessonsInPacks": "Lessons left in packs",
+    "lessonsInPacksHint": "Ready to book, already paid",
+    "packsTitle": "Lesson packs",
+    "noPacks": "You don't have any lesson packs. Packs of 5 or 10 lessons come with a discount.",
+    "packWith": "{count}-lesson pack · {name}",
+    "boughtOn": "Bought {date} · {amount}",
+    "packStatus": {
+      "pending_payment": "Awaiting payment",
+      "active": "Active",
+      "exhausted": "Used up",
+      "refunded": "Refunded",
+      "expired": "Expired"
+    },
+    "usedAria": "{used} of {total} lessons booked",
+    "remaining": "{count, plural, =0 {No lessons left} one {# lesson left to book} other {# lessons left to book}}",
+    "bookFromPack": "Book a lesson",
+    "historyTitle": "Payment history",
+    "emptyTitle": "No payments yet",
+    "emptyText": "Your payments and refunds will appear here.",
+    "colDate": "Date",
+    "colWhat": "Description",
+    "colStatus": "Status",
+    "colAmount": "Amount",
+    "note": "All prices are in US dollars. Card payments are processed securely by Stripe.",
+    "what": {
+      "package": "{count}-lesson pack · {name}",
+      "trial": "Trial lesson · {name}",
+      "single": "Single lesson · {name}"
+    },
+    "lessonOn": "Lesson on {date}",
+    "status": {
+      "requires_payment": "Pending",
+      "succeeded": "Paid",
+      "failed": "Failed",
+      "refunded": "Refunded",
+      "partially_refunded": "Partly refunded"
+    },
+    "refunded": "{amount} refunded"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Your profile, time zone, language and account.",
+    "profileTitle": "Profile",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "E-mail",
+    "emailHint": "Your sign-in e-mail. It can't be changed here.",
+    "phone": "Phone (optional)",
+    "country": "Country",
+    "countryPlaceholder": "Select your country",
+    "nativeLanguage": "Native language",
+    "nativeLanguagePlaceholder": "Select your native language",
+    "timezone": "Time zone",
+    "timezoneHint": "Lesson times are shown in this time zone.",
+    "useDeviceTz": "Use this device's time zone ({tz})",
+    "namesRequired": "Please enter your first and last name.",
+    "save": "Save changes",
+    "saving": "Saving…",
+    "saved": "Changes saved",
+    "languageTitle": "Interface language",
+    "languageText": "Choose the language of the Amerivo website. Your lessons stay in English!",
+    "delete": {
+      "title": "Delete my account",
+      "text": "Permanently delete your Amerivo account and personal data.",
+      "button": "Delete my account",
+      "dialogTitle": "Delete your account?",
+      "consequence1": "Your name, e-mail, phone and profile are erased. This can't be undone.",
+      "consequence2": "Lessons left in your packs are lost.",
+      "consequence3": "Upcoming lessons must be cancelled first.",
+      "consequence4": "Payment records are kept anonymously, as required for accounting.",
+      "understand": "I understand that my account will be deleted permanently.",
+      "confirmWord": "DELETE",
+      "typeToConfirm": "Type {word} to confirm",
+      "hasLessons": "You still have upcoming lessons. Please cancel them first.",
+      "goToLessons": "Go to my lessons",
+      "keep": "Keep my account",
+      "confirm": "Delete permanently",
+      "deleting": "Deleting…"
+    }
   },
   "live": {
     "booked": "Your lesson is booked! You'll find it below and receive a confirmation e-mail.",
@@ -111,39 +409,6 @@
     "timeZoneNote": "Times shown in your time zone ({tz}).",
     "classroom": "Classroom",
     "emptyTeacher": "No upcoming lessons yet. New bookings will appear here."
-  },
-  "lesson": {
-    "metaTitle": "Lesson summary",
-    "eyebrow": "Lesson summary",
-    "niceWork": "Nice work today, {name}!",
-    "meta": "{teacher} · {date} · {minutes} min · {topic}",
-    "srLesson": "(lesson {id})",
-    "homeworkDue": "Homework · due {date}",
-    "nextRecommendation": "Next lesson recommendation",
-    "strengths": "Strengths",
-    "toWorkOn": "To work on",
-    "howWas": "How was your lesson with {name}?",
-    "bookNext": "Book next with {name}",
-    "tryAnother": "Try another teacher"
-  },
-  "review": {
-    "labels": {
-      "poor": "Poor",
-      "fair": "Fair",
-      "good": "Good",
-      "veryGood": "Very good",
-      "excellent": "Excellent"
-    },
-    "thanks": "Thanks for your review!",
-    "rated": "You rated this lesson {rating} out of 5.",
-    "willAppear": "Your review will appear on {name}'s public profile.",
-    "helps": "Your rating helps {name} and other students.",
-    "legend": "Rating",
-    "starOption": "{count, plural, one {# star} other {# stars}} – {label}",
-    "tapToRate": "Tap a star to rate",
-    "writeReview": "Write a review (optional)",
-    "placeholder": "What did you like? This will appear on {name}'s public profile.",
-    "submit": "Submit review"
   },
   "messages": {
     "metaTitle": "Messages",

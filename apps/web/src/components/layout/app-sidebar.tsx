@@ -9,6 +9,7 @@ import { Logo } from "@/components/ui/logo";
 import { Avatar, type AvatarTone } from "@/components/ui/primitives";
 import { SidebarSignOut } from "./auth-nav";
 import { useMe } from "./role-gate";
+import { fileSrc } from "@/components/ui/file-upload";
 import { useTranslations } from "next-intl";
 import { LanguageSwitcher } from "./language-switcher";
 
@@ -108,7 +109,7 @@ export function AppSidebar({
         <SidebarSignOut dark={dark} />
         {user && (
           <div className={cn("flex items-center gap-3 rounded-2xl p-3.5", dark ? "bg-white/8" : "bg-beige")}>
-            <Avatar initials={user.initials} tone={user.tone} size={42} />
+            <Avatar initials={user.initials} tone={user.tone} size={42} src={fileSrc(me?.avatarUrl) ?? undefined} alt="" />
             <div className="flex flex-col">
               <span className="text-sm font-semibold">{user.name}</span>
               <span className={cn("text-xs", dark ? "text-[#9fdccf]" : "text-muted")}>{user.subtitle}</span>

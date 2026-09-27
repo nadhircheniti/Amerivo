@@ -12,6 +12,8 @@ import { formatUsd, PLATFORM_COMMISSION, teacherNet } from "@/lib/mock-data";
 import { educationLevels, experienceLevels, genders, groups, idTypes, interviewSlots, steps, subjects, timeZones, type Application } from "../_data";
 import { SectionTitle, TagInput, UploadButton } from "./fields";
 import { useLive } from "./live-context";
+import { ApplyPhoto } from "./live-uploads";
+import { CertificateFiles } from "@/components/ui/file-upload";
 import { identityKey, identityTones, LiveApproval, LiveIdentity, LiveVideo, StatusList } from "./live-steps";
 
 type StepProps = { app: Application; update: (patch: Partial<Application>) => void };
@@ -39,16 +41,6 @@ function useCountryName() {
   };
 }
 
-/** "Coming later" note replacing file uploads in live mode (no file storage yet). */
-function LaterNote({ children }: { children: ReactNode }) {
-  return (
-    <p className="flex items-start gap-2 rounded-xl bg-beige px-4 py-3 text-[13px] leading-normal text-navy-soft">
-      <Icon name="clock" size={16} className="mt-0.5 shrink-0 text-teal-dark" />
-      {children}
-    </p>
-  );
-}
-
 /* ---------------- 1 · Personal info ---------------- */
 export function PersonalStep({ app, update }: StepProps) {
   const t = useTranslations("apply.personal");
@@ -58,7 +50,7 @@ export function PersonalStep({ app, update }: StepProps) {
   return (
     <>
       {live ? (
-        <LaterNote>{t("photoLater")}</LaterNote>
+        <ApplyPhoto firstName={app.firstName} lastName={app.lastName} />
       ) : (
         <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
           <span className="flex size-24 shrink-0 items-center justify-center rounded-full bg-beige text-muted" aria-hidden="true">
@@ -221,7 +213,7 @@ export function ProfessionalStep({ app, update }: StepProps) {
             onChange={(certifications) => update({ certifications })}
           />
           {live ? (
-            <LaterNote>{t("certificatesLater")}</LaterNote>
+            <CertificateFiles />
           ) : (
             <UploadButton
               label={t("uploadCertificates")}

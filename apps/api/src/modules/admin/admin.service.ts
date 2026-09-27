@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { and, count, desc, eq, gte, sql, sum } from "drizzle-orm";
 import { DB, type Db } from "../../db/db";
-import { auditLogs, bookings, earnings, lessons, payments, teacherApplications, teacherProfiles, users } from "../../db/schema";
+import { auditLogs, bookings, disputes, earnings, lessons, payments, teacherApplications, teacherProfiles, users } from "../../db/schema";
 import { CLOCK, type Clock } from "../../common/clock";
 import { badRequest, notFound } from "../../common/errors";
 import { canAdminRefundAfterLesson } from "../../domain/cancellation";
@@ -106,13 +106,21 @@ export class AdminService {
     return { teacherId, status: decision };
   }
 
-  /** Refund a completed lesson within 24 h after it ended (issue or complaint). */
+  /**
+   * Refund a completed lesson within 24 h after it ended (issue or complaint).
+   * When the student opened a dispute in time, the lesson stays refundable after the 24 h
+   * (the admin may decide later), no-show lessons included; the dispute is marked refunded.
+   */
   async refundCompletedLesson(admin: AuthUser, bookingId: string, reason: string) {
     const [row] = await this.db.select({ b: bookings, l: lessons }).from(bookings).leftJoin(lessons, eq(lessons.bookingId, bookings.id)).where(eq(bookings.id, bookingId));
     if (!row) throw notFound("Booking");
     const { b, l } = row;
-    if (b.status !== "completed" || !l?.endedAt) throw badRequest("Only completed lessons can be refunded here");
-    if (!canAdminRefundAfterLesson(l.endedAt, this.clock.now())) throw badRequest("Refunds are only possible within 24 hours after the lesson");
+    const [dispute] = await this.db.select({ id: disputes.id }).from(disputes).where(and(eq(disputes.bookingId, b.id), eq(disputes.status, "open")));
+    const refundable = b.status === "completed" || (dispute && b.status === "no_show");
+    const endedAt = l?.endedAt ?? (dispute ? new Date(b.startsAt.getTime() + b.durationMin * 60_000) : null);
+    if (!refundable || !endedAt) throw badRequest("Only completed lessons can be refunded here");
+    const now = this.clock.now();
+    if (!dispute && !canAdminRefundAfterLesson(endedAt, now)) throw badRequest("Refunds are only possible within 24 hours after the lesson");
 
     const [payment] = await this.db.select().from(payments).where(b.packageId ? eq(payments.packageId, b.packageId) : eq(payments.bookingId, b.id));
     if (payment?.providerRef && b.priceCents > 0) await this.stripe.refund(payment.providerRef, b.priceCents, `admin_refund_${b.id}`);
@@ -123,7 +131,8 @@ export class AdminService {
         const refunded = payment.refundedCents + b.priceCents;
         await tx.update(payments).set({ refundedCents: refunded, status: refunded >= payment.amountCents ? "refunded" : "partially_refunded" }).where(eq(payments.id, payment.id));
       }
-      await tx.insert(auditLogs).values({ actorId: admin.id, action: "booking.refund", entity: "booking", entityId: b.id, data: { reason, amountCents: b.priceCents } });
+      if (dispute) await tx.update(disputes).set({ status: "refunded", resolution: reason, resolvedBy: admin.id, resolvedAt: now }).where(eq(disputes.id, dispute.id));
+      await tx.insert(auditLogs).values({ actorId: admin.id, action: "booking.refund", entity: "booking", entityId: b.id, data: { reason, amountCents: b.priceCents, disputeId: dispute?.id } });
     });
     await this.notifications.notify(b.studentId, { type: "refund", title: "Your lesson was refunded", body: reason });
     return { refunded: b.priceCents };

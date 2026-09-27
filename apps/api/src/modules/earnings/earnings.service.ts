@@ -38,6 +38,8 @@ export class EarningsService {
     await this.release();
     const [profile] = await this.db.select({ accountId: teacherProfiles.stripeAccountId }).from(teacherProfiles).where(eq(teacherProfiles.userId, teacherId));
     if (!profile?.accountId) throw badRequest("Connect your bank account (Stripe) before withdrawing");
+    // The Express account must have finished onboarding before Stripe accepts transfers to it.
+    if (!(await this.payoutsReady(profile.accountId))) throw badRequest("Finish setting up your Stripe account before withdrawing");
 
     const payout = await this.db.transaction(async (tx) => {
       const available = await tx.select().from(earnings).where(and(eq(earnings.teacherId, teacherId), eq(earnings.status, "available"))).for("update");
@@ -61,6 +63,21 @@ export class EarningsService {
     }
     await this.notifications.notify(teacherId, { type: "payout_issued", title: "Payout issued", body: `$${(payout.amountCents / 100).toFixed(2)} is on its way to your bank.` });
     return payout;
+  }
+
+  /**
+   * True when the connected account can receive transfers. When Stripe can't be asked (older test
+   * fakes, network error) the transfer itself is attempted and reports the real problem.
+   */
+  async payoutsReady(accountId: string) {
+    const stripe = this.stripe as Partial<Pick<StripeService, "retrieveAccount">>;
+    if (typeof stripe.retrieveAccount !== "function") return true;
+    try {
+      const acct = await stripe.retrieveAccount(accountId);
+      return !!acct.details_submitted && (acct.payouts_enabled || acct.capabilities?.transfers === "active");
+    } catch {
+      return true;
+    }
   }
 
   /** Monthly automatic payout for every teacher with an available balance (run by a scheduler on the 28th). */

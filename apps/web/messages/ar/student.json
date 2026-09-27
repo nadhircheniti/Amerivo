@@ -11,57 +11,88 @@
     "userSubtitle": "طالب · المستوى {level}"
   },
   "backToOverview": "العودة إلى النظرة العامة",
-  "comingSoon": {
-    "lessons": {
-      "title": "دروسي",
-      "description": "ستجد هنا قريبًا تقويم دروسك الكامل والدروس السابقة وتقاريرها."
+  "states": {
+    "loading": "جارٍ التحميل…",
+    "errorTitle": "تعذّر تحميل هذه الصفحة",
+    "errorText": "قد تكون الخدمة قيد التشغيل، وقد يستغرق ذلك دقيقة. يُرجى المحاولة مرة أخرى.",
+    "tryAgain": "إعادة المحاولة",
+    "studentsOnlyTitle": "لحسابات الطلاب فقط",
+    "studentsOnly": "تعرض هذه الصفحة دروس الطالب وبياناته الخاصة. سجّل الدخول بحساب طالب لعرضها.",
+    "close": "إغلاق"
+  },
+  "join": {
+    "join": "ادخل الفصل الافتراضي",
+    "opensSoon": "يُفتح قبل الدرس بـ 10 دقائق",
+    "opensAt": "يُفتح الساعة {time}",
+    "opensOn": "يُفتح يوم {date} الساعة {time}"
+  },
+  "cancel": {
+    "button": "إلغاء",
+    "title": "هل تريد إلغاء هذا الدرس؟",
+    "lesson": "درس مع {name} · {date} · {time}",
+    "outcome": {
+      "unpaid": "لم يُدفع ثمن هذا الدرس بعد، لذا لن يُخصم منك أي مبلغ.",
+      "money": "ستحصل على استرداد كامل بقيمة {amount} إلى وسيلة الدفع الأصلية.",
+      "packageCredit": "سيعود الدرس إلى باقتك مع {name}، ويمكنك حجزه من جديد.",
+      "free": "سيُلغى هذا الدرس المجاني ببساطة.",
+      "late": "تبقّى أقل من 24 ساعة على الدرس، لذا لا يمكن استرداد ثمنه."
     },
-    "homework": {
-      "title": "الواجبات",
-      "description": "جميع الواجبات المُسندة والمعلّقة والمنجزة في مكان واحد."
-    },
-    "progress": {
-      "title": "التقدم",
-      "description": "تطور مستواك وساعات الدراسة ومهاراتك بمرور الوقت."
-    },
-    "payments": {
-      "title": "المدفوعات",
-      "description": "الفواتير وسجل المدفوعات وباقات دروسك."
-    },
-    "settings": {
-      "title": "الإعدادات",
-      "description": "الملف الشخصي والإشعارات والمنطقة الزمنية وكلمة المرور."
-    }
+    "freeUntil": "الإلغاء مجاني حتى {date} الساعة {time}.",
+    "policy": "تُسترد قيمة الدروس الملغاة قبل موعدها بأكثر من 24 ساعة بالكامل.",
+    "reason": "السبب (اختياري)",
+    "reasonPlaceholder": "أخبر معلمك بالسبب",
+    "keep": "الإبقاء على الدرس",
+    "confirm": "إلغاء الدرس",
+    "cancelling": "جارٍ الإلغاء…"
   },
   "overview": {
     "metaTitle": "نظرة عامة",
-    "greeting": "مساء الخير يا {name}",
+    "booked": "تم حجز درسك! ستجده أدناه وستتلقى رسالة تأكيد عبر البريد الإلكتروني.",
+    "greeting": {
+      "morning": "صباح الخير يا {name}",
+      "afternoon": "مساء الخير يا {name}",
+      "evening": "مساء الخير يا {name}"
+    },
     "encouragement": "واصل التقدم — أنت تقترب من المستوى {level}.",
-    "notifications": "الإشعارات (جديدة)",
+    "encouragementGeneric": "كل درس يُحدث فرقًا. واصل عملك الرائع!",
     "bookLesson": "احجز درسًا",
     "nextLesson": {
       "eyebrow": "الدرس التالي · يبدأ بعد {minutes} دقيقة",
-      "title": "{subject} مع {name}",
-      "details": "اليوم · {time} (بتوقيتك) · الموضوع: {topic}",
-      "join": "ادخل الفصل الافتراضي"
+      "eyebrowNow": "يجري الآن",
+      "eyebrowToday": "الدرس التالي · اليوم",
+      "eyebrowPlain": "الدرس التالي",
+      "eyebrowNone": "الدرس التالي",
+      "details": "{day} · {time} (بتوقيتك) · الموضوع: {topic}",
+      "detailsNoTopic": "{day} · {time} (بتوقيتك)",
+      "noneTitle": "لا توجد دروس محجوزة بعد",
+      "noneText": "اختر معلمًا واحجز موعدًا يناسبك.",
+      "findTeacher": "ابحث عن معلم"
     },
     "stats": {
       "label": "تقدمك",
       "hoursStudied": "ساعات الدراسة",
       "hoursHint": "+{hours} هذا الشهر",
+      "hoursNone": "لا دروس هذا الشهر بعد",
       "lessonsCompleted": "الدروس المكتملة",
       "withTeachers": "{count, plural, zero {مع # معلم} one {مع معلم واحد} two {مع معلمَين} few {مع # معلمين} many {مع # معلمًا} other {مع # معلم}}",
+      "noLessonsYet": "درسك الأول بانتظارك",
       "levelProgress": "التقدم في المستوى",
-      "levelProgressAria": "التقدم من {from} إلى {to}",
+      "levelScaleAria": "المستوى الحالي {level} على المقياس من A1 إلى C2",
+      "takeTest": "خذ اختبار تحديد المستوى",
       "currentPlan": "الخطة الحالية",
       "pack": "باقة {count} دروس",
-      "lessonsLeft": "{count, plural, zero {لم يتبقَّ أي درس} one {تبقّى درس واحد} two {تبقّى درسان} few {تبقّت # دروس} many {تبقّى # درسًا} other {تبقّى # درس}}"
+      "lessonsLeftWith": "{count, plural, zero {لم يتبقَّ أي درس مع {name}} one {تبقّى درس واحد مع {name}} two {تبقّى درسان مع {name}} few {تبقّت # دروس مع {name}} many {تبقّى # درسًا مع {name}} other {تبقّى # درس مع {name}}}",
+      "morePacks": "{count, plural, zero {+ # باقات أخرى} one {+ باقة أخرى} two {+ باقتان أخريان} few {+ # باقات أخرى} many {+ # باقة أخرى} other {+ # باقة أخرى}}",
+      "payAsYouGo": "الدفع لكل درس",
+      "noPack": "لا توجد باقة دروس نشطة"
     },
     "upcoming": {
       "title": "الدروس القادمة",
-      "viewCalendar": "عرض التقويم",
-      "reschedule": "تغيير الموعد",
-      "rescheduleAria": "تغيير موعد الدرس مع {name} يوم {date}",
+      "viewAll": "كل الدروس",
+      "noOthers": "لا توجد دروس أخرى محجوزة بعد هذا الدرس.",
+      "empty": "لا توجد دروس قادمة بعد.",
+      "manage": "إدارة",
+      "manageAria": "إدارة الدرس مع {name} يوم {date}",
       "nextTeacher": "<strong>المعلم التالي؟</strong> واصل التعلم مع {name} أو جرّب معلمًا جديدًا.",
       "bookName": "احجز مع {name}",
       "browse": "تصفّح"
@@ -70,24 +101,291 @@
       "title": "ملخص الدرس الأخير",
       "openReport": "فتح التقرير",
       "strengths": "نقاط القوة",
-      "toWorkOn": "نقاط للتحسين"
+      "toWorkOn": "نقاط للتحسين",
+      "empty": "بعد كل درس، يرسل إليك معلمك ملخصًا قصيرًا سيظهر هنا."
     },
     "payments": {
       "title": "المدفوعات",
-      "allInvoices": "جميع الفواتير",
+      "allPayments": "كل المدفوعات",
+      "empty": "لا توجد مدفوعات بعد.",
       "free": "مجانًا",
       "pack": "باقة {count} دروس · {teacher}",
       "single": "درس فردي · {teacher}",
-      "trial": "درس تجريبي · {teacher}"
+      "trial": "درس تجريبي · {teacher}",
+      "package": "درس من باقة · {teacher}",
+      "refunded": "تم استرداد {amount}"
     }
+  },
+  "lessons": {
+    "title": "دروسي",
+    "description": "دروسك المحجوزة ودروسك السابقة وتقارير معلميك.",
+    "bookLesson": "احجز درسًا",
+    "tabsLabel": "عرض الدروس",
+    "tabs": {
+      "upcoming": "القادمة",
+      "past": "السابقة والملغاة"
+    },
+    "cancelled": {
+      "money": "أُلغي الدرس. سيُسترد مبلغ {amount} إلى وسيلة الدفع الأصلية.",
+      "packageCredit": "أُلغي الدرس وعاد إلى باقتك.",
+      "none": "أُلغي الدرس."
+    },
+    "empty": {
+      "upcomingTitle": "لا توجد دروس قادمة",
+      "upcomingText": "اختر معلمًا واحجز درسك التالي، وسيظهر هنا.",
+      "pastTitle": "لا توجد دروس سابقة بعد",
+      "pastText": "بعد درسك الأول، ستجده هنا مع تقرير معلمك."
+    },
+    "findTeacher": "ابحث عن معلم",
+    "timeZoneNote": "المواعيد معروضة حسب منطقتك الزمنية ({tz}).",
+    "with": {
+      "trial": "درس تجريبي مع {name}",
+      "single": "درس مع {name}",
+      "package": "درس من الباقة مع {name}"
+    },
+    "withFull": {
+      "trial": "درس تجريبي · {name}",
+      "single": "درس · {name}",
+      "package": "درس من الباقة · {name}"
+    },
+    "status": {
+      "pending_payment": "بانتظار الدفع",
+      "confirmed": "مؤكَّد",
+      "completed": "مكتمل",
+      "cancelled": "ملغى",
+      "refunded": "ملغى · تم الاسترداد",
+      "no_show": "فائت"
+    },
+    "minutes": "{count} دقيقة",
+    "cancelledByTeacher": "ألغاه المعلم",
+    "cancelledByAdmin": "ألغته Amerivo",
+    "reportReady": "التقرير",
+    "viewReport": "عرض التقرير",
+    "details": "التفاصيل",
+    "review": "اكتب تقييمًا",
+    "reviewTitle": "كيف كان درسك مع {name}؟",
+    "bookAgain": "احجز مجددًا"
   },
   "homework": {
     "title": "الواجبات",
+    "description": "كل ما كلّفك به معلموك في مكان واحد.",
     "status": "{pending} معلّقة · {done} منجزة",
     "completed": "منجز",
+    "submitted": "تم التسليم",
+    "dueToday": "موعد التسليم اليوم",
     "dueTomorrow": "موعد التسليم غدًا",
     "dueOn": "موعد التسليم {date}",
-    "from": "{due} · من {teacher}"
+    "overdue": "متأخر · {date}",
+    "noDueDate": "بدون موعد تسليم",
+    "from": "{due} · من {teacher}",
+    "fromTeacher": "من {name}",
+    "lessonOf": "درس {date}",
+    "allDone": "أنجزت كل شيء — لا توجد واجبات معلّقة.",
+    "seeAll": "كل الواجبات",
+    "fromThisLesson": "واجبات هذا الدرس",
+    "filterLabel": "عرض الواجبات",
+    "filters": {
+      "todo": "المطلوبة ({count})",
+      "done": "المنجزة ({count})",
+      "all": "الكل"
+    },
+    "empty": {
+      "title": "لا توجد واجبات بعد",
+      "text": "عندما يكلّفك معلم بواجب بعد الدرس، سيظهر هنا.",
+      "allDoneTitle": "أنجزت كل شيء!",
+      "allDoneText": "أنهيت جميع واجباتك. أحسنت."
+    },
+    "markDone": "وضع علامة منجز",
+    "markNotDone": "وضع علامة غير منجز"
+  },
+  "lesson": {
+    "metaTitle": "ملخص الدرس",
+    "backToLessons": "العودة إلى دروسي",
+    "eyebrow": "ملخص الدرس",
+    "eyebrowLesson": "الدرس",
+    "niceWork": "أحسنت يا {name}!",
+    "niceWorkNoName": "أحسنت!",
+    "meta": "{teacher} · {date} · {minutes} دقيقة · {topic}",
+    "metaNoTopic": "{teacher} · {date} · {minutes} دقيقة",
+    "homework": "الواجب",
+    "homeworkDue": "الواجب · موعد التسليم {date}",
+    "nextRecommendation": "توصية للدرس التالي",
+    "strengths": "نقاط القوة",
+    "toWorkOn": "نقاط للتحسين",
+    "noReport": "لم يرسل {name} ملخص الدرس بعد. سيصلك إشعار عندما يصبح جاهزًا.",
+    "howWas": "كيف كان درسك مع {name}؟",
+    "reviewedOn": "تم التقييم في {date}",
+    "noReviewNoShow": "لا يمكن تقييم إلا الدروس التي عُقدت فعلًا.",
+    "cancelledText": "أُلغي هذا الدرس.",
+    "bookNext": "احجز الدرس التالي مع {name}",
+    "tryAnother": "جرّب معلمًا آخر"
+  },
+  "dispute": {
+    "title": "هل حدثت مشكلة؟",
+    "intro": "إذا واجهت مشكلة في هذا الدرس (لم يحضر المعلم، أو حدث عطل تقني…)، أبلغنا قبل {date} الساعة {time}. سيراجعها فريقنا.",
+    "button": "الإبلاغ عن مشكلة",
+    "dialogTitle": "الإبلاغ عن مشكلة",
+    "dialogText": "صف ما حدث. سيراجع أحد مسؤولي Amerivo بلاغك وقد يسترد لك ثمن الدرس.",
+    "reason": "ماذا حدث؟",
+    "reasonHint": "10 أحرف على الأقل.",
+    "reasonPlaceholder": "مثال: انضم المعلم متأخرًا 25 دقيقة واختُصر الدرس.",
+    "back": "رجوع",
+    "send": "إرسال البلاغ",
+    "sending": "جارٍ الإرسال…",
+    "reportedTitle": "تم الإبلاغ عن المشكلة",
+    "status": {
+      "open": "قيد المراجعة",
+      "refunded": "تم الاسترداد",
+      "rejected": "مغلق"
+    },
+    "statusText": {
+      "open": "شكرًا لإبلاغنا. يراجع فريقنا بلاغك الآن.",
+      "refunded": "تم قبول بلاغك واسترداد ثمن الدرس.",
+      "rejected": "راجع فريقنا بلاغك وأغلقه دون استرداد."
+    },
+    "resolution": "ردّنا: {text}",
+    "sentOn": "تم الإبلاغ في {date}"
+  },
+  "review": {
+    "labels": {
+      "poor": "ضعيف",
+      "fair": "مقبول",
+      "good": "جيد",
+      "veryGood": "جيد جدًا",
+      "excellent": "ممتاز"
+    },
+    "thanks": "شكرًا على تقييمك!",
+    "rated": "قيّمت هذا الدرس بـ {rating} من 5.",
+    "willAppear": "سيظهر تقييمك في الملف الشخصي العام لـ {name}.",
+    "helps": "تقييمك يساعد {name} والطلاب الآخرين.",
+    "legend": "التقييم",
+    "starOption": "{count, plural, zero {# نجوم} one {نجمة واحدة} two {نجمتان} few {# نجوم} many {# نجمة} other {# نجمة}} – {label}",
+    "tapToRate": "اضغط على نجمة للتقييم",
+    "writeReview": "اكتب مراجعة (اختياري)",
+    "placeholder": "ما الذي أعجبك؟ ستظهر مراجعتك في الملف الشخصي العام لـ {name}.",
+    "submit": "إرسال التقييم",
+    "sending": "جارٍ الإرسال…"
+  },
+  "progress": {
+    "title": "التقدم",
+    "description": "مستواك ودروسك وما لاحظه معلموك.",
+    "statsLabel": "تقدمك بالأرقام",
+    "totalHours": "ساعات الدراسة",
+    "thisMonth": "{hours} ساعة هذا الشهر",
+    "lessonsCompleted": "الدروس المكتملة",
+    "teachers": "المعلمون",
+    "currentLevel": "المستوى الحالي",
+    "nextGoal": "الهدف التالي: {level}",
+    "levelTitle": "مستواك",
+    "scaleAria": "مقياس الإطار الأوروبي المرجعي، المستوى الحالي {level}",
+    "skillsTitle": "اختبار تحديد المستوى حسب المهارة",
+    "skills": {
+      "grammar": "القواعد",
+      "reading": "القراءة",
+      "listening": "الاستماع",
+      "speaking": "التحدث"
+    },
+    "source": {
+      "placement": "المستوى المحدد عند التسجيل",
+      "placement_test": "اختبار تحديد المستوى"
+    },
+    "noLevel": "خذ اختبار تحديد المستوى القصير لمعرفة مستواك ومتابعة تقدمك.",
+    "takeTest": "خذ اختبار تحديد المستوى",
+    "perMonthTitle": "الدروس شهريًا",
+    "lessonsCount": "{count}",
+    "perMonthCaption": "الدروس المكتملة خلال الأشهر الستة الماضية.",
+    "reportsTitle": "تقارير المعلمين",
+    "noReports": "لا توجد تقارير بعد. بعد كل درس، يرسل إليك معلمك ملخصًا بنقاط قوتك وما تحتاج إلى تحسينه.",
+    "openReport": "فتح",
+    "strengths": "نقاط القوة",
+    "toWorkOn": "نقاط للتحسين",
+    "recommendation": "التوصية"
+  },
+  "payments": {
+    "title": "المدفوعات",
+    "description": "سجل مدفوعاتك وباقات دروسك.",
+    "totalsLabel": "الإجماليات",
+    "totalSpent": "إجمالي المدفوع",
+    "totalRefunded": "المسترد",
+    "lessonsInPacks": "الدروس المتبقية في الباقات",
+    "lessonsInPacksHint": "مدفوعة مسبقًا وجاهزة للحجز",
+    "packsTitle": "باقات الدروس",
+    "noPacks": "ليست لديك باقات دروس. باقات 5 أو 10 دروس تأتي بخصم.",
+    "packWith": "باقة {count} دروس · {name}",
+    "boughtOn": "اشتُريت في {date} · {amount}",
+    "packStatus": {
+      "pending_payment": "بانتظار الدفع",
+      "active": "نشطة",
+      "exhausted": "مستنفدة",
+      "refunded": "مستردة",
+      "expired": "منتهية"
+    },
+    "usedAria": "تم حجز {used} من {total} دروس",
+    "remaining": "{count, plural, =0 {لم يتبقَّ أي درس} zero {لم يتبقَّ أي درس} one {تبقّى درس واحد للحجز} two {تبقّى درسان للحجز} few {تبقّت # دروس للحجز} many {تبقّى # درسًا للحجز} other {تبقّى # درس للحجز}}",
+    "bookFromPack": "احجز درسًا",
+    "historyTitle": "سجل المدفوعات",
+    "emptyTitle": "لا توجد مدفوعات بعد",
+    "emptyText": "ستظهر هنا مدفوعاتك والمبالغ المستردة.",
+    "colDate": "التاريخ",
+    "colWhat": "الوصف",
+    "colStatus": "الحالة",
+    "colAmount": "المبلغ",
+    "note": "جميع الأسعار بالدولار الأمريكي (USD). تتم معالجة الدفع بالبطاقة بأمان عبر Stripe.",
+    "what": {
+      "package": "باقة {count} دروس · {name}",
+      "trial": "درس تجريبي · {name}",
+      "single": "درس فردي · {name}"
+    },
+    "lessonOn": "درس {date}",
+    "status": {
+      "requires_payment": "معلّق",
+      "succeeded": "مدفوع",
+      "failed": "فشل",
+      "refunded": "مسترد",
+      "partially_refunded": "مسترد جزئيًا"
+    },
+    "refunded": "تم استرداد {amount}"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "description": "ملفك الشخصي ومنطقتك الزمنية ولغتك وحسابك.",
+    "profileTitle": "الملف الشخصي",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "email": "البريد الإلكتروني",
+    "emailHint": "بريد تسجيل الدخول. لا يمكن تغييره من هنا.",
+    "phone": "الهاتف (اختياري)",
+    "country": "البلد",
+    "countryPlaceholder": "اختر بلدك",
+    "nativeLanguage": "اللغة الأم",
+    "nativeLanguagePlaceholder": "اختر لغتك الأم",
+    "timezone": "المنطقة الزمنية",
+    "timezoneHint": "تُعرض مواعيد الدروس حسب هذه المنطقة الزمنية.",
+    "useDeviceTz": "استخدم المنطقة الزمنية لهذا الجهاز ({tz})",
+    "namesRequired": "يُرجى إدخال الاسم الأول واسم العائلة.",
+    "save": "حفظ التغييرات",
+    "saving": "جارٍ الحفظ…",
+    "saved": "تم حفظ التغييرات",
+    "languageTitle": "لغة الواجهة",
+    "languageText": "اختر لغة موقع Amerivo. دروسك تبقى باللغة الإنجليزية!",
+    "delete": {
+      "title": "حذف حسابي",
+      "text": "احذف حسابك في Amerivo وبياناتك الشخصية نهائيًا.",
+      "button": "حذف حسابي",
+      "dialogTitle": "هل تريد حذف حسابك؟",
+      "consequence1": "سيتم مسح اسمك وبريدك الإلكتروني وهاتفك وملفك الشخصي. لا يمكن التراجع عن ذلك.",
+      "consequence2": "ستفقد الدروس المتبقية في باقاتك.",
+      "consequence3": "يجب إلغاء الدروس القادمة أولًا.",
+      "consequence4": "تُحفظ سجلات الدفع بشكل مجهول الهوية كما تقتضي المحاسبة.",
+      "understand": "أفهم أن حسابي سيُحذف نهائيًا.",
+      "confirmWord": "حذف",
+      "typeToConfirm": "اكتب {word} للتأكيد",
+      "hasLessons": "لا تزال لديك دروس قادمة. يُرجى إلغاؤها أولًا.",
+      "goToLessons": "انتقل إلى دروسي",
+      "keep": "الإبقاء على حسابي",
+      "confirm": "حذف نهائي",
+      "deleting": "جارٍ الحذف…"
+    }
   },
   "live": {
     "booked": "تم حجز درسك! ستجده أدناه، وستصلك رسالة تأكيد عبر البريد الإلكتروني.",
@@ -111,39 +409,6 @@
     "timeZoneNote": "الأوقات معروضة حسب منطقتك الزمنية ({tz}).",
     "classroom": "الفصل الافتراضي",
     "emptyTeacher": "لا توجد دروس قادمة بعد. ستظهر الحجوزات الجديدة هنا."
-  },
-  "lesson": {
-    "metaTitle": "ملخص الدرس",
-    "eyebrow": "ملخص الدرس",
-    "niceWork": "أحسنت اليوم يا {name}!",
-    "meta": "{teacher} · {date} · {minutes} دقيقة · {topic}",
-    "srLesson": "(الدرس {id})",
-    "homeworkDue": "الواجب · موعد التسليم {date}",
-    "nextRecommendation": "توصية للدرس التالي",
-    "strengths": "نقاط القوة",
-    "toWorkOn": "نقاط للتحسين",
-    "howWas": "كيف كان درسك مع {name}؟",
-    "bookNext": "احجز الدرس التالي مع {name}",
-    "tryAnother": "جرّب معلمًا آخر"
-  },
-  "review": {
-    "labels": {
-      "poor": "ضعيف",
-      "fair": "مقبول",
-      "good": "جيد",
-      "veryGood": "جيد جدًا",
-      "excellent": "ممتاز"
-    },
-    "thanks": "شكرًا على تقييمك!",
-    "rated": "قيّمت هذا الدرس بـ {rating} من 5.",
-    "willAppear": "سيظهر تقييمك في الملف الشخصي العام لـ {name}.",
-    "helps": "تقييمك يساعد {name} والطلاب الآخرين.",
-    "legend": "التقييم",
-    "starOption": "{count, plural, zero {# نجوم} one {نجمة واحدة} two {نجمتان} few {# نجوم} many {# نجمة} other {# نجمة}} – {label}",
-    "tapToRate": "اضغط على نجمة للتقييم",
-    "writeReview": "اكتب مراجعة (اختياري)",
-    "placeholder": "ما الذي أعجبك؟ ستظهر مراجعتك في الملف الشخصي العام لـ {name}.",
-    "submit": "إرسال التقييم"
   },
   "messages": {
     "metaTitle": "الرسائل",
