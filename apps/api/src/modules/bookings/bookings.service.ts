@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from "@nestjs/common";
+import { Inject, Injectable, Logger, ServiceUnavailableException } from "@nestjs/common";
 import { and, eq, getTableColumns, gte, inArray, lt, ne, or, sql } from "drizzle-orm";
 import { DB, type Db } from "../../db/db";
 import { auditLogs, bookings, earnings, lessonPackages, lessons, payments, processedEvents, teacherProfiles, users } from "../../db/schema";
@@ -123,13 +123,21 @@ export class BookingsService {
       return { booking, package: created.pkg ?? null, payment: { id: created.payment!.id, clientSecret: null, amountCents: q.totalCents, simulated: true } };
     }
 
-    const intent = await this.stripe.createPaymentIntent({
-      amountCents: q.totalCents,
-      studentId: student.id,
-      paymentId: created.payment!.id,
-      description: `Amerivo English — ${q.lessonCount > 1 ? `${q.lessonCount}-lesson package` : "lesson"} with ${teacher.firstName}`,
-      idempotencyKey: `pi_${created.payment!.id}`,
-    });
+    let intent;
+    try {
+      intent = await this.stripe.createPaymentIntent({
+        amountCents: q.totalCents,
+        studentId: student.id,
+        paymentId: created.payment!.id,
+        description: `Amerivo English — ${q.lessonCount > 1 ? `${q.lessonCount}-lesson package` : "lesson"} with ${teacher.firstName}`,
+        idempotencyKey: `pi_${created.payment!.id}`,
+      });
+    } catch (e) {
+      // No payment could be started: free the slot at once instead of holding it for 30 minutes.
+      this.log.error(`Stripe PaymentIntent failed for booking ${created.booking.id}: ${(e as Error).message}`);
+      await this.expireHold(created.booking, created.payment!.id, "Payment could not be started");
+      throw new ServiceUnavailableException("Payment is temporarily unavailable. Please try again in a few minutes.");
+    }
     await this.db.update(payments).set({ providerRef: intent.id }).where(eq(payments.id, created.payment!.id));
     return { booking: created.booking, package: created.pkg ?? null, payment: { id: created.payment!.id, clientSecret: intent.client_secret, amountCents: q.totalCents } };
   }
@@ -296,9 +304,8 @@ export class BookingsService {
     return stale.length;
   }
 
-  private async expireHold(b: typeof bookings.$inferSelect, paymentId?: string) {
+  private async expireHold(b: typeof bookings.$inferSelect, paymentId?: string, reason = "Payment not completed in time") {
     const now = this.clock.now();
-    const reason = "Payment not completed in time";
     await this.db
       .update(bookings)
       .set({ status: "cancelled", cancelledAt: now, cancelReason: reason })
@@ -315,9 +322,18 @@ export class BookingsService {
       .where(and(eq(bookings.studentId, studentId), eq(bookings.teacherId, teacherId), eq(bookings.startsAt, startsAt), eq(bookings.status, "pending_payment")));
     if (!b) return null;
     const payment = await this.paymentFor(b);
-    if (!payment?.providerRef?.startsWith("pi_") || !this.stripe.isConfigured()) return null;
-    const intent = await this.stripe.retrieveIntent(payment.providerRef);
-    if (!intent.client_secret || ["succeeded", "canceled"].includes(intent.status)) return null;
+    const ref = payment?.providerRef;
+    const intent = ref?.startsWith("pi_") && this.stripe.isConfigured() ? await this.stripe.retrieveIntent(ref) : null;
+    if (intent?.status === "succeeded") {
+      // Paid already (e.g. the page was closed before the confirmation): confirm it now.
+      await this.onPaymentSucceeded(`sync_${intent.id}`, intent.id);
+      return { booking: await this.get(b.id), package: null, payment: { id: payment!.id, clientSecret: null, amountCents: payment!.amountCents } };
+    }
+    if (!intent?.client_secret || intent.status === "canceled" || intent.status === "processing") {
+      // The student's own unpaid booking can't be resumed: release it and book afresh.
+      if (intent?.status !== "processing") await this.expireHold(b, payment?.id, "Replaced by a new booking attempt");
+      return null;
+    }
     const [pkg] = b.packageId ? await this.db.select().from(lessonPackages).where(eq(lessonPackages.id, b.packageId)) : [null];
     return { booking: b, package: pkg ?? null, payment: { id: payment.id, clientSecret: intent.client_secret, amountCents: payment.amountCents } };
   }
