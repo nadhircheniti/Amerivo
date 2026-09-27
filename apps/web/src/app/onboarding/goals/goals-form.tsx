@@ -9,7 +9,7 @@ import { cn } from "@/lib/cn";
 const goals = [
   { id: "business", label: "Business", hint: "Meetings, emails, interviews" },
   { id: "travel", label: "Travel", hint: "Get around with ease" },
-  { id: "university", label: "University", hint: "Study abroad, exams" },
+  { id: "university", label: "Education", hint: "School, university, exams" },
   { id: "immigration", label: "Immigration", hint: "Life and work in the U.S." },
   { id: "conversation", label: "Conversation", hint: "Speak naturally, every day" },
 ] as const;
@@ -60,10 +60,7 @@ export function GoalsForm() {
       <Group legend="Why are you learning English?">
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {goals.map((g) => (
-            <label
-              key={g.id}
-              className={cn(selectable, "flex min-h-[120px] flex-col items-start gap-1.5 rounded-2xl px-3.5 py-[18px] text-left")}
-            >
+            <label key={g.id} className={cn(selectable, "flex min-h-[120px] flex-col items-start gap-1.5 rounded-2xl px-3.5 py-[18px] text-left")}>
               <input type="radio" name="goal" value={g.id} checked={goal === g.id} onChange={() => setGoal(g.id)} className="sr-only" />
               <span className="font-display text-[15px] font-bold">{g.label}</span>
               <span className="text-xs leading-snug text-muted">{g.hint}</span>

@@ -1,9 +1,30 @@
 import Link from "next/link";
 
 const columns = [
-  { title: "Learn", links: [{ href: "/teachers", label: "Find a teacher" }, { href: "/onboarding/goals", label: "Placement test" }, { href: "/#pricing", label: "Pricing" }] },
-  { title: "Teach", links: [{ href: "/teach/apply", label: "Become a teacher" }, { href: "/teach/apply#faq", label: "Teacher FAQ" }] },
-  { title: "Company", links: [{ href: "/about", label: "About" }, { href: "mailto:support@amerivo.example", label: "Support" }, { href: "/privacy", label: "Privacy & GDPR" }, { href: "/terms", label: "Terms" }] },
+  {
+    title: "Learn",
+    links: [
+      { href: "/teachers", label: "Find a teacher" },
+      { href: "/onboarding/goals", label: "Placement test" },
+      { href: "/#pricing", label: "Pricing" },
+    ],
+  },
+  {
+    title: "Teach",
+    links: [
+      { href: "/teach/apply", label: "Become a teacher" },
+      { href: "/teach/apply#faq", label: "Teacher FAQ" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { href: "/about", label: "About" },
+      { href: "mailto:support@amerivo.example", label: "Support" },
+      { href: "/privacy", label: "Privacy & GDPR" },
+      { href: "/terms", label: "Terms" },
+    ],
+  },
 ];
 
 export function SiteFooter() {
@@ -29,7 +50,7 @@ export function SiteFooter() {
           ))}
         </div>
         <div className="flex flex-col items-start justify-between gap-3 border-t border-line-soft pt-6 text-sm text-muted sm:flex-row sm:items-center">
-          <span>© {new Date().getFullYear()} Amerivo English</span>
+          <span>© {new Date().getFullYear()} Amerivo English LLC. All rights reserved.</span>
           <span className="font-display font-semibold tracking-[6px] text-navy">LEARN · CONNECT · GROW</span>
         </div>
       </div>

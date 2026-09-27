@@ -8,6 +8,7 @@ import { Icon, type IconName } from "@/components/ui/icon";
 import { Logo } from "@/components/ui/logo";
 import { Avatar, type AvatarTone } from "@/components/ui/primitives";
 import { SidebarSignOut } from "./auth-nav";
+import { useMe } from "./role-gate";
 
 export type SidebarItem = {
   href: string;
@@ -36,6 +37,18 @@ export function AppSidebar({
 }) {
   const pathname = usePathname();
   const dark = variant === "teacher";
+  // Signed in: show the real account (and its role) instead of the sample profile.
+  const me = useMe();
+  if (me) {
+    const name = `${me.firstName} ${me.lastName}`.trim() || me.email;
+    const roleLabel = me.role === "admin" ? "Administrator" : me.role === "teacher" ? "Teacher" : "Student";
+    user = {
+      name,
+      subtitle: me.role === variant ? roleLabel : `${roleLabel} · viewing ${variant} space`,
+      initials: `${me.firstName.charAt(0)}${me.lastName.charAt(0)}`.toUpperCase() || "A",
+      tone: user?.tone ?? "teal",
+    };
+  }
   const isActive = (item: SidebarItem) => (item.exact ? pathname === item.href : pathname === item.href || pathname.startsWith(item.href + "/"));
 
   return (
