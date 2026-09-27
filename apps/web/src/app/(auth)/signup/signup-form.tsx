@@ -139,6 +139,8 @@ export function SignupForm({ role = "student" }: { role?: SignupRole }) {
           {error}
         </p>
       )}
+      {/* Clerk's bot protection (Smart CAPTCHA) renders here when needed. */}
+      <div id="clerk-captcha" className="sm:col-span-2" />
       <Button type="submit" variant="teal" size="lg" className="mt-2.5 font-bold sm:col-span-2" disabled={pending || !flow.ready}>
         {pending ? t("signup.submitting") : teacher ? t("signup.teacherSubmit") : t("signup.submit")}
       </Button>
