@@ -62,11 +62,12 @@ export const timeLabel = (instant: number, tz: string) =>
       }),
   ).format(instant);
 
-export const dayLabel = (instant: number, tz: string) =>
+/** "Mon, Oct 14" in the visitor's language (`tag` = BCP-47 tag from intlTags). */
+export const dayLabel = (instant: number, tz: string, tag = "en-US") =>
   fmt(
-    `day:${tz}`,
+    `day:${tz}:${tag}`,
     () =>
-      new Intl.DateTimeFormat("en-US", {
+      new Intl.DateTimeFormat(tag, {
         timeZone: tz,
         weekday: "short",
         month: "short",
@@ -115,9 +116,25 @@ export function firstMonday(todayCivil: string) {
   return addDays(todayCivil, -(dow - 1));
 }
 
-const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+/** Short weekday name of a civil date ("Mon", "lun.", "周一"…) in the visitor's language. */
+const weekdayLabel = (civil: string, tag: string) =>
+  fmt(`weekday:${tag}`, () => new Intl.DateTimeFormat(tag, { weekday: "short", timeZone: "UTC" })).format(civilToUtcMidnight(civil) + DAY_MS / 2);
 
-export function buildWeek({ seed, teacherTz, viewerTz, monday, now }: { seed: string; teacherTz: string; viewerTz: string; monday: string; now: number }): SlotDay[] {
+export function buildWeek({
+  seed,
+  teacherTz,
+  viewerTz,
+  monday,
+  now,
+  tag = "en-US",
+}: {
+  seed: string;
+  teacherTz: string;
+  viewerTz: string;
+  monday: string;
+  now: number;
+  tag?: string;
+}): SlotDay[] {
   return [0, 1, 2, 3, 4, 5, 6].map((i) => {
     const date = addDays(monday, i);
     const candidates: Slot[] = [];
@@ -146,7 +163,7 @@ export function buildWeek({ seed, teacherTz, viewerTz, monday, now }: { seed: st
         : Array.from({ length: SLOTS_PER_DAY }, (_, k) => candidates[Math.round((k * (candidates.length - 1)) / (SLOTS_PER_DAY - 1))]);
     return {
       date,
-      weekday: WEEKDAYS[weekdayOf(date)],
+      weekday: weekdayLabel(date, tag),
       dayOfMonth: Number(date.slice(8, 10)),
       slots: picked,
     };
@@ -156,12 +173,12 @@ export function buildWeek({ seed, teacherTz, viewerTz, monday, now }: { seed: st
 export { addDays };
 
 /** Groups API slots (UTC instants) into the 7 viewer-local days starting on `monday`. */
-export function groupApiSlots(startsAt: string[], viewerTz: string, monday: string): SlotDay[] {
+export function groupApiSlots(startsAt: string[], viewerTz: string, monday: string, tag = "en-US"): SlotDay[] {
   const days: SlotDay[] = [0, 1, 2, 3, 4, 5, 6].map((i) => {
     const date = addDays(monday, i);
     return {
       date,
-      weekday: WEEKDAYS[weekdayOf(date)],
+      weekday: weekdayLabel(date, tag),
       dayOfMonth: Number(date.slice(8, 10)),
       slots: [],
     };

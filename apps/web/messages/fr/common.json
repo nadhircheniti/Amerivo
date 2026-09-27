@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "title": "Amerivo English — Apprenez l'anglais à votre façon",
+    "description": "Des cours particuliers en direct avec des professeurs d'anglais américains sélectionnés. Flexibles, personnalisés, partout dans le monde."
+  },
+  "language": {
+    "label": "Langue"
+  },
+  "nav": {
+    "main": "Principal",
+    "home": "Accueil",
+    "teachers": "Professeurs",
+    "howItWorks": "Comment ça marche",
+    "pricing": "Tarifs",
+    "business": "Entreprises",
+    "becomeTeacher": "Devenir professeur",
+    "logIn": "Se connecter",
+    "getStarted": "Commencer",
+    "mySpace": "Mon espace",
+    "logOut": "Se déconnecter",
+    "homeLink": "Accueil Amerivo English"
+  },
+  "footer": {
+    "tagline": "De vraies personnes. De vraies conversations. Un avenir plus brillant.",
+    "learn": "Apprendre",
+    "findTeacher": "Trouver un professeur",
+    "placementTest": "Test de niveau",
+    "pricing": "Tarifs",
+    "teach": "Enseigner",
+    "becomeTeacher": "Devenir professeur",
+    "teacherFaq": "FAQ professeurs",
+    "company": "Entreprise",
+    "about": "À propos",
+    "support": "Assistance",
+    "privacy": "Confidentialité et RGPD",
+    "terms": "Conditions d'utilisation",
+    "rights": "© {year} Amerivo English LLC. Tous droits réservés.",
+    "motto": "APPRENDRE · ÉCHANGER · GRANDIR"
+  },
+  "sidebar": {
+    "nav": "Tableau de bord",
+    "viewing": "{role} · espace {space}"
+  },
+  "roles": {
+    "student": "Élève",
+    "teacher": "Professeur",
+    "admin": "Administrateur"
+  },
+  "spaces": {
+    "student": "élève",
+    "teacher": "professeur",
+    "admin": "admin"
+  },
+  "gate": {
+    "loading": "Chargement de votre espace…",
+    "unreachable": "Impossible de joindre Amerivo pour le moment. Le service est peut-être en train de redémarrer — réessayez dans une minute.",
+    "tryAgain": "Réessayer"
+  },
+  "rating": {
+    "new": "Nouveau",
+    "outOf5": "sur 5",
+    "stars": "{count} étoiles sur 5"
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "description": "La page que vous cherchez n'existe pas ou a été déplacée.",
+    "back": "Retour à l'accueil"
+  },
+  "progress": "Progression",
+  "loading": "Chargement…",
+  "specialties": {
+    "Business English": "Anglais des affaires",
+    "Conversation": "Conversation",
+    "Interview Prep": "Préparation aux entretiens",
+    "IELTS Prep": "Préparation IELTS",
+    "TOEFL Prep": "Préparation TOEFL",
+    "Teens": "Adolescents",
+    "General English": "Anglais général",
+    "Travel": "Voyage",
+    "Corporate": "Entreprises",
+    "Reading": "Lecture",
+    "Grammar": "Grammaire"
+  },
+  "audiences": {
+    "Adults": "Adultes",
+    "Teens": "Adolescents"
+  }
+}

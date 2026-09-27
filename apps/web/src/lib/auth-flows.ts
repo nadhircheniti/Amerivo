@@ -9,6 +9,7 @@
  */
 import { useSignIn, useSignUp } from "@clerk/nextjs/legacy";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { clerkEnabled } from "./auth-config";
 
 export type SignupProfile = {
@@ -23,13 +24,13 @@ export type SignupProfile = {
 };
 export type OAuthProvider = "oauth_google" | "oauth_apple";
 
-/** Readable message from a Clerk error. */
-export function clerkMessage(e: unknown) {
+/** Readable message from a Clerk error (Clerk localizes its own messages); `fallback` is the translated generic error. */
+export function clerkMessage(e: unknown, fallback = "Something went wrong. Please try again.") {
   const err = e as {
     errors?: { longMessage?: string; message?: string }[];
     message?: string;
   };
-  return err.errors?.[0]?.longMessage || err.errors?.[0]?.message || err.message || "Something went wrong. Please try again.";
+  return err.errors?.[0]?.longMessage || err.errors?.[0]?.message || err.message || fallback;
 }
 
 const welcome = (next?: string | null) => `/welcome${next ? `?${new URLSearchParams({ next })}` : ""}`;
@@ -38,6 +39,7 @@ const welcome = (next?: string | null) => `/welcome${next ? `?${new URLSearchPar
 function useClerkSignUpFlow() {
   const { isLoaded, signUp, setActive } = useSignUp();
   const router = useRouter();
+  const t = useTranslations("auth.errors");
   return {
     ready: isLoaded,
     async start(p: SignupProfile) {
@@ -61,7 +63,7 @@ function useClerkSignUpFlow() {
     async verify(code: string) {
       if (!isLoaded) return;
       const res = await signUp.attemptEmailAddressVerification({ code });
-      if (res.status !== "complete" || !res.createdSessionId) throw new Error("This code didn't complete your sign-up. Please try again.");
+      if (res.status !== "complete" || !res.createdSessionId) throw new Error(t("signupIncomplete"));
       await setActive({ session: res.createdSessionId });
       router.push(welcome("/onboarding/goals"));
     },
@@ -103,13 +105,14 @@ export const useSignUpFlow = clerkEnabled ? useClerkSignUpFlow : useDemoSignUpFl
 function useClerkSignInFlow() {
   const { isLoaded, signIn, setActive } = useSignIn();
   const router = useRouter();
+  const t = useTranslations("auth.errors");
   return {
     ready: isLoaded,
     async signIn(email: string, password: string, next?: string | null) {
       if (!isLoaded) return;
       const res = await signIn.create({ identifier: email, password });
       if (res.status !== "complete" || !res.createdSessionId) {
-        throw new Error("Additional verification is required for this account. Please use the link sent to your email.");
+        throw new Error(t("extraVerification"));
       }
       await setActive({ session: res.createdSessionId });
       router.push(welcome(next));

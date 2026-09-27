@@ -1,0 +1,87 @@
+{
+  "goals": {
+    "metaTitle": "Your goals",
+    "step": "Step 3 of 4 · Your goals",
+    "saveLater": "Save & finish later",
+    "title": "Tell us about your goals",
+    "subtitle": "We use your answers to recommend the right teachers.",
+    "whyLegend": "Why are you learning English?",
+    "goals": {
+      "business": "Business",
+      "businessHint": "Meetings, emails, interviews",
+      "travel": "Travel",
+      "travelHint": "Get around with ease",
+      "university": "Education",
+      "universityHint": "School, university, exams",
+      "immigration": "Immigration",
+      "immigrationHint": "Life and work in the U.S.",
+      "conversation": "Conversation",
+      "conversationHint": "Speak naturally, every day"
+    },
+    "levelQuestion": "How would you describe your level?",
+    "levelLabel": "Your English level",
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "teacherLegend": "Preferred teacher",
+    "teacherPrefs": {
+      "none": "No preference",
+      "female": "Female",
+      "male": "Male"
+    },
+    "timesLegend": "Preferred lesson times",
+    "times": {
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening",
+      "weekend": "Weekend"
+    },
+    "back": "Back",
+    "continue": "Continue to level test",
+    "aboutTest": "About the level test",
+    "nextEyebrow": "NEXT · LEVEL TEST",
+    "duration": "About 15 minutes",
+    "testDescription": "Four short sections give you a CEFR level from A1 to C2, saved to your profile.",
+    "sampleLegend": "SAMPLE QUESTION · GRAMMAR"
+  },
+  "skills": {
+    "grammar": "Grammar",
+    "reading": "Reading",
+    "listening": "Listening",
+    "speaking": "Speaking"
+  },
+  "results": {
+    "metaTitle": "Your level and matches",
+    "step": "Step 4 of 4 · Complete",
+    "dashboard": "Go to my dashboard",
+    "levelAria": "Your level: {level}, {label}",
+    "eyebrow": "Your placement result",
+    "title": "Great work, {name}! You're at {level}.",
+    "description": "You can handle most everyday situations. Next goal: speak more fluently in meetings and understand native speakers at natural speed (B2).",
+    "cefrScale": "CEFR scale",
+    "bySkill": "Level by skill",
+    "recommendedTitle": "Teachers recommended for you",
+    "recommendedSubtitle": "Matched on your goal ({goal}), your level, evening availability and rating.",
+    "seeAll": "See all teachers",
+    "bestMatch": "BEST MATCH",
+    "perLesson": "{price} / lesson",
+    "reasons": {
+      "specialist": "{specialty} specialist",
+      "evenings": "Available on your evenings",
+      "speaksSpanish": "Speaks Spanish",
+      "negotiation": "Negotiation & presentations",
+      "experience": "{years, plural, one {# year of experience} other {# years of experience}}",
+      "weekend": "Weekend slots",
+      "fluency": "Focus on speaking fluency",
+      "budget": "Budget friendly"
+    },
+    "bookTrial": "Book free trial",
+    "bookTrialWith": "Book free trial with {name}",
+    "bookLesson": "Book a lesson",
+    "bookLessonWith": "Book a lesson with {name}",
+    "profile": "Profile",
+    "profileOf": "{name}'s profile"
+  }
+}

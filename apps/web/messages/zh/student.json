@@ -1,0 +1,178 @@
+{
+  "nav": {
+    "overview": "概览",
+    "lessons": "我的课程",
+    "findTeachers": "找老师",
+    "messages": "消息",
+    "homework": "作业",
+    "progress": "学习进度",
+    "payments": "付款",
+    "settings": "设置",
+    "userSubtitle": "学生 · {level} 级"
+  },
+  "backToOverview": "返回概览",
+  "comingSoon": {
+    "lessons": {
+      "title": "我的课程",
+      "description": "你的完整课表、历史课程和课后报告将显示在这里。"
+    },
+    "homework": {
+      "title": "作业",
+      "description": "所有已布置、待完成和已完成的作业，一目了然。"
+    },
+    "progress": {
+      "title": "学习进度",
+      "description": "查看你的水平变化、学习时长和各项技能的成长。"
+    },
+    "payments": {
+      "title": "付款",
+      "description": "发票、付款记录和你的课时包。"
+    },
+    "settings": {
+      "title": "设置",
+      "description": "个人资料、通知、时区和密码。"
+    }
+  },
+  "overview": {
+    "metaTitle": "概览",
+    "greeting": "晚上好，{name}",
+    "encouragement": "继续加油——你离 {level} 越来越近了。",
+    "notifications": "通知（有新消息）",
+    "bookLesson": "预约课程",
+    "nextLesson": {
+      "eyebrow": "下一节课 · {minutes} 分钟后开始",
+      "title": "{name}老师的{subject}课",
+      "details": "今天 · {time}（你的时间）· 主题：{topic}",
+      "join": "进入课堂"
+    },
+    "stats": {
+      "label": "你的进度",
+      "hoursStudied": "学习时长（小时）",
+      "hoursHint": "本月 +{hours}",
+      "lessonsCompleted": "已完成课程",
+      "withTeachers": "{count, plural, other {跟随 # 位老师}}",
+      "levelProgress": "等级进度",
+      "levelProgressAria": "从 {from} 到 {to} 的进度",
+      "currentPlan": "当前方案",
+      "pack": "{count} 节课时包",
+      "lessonsLeft": "{count, plural, other {剩余 # 节课}}"
+    },
+    "upcoming": {
+      "title": "即将开始的课程",
+      "viewCalendar": "查看日历",
+      "reschedule": "改期",
+      "rescheduleAria": "将与{name}的课程（{date}）改期",
+      "nextTeacher": "<strong>下一位老师？</strong>继续跟{name}学习，或者试试新老师。",
+      "bookName": "预约{name}",
+      "browse": "浏览"
+    },
+    "lastLesson": {
+      "title": "上节课总结",
+      "openReport": "查看报告",
+      "strengths": "优点",
+      "toWorkOn": "待提高"
+    },
+    "payments": {
+      "title": "付款",
+      "allInvoices": "全部发票",
+      "free": "免费",
+      "pack": "{count} 节课时包 · {teacher}",
+      "single": "单节课 · {teacher}",
+      "trial": "试听课 · {teacher}"
+    }
+  },
+  "homework": {
+    "title": "作业",
+    "status": "待完成 {pending} · 已完成 {done}",
+    "completed": "已完成",
+    "dueTomorrow": "明天截止",
+    "dueOn": "{date}截止",
+    "from": "{due} · 来自{teacher}"
+  },
+  "live": {
+    "booked": "课程预约成功！你可以在下方看到它，确认邮件也会发送到你的邮箱。",
+    "title": "我已预约的课程",
+    "loadError": "暂时无法加载你的课程，请稍后刷新页面。",
+    "empty": "还没有即将开始的课程——选一位老师，预约你的第一节课吧。",
+    "withName": {
+      "trial": "与{name}的试听课",
+      "single": "与{name}的课程",
+      "package": "与{name}的课时包课程"
+    },
+    "withYourTeacher": {
+      "trial": "与你的老师的试听课",
+      "single": "与你的老师的课程",
+      "package": "与你的老师的课时包课程"
+    },
+    "status": {
+      "confirmed": "已确认",
+      "pending_payment": "待付款"
+    },
+    "timeZoneNote": "时间按你所在的时区显示（{tz}）。"
+  },
+  "lesson": {
+    "metaTitle": "课程总结",
+    "eyebrow": "课程总结",
+    "niceWork": "今天表现很棒，{name}！",
+    "meta": "{teacher} · {date} · {minutes} 分钟 · {topic}",
+    "srLesson": "（课程 {id}）",
+    "homeworkDue": "作业 · {date}截止",
+    "nextRecommendation": "下节课建议",
+    "strengths": "优点",
+    "toWorkOn": "待提高",
+    "howWas": "你和{name}的这节课怎么样？",
+    "bookNext": "继续预约{name}",
+    "tryAnother": "试试其他老师"
+  },
+  "review": {
+    "labels": {
+      "poor": "很差",
+      "fair": "一般",
+      "good": "不错",
+      "veryGood": "很好",
+      "excellent": "非常棒"
+    },
+    "thanks": "感谢你的评价！",
+    "rated": "你给这节课打了 {rating} 分（满分 5 分）。",
+    "willAppear": "你的评价将显示在{name}的公开主页上。",
+    "helps": "你的评分能帮助{name}和其他学生。",
+    "legend": "评分",
+    "starOption": "{count, plural, other {# 星}} – {label}",
+    "tapToRate": "点击星星进行评分",
+    "writeReview": "写评价（选填）",
+    "placeholder": "你喜欢这节课的哪些方面？评价将显示在{name}的公开主页上。",
+    "submit": "提交评价"
+  },
+  "messages": {
+    "metaTitle": "消息",
+    "title": "消息",
+    "searchLabel": "搜索消息",
+    "searchPlaceholder": "搜索",
+    "conversations": "对话",
+    "unread": "未读",
+    "noMatch": "没有与“{query}”匹配的对话。",
+    "conversationWith": "与{name}的对话",
+    "backToList": "返回对话列表",
+    "attach": "添加附件",
+    "messageLabel": "消息",
+    "placeholder": "输入消息…",
+    "send": "发送",
+    "youSr": "你：",
+    "youPreview": "你：{text}",
+    "youSent": "你发送了 {name}",
+    "open": "打开",
+    "openFile": "打开 {name}",
+    "details": "对话详情",
+    "viewProfile": "查看主页",
+    "sharedFiles": "共享文件",
+    "together": "一起学习的记录",
+    "togetherStats": "{lessons, plural, other {# 节课}} · {hours} 小时",
+    "joinLesson": "进入 {time} 的课程",
+    "today": "今天",
+    "homeworkSubmitted": "作业已提交",
+    "online": "在线 · {city}，{time}",
+    "lastSeen": "最后在线：{day} · {city}",
+    "repliesWithinHours": "通常在几小时内回复",
+    "supportSubtitle": "预约、付款和账户相关帮助"
+  }
+}

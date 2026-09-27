@@ -1,0 +1,178 @@
+{
+  "nav": {
+    "overview": "نظرة عامة",
+    "lessons": "دروسي",
+    "findTeachers": "ابحث عن معلم",
+    "messages": "الرسائل",
+    "homework": "الواجبات",
+    "progress": "التقدم",
+    "payments": "المدفوعات",
+    "settings": "الإعدادات",
+    "userSubtitle": "طالب · المستوى {level}"
+  },
+  "backToOverview": "العودة إلى النظرة العامة",
+  "comingSoon": {
+    "lessons": {
+      "title": "دروسي",
+      "description": "ستجد هنا قريبًا تقويم دروسك الكامل والدروس السابقة وتقاريرها."
+    },
+    "homework": {
+      "title": "الواجبات",
+      "description": "جميع الواجبات المُسندة والمعلّقة والمنجزة في مكان واحد."
+    },
+    "progress": {
+      "title": "التقدم",
+      "description": "تطور مستواك وساعات الدراسة ومهاراتك بمرور الوقت."
+    },
+    "payments": {
+      "title": "المدفوعات",
+      "description": "الفواتير وسجل المدفوعات وباقات دروسك."
+    },
+    "settings": {
+      "title": "الإعدادات",
+      "description": "الملف الشخصي والإشعارات والمنطقة الزمنية وكلمة المرور."
+    }
+  },
+  "overview": {
+    "metaTitle": "نظرة عامة",
+    "greeting": "مساء الخير يا {name}",
+    "encouragement": "واصل التقدم — أنت تقترب من المستوى {level}.",
+    "notifications": "الإشعارات (جديدة)",
+    "bookLesson": "احجز درسًا",
+    "nextLesson": {
+      "eyebrow": "الدرس التالي · يبدأ بعد {minutes} دقيقة",
+      "title": "{subject} مع {name}",
+      "details": "اليوم · {time} (بتوقيتك) · الموضوع: {topic}",
+      "join": "ادخل الفصل الافتراضي"
+    },
+    "stats": {
+      "label": "تقدمك",
+      "hoursStudied": "ساعات الدراسة",
+      "hoursHint": "+{hours} هذا الشهر",
+      "lessonsCompleted": "الدروس المكتملة",
+      "withTeachers": "{count, plural, zero {مع # معلم} one {مع معلم واحد} two {مع معلمَين} few {مع # معلمين} many {مع # معلمًا} other {مع # معلم}}",
+      "levelProgress": "التقدم في المستوى",
+      "levelProgressAria": "التقدم من {from} إلى {to}",
+      "currentPlan": "الخطة الحالية",
+      "pack": "باقة {count} دروس",
+      "lessonsLeft": "{count, plural, zero {لم يتبقَّ أي درس} one {تبقّى درس واحد} two {تبقّى درسان} few {تبقّت # دروس} many {تبقّى # درسًا} other {تبقّى # درس}}"
+    },
+    "upcoming": {
+      "title": "الدروس القادمة",
+      "viewCalendar": "عرض التقويم",
+      "reschedule": "تغيير الموعد",
+      "rescheduleAria": "تغيير موعد الدرس مع {name} يوم {date}",
+      "nextTeacher": "<strong>المعلم التالي؟</strong> واصل التعلم مع {name} أو جرّب معلمًا جديدًا.",
+      "bookName": "احجز مع {name}",
+      "browse": "تصفّح"
+    },
+    "lastLesson": {
+      "title": "ملخص الدرس الأخير",
+      "openReport": "فتح التقرير",
+      "strengths": "نقاط القوة",
+      "toWorkOn": "نقاط للتحسين"
+    },
+    "payments": {
+      "title": "المدفوعات",
+      "allInvoices": "جميع الفواتير",
+      "free": "مجانًا",
+      "pack": "باقة {count} دروس · {teacher}",
+      "single": "درس فردي · {teacher}",
+      "trial": "درس تجريبي · {teacher}"
+    }
+  },
+  "homework": {
+    "title": "الواجبات",
+    "status": "{pending} معلّقة · {done} منجزة",
+    "completed": "منجز",
+    "dueTomorrow": "موعد التسليم غدًا",
+    "dueOn": "موعد التسليم {date}",
+    "from": "{due} · من {teacher}"
+  },
+  "live": {
+    "booked": "تم حجز درسك! ستجده أدناه، وستصلك رسالة تأكيد عبر البريد الإلكتروني.",
+    "title": "دروسي المحجوزة",
+    "loadError": "تعذّر تحميل دروسك الآن. يُرجى تحديث الصفحة بعد دقيقة.",
+    "empty": "لا توجد دروس قادمة بعد — اختر معلمًا واحجز درسك الأول.",
+    "withName": {
+      "trial": "درس تجريبي مع {name}",
+      "single": "درس مع {name}",
+      "package": "درس من الباقة مع {name}"
+    },
+    "withYourTeacher": {
+      "trial": "درس تجريبي مع معلمك",
+      "single": "درس مع معلمك",
+      "package": "درس من الباقة مع معلمك"
+    },
+    "status": {
+      "confirmed": "مؤكَّد",
+      "pending_payment": "بانتظار الدفع"
+    },
+    "timeZoneNote": "الأوقات معروضة حسب منطقتك الزمنية ({tz})."
+  },
+  "lesson": {
+    "metaTitle": "ملخص الدرس",
+    "eyebrow": "ملخص الدرس",
+    "niceWork": "أحسنت اليوم يا {name}!",
+    "meta": "{teacher} · {date} · {minutes} دقيقة · {topic}",
+    "srLesson": "(الدرس {id})",
+    "homeworkDue": "الواجب · موعد التسليم {date}",
+    "nextRecommendation": "توصية للدرس التالي",
+    "strengths": "نقاط القوة",
+    "toWorkOn": "نقاط للتحسين",
+    "howWas": "كيف كان درسك مع {name}؟",
+    "bookNext": "احجز الدرس التالي مع {name}",
+    "tryAnother": "جرّب معلمًا آخر"
+  },
+  "review": {
+    "labels": {
+      "poor": "ضعيف",
+      "fair": "مقبول",
+      "good": "جيد",
+      "veryGood": "جيد جدًا",
+      "excellent": "ممتاز"
+    },
+    "thanks": "شكرًا على تقييمك!",
+    "rated": "قيّمت هذا الدرس بـ {rating} من 5.",
+    "willAppear": "سيظهر تقييمك في الملف الشخصي العام لـ {name}.",
+    "helps": "تقييمك يساعد {name} والطلاب الآخرين.",
+    "legend": "التقييم",
+    "starOption": "{count, plural, zero {# نجوم} one {نجمة واحدة} two {نجمتان} few {# نجوم} many {# نجمة} other {# نجمة}} – {label}",
+    "tapToRate": "اضغط على نجمة للتقييم",
+    "writeReview": "اكتب مراجعة (اختياري)",
+    "placeholder": "ما الذي أعجبك؟ ستظهر مراجعتك في الملف الشخصي العام لـ {name}.",
+    "submit": "إرسال التقييم"
+  },
+  "messages": {
+    "metaTitle": "الرسائل",
+    "title": "الرسائل",
+    "searchLabel": "البحث في الرسائل",
+    "searchPlaceholder": "بحث",
+    "conversations": "المحادثات",
+    "unread": "غير مقروءة",
+    "noMatch": "لا توجد محادثات تطابق «{query}».",
+    "conversationWith": "محادثة مع {name}",
+    "backToList": "العودة إلى المحادثات",
+    "attach": "إرفاق ملف",
+    "messageLabel": "الرسالة",
+    "placeholder": "اكتب رسالة…",
+    "send": "إرسال",
+    "youSr": "أنت: ",
+    "youPreview": "أنت: {text}",
+    "youSent": "أرسلتَ {name}",
+    "open": "فتح",
+    "openFile": "فتح {name}",
+    "details": "تفاصيل المحادثة",
+    "viewProfile": "عرض الملف الشخصي",
+    "sharedFiles": "الملفات المشتركة",
+    "together": "مسيرتكما معًا حتى الآن",
+    "togetherStats": "{lessons, plural, zero {# دروس} one {درس واحد} two {درسان} few {# دروس} many {# درسًا} other {# درس}} · {hours} ساعة",
+    "joinLesson": "انضم إلى درس {time}",
+    "today": "اليوم",
+    "homeworkSubmitted": "تم تسليم الواجب",
+    "online": "متصل الآن · {city}، {time}",
+    "lastSeen": "آخر ظهور {day} · {city}",
+    "repliesWithinHours": "يرد عادةً خلال بضع ساعات",
+    "supportSubtitle": "مساعدة في الحجوزات والمدفوعات وحسابك"
+  }
+}

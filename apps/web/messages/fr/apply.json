@@ -1,0 +1,270 @@
+{
+  "page": {
+    "metaTitle": "Enseigner sur Amerivo",
+    "metaDescription": "Postulez pour enseigner l'anglais américain en ligne avec Amerivo. Fixez votre propre tarif, soyez payé chaque mois.",
+    "brandSuffix": "pour les professeurs",
+    "saveExit": "Enregistrer et quitter",
+    "faqEyebrow": "FAQ professeurs",
+    "faqTitle": "Vos questions avant de postuler",
+    "faq": {
+      "earn": {
+        "q": "Combien puis-je gagner ?",
+        "a": "Vous fixez votre tarif entre {min} et {max} par cours de 50 minutes. Amerivo prélève une commission de {commission} %, donc à {example} vous recevez {net} par cours. Vous pouvez aussi proposer des forfaits de 5 et 10 cours."
+      },
+      "paid": {
+        "q": "Quand et comment suis-je payé ?",
+        "a": "Les versements sont effectués chaque mois, au plus tard le 28, via Stripe Connect sur votre compte bancaire. Chaque versement couvre les cours terminés au cours de la période précédente."
+      },
+      "who": {
+        "q": "Qui peut postuler ?",
+        "a": "Les professeurs Amerivo sont des anglophones natifs des États-Unis. Une certification d'enseignement (TESOL, TEFL ou CELTA) ou une expérience en classe est fortement recommandée, et chaque candidat passe une vérification d'identité et un court entretien."
+      },
+      "equipment": {
+        "q": "De quel équipement ai-je besoin ?",
+        "a": "Un ordinateur avec webcam, un casque ou un bon micro, une connexion internet stable (10 Mbit/s ou plus) et un endroit calme et bien éclairé. Les cours se déroulent dans le navigateur, sans logiciel à installer."
+      }
+    }
+  },
+  "steps": {
+    "personal": {
+      "title": "Infos personnelles",
+      "heading": "Informations personnelles",
+      "continue": "Continuer vers les infos personnelles"
+    },
+    "professional": {
+      "title": "Infos professionnelles",
+      "heading": "Informations professionnelles",
+      "continue": "Continuer vers les infos professionnelles"
+    },
+    "identity": {
+      "title": "Vérification d'identité",
+      "heading": "Vérification d'identité",
+      "continue": "Continuer vers la vérification d'identité"
+    },
+    "video": {
+      "title": "Vidéo de présentation",
+      "heading": "Vidéo de présentation",
+      "continue": "Continuer vers la vidéo de présentation"
+    },
+    "review": {
+      "title": "Récapitulatif et entretien",
+      "heading": "Récapitulatif et entretien",
+      "continue": "Continuer vers le récapitulatif"
+    },
+    "approval": {
+      "title": "Validation",
+      "heading": "Statut de la candidature",
+      "continue": "Continuer vers la validation"
+    }
+  },
+  "wizard": {
+    "navLabel": "Étapes de la candidature",
+    "yourApplication": "Votre candidature",
+    "completed": "(terminée)",
+    "usOnly": "Seuls les anglophones natifs des États-Unis peuvent enseigner sur Amerivo.",
+    "progress": "Étape {current} sur {total}",
+    "back": "Retour",
+    "submit": "Envoyer ma candidature",
+    "backHome": "Retour à Amerivo"
+  },
+  "options": {
+    "subjects": {
+      "businessEnglish": "Anglais des affaires",
+      "conversation": "Conversation (expression orale)",
+      "reading": "Lecture",
+      "generalEnglish": "Anglais général",
+      "interviewPrep": "Préparation aux entretiens",
+      "examPrep": "Préparation IELTS / TOEFL"
+    },
+    "groups": {
+      "adults": "Adultes",
+      "teens": "Adolescents (13–17 ans)",
+      "corporate": "Groupes en entreprise"
+    },
+    "education": {
+      "bachelor": "Licence (Bachelor)",
+      "master": "Master",
+      "phd": "Doctorat",
+      "associate": "Associate degree (bac +2)",
+      "other": "Autre"
+    },
+    "experience": {
+      "lessThan1": "Moins d'un an",
+      "oneToTwo": "1 à 2 ans",
+      "threeToFive": "3 à 5 ans",
+      "fiveToTen": "5 à 10 ans",
+      "tenPlus": "Plus de 10 ans"
+    },
+    "countryOther": "Autre",
+    "genders": {
+      "female": "Femme",
+      "male": "Homme",
+      "undisclosed": "Je préfère ne pas répondre"
+    },
+    "timeZones": {
+      "newYork": "Heure de l'Est (ET)",
+      "chicago": "Heure du Centre (CT)",
+      "denver": "Heure des Rocheuses (MT)",
+      "phoenix": "Arizona (MST)",
+      "losAngeles": "Heure du Pacifique (PT)",
+      "anchorage": "Heure de l'Alaska (AKT)",
+      "honolulu": "Heure d'Hawaï (HT)",
+      "london": "Londres (GMT/BST)",
+      "madrid": "Europe centrale (CET)",
+      "tokyo": "Tokyo (JST)"
+    },
+    "idTypes": {
+      "passport": "Passeport",
+      "license": "Permis de conduire",
+      "government": "Pièce d'identité officielle"
+    },
+    "interviewSlots": {
+      "weekdayMornings": "Matins en semaine",
+      "weekdayAfternoons": "Après-midi en semaine",
+      "weekdayEvenings": "Soirées en semaine",
+      "weekends": "Week-ends"
+    }
+  },
+  "fields": {
+    "add": "Ajouter…",
+    "remove": "Retirer {value}",
+    "selectedFiles": "Fichiers sélectionnés"
+  },
+  "personal": {
+    "photo": "Photo de profil",
+    "photoHint": "Un portrait souriant et bien éclairé. Les élèves le voient sur votre profil et dans les résultats de recherche.",
+    "replacePhoto": "Remplacer la photo",
+    "uploadPhoto": "Importer une photo (JPG, PNG)",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "country": "Pays de résidence",
+    "timeZone": "Fuseau horaire",
+    "timeZoneHint": "Permet d'afficher vos disponibilités aux élèves dans leur heure locale.",
+    "gender": "Genre",
+    "genderHint": "Certains élèves filtrent selon le genre du professeur. Vous pourrez modifier ce choix plus tard."
+  },
+  "professional": {
+    "education": "Diplôme le plus élevé",
+    "experience": "Années d'expérience en enseignement",
+    "subjects": "Que pouvez-vous enseigner ?",
+    "groups": "Publics auxquels vous pouvez enseigner",
+    "certifications": "Certifications",
+    "uploadCertificates": "Importer vos certificats (PDF, JPG)",
+    "languages": "Langues parlées",
+    "languagesPlaceholder": "ex. Espagnol · B1",
+    "rate": "Votre tarif par cours de 50 min",
+    "rateValue": "{price} par cours",
+    "net": "Vous recevez {net} après la commission de {commission} % de la plateforme",
+    "trial": "Proposer un cours d'essai gratuit de 20 minutes",
+    "trialHint": "Les élèves peuvent vous rencontrer une fois avant de réserver. Vous pourrez modifier ce choix plus tard."
+  },
+  "previews": {
+    "label": "Prochaines étapes",
+    "step3": "ÉTAPE 3 · APERÇU",
+    "identityTitle": "Vérification d'identité",
+    "identityText": "Pièce d'identité officielle, passeport ou permis de conduire, plus un selfie. Traité de façon sécurisée par Stripe Identity.",
+    "identityUpload": "Importer une pièce d'identité",
+    "step4": "ÉTAPE 4 · APERÇU",
+    "videoTitle": "Vidéo de présentation de 2 minutes",
+    "videoText": "Parcours · Expérience · Style d'enseignement. Les élèves la voient sur votre profil."
+  },
+  "identity": {
+    "intro": "Nous vérifions chaque professeur avant qu'il puisse accepter des réservations. Importez une pièce d'identité avec photo en cours de validité ; un selfie rapide vous sera demandé pour la comparer.",
+    "documentType": "Type de document",
+    "upload": {
+      "passport": "Importer votre passeport",
+      "license": "Importer votre permis de conduire",
+      "government": "Importer votre pièce d'identité officielle"
+    },
+    "uploadHint": "Recto et verso si nécessaire · JPG, PNG ou PDF",
+    "secure": "<strong>Traité de façon sécurisée par Stripe Identity.</strong> Amerivo ne conserve jamais de copie de votre pièce d'identité ; nous recevons uniquement le résultat de la vérification.",
+    "taxTitle": "Informations fiscales (W-9)",
+    "taxText": "Nous recueillons votre formulaire W-9 ; les formulaires 1099 sont émis automatiquement. Vous le remplirez en connectant votre compte de versement."
+  },
+  "video": {
+    "intro": "Enregistrez une vidéo de 2 minutes maximum. Les élèves la regardent sur votre profil avant de réserver : parlez naturellement et regardez la caméra.",
+    "browserRecording": "Enregistrement navigateur ({duration})",
+    "recordingTime": "Durée d'enregistrement",
+    "recording": "Enregistrement",
+    "stop": "Arrêter l'enregistrement",
+    "again": "Enregistrer à nouveau",
+    "record": "Enregistrer dans le navigateur",
+    "upload": "Importer un fichier vidéo",
+    "formats": "MP4, MOV ou WebM · 2 minutes max.",
+    "whatToCover": "Ce qu'il faut aborder",
+    "topics": {
+      "background": {
+        "title": "Parcours",
+        "text": "D'où vous venez aux États-Unis et quelques mots sur vous."
+      },
+      "experience": {
+        "title": "Expérience",
+        "text": "À qui vous avez enseigné et quels résultats ils ont obtenus."
+      },
+      "style": {
+        "title": "Style d'enseignement",
+        "text": "À quoi ressemble un cours avec vous."
+      }
+    },
+    "topic": "{number}. {title}"
+  },
+  "review": {
+    "notProvided": "Non renseigné",
+    "edit": "Modifier",
+    "editSection": "Modifier : {section}",
+    "name": "Nom",
+    "email": "E-mail",
+    "phone": "Téléphone",
+    "country": "Pays",
+    "gender": "Genre",
+    "timeZone": "Fuseau horaire",
+    "photo": "Photo",
+    "education": "Diplôme",
+    "experience": "Expérience",
+    "teaches": "Enseigne",
+    "groups": "Publics",
+    "certifications": "Certifications",
+    "languages": "Langues",
+    "rate": "Tarif",
+    "rateValue": "{price} par cours · vous recevez {net} · cours d'essai gratuit {trial, select, on {activé} other {désactivé}}",
+    "document": "Document",
+    "documentValue": "{type} · {count, plural, one {# fichier} other {# fichiers}}",
+    "w9": "W-9",
+    "w9Value": "Recueilli lors de la connexion de vos versements",
+    "video": "Vidéo",
+    "interviewTitle": "Court entretien",
+    "interviewText": "Si votre candidature est retenue, nous vous inviterons à un entretien vidéo de 15 minutes avec notre équipe pédagogique.",
+    "interviewTime": "Créneau d'entretien préféré",
+    "confirm": "Je confirme être anglophone natif des États-Unis et que les informations de cette candidature sont exactes."
+  },
+  "approval": {
+    "submitted": "Candidature envoyée",
+    "pendingReview": "En cours d'examen",
+    "thanks": "Merci !",
+    "thanksName": "Merci, {name} !",
+    "emailTo": "Nous écrirons à {email} sous 3 à 5 jours ouvrés pour planifier votre entretien.",
+    "emailYou": "Nous vous écrirons sous 3 à 5 jours ouvrés pour planifier votre entretien.",
+    "statusTitle": "Ce que signifie chaque statut",
+    "current": "(votre statut actuel)",
+    "statuses": {
+      "pending": {
+        "label": "En attente",
+        "text": "Nous examinons vos documents, votre vidéo et votre entretien. Cela prend généralement 3 à 5 jours ouvrés."
+      },
+      "approved": {
+        "label": "Approuvé",
+        "text": "Votre profil est mis en ligne. Définissez vos disponibilités et connectez Stripe pour commencer à accepter des réservations."
+      },
+      "rejected": {
+        "label": "Refusé",
+        "text": "Votre candidature ne répond pas à nos critères cette fois-ci. Nous vous enverrons la raison par e-mail."
+      },
+      "suspended": {
+        "label": "Suspendu",
+        "text": "Un compte validé peut être suspendu si nos standards pédagogiques ou nos conditions ne sont pas respectés."
+      }
+    }
+  }
+}

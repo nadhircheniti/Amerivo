@@ -1,0 +1,178 @@
+{
+  "nav": {
+    "overview": "Overview",
+    "lessons": "My lessons",
+    "findTeachers": "Find teachers",
+    "messages": "Messages",
+    "homework": "Homework",
+    "progress": "Progress",
+    "payments": "Payments",
+    "settings": "Settings",
+    "userSubtitle": "Student · Level {level}"
+  },
+  "backToOverview": "Back to overview",
+  "comingSoon": {
+    "lessons": {
+      "title": "My lessons",
+      "description": "Your full lesson calendar, past lessons and reports will live here."
+    },
+    "homework": {
+      "title": "Homework",
+      "description": "All assigned, pending and completed homework in one place."
+    },
+    "progress": {
+      "title": "Progress",
+      "description": "Your level history, hours studied and skills over time."
+    },
+    "payments": {
+      "title": "Payments",
+      "description": "Invoices, payment history and your lesson packages."
+    },
+    "settings": {
+      "title": "Settings",
+      "description": "Profile, notifications, time zone and password."
+    }
+  },
+  "overview": {
+    "metaTitle": "Overview",
+    "greeting": "Good evening, {name}",
+    "encouragement": "Keep going — you're getting closer to {level}.",
+    "notifications": "Notifications (new)",
+    "bookLesson": "Book a lesson",
+    "nextLesson": {
+      "eyebrow": "Next lesson · starts in {minutes} min",
+      "title": "{subject} with {name}",
+      "details": "Today · {time} (your time) · Topic: {topic}",
+      "join": "Join classroom"
+    },
+    "stats": {
+      "label": "Your progress",
+      "hoursStudied": "Hours studied",
+      "hoursHint": "+{hours} this month",
+      "lessonsCompleted": "Lessons completed",
+      "withTeachers": "{count, plural, one {With # teacher} other {With # teachers}}",
+      "levelProgress": "Level progress",
+      "levelProgressAria": "Progress from {from} to {to}",
+      "currentPlan": "Current plan",
+      "pack": "{count}-lesson pack",
+      "lessonsLeft": "{count, plural, one {# lesson left} other {# lessons left}}"
+    },
+    "upcoming": {
+      "title": "Upcoming lessons",
+      "viewCalendar": "View calendar",
+      "reschedule": "Reschedule",
+      "rescheduleAria": "Reschedule lesson with {name} on {date}",
+      "nextTeacher": "<strong>Next teacher?</strong> Keep learning with {name} or try someone new.",
+      "bookName": "Book {name}",
+      "browse": "Browse"
+    },
+    "lastLesson": {
+      "title": "Last lesson summary",
+      "openReport": "Open report",
+      "strengths": "Strengths",
+      "toWorkOn": "To work on"
+    },
+    "payments": {
+      "title": "Payments",
+      "allInvoices": "All invoices",
+      "free": "Free",
+      "pack": "{count}-lesson pack · {teacher}",
+      "single": "Single lesson · {teacher}",
+      "trial": "Trial lesson · {teacher}"
+    }
+  },
+  "homework": {
+    "title": "Homework",
+    "status": "{pending} pending · {done} done",
+    "completed": "Completed",
+    "dueTomorrow": "Due tomorrow",
+    "dueOn": "Due {date}",
+    "from": "{due} · from {teacher}"
+  },
+  "live": {
+    "booked": "Your lesson is booked! You'll find it below and receive a confirmation e-mail.",
+    "title": "My booked lessons",
+    "loadError": "We couldn't load your lessons right now. Please refresh in a minute.",
+    "empty": "No upcoming lessons yet — pick a teacher and book your first one.",
+    "withName": {
+      "trial": "Trial lesson with {name}",
+      "single": "Lesson with {name}",
+      "package": "Pack lesson with {name}"
+    },
+    "withYourTeacher": {
+      "trial": "Trial lesson with your teacher",
+      "single": "Lesson with your teacher",
+      "package": "Pack lesson with your teacher"
+    },
+    "status": {
+      "confirmed": "Confirmed",
+      "pending_payment": "Awaiting payment"
+    },
+    "timeZoneNote": "Times shown in your time zone ({tz})."
+  },
+  "lesson": {
+    "metaTitle": "Lesson summary",
+    "eyebrow": "Lesson summary",
+    "niceWork": "Nice work today, {name}!",
+    "meta": "{teacher} · {date} · {minutes} min · {topic}",
+    "srLesson": "(lesson {id})",
+    "homeworkDue": "Homework · due {date}",
+    "nextRecommendation": "Next lesson recommendation",
+    "strengths": "Strengths",
+    "toWorkOn": "To work on",
+    "howWas": "How was your lesson with {name}?",
+    "bookNext": "Book next with {name}",
+    "tryAnother": "Try another teacher"
+  },
+  "review": {
+    "labels": {
+      "poor": "Poor",
+      "fair": "Fair",
+      "good": "Good",
+      "veryGood": "Very good",
+      "excellent": "Excellent"
+    },
+    "thanks": "Thanks for your review!",
+    "rated": "You rated this lesson {rating} out of 5.",
+    "willAppear": "Your review will appear on {name}'s public profile.",
+    "helps": "Your rating helps {name} and other students.",
+    "legend": "Rating",
+    "starOption": "{count, plural, one {# star} other {# stars}} – {label}",
+    "tapToRate": "Tap a star to rate",
+    "writeReview": "Write a review (optional)",
+    "placeholder": "What did you like? This will appear on {name}'s public profile.",
+    "submit": "Submit review"
+  },
+  "messages": {
+    "metaTitle": "Messages",
+    "title": "Messages",
+    "searchLabel": "Search messages",
+    "searchPlaceholder": "Search",
+    "conversations": "Conversations",
+    "unread": "Unread",
+    "noMatch": "No conversations match “{query}”.",
+    "conversationWith": "Conversation with {name}",
+    "backToList": "Back to conversations",
+    "attach": "Attach a file",
+    "messageLabel": "Message",
+    "placeholder": "Write a message…",
+    "send": "Send",
+    "youSr": "You: ",
+    "youPreview": "You: {text}",
+    "youSent": "You sent {name}",
+    "open": "Open",
+    "openFile": "Open {name}",
+    "details": "Conversation details",
+    "viewProfile": "View profile",
+    "sharedFiles": "Shared files",
+    "together": "Together so far",
+    "togetherStats": "{lessons, plural, one {# lesson} other {# lessons}} · {hours} h",
+    "joinLesson": "Join {time} lesson",
+    "today": "Today",
+    "homeworkSubmitted": "Homework submitted",
+    "online": "Online · {city}, {time}",
+    "lastSeen": "Last seen {day} · {city}",
+    "repliesWithinHours": "Usually replies within a few hours",
+    "supportSubtitle": "Help with bookings, payments and your account"
+  }
+}

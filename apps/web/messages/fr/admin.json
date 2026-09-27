@@ -1,0 +1,209 @@
+{
+  "nav": {
+    "analytics": "Statistiques",
+    "teachers": "Professeurs",
+    "students": "Élèves",
+    "bookings": "Réservations",
+    "payments": "Paiements et versements",
+    "disputes": "Litiges et remboursements",
+    "settings": "Paramètres et journal d'audit",
+    "signedIn2fa": "Connecté avec la double authentification"
+  },
+  "comingSoon": {
+    "back": "Retour aux statistiques",
+    "bookingsTitle": "Réservations",
+    "bookingsDescription": "Cours à venir, terminés et annulés, avec report et forçage de statut.",
+    "disputesTitle": "Litiges et remboursements",
+    "disputesDescription": "Réclamations et demandes de remboursement (délai de 24 heures).",
+    "paymentsTitle": "Paiements et versements",
+    "paymentsDescription": "Chiffre d'affaires, versements aux professeurs, remboursements et paiements en attente.",
+    "settingsTitle": "Paramètres et journal d'audit",
+    "settingsDescription": "Calendrier des versements, commission, administrateurs avec double authentification et journal d'audit.",
+    "studentsTitle": "Élèves",
+    "studentsDescription": "Ajouter, modifier, bloquer, contacter et rembourser des élèves."
+  },
+  "overview": {
+    "metaTitle": "Statistiques de la plateforme · Amerivo Admin",
+    "title": "Statistiques de la plateforme",
+    "subtitle": "Données d'exemple · chiffres mis à jour en temps réel",
+    "period": "Période",
+    "last30": "30 derniers jours",
+    "last90": "90 derniers jours",
+    "thisYear": "Cette année",
+    "keyMetrics": "Indicateurs clés",
+    "kpi": {
+      "totalStudents": "Total des élèves",
+      "totalStudentsHint": "En hausse par rapport à la période précédente",
+      "activeStudents": "Élèves actifs",
+      "activeStudentsHint": "Ont réservé ces 30 derniers jours",
+      "totalTeachers": "Total des professeurs",
+      "totalTeachersHint": "{count, plural, one {# candidature en attente} other {# candidatures en attente}}",
+      "revenue": "Chiffre d'affaires (brut)",
+      "revenueHint": "Commission de {percent} % : {amount}",
+      "lessonsCompleted": "Cours terminés",
+      "retention": "Taux de rétention",
+      "retentionHint": "Élèves qui réservent à nouveau sous 30 jours",
+      "conversion": "Taux de conversion",
+      "conversionHint": "Cours d'essai → cours payant",
+      "payouts": "Versements à effectuer",
+      "payoutsHint": "Échéance le {date}"
+    }
+  },
+  "export": {
+    "button": "Exporter en CSV",
+    "bookingId": "N° de réservation",
+    "amountUsd": "Montant (USD)"
+  },
+  "chart": {
+    "title": "Chiffre d'affaires et cours",
+    "sample": "Données d'exemple",
+    "legend": "Légende",
+    "revenue": "Chiffre d'affaires",
+    "lessons": "Cours",
+    "aria": "Évolution du chiffre d'affaires et des cours, données d'exemple, de {from} à {to}. Les deux courbes progressent régulièrement : indice du chiffre d'affaires de {revenueFrom} à {revenueTo}, indice des cours de {lessonsFrom} à {lessonsTo}.",
+    "note": "Échelle relative (meilleur mois = 100). Les chiffres réels s'afficheront une fois l'API d'analyse connectée."
+  },
+  "refunds": {
+    "title": "Demandes de remboursement",
+    "window": "Sous 24 h après le cours",
+    "lessonOn": "Cours du {date}",
+    "refunded": "Remboursé",
+    "declined": "Refusé",
+    "awaitingReply": "En attente de réponse",
+    "liveRefunded": "{amount} remboursés à {name}.",
+    "liveDeclined": "Demande de remboursement de {name} refusée.",
+    "liveContacted": "Message envoyé à {name}.",
+    "returned": "{amount} reversés sur le moyen de paiement d'origine.",
+    "notified": "L'élève a été prévenu.",
+    "undo": "Annuler l'action",
+    "refund": "Rembourser",
+    "contact": "Contacter",
+    "contacted": "Contacté",
+    "decline": "Refuser",
+    "teacherWarning": "Avertissement professeur",
+    "warningText": "{count, selectordinal, one {#re} other {#e}} annulation ce mois-ci — avertissement automatique envoyé."
+  },
+  "bookings": {
+    "title": "Réservations",
+    "statusTabs": "Statut des réservations",
+    "tabs": {
+      "upcoming": "À venir",
+      "completed": "Terminées",
+      "cancelled": "Annulées"
+    },
+    "status": {
+      "confirmed": "Confirmée",
+      "pendingPayment": "Paiement en attente",
+      "completed": "Terminée",
+      "cancelled": "Annulée",
+      "refunded": "Remboursée"
+    },
+    "type": {
+      "single": "Cours unique · 50 min",
+      "trial": "Cours d'essai · 20 min",
+      "pack": "Forfait {size} cours ({used}/{size})",
+      "corporate": "Forfait entreprise · {size} cours"
+    },
+    "dateUtc": "Date (UTC)",
+    "student": "Élève",
+    "teacher": "Professeur",
+    "typeHeader": "Type",
+    "amount": "Montant",
+    "statusHeader": "Statut",
+    "actions": "Actions",
+    "empty": "Aucune réservation dans cette vue.",
+    "free": "Gratuit",
+    "newDate": "Nouvelle date et heure (UTC) pour {booking}",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "reschedule": "Reporter",
+    "rescheduleAria": "Reporter {booking}",
+    "cancelAria": "Annuler {booking}",
+    "override": "Forcer",
+    "overrideAria": "Forcer le statut de {booking}",
+    "noticeMoved": "Réservation de {name} déplacée au {when} UTC. L'élève et le professeur ont été prévenus.",
+    "noticeCancelled": "Réservation de {name} annulée. Elle se trouve désormais dans l'onglet Annulées.",
+    "noticePaid": "Paiement marqué comme reçu pour {name}. Forçage consigné dans le journal d'audit.",
+    "noticeRestored": "Réservation de {name} rétablie dans À venir. Forçage consigné dans le journal d'audit.",
+    "noticeOverride": "Forçage pour {name} consigné dans le journal d'audit."
+  },
+  "teachers": {
+    "metaTitle": "Gestion des professeurs · Amerivo Admin",
+    "title": "Gestion des professeurs",
+    "search": "Rechercher des professeurs",
+    "searchPlaceholder": "Rechercher par nom ou e-mail",
+    "statusTabs": "Statut des professeurs",
+    "tabs": {
+      "all": "Tous",
+      "pending": "En attente ({count})",
+      "approved": "Approuvés",
+      "rejected": "Refusés",
+      "suspended": "Suspendus"
+    },
+    "status": {
+      "pending": "En attente d'examen",
+      "interview": "Entretien demandé",
+      "approved": "Approuvé",
+      "rejected": "Refusé",
+      "suspended": "Suspendu"
+    },
+    "flags": {
+      "idPending": "Pièce d'identité en attente",
+      "noVideo": "Pas de vidéo"
+    },
+    "notice": {
+      "interview": "Entretien demandé à {name}. La candidature reste dans En attente.",
+      "pending": "La candidature de {name} a été rouverte et placée dans l'onglet En attente.",
+      "approved": "{name} est désormais approuvé et figure dans l'onglet Approuvés.",
+      "rejected": "La candidature de {name} a été refusée et placée dans l'onglet Refusés.",
+      "suspended": "{name} est désormais suspendu et figure dans l'onglet Suspendus."
+    },
+    "applicants": "Candidats",
+    "empty": "Aucun professeur ne correspond à cette vue.",
+    "applied": "{city} · candidature le {date}",
+    "since": "{city} · depuis le {date}",
+    "selectPrompt": "Sélectionnez un professeur à examiner.",
+    "playVideo": "Lire la vidéo de présentation de {name} ({length})",
+    "introVideo": "Vidéo de présentation · {length}",
+    "noVideo": "Aucune vidéo de présentation envoyée",
+    "education": "Formation",
+    "experience": "Expérience",
+    "experienceYears": "{count, plural, =0 {Moins d'un an} one {# an} other {# ans}}",
+    "teaches": "Enseigne",
+    "rate": "Tarif",
+    "ratePer": "{price} / 50 min",
+    "certifications": "Certifications",
+    "noneProvided": "Aucune fournie",
+    "identity": "Identité (Stripe Identity)",
+    "identityVerified": "Vérifiée · {document}",
+    "identityPending": "En attente · Document envoyé",
+    "documents": {
+      "passport": "Passeport",
+      "driversLicense": "Permis de conduire"
+    },
+    "evaluation": "Évaluation",
+    "evalFields": {
+      "fluency": "Aisance en anglais",
+      "professionalism": "Professionnalisme",
+      "teaching": "Compétences pédagogiques",
+      "camera": "Qualité de la caméra",
+      "internet": "Qualité de la connexion"
+    },
+    "scores": {
+      "5": "5 – Excellent",
+      "4": "4 – Bon",
+      "3": "3 – Moyen",
+      "2": "2 – Faible",
+      "1": "1 – Insuffisant"
+    },
+    "internalNotes": "Notes internes",
+    "notesPlaceholder": "Visibles uniquement par les administrateurs",
+    "requestInterview": "Demander un entretien",
+    "interviewRequested": "Entretien demandé",
+    "reject": "Refuser",
+    "approve": "Approuver le professeur",
+    "suspend": "Suspendre",
+    "reinstate": "Réintégrer",
+    "reopen": "Rouvrir la candidature"
+  }
+}

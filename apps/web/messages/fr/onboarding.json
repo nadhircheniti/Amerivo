@@ -1,0 +1,87 @@
+{
+  "goals": {
+    "metaTitle": "Vos objectifs",
+    "step": "Étape 3 sur 4 · Vos objectifs",
+    "saveLater": "Enregistrer et terminer plus tard",
+    "title": "Parlez-nous de vos objectifs",
+    "subtitle": "Vos réponses nous permettent de vous recommander les bons professeurs.",
+    "whyLegend": "Pourquoi apprenez-vous l'anglais ?",
+    "goals": {
+      "business": "Travail",
+      "businessHint": "Réunions, e-mails, entretiens",
+      "travel": "Voyages",
+      "travelHint": "Se déplacer en toute simplicité",
+      "university": "Études",
+      "universityHint": "École, université, examens",
+      "immigration": "Immigration",
+      "immigrationHint": "Vivre et travailler aux États-Unis",
+      "conversation": "Conversation",
+      "conversationHint": "Parler naturellement, au quotidien"
+    },
+    "levelQuestion": "Comment décririez-vous votre niveau ?",
+    "levelLabel": "Votre niveau d'anglais",
+    "levels": {
+      "beginner": "Débutant",
+      "intermediate": "Intermédiaire",
+      "advanced": "Avancé"
+    },
+    "teacherLegend": "Professeur préféré",
+    "teacherPrefs": {
+      "none": "Pas de préférence",
+      "female": "Femme",
+      "male": "Homme"
+    },
+    "timesLegend": "Horaires de cours préférés",
+    "times": {
+      "morning": "Matin",
+      "afternoon": "Après-midi",
+      "evening": "Soir",
+      "weekend": "Week-end"
+    },
+    "back": "Retour",
+    "continue": "Passer au test de niveau",
+    "aboutTest": "À propos du test de niveau",
+    "nextEyebrow": "ÉTAPE SUIVANTE · TEST DE NIVEAU",
+    "duration": "Environ 15 minutes",
+    "testDescription": "Quatre courtes sections vous attribuent un niveau CECRL de A1 à C2, enregistré dans votre profil.",
+    "sampleLegend": "EXEMPLE DE QUESTION · GRAMMAIRE"
+  },
+  "skills": {
+    "grammar": "Grammaire",
+    "reading": "Compréhension écrite",
+    "listening": "Compréhension orale",
+    "speaking": "Expression orale"
+  },
+  "results": {
+    "metaTitle": "Votre niveau et vos professeurs",
+    "step": "Étape 4 sur 4 · Terminé",
+    "dashboard": "Accéder à mon tableau de bord",
+    "levelAria": "Votre niveau : {level}, {label}",
+    "eyebrow": "Résultat de votre test de niveau",
+    "title": "Bravo, {name} ! Vous avez le niveau {level}.",
+    "description": "Vous vous débrouillez dans la plupart des situations du quotidien. Prochain objectif : parler plus couramment en réunion et comprendre les natifs à vitesse normale (B2).",
+    "cefrScale": "Échelle CECRL",
+    "bySkill": "Niveau par compétence",
+    "recommendedTitle": "Professeurs recommandés pour vous",
+    "recommendedSubtitle": "Sélectionnés selon votre objectif ({goal}), votre niveau, vos disponibilités en soirée et leur note.",
+    "seeAll": "Voir tous les professeurs",
+    "bestMatch": "MEILLEUR CHOIX",
+    "perLesson": "{price} / cours",
+    "reasons": {
+      "specialist": "Spécialiste : {specialty}",
+      "evenings": "Disponible en soirée",
+      "speaksSpanish": "Parle espagnol",
+      "negotiation": "Négociation et présentations",
+      "experience": "{years, plural, one {# an d'expérience} other {# ans d'expérience}}",
+      "weekend": "Créneaux le week-end",
+      "fluency": "Accent mis sur l'aisance à l'oral",
+      "budget": "Petit budget"
+    },
+    "bookTrial": "Essai gratuit",
+    "bookTrialWith": "Réserver un cours d'essai gratuit avec {name}",
+    "bookLesson": "Réserver un cours",
+    "bookLessonWith": "Réserver un cours avec {name}",
+    "profile": "Profil",
+    "profileOf": "Profil de {name}"
+  }
+}

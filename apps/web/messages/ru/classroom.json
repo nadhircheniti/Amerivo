@@ -1,0 +1,50 @@
+{
+  "page": {
+    "metaTitle": "Урок в прямом эфире",
+    "backToDashboard": "Назад в личный кабинет",
+    "participants": "{teacher} и {student}",
+    "connectionGood": "Связь хорошая"
+  },
+  "timer": {
+    "label": "Прошло {elapsed} из {total}"
+  },
+  "controls": {
+    "toolbar": "Управление звонком",
+    "muteMic": "Выключить микрофон",
+    "cameraOff": "Выключить камеру",
+    "shareScreen": "Показать экран",
+    "whiteboard": "Доска",
+    "endLesson": "Завершить урок"
+  },
+  "stage": {
+    "whiteboard": "Общая доска",
+    "tools": "Инструменты доски",
+    "tool": {
+      "pen": "Ручка",
+      "text": "Текст",
+      "shape": "Фигура",
+      "eraser": "Ластик"
+    },
+    "videoCall": "Видеозвонок: {name}",
+    "videoFeed": "ВИДЕО",
+    "sharing": "Вы показываете свой экран",
+    "teacherLabel": "{name} · преподаватель",
+    "you": "Вы",
+    "cameraOff": "Камера выключена",
+    "micMuted": "Микрофон выключен"
+  },
+  "panel": {
+    "label": "Панель урока",
+    "chat": "Чат",
+    "notes": "Заметки к уроку",
+    "files": "Файлы",
+    "chatMessages": "Сообщения чата",
+    "youPrefix": "Вы:",
+    "chatMessage": "Сообщение",
+    "messagePlaceholder": "Сообщение для {name}…",
+    "send": "Отправить сообщение",
+    "notesLabel": "Общие заметки к уроку · сохраняются автоматически",
+    "sharedFiles": "Общие файлы",
+    "upload": "Загрузить файл"
+  }
+}

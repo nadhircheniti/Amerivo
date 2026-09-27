@@ -40,6 +40,19 @@ export class StripeService {
     );
   }
 
+  retrieveIntent(id: string) {
+    return this.stripe.paymentIntents.retrieve(id);
+  }
+
+  /** Cancels an unpaid PaymentIntent; returns null when it can no longer be cancelled (e.g. already paid). */
+  async cancelIntent(id: string) {
+    try {
+      return await this.stripe.paymentIntents.cancel(id);
+    } catch {
+      return null;
+    }
+  }
+
   refund(paymentIntentId: string, amountCents: number, idempotencyKey: string) {
     return this.stripe.refunds.create({ payment_intent: paymentIntentId, amount: amountCents }, { idempotencyKey });
   }

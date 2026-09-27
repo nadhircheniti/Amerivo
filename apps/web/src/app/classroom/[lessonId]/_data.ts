@@ -33,8 +33,7 @@ export function getClassroomLesson(lessonId: string): ClassroomLesson {
       { text: "“Could we come back to that later?”" },
       { text: "“To sum up, …”", highlight: true },
     ],
-    notes:
-      "New vocabulary\n• agenda item\n• to table a topic\n• action points\n\nCorrections\n• “I have presented” → “I presented” (yesterday)",
+    notes: "New vocabulary\n• agenda item\n• to table a topic\n• action points\n\nCorrections\n• “I have presented” → “I presented” (yesterday)",
     files: [
       { id: "f1", name: "Meeting-agenda-template.pdf", kind: "PDF" },
       { id: "f2", name: "Listening-clip-01.mp3", kind: "MP3" },

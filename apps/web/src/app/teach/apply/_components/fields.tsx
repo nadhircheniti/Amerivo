@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
 
@@ -10,7 +11,7 @@ export function TagInput({
   values,
   onChange,
   tone = "teal",
-  placeholder = "Add…",
+  placeholder,
 }: {
   label: string;
   values: string[];
@@ -18,6 +19,7 @@ export function TagInput({
   tone?: "teal" | "orange";
   placeholder?: string;
 }) {
+  const t = useTranslations("apply.fields");
   const [draft, setDraft] = useState("");
   const id = useId();
 
@@ -42,9 +44,9 @@ export function TagInput({
       </label>
       <div className="flex min-h-[50px] flex-wrap items-center gap-1.5 rounded-xl border border-line bg-white p-2 focus-within:border-teal-dark">
         {values.map((v) => (
-          <span key={v} className={cn("flex items-center gap-1 rounded-lg py-1.5 pr-1.5 pl-2.5 text-[13px]", tone === "teal" ? "bg-teal-100" : "bg-orange-100")}>
+          <span key={v} className={cn("flex items-center gap-1 rounded-lg py-1.5 ps-2.5 pe-1.5 text-[13px]", tone === "teal" ? "bg-teal-100" : "bg-orange-100")}>
             {v}
-            <button type="button" aria-label={`Remove ${v}`} onClick={() => onChange(values.filter((x) => x !== v))} className="rounded p-0.5 hover:bg-white/60">
+            <button type="button" aria-label={t("remove", { value: v })} onClick={() => onChange(values.filter((x) => x !== v))} className="rounded p-0.5 hover:bg-white/60">
               <Icon name="x" size={12} strokeWidth={2.4} />
             </button>
           </span>
@@ -55,7 +57,7 @@ export function TagInput({
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={onKey}
           onBlur={commit}
-          placeholder={placeholder}
+          placeholder={placeholder ?? t("add")}
           className="min-w-[80px] flex-1 bg-transparent px-1 text-sm text-navy placeholder:text-muted focus:outline-none"
         />
       </div>
@@ -83,6 +85,7 @@ export function UploadButton({
   icon?: IconName;
   hint?: ReactNode;
 }) {
+  const t = useTranslations("apply.fields");
   const id = useId();
   return (
     <div className={cn("flex flex-col gap-2", variant === "pill" && "items-start")}>
@@ -111,7 +114,7 @@ export function UploadButton({
         {hint && variant === "tile" && <span className="text-[13px] font-normal text-muted">{hint}</span>}
       </label>
       {files.length > 0 && (
-        <ul className="flex flex-col gap-1 text-[13px] text-navy-soft" aria-label="Selected files">
+        <ul className="flex flex-col gap-1 text-[13px] text-navy-soft" aria-label={t("selectedFiles")}>
           {files.map((f) => (
             <li key={f} className="flex items-center gap-1.5">
               <Icon name="check" size={14} strokeWidth={2.4} className="text-teal-dark" />

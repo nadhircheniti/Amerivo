@@ -27,11 +27,20 @@ const clock = { t: new Date("2026-10-01T00:00:00Z"), now() { return this.t; }, s
 
 const stripeCalls = { intents: 0, refunds: [] as { pi: string; amount: number }[], transfers: [] as { account: string; amount: number }[] };
 let stripeConfigured = true;
+const intentStatus: Record<string, string> = {};
+const uncancellable = new Set<string>();
 const fakeStripe = {
   isConfigured: () => stripeConfigured,
   createPaymentIntent: async (p: { amountCents: number }) => ({ id: `pi_${++stripeCalls.intents}`, client_secret: `secret_${stripeCalls.intents}`, amount: p.amountCents }),
   refund: async (pi: string, amount: number) => { stripeCalls.refunds.push({ pi, amount }); return { id: `re_${stripeCalls.refunds.length}` }; },
   transferToTeacher: async (p: { accountId: string; amountCents: number }) => { stripeCalls.transfers.push({ account: p.accountId, amount: p.amountCents }); return { id: `tr_${stripeCalls.transfers.length}` }; },
+  // PaymentIntent statuses as Stripe would report them (default: waiting for the card).
+  retrieveIntent: async (id: string) => ({ id, status: intentStatus[id] ?? "requires_payment_method", client_secret: `secret_${id.slice(3)}` }),
+  cancelIntent: async (id: string) => {
+    if (intentStatus[id] === "succeeded" || uncancellable.has(id)) return null;
+    intentStatus[id] = "canceled";
+    return { id, status: "canceled" };
+  },
   constructEvent: (raw: Buffer) => JSON.parse(raw.toString()),
   identitySession: async () => ({ url: "https://verify.stripe.test/session" }),
 };
@@ -282,5 +291,48 @@ describe("Amerivo API", () => {
     assert.equal(promoted.body.role, "admin");
     delete process.env.ADMIN_EMAILS;
     await http().post("/api/me/register").set(as("clerk_other")).send({ role: "student", email: "other@amerivo.test", firstName: "O", lastName: "T", timezone: "Europe/Zurich" }).expect(400);
+  });
+
+  it("Stripe: confirmation without webhook, 30-min payment hold, resume, late payment refunded", async () => {
+    clock.set("2026-10-20T00:00:00Z");
+    const [bob] = await db.insert(schema.users).values({ clerkId: "clerk_bob", role: "student", status: "active", email: "bob@example.com", firstName: "Bob", lastName: "Lee" }).returning();
+    const book = (who: string, startsAt: string) => http().post("/api/bookings").set(as(who)).send({ teacherSlug: "sarah-mitchell", offer: "single", startsAt });
+
+    // 1. Paid on the checkout page → sync confirms at once; the later webhook is a no-op.
+    const a = await book("clerk_ana", "2026-11-04T17:00:00.000Z").expect(201);
+    const pi1 = (await db.select().from(schema.payments).where(eq(schema.payments.bookingId, a.body.booking.id)))[0].providerRef!;
+    intentStatus[pi1] = "succeeded";
+    const synced = await http().post(`/api/bookings/${a.body.booking.id}/sync-payment`).set(as("clerk_ana")).expect(201);
+    assert.equal(synced.body.status, "confirmed");
+    await http().post(`/api/bookings/${a.body.booking.id}/sync-payment`).set(as("clerk_bob")).expect(403);
+    const late = await http().post("/api/webhooks/stripe").set("stripe-signature", "t").send({ id: "evt_sync_dup", type: "payment_intent.succeeded", data: { object: { id: pi1 } } }).expect(200);
+    assert.equal(late.body.duplicate, true);
+
+    // 2. Unpaid: the same student gets the same payment back; others can't take the slot.
+    const b = await book("clerk_ana", "2026-11-04T18:00:00.000Z").expect(201);
+    const again = await book("clerk_ana", "2026-11-04T18:00:00.000Z").expect(201);
+    assert.equal(again.body.booking.id, b.body.booking.id);
+    assert.equal(again.body.payment.clientSecret, b.body.payment.clientSecret);
+    await book("clerk_bob", "2026-11-04T18:00:00.000Z").expect(409);
+
+    // 3. After 30 minutes the hold is released: slot visible again, intent cancelled, Bob books it.
+    clock.set("2026-10-20T00:31:00Z");
+    const slots = await http().get("/api/teachers/sarah-mitchell/slots?from=2026-11-02T00:00:00Z&to=2026-11-08T00:00:00Z&tz=UTC").expect(200);
+    assert.ok(slots.body.some((s: { startsAt: string }) => s.startsAt === "2026-11-04T18:00:00.000Z"));
+    const c = await book("clerk_bob", "2026-11-04T18:00:00.000Z").expect(201);
+    const [expired] = await db.select().from(schema.bookings).where(eq(schema.bookings.id, b.body.booking.id));
+    assert.equal(expired.status, "cancelled");
+    assert.equal(expired.cancelReason, "Payment not completed in time");
+
+    // 4. Bob cancels while Stripe was already charging him → the success that follows is refunded.
+    const pi3 = (await db.select().from(schema.payments).where(eq(schema.payments.bookingId, c.body.booking.id)))[0].providerRef!;
+    uncancellable.add(pi3);
+    await http().post(`/api/bookings/${c.body.booking.id}/cancel`).set(as("clerk_bob")).send({}).expect(201);
+    const refundsBefore = stripeCalls.refunds.length;
+    await http().post("/api/webhooks/stripe").set("stripe-signature", "t").send({ id: "evt_late", type: "payment_intent.succeeded", data: { object: { id: pi3 } } }).expect(200);
+    assert.equal(stripeCalls.refunds.length, refundsBefore + 1);
+    assert.deepEqual(stripeCalls.refunds.at(-1), { pi: pi3, amount: 3500 });
+    const [p3] = await db.select().from(schema.payments).where(eq(schema.payments.providerRef, pi3));
+    assert.equal(p3.status, "refunded");
   });
 });

@@ -1,0 +1,270 @@
+{
+  "page": {
+    "metaTitle": "Teach on Amerivo",
+    "metaDescription": "Apply to teach American English online with Amerivo. Set your own rate, get paid monthly.",
+    "brandSuffix": "for Teachers",
+    "saveExit": "Save & exit",
+    "faqEyebrow": "Teacher FAQ",
+    "faqTitle": "Questions before you apply",
+    "faq": {
+      "earn": {
+        "q": "How much can I earn?",
+        "a": "You set your own rate between {min} and {max} per 50-minute lesson. Amerivo keeps a {commission}% platform commission, so at {example} you receive {net} per lesson. You can also offer 5- and 10-lesson packages."
+      },
+      "paid": {
+        "q": "When and how do I get paid?",
+        "a": "Payouts are sent monthly, by the 28th, through Stripe Connect to your bank account. Each payout covers the lessons completed in the previous period."
+      },
+      "who": {
+        "q": "Who can apply?",
+        "a": "Amerivo teachers are U.S. native English speakers. A teaching certification (TESOL, TEFL or CELTA) or classroom experience is strongly recommended, and every applicant completes ID verification and a short interview."
+      },
+      "equipment": {
+        "q": "What equipment do I need?",
+        "a": "A computer with a webcam, a headset or good microphone, a stable internet connection (10 Mbps or faster) and a quiet, well-lit space. Lessons run in the browser — no software to install."
+      }
+    }
+  },
+  "steps": {
+    "personal": {
+      "title": "Personal info",
+      "heading": "Personal information",
+      "continue": "Continue to personal info"
+    },
+    "professional": {
+      "title": "Professional info",
+      "heading": "Professional information",
+      "continue": "Continue to professional info"
+    },
+    "identity": {
+      "title": "Identity verification",
+      "heading": "Identity verification",
+      "continue": "Continue to identity verification"
+    },
+    "video": {
+      "title": "Video introduction",
+      "heading": "Video introduction",
+      "continue": "Continue to video introduction"
+    },
+    "review": {
+      "title": "Review & interview",
+      "heading": "Review & interview",
+      "continue": "Continue to review & interview"
+    },
+    "approval": {
+      "title": "Approval",
+      "heading": "Application status",
+      "continue": "Continue to approval"
+    }
+  },
+  "wizard": {
+    "navLabel": "Application steps",
+    "yourApplication": "Your application",
+    "completed": "(completed)",
+    "usOnly": "Only U.S. native English speakers can teach on Amerivo.",
+    "progress": "Step {current} of {total}",
+    "back": "Back",
+    "submit": "Submit application",
+    "backHome": "Back to Amerivo"
+  },
+  "options": {
+    "subjects": {
+      "businessEnglish": "Business English",
+      "conversation": "Conversation (Speaking)",
+      "reading": "Reading",
+      "generalEnglish": "General English",
+      "interviewPrep": "Interview Preparation",
+      "examPrep": "IELTS / TOEFL Prep"
+    },
+    "groups": {
+      "adults": "Adults",
+      "teens": "Teens (13–17)",
+      "corporate": "Corporate groups"
+    },
+    "education": {
+      "bachelor": "Bachelor's degree",
+      "master": "Master's degree",
+      "phd": "PhD",
+      "associate": "Associate degree",
+      "other": "Other"
+    },
+    "experience": {
+      "lessThan1": "Less than 1 year",
+      "oneToTwo": "1–2 years",
+      "threeToFive": "3–5 years",
+      "fiveToTen": "5–10 years",
+      "tenPlus": "10+ years"
+    },
+    "countryOther": "Other",
+    "genders": {
+      "female": "Female",
+      "male": "Male",
+      "undisclosed": "Prefer not to say"
+    },
+    "timeZones": {
+      "newYork": "Eastern Time (ET)",
+      "chicago": "Central Time (CT)",
+      "denver": "Mountain Time (MT)",
+      "phoenix": "Arizona (MST)",
+      "losAngeles": "Pacific Time (PT)",
+      "anchorage": "Alaska Time (AKT)",
+      "honolulu": "Hawaii Time (HT)",
+      "london": "London (GMT/BST)",
+      "madrid": "Central Europe (CET)",
+      "tokyo": "Tokyo (JST)"
+    },
+    "idTypes": {
+      "passport": "Passport",
+      "license": "Driver's license",
+      "government": "Government ID"
+    },
+    "interviewSlots": {
+      "weekdayMornings": "Weekday mornings",
+      "weekdayAfternoons": "Weekday afternoons",
+      "weekdayEvenings": "Weekday evenings",
+      "weekends": "Weekends"
+    }
+  },
+  "fields": {
+    "add": "Add…",
+    "remove": "Remove {value}",
+    "selectedFiles": "Selected files"
+  },
+  "personal": {
+    "photo": "Profile photo",
+    "photoHint": "A friendly, well-lit headshot. Students see it on your profile and in search results.",
+    "replacePhoto": "Replace photo",
+    "uploadPhoto": "Upload photo (JPG, PNG)",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "phone": "Phone",
+    "country": "Country of residence",
+    "timeZone": "Time zone",
+    "timeZoneHint": "Used to show your availability to students in their local time.",
+    "gender": "Gender",
+    "genderHint": "Some students filter by a preferred teacher gender. You can change this later."
+  },
+  "professional": {
+    "education": "Highest education",
+    "experience": "Years of teaching experience",
+    "subjects": "What can you teach?",
+    "groups": "Groups you can teach",
+    "certifications": "Certifications",
+    "uploadCertificates": "Upload certificates (PDF, JPG)",
+    "languages": "Spoken languages",
+    "languagesPlaceholder": "e.g. French · B1",
+    "rate": "Your rate per 50-min lesson",
+    "rateValue": "{price} per lesson",
+    "net": "You receive {net} after the {commission}% platform commission",
+    "trial": "Offer a free 20-minute trial lesson",
+    "trialHint": "Students can meet you once before booking. You can change this later."
+  },
+  "previews": {
+    "label": "Coming up next",
+    "step3": "STEP 3 · PREVIEW",
+    "identityTitle": "Identity verification",
+    "identityText": "Government ID, passport or driver's license, plus a selfie. Handled securely by Stripe Identity.",
+    "identityUpload": "Upload ID document",
+    "step4": "STEP 4 · PREVIEW",
+    "videoTitle": "2-minute video introduction",
+    "videoText": "Background · Experience · Teaching style. Students see it on your profile."
+  },
+  "identity": {
+    "intro": "We verify every teacher before they can accept bookings. Upload a valid photo ID; you'll be asked for a quick selfie to match it.",
+    "documentType": "Document type",
+    "upload": {
+      "passport": "Upload your passport",
+      "license": "Upload your driver's license",
+      "government": "Upload your government ID"
+    },
+    "uploadHint": "Front and back if applicable · JPG, PNG or PDF",
+    "secure": "<strong>Handled securely by Stripe Identity.</strong> Amerivo never stores a copy of your ID document; we only receive the verification result.",
+    "taxTitle": "Tax information (W-9)",
+    "taxText": "We collect your W-9; 1099 forms are issued automatically. You'll complete it when you connect your payout account."
+  },
+  "video": {
+    "intro": "Record a video of up to 2 minutes. Students watch it on your profile before booking, so speak naturally and look at the camera.",
+    "browserRecording": "Browser recording ({duration})",
+    "recordingTime": "Recording time",
+    "recording": "Recording",
+    "stop": "Stop recording",
+    "again": "Record again",
+    "record": "Record in browser",
+    "upload": "Upload a video file",
+    "formats": "MP4, MOV or WebM · max 2 minutes",
+    "whatToCover": "What to cover",
+    "topics": {
+      "background": {
+        "title": "Background",
+        "text": "Where you're from in the U.S. and a little about you."
+      },
+      "experience": {
+        "title": "Experience",
+        "text": "Who you've taught and what results they got."
+      },
+      "style": {
+        "title": "Teaching style",
+        "text": "What a lesson with you feels like."
+      }
+    },
+    "topic": "{number}. {title}"
+  },
+  "review": {
+    "notProvided": "Not provided",
+    "edit": "Edit",
+    "editSection": "Edit {section}",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "country": "Country",
+    "gender": "Gender",
+    "timeZone": "Time zone",
+    "photo": "Photo",
+    "education": "Education",
+    "experience": "Experience",
+    "teaches": "Teaches",
+    "groups": "Groups",
+    "certifications": "Certifications",
+    "languages": "Languages",
+    "rate": "Rate",
+    "rateValue": "{price} per lesson · you receive {net} · free trial {trial, select, on {on} other {off}}",
+    "document": "Document",
+    "documentValue": "{type} · {count, plural, one {# file} other {# files}}",
+    "w9": "W-9",
+    "w9Value": "Collected when you connect payouts",
+    "video": "Video",
+    "interviewTitle": "Short interview",
+    "interviewText": "If your application passes review, we'll invite you to a 15-minute video interview with our teaching team.",
+    "interviewTime": "Preferred interview time",
+    "confirm": "I confirm that I am a U.S. native English speaker and that the information in this application is accurate."
+  },
+  "approval": {
+    "submitted": "Application submitted",
+    "pendingReview": "Pending review",
+    "thanks": "Thanks!",
+    "thanksName": "Thanks, {name}!",
+    "emailTo": "We'll email {email} within 3–5 business days to schedule your interview.",
+    "emailYou": "We'll email you within 3–5 business days to schedule your interview.",
+    "statusTitle": "What each status means",
+    "current": "(your current status)",
+    "statuses": {
+      "pending": {
+        "label": "Pending",
+        "text": "We're reviewing your documents, video and interview. This usually takes 3–5 business days."
+      },
+      "approved": {
+        "label": "Approved",
+        "text": "Your profile goes live. Set your availability and connect Stripe to start accepting bookings."
+      },
+      "rejected": {
+        "label": "Rejected",
+        "text": "Your application didn't meet our requirements this time. We'll email you the reason."
+      },
+      "suspended": {
+        "label": "Suspended",
+        "text": "An approved account can be paused if our teacher standards or terms aren't met."
+      }
+    }
+  }
+}

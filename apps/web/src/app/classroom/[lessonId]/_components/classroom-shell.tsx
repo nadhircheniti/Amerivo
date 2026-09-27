@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { ButtonLink } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
@@ -11,6 +12,7 @@ import { VideoStage } from "./video-stage";
 
 /** Stage + call controls + side panel. Owns the media toggle state shared by stage and controls. */
 export function ClassroomShell({ lesson }: { lesson: ClassroomLesson }) {
+  const t = useTranslations("classroom.controls");
   const [micMuted, setMicMuted] = useState(false);
   const [cameraOff, setCameraOff] = useState(false);
   const [sharing, setSharing] = useState(false);
@@ -23,14 +25,14 @@ export function ClassroomShell({ lesson }: { lesson: ClassroomLesson }) {
         <VideoStage lesson={lesson} mode={board ? "board" : "video"} micMuted={micMuted} cameraOff={cameraOff} sharing={sharing} />
 
         {/* Controls */}
-        <div role="toolbar" aria-label="Call controls" className="flex min-h-[92px] shrink-0 flex-wrap items-center justify-center gap-3 py-3">
-          <ToggleControl label="Mute microphone" pressed={micMuted} onToggle={() => setMicMuted((v) => !v)} activeTone="danger">
+        <div role="toolbar" aria-label={t("toolbar")} className="flex min-h-[92px] shrink-0 flex-wrap items-center justify-center gap-3 py-3">
+          <ToggleControl label={t("muteMic")} pressed={micMuted} onToggle={() => setMicMuted((v) => !v)} activeTone="danger">
             {micMuted ? <LocalIcon name="micOff" /> : <Icon name="mic" size={22} />}
           </ToggleControl>
-          <ToggleControl label="Turn camera off" pressed={cameraOff} onToggle={() => setCameraOff((v) => !v)} activeTone="danger">
+          <ToggleControl label={t("cameraOff")} pressed={cameraOff} onToggle={() => setCameraOff((v) => !v)} activeTone="danger">
             {cameraOff ? <LocalIcon name="videoOff" /> : <Icon name="video" size={22} />}
           </ToggleControl>
-          <ToggleControl label="Share screen" pressed={sharing} onToggle={() => setSharing((v) => !v)} activeTone="accent">
+          <ToggleControl label={t("shareScreen")} pressed={sharing} onToggle={() => setSharing((v) => !v)} activeTone="accent">
             <Icon name="screen" size={22} />
           </ToggleControl>
           <button
@@ -43,12 +45,12 @@ export function ClassroomShell({ lesson }: { lesson: ClassroomLesson }) {
             )}
           >
             <Icon name="pen" size={22} />
-            Whiteboard
+            {t("whiteboard")}
           </button>
           <span className="mx-1.5 hidden h-9 w-px bg-white/15 sm:block" aria-hidden="true" />
           <ButtonLink href={`/teacher/lessons/${lesson.id}/report`} variant="danger" size="lg" className="px-6">
             <Icon name="phoneOff" size={22} />
-            End lesson
+            {t("endLesson")}
           </ButtonLink>
         </div>
       </div>

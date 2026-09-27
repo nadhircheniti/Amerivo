@@ -26,7 +26,7 @@ services:
         value: "1"
       - key: WEB_URL             # Vercel URL(s) for CORS, comma-separated; "*" allowed for previews:
         sync: false              # https://amerivo-api.vercel.app,https://amerivo-api-*.vercel.app
-      - key: PAYMENTS_SIMULATED  # "1" = while Stripe keys are missing, bookings are confirmed without payment (staging only)
+      - key: PAYMENTS_SIMULATED  # "1" = bookings confirmed without payment while STRIPE_SECRET_KEY is missing (staging only; ignored once Stripe is set)
         value: "1"
       - key: ADMIN_EMAILS        # comma-separated e-mails that become admins when they sign up (verified e-mail)
         sync: false

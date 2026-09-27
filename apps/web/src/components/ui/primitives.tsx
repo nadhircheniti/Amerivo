@@ -1,4 +1,5 @@
 import type { ComponentProps, ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
 import { Icon } from "./icon";
 
@@ -72,18 +73,20 @@ export function Avatar({
 
 /* ---------- Stars ---------- */
 export function Rating({ value, className, size = 16 }: { value: number; className?: string; size?: number }) {
+  const t = useTranslations("common.rating");
   return (
     <span className={cn("inline-flex items-center gap-1 font-semibold", className)}>
       <Icon name="star" size={size} className="text-orange" />
-      {value > 0 ? value.toFixed(1) : "New"}
-      {value > 0 && <span className="sr-only"> out of 5</span>}
+      {value > 0 ? value.toFixed(1) : t("new")}
+      {value > 0 && <span className="sr-only"> {t("outOf5")}</span>}
     </span>
   );
 }
 
 export function StarRow({ count = 5, size = 16 }: { count?: number; size?: number }) {
+  const t = useTranslations("common.rating");
   return (
-    <span className="inline-flex gap-0.5" aria-label={`${count} out of 5 stars`}>
+    <span className="inline-flex gap-0.5" aria-label={t("stars", { count })}>
       {Array.from({ length: 5 }, (_, i) => (
         <Icon key={i} name="star" size={size} className={i < count ? "text-orange" : "text-line"} />
       ))}
@@ -121,7 +124,7 @@ export function Divider({ className }: { className?: string }) {
 export function PhotoPlaceholder({ label, className }: { label: string; className?: string }) {
   return (
     <div className={cn("flex items-end justify-center bg-sand", className)} role="img" aria-label={label}>
-      <span className="mb-5 rounded-full bg-navy/55 px-3 py-1.5 text-xs tracking-wide text-white uppercase">Photo · {label}</span>
+      <span className="mb-5 rounded-full bg-navy/55 px-3 py-1.5 text-xs tracking-wide text-white uppercase">{label}</span>
     </div>
   );
 }

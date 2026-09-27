@@ -1,24 +1,31 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { isRtl } from "@/i18n/config";
 import { cn } from "@/lib/cn";
 import type { ChatMessage, ClassroomLesson, SharedFile } from "../_data";
 import { LocalIcon } from "./local-icons";
 
 type TabId = "chat" | "notes" | "files";
-const tabs: { id: TabId; label: string }[] = [
-  { id: "chat", label: "Chat" },
-  { id: "notes", label: "Lesson notes" },
-  { id: "files", label: "Files" },
+const tabs: { id: TabId; labelKey: "chat" | "notes" | "files" }[] = [
+  { id: "chat", labelKey: "chat" },
+  { id: "notes", labelKey: "notes" },
+  { id: "files", labelKey: "files" },
 ];
 
 export function SidePanel({ lesson }: { lesson: ClassroomLesson }) {
+  const t = useTranslations("classroom.panel");
+  const rtl = isRtl(useLocale());
   const [tab, setTab] = useState<TabId>("chat");
   const uid = useId();
   const tabRefs = useRef<Record<TabId, HTMLButtonElement | null>>({ chat: null, notes: null, files: null });
 
   function onTabKey(e: KeyboardEvent<HTMLButtonElement>, index: number) {
-    const delta = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+    // Arrow keys follow the reading direction (reversed in right-to-left languages).
+    const forward = rtl ? "ArrowLeft" : "ArrowRight";
+    const back = rtl ? "ArrowRight" : "ArrowLeft";
+    const delta = e.key === forward ? 1 : e.key === back ? -1 : 0;
     if (!delta) return;
     e.preventDefault();
     const next = tabs[(index + delta + tabs.length) % tabs.length].id;
@@ -27,28 +34,25 @@ export function SidePanel({ lesson }: { lesson: ClassroomLesson }) {
   }
 
   return (
-    <aside
-      aria-label="Lesson panel"
-      className="flex min-h-[480px] w-full shrink-0 flex-col overflow-hidden rounded-t-[20px] bg-white text-navy lg:min-h-0 lg:w-[380px]"
-    >
-      <div role="tablist" aria-label="Lesson panel" className="m-3.5 flex gap-1 rounded-[14px] bg-beige p-2">
-        {tabs.map((t, i) => (
+    <aside aria-label={t("label")} className="flex min-h-[480px] w-full shrink-0 flex-col overflow-hidden rounded-t-[20px] bg-white text-navy lg:min-h-0 lg:w-[380px]">
+      <div role="tablist" aria-label={t("label")} className="m-3.5 flex gap-1 rounded-[14px] bg-beige p-2">
+        {tabs.map((tb, i) => (
           <button
-            key={t.id}
+            key={tb.id}
             ref={(el) => {
-              tabRefs.current[t.id] = el;
+              tabRefs.current[tb.id] = el;
             }}
             type="button"
             role="tab"
-            id={`${uid}-tab-${t.id}`}
-            aria-selected={tab === t.id}
-            aria-controls={`${uid}-panel-${t.id}`}
-            tabIndex={tab === t.id ? 0 : -1}
-            onClick={() => setTab(t.id)}
+            id={`${uid}-tab-${tb.id}`}
+            aria-selected={tab === tb.id}
+            aria-controls={`${uid}-panel-${tb.id}`}
+            tabIndex={tab === tb.id ? 0 : -1}
+            onClick={() => setTab(tb.id)}
             onKeyDown={(e) => onTabKey(e, i)}
-            className={cn("h-[42px] flex-1 rounded-[10px] text-sm text-navy", tab === t.id ? "bg-white font-semibold shadow-[0_2px_6px_rgb(15_59_91/0.1)]" : "hover:bg-white/60")}
+            className={cn("h-[42px] flex-1 rounded-[10px] text-sm text-navy", tab === tb.id ? "bg-white font-semibold shadow-[0_2px_6px_rgb(15_59_91/0.1)]" : "hover:bg-white/60")}
           >
-            {t.label}
+            {t(tb.labelKey)}
           </button>
         ))}
       </div>
@@ -73,6 +77,7 @@ export function SidePanel({ lesson }: { lesson: ClassroomLesson }) {
 }
 
 function ChatTab({ lesson }: { lesson: ClassroomLesson }) {
+  const t = useTranslations("classroom.panel");
   const [messages, setMessages] = useState<ChatMessage[]>(lesson.chat);
   const [draft, setDraft] = useState("");
   const listRef = useRef<HTMLDivElement>(null);
@@ -93,34 +98,43 @@ function ChatTab({ lesson }: { lesson: ClassroomLesson }) {
 
   return (
     <>
-      <div ref={listRef} role="log" aria-label="Chat messages" className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-[18px] py-1">
+      <div ref={listRef} role="log" aria-label={t("chatMessages")} className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-[18px] py-1">
         {messages.map((m) =>
           m.from === "teacher" ? (
-            <div key={m.id} className="max-w-[280px] self-start rounded-[14px_14px_14px_4px] bg-beige px-3.5 py-2.5 text-sm leading-normal">
+            <div key={m.id} className="max-w-[280px] self-start rounded-[14px] rounded-es-[4px] bg-beige px-3.5 py-2.5 text-sm leading-normal">
               <strong className="block text-xs text-teal-dark">{lesson.teacher.firstName}</strong>
-              {m.text}
+              <span dir="auto" className="block">
+                {m.text}
+              </span>
             </div>
           ) : (
-            <div key={m.id} className="max-w-[280px] self-end rounded-[14px_14px_4px_14px] bg-navy px-3.5 py-2.5 text-sm leading-normal text-white">
-              <span className="sr-only">You: </span>
-              {m.text}
+            <div key={m.id} className="max-w-[280px] self-end rounded-[14px] rounded-ee-[4px] bg-navy px-3.5 py-2.5 text-sm leading-normal text-white">
+              <span className="sr-only">{t("youPrefix")} </span>
+              <span dir="auto" className="block">
+                {m.text}
+              </span>
             </div>
           ),
         )}
       </div>
-      <form onSubmit={send} className="m-3.5 flex h-[50px] items-center gap-2 rounded-full border border-line pr-1.5 pl-[18px] focus-within:border-teal-dark">
+      <form onSubmit={send} className="m-3.5 flex h-[50px] items-center gap-2 rounded-full border border-line ps-[18px] pe-1.5 focus-within:border-teal-dark">
         <label htmlFor={inputId} className="sr-only">
-          Chat message
+          {t("chatMessage")}
         </label>
         <input
           id={inputId}
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
-          placeholder={`Message ${lesson.teacher.firstName}…`}
+          placeholder={t("messagePlaceholder", { name: lesson.teacher.firstName })}
           autoComplete="off"
           className="min-w-0 flex-1 bg-transparent text-sm text-navy placeholder:text-muted focus:outline-none"
         />
-        <button type="submit" aria-label="Send message" disabled={!draft.trim()} className="flex size-10 items-center justify-center rounded-full bg-teal-dark text-white disabled:opacity-40">
+        <button
+          type="submit"
+          aria-label={t("send")}
+          disabled={!draft.trim()}
+          className="flex size-10 items-center justify-center rounded-full bg-teal-dark text-white disabled:opacity-40"
+        >
           <LocalIcon name="send" size={18} />
         </button>
       </form>
@@ -129,11 +143,12 @@ function ChatTab({ lesson }: { lesson: ClassroomLesson }) {
 }
 
 function NotesTab({ initial }: { initial: string }) {
+  const t = useTranslations("classroom.panel");
   const id = useId();
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3 px-[18px] pt-1 pb-[18px]">
       <label htmlFor={id} className="text-[13px] text-muted">
-        Shared lesson notes · saved automatically
+        {t("notesLabel")}
       </label>
       {/* TODO(api): sync notes between participants and autosave to the lesson record. */}
       <textarea
@@ -163,12 +178,13 @@ function kindOf(name: string): SharedFile["kind"] {
 }
 
 function FilesTab({ initial }: { initial: SharedFile[] }) {
+  const t = useTranslations("classroom.panel");
   const [files, setFiles] = useState(initial);
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className="flex flex-1 flex-col gap-2.5 px-[18px] pt-1 pb-[18px]">
-      <ul className="flex flex-col gap-2.5" aria-label="Shared files">
+      <ul className="flex flex-col gap-2.5" aria-label={t("sharedFiles")}>
         {files.map((f) => (
           <li key={f.id} className="flex items-center gap-3 rounded-xl bg-beige p-3">
             <span className={cn("flex size-10 shrink-0 items-center justify-center rounded-[10px] text-xs font-bold", kindTone[f.kind])} aria-hidden="true">
@@ -197,7 +213,7 @@ function FilesTab({ initial }: { initial: SharedFile[] }) {
         className="mt-1.5 flex h-12 items-center justify-center gap-2 rounded-full border border-dashed border-teal-dark bg-teal-50 font-semibold text-navy hover:bg-teal-100"
       >
         <LocalIcon name="upload" size={18} />
-        Upload a file
+        {t("upload")}
       </button>
     </div>
   );

@@ -3,6 +3,7 @@
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Field, Input, Select } from "@/components/ui/form";
 import { ageOn, latestBirthDate, MIN_STUDENT_AGE } from "@/lib/age";
@@ -42,7 +43,8 @@ function useClerkUserLite(): { loaded: boolean; user: ClerkUserLite } {
 const useNoUser = () => ({ loaded: true, user: null as ClerkUserLite });
 const useUserLite = clerkEnabled ? useClerkUserLite : useNoUser;
 
-const COUNTRIES = ["Brazil", "France", "Germany", "Italy", "Japan", "Mexico", "Morocco", "Saudi Arabia", "South Korea", "Spain", "Switzerland", "Tunisia", "Turkey", "Other"];
+/** Option values stay in English (stored on the profile); only the labels are translated. */
+const COUNTRIES = ["Brazil", "France", "Germany", "Italy", "Japan", "Mexico", "Morocco", "Saudi Arabia", "South Korea", "Spain", "Switzerland", "Tunisia", "Turkey", "Other"] as const;
 
 /**
  * Single landing page after any sign-in:
@@ -51,6 +53,7 @@ const COUNTRIES = ["Brazil", "France", "Germany", "Italy", "Japan", "Mexico", "M
  * - Google/Apple first sign-in → asks the missing details (date of birth for the 13+ rule…)
  */
 export function WelcomeFlow() {
+  const t = useTranslations("auth");
   const router = useRouter();
   const { call } = useApi();
   const { loaded, user } = useUserLite();
@@ -102,7 +105,7 @@ export function WelcomeFlow() {
         router.replace(followNext ? safeNext : homeForRole(me.role));
       } catch (e) {
         if (!(e instanceof ApiError) || e.status !== 401 || !/no amerivo account/i.test(e.message)) {
-          setError("We couldn't reach Amerivo right now. The service may be waking up — please try again in a minute.");
+          setError(t("errors.unreachable"));
           setPhase("error");
           return;
         }
@@ -124,12 +127,12 @@ export function WelcomeFlow() {
         }
       }
     })();
-  }, [loaded, call, user, router, safeNext, register]);
+  }, [loaded, call, user, router, safeNext, register, t]);
 
   if (phase === "checking") {
     return (
       <p role="status" className="text-base text-navy-soft">
-        Setting up your space…
+        {t("welcome.settingUp")}
       </p>
     );
   }
@@ -141,7 +144,7 @@ export function WelcomeFlow() {
           {error}
         </p>
         <Button variant="teal" onClick={() => window.location.reload()}>
-          Try again
+          {t("welcome.tryAgain")}
         </Button>
       </div>
     );
@@ -150,8 +153,8 @@ export function WelcomeFlow() {
   return (
     <div className="flex w-full max-w-[600px] flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-[28px] font-extrabold sm:text-[34px]">Complete your profile</h1>
-        <p className="text-base text-navy-soft">A few details and you&apos;re ready to find your teacher.</p>
+        <h1 className="text-[28px] font-extrabold sm:text-[34px]">{t("welcome.title")}</h1>
+        <p className="text-base text-navy-soft">{t("welcome.subtitle")}</p>
       </div>
       <form
         className="grid grid-cols-1 gap-4 sm:grid-cols-2"
@@ -160,7 +163,7 @@ export function WelcomeFlow() {
           const d = new FormData(e.currentTarget);
           const get = (k: string) => String(d.get(k) ?? "").trim();
           if (ageOn(get("birthDate")) < MIN_STUDENT_AGE) {
-            setError(`You must be at least ${MIN_STUDENT_AGE} years old to use Amerivo.`);
+            setError(t("errors.minAgeUse", { age: MIN_STUDENT_AGE }));
             return;
           }
           setError(null);
@@ -176,27 +179,29 @@ export function WelcomeFlow() {
             .finally(() => setPending(false));
         }}
       >
-        <Field label="First name">
+        <Field label={t("fields.firstName")}>
           <Input name="firstName" autoComplete="given-name" defaultValue={user?.meta.firstName || user?.firstName} required />
         </Field>
-        <Field label="Last name">
+        <Field label={t("fields.lastName")}>
           <Input name="lastName" autoComplete="family-name" defaultValue={user?.meta.lastName || user?.lastName} required />
         </Field>
-        <Field label="Date of birth" hint={`Amerivo is for learners aged ${MIN_STUDENT_AGE} and over.`}>
+        <Field label={t("fields.birthDate")} hint={t("fields.birthDateHint", { age: MIN_STUDENT_AGE })}>
           <Input name="birthDate" type="date" autoComplete="bday" max={latestBirthDate()} required />
         </Field>
-        <Field label="Country">
+        <Field label={t("fields.country")}>
           <Select name="country" defaultValue="" required>
             <option value="" disabled>
-              Select your country
+              {t("fields.selectCountry")}
             </option>
             {COUNTRIES.map((c) => (
-              <option key={c}>{c}</option>
+              <option key={c} value={c}>
+                {t(`countries.${c}`)}
+              </option>
             ))}
           </Select>
         </Field>
-        <Field label="Native language" className="sm:col-span-2">
-          <Input name="nativeLanguage" placeholder="e.g. Portuguese" />
+        <Field label={t("fields.nativeLanguage")} className="sm:col-span-2">
+          <Input name="nativeLanguage" placeholder={t("fields.nativeLanguagePlaceholder")} />
         </Field>
         {error && (
           <p role="alert" className="rounded-xl bg-danger-100 px-4 py-3 text-sm font-semibold text-danger-text sm:col-span-2">
@@ -204,7 +209,7 @@ export function WelcomeFlow() {
           </p>
         )}
         <Button type="submit" variant="teal" size="lg" className="font-bold sm:col-span-2" disabled={pending}>
-          {pending ? "Saving…" : "Continue"}
+          {pending ? t("welcome.saving") : t("welcome.submit")}
         </Button>
       </form>
     </div>

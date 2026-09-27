@@ -1,0 +1,251 @@
+{
+  "home": {
+    "eyebrow": "Online English Learning",
+    "title": "Learn English<br></br>Your Way",
+    "tagline": "Flexible. Personalized. Global.",
+    "intro": "Live one-on-one lessons with vetted American English teachers. Build real conversations and reach your goals — from anywhere.",
+    "searchLabel": "What do you want to learn?",
+    "searchPlaceholder": "What do you want to learn? e.g. Business English",
+    "searchSubmit": "Search teachers",
+    "perks": {
+      "placementTest": "Free placement test",
+      "trialLessons": "Free trial lessons",
+      "usTeachers": "U.S. teachers only"
+    },
+    "photoLabel": "New York skyline at golden hour",
+    "handwritten": "Better<br></br>English<br></br>Bigger<br></br>Opportunities",
+    "whyLabel": "Why Amerivo",
+    "values": {
+      "teachers": {
+        "title": "Expert Teachers",
+        "body": "Qualified, native speakers<br></br>from the U.S."
+      },
+      "scheduling": {
+        "title": "Flexible Scheduling",
+        "body": "Book lessons that fit your life,<br></br>in your own time zone."
+      },
+      "personalized": {
+        "title": "Personalized Learning",
+        "body": "A plan built on your level<br></br>and your goals."
+      },
+      "community": {
+        "title": "Global Community",
+        "body": "Learn, connect, grow —<br></br>together."
+      }
+    },
+    "how": {
+      "eyebrow": "How it works",
+      "title": "From first test to fluent conversations",
+      "steps": {
+        "test": {
+          "title": "Take the placement test",
+          "body": "Tell us your goals and get your CEFR level, from A1 to C2."
+        },
+        "match": {
+          "title": "Get matched",
+          "body": "We recommend teachers by goal, availability, specialty and rating."
+        },
+        "book": {
+          "title": "Book & pay securely",
+          "body": "Pick a time in your time zone. Card, Apple Pay, Google Pay or PayPal."
+        },
+        "learn": {
+          "title": "Learn live",
+          "body": "Join your video classroom in one click, then get notes and homework."
+        }
+      }
+    },
+    "teachers": {
+      "eyebrow": "Meet our teachers",
+      "title": "Real people. Real conversations.",
+      "browseAll": "Browse all teachers",
+      "introVideo": "Intro video",
+      "perLesson": "/50 min",
+      "meta": "{city} · {years, plural, one {# yr} other {# yrs}} experience"
+    },
+    "pricing": {
+      "eyebrow": "Simple pricing",
+      "title": "Pay per lesson or save with a package",
+      "intro": "Each teacher sets their own rate, from $20 to $50 per 50-minute session. Cancel for a full refund up to 24 hours before.",
+      "popular": "Popular",
+      "plans": {
+        "trial": {
+          "title": "Trial lesson",
+          "price": "20 min",
+          "body": "Free with teachers who offer it: meet and discuss your goals before you book."
+        },
+        "single": {
+          "title": "Single lesson",
+          "price": "$20–50",
+          "body": "One 50-minute live lesson at the teacher's rate."
+        },
+        "pack5": {
+          "title": "5-lesson pack",
+          "price": "Up to 5% off",
+          "body": "Offered by participating teachers."
+        },
+        "pack10": {
+          "title": "10-lesson pack",
+          "price": "Up to 10% off",
+          "body": "Best value for steady progress."
+        }
+      }
+    },
+    "business": {
+      "title": "English for your team",
+      "body": "Tell us your company's language needs and book 10, 20 or more sessions for your employees.",
+      "cta": "Request a company plan"
+    },
+    "teach": {
+      "title": "Teach American English",
+      "body": "Set your own rate, teach from anywhere and get paid monthly. Apply with a 2-minute intro video.",
+      "cta": "Become a Teacher"
+    }
+  },
+  "pages": {
+    "backHome": "Back to home",
+    "about": {
+      "title": "About Amerivo",
+      "description": "Company story and team — content to be supplied by Amerivo."
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "description": "The final terms will be provided by Amerivo's legal counsel."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "description": "GDPR / CCPA privacy policy — to be provided by Amerivo's legal counsel."
+    }
+  },
+  "search": {
+    "metaTitle": "Find a teacher",
+    "metaDescription": "Browse verified U.S. native English teachers by specialty, price and who they teach.",
+    "title": "Find your American English teacher",
+    "subtitle": "All teachers are U.S. native speakers, verified and interviewed by our team.",
+    "sortBy": "Sort by",
+    "sort": {
+      "best": "Best match",
+      "rating": "Highest rated",
+      "price": "Price: low to high",
+      "experience": "Most experienced"
+    },
+    "showFilters": "Show filters",
+    "hideFilters": "Hide filters",
+    "filters": "Filters",
+    "wantToLearn": "I want to learn",
+    "specialties": {
+      "businessEnglish": "Business English",
+      "conversation": "Conversation",
+      "interviewPrep": "Interview Preparation",
+      "ieltsPrep": "IELTS Prep",
+      "toeflPrep": "TOEFL Prep",
+      "teens": "Teens (13+)"
+    },
+    "pricePerLesson": "Price per lesson",
+    "priceRange": "{min} – {max}",
+    "upTo": "Up to {price}",
+    "availability": "Availability",
+    "yourTime": "(your time)",
+    "slots": {
+      "Morning": "Morning",
+      "Afternoon": "Afternoon",
+      "Evening": "Evening",
+      "Weekend": "Weekend"
+    },
+    "teaches": "Teaches",
+    "gender": "Teacher gender",
+    "genderAny": "No preference",
+    "genderFemale": "Female",
+    "genderMale": "Male",
+    "alsoSpeaks": "Also speaks",
+    "anyLanguage": "Any language",
+    "clearFilters": "Clear all filters",
+    "results": "Results",
+    "count": "{count, plural, one {# teacher} other {# teachers}}",
+    "countFor": "{count, plural, one {# teacher} other {# teachers}} for <strong>{specialties}</strong>",
+    "listSeparator": ", ",
+    "pricesNote": "prices shown in USD per 50-min lesson",
+    "matching": "Matching “<strong>{text}</strong>”",
+    "clearSearch": "Clear search",
+    "emptyTitle": "No teachers match these filters",
+    "emptyBody": "Try a higher price limit or fewer specialties.",
+    "pagination": "Pagination",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "verified": "Verified",
+    "cardMeta": "{city} ({tz}) · {years, plural, one {# year} other {# years}}",
+    "speaks": "Speaks {languages}",
+    "reviewsPlaceholder": "[N] reviews",
+    "lessonsPlaceholder": "[N] lessons",
+    "perLesson": "per 50-min lesson",
+    "bookLesson": "Book lesson",
+    "bookLessonWith": "Book lesson with {name}",
+    "freeTrial": "Free 20-min trial",
+    "freeTrialWith": "Free 20-min trial with {name}"
+  },
+  "languages": {
+    "English": "English",
+    "Spanish": "Spanish",
+    "French": "French",
+    "Arabic": "Arabic",
+    "Portuguese": "Portuguese",
+    "native": "native"
+  },
+  "profile": {
+    "breadcrumb": "Breadcrumb",
+    "idVerified": "ID verified",
+    "averageRating": "Average rating",
+    "lessonsCompleted": "Lessons completed",
+    "experience": "Experience",
+    "yearsShort": "{count, plural, one {# yr} other {# yrs}}",
+    "timeZones": {
+      "EST": "Eastern Time",
+      "EDT": "Eastern Time",
+      "CST": "Central Time",
+      "CDT": "Central Time",
+      "MST": "Mountain Time",
+      "MDT": "Mountain Time",
+      "PST": "Pacific Time",
+      "PDT": "Pacific Time"
+    },
+    "videoSection": "Introduction video",
+    "playVideo": "Play {name}'s introduction video",
+    "meet": "Meet {name} · 2-min introduction",
+    "aboutMe": "About me",
+    "bioPlaceholder": "[Teacher bio] — Background, teaching experience and teaching style, written by the teacher during onboarding.",
+    "specialties": "Specialties",
+    "teaches": "Teaches",
+    "languages": "Languages",
+    "certifications": "Certifications",
+    "reviews": "Student reviews",
+    "noReviews": "No reviews yet",
+    "reviewsSummary": "{rating} average · {count, plural, one {# review} other {# reviews}}",
+    "reviewsSummaryUnknown": "{rating} average · [N] reviews",
+    "reviewPlaceholder": "[Student review text — shown after a completed lesson]",
+    "reviewMeta": "Student name · Country · Date",
+    "fallbackHeadline": "American English teacher",
+    "fallbackCity": "United States"
+  },
+  "booking": {
+    "title": "Book a lesson with {name}",
+    "perLesson": "per 50-min lesson",
+    "lessonType": "Lesson type",
+    "trial": "Trial lesson · 20 min",
+    "single": "Single lesson · 50 min",
+    "pack5": "5 lessons",
+    "pack10": "10 lessons",
+    "free": "Free",
+    "pickTime": "Pick a time",
+    "previousWeek": "Previous week",
+    "nextWeek": "Next week",
+    "timezone": "Times shown in your time zone: {tz} (auto-detected)",
+    "detecting": "Detecting your time zone…",
+    "noSlots": "No free times this week — try the next week.",
+    "unavailable": "{time}, unavailable",
+    "selectTime": "Select a time to continue",
+    "continue": "Continue to payment",
+    "message": "Message {name}",
+    "cancellation": "Free cancellation up to 24 hours before the lesson.",
+    "loadError": "We couldn't load this teacher's calendar. Please refresh in a moment."
+  }
+}

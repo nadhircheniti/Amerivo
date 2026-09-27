@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { getLessonForReport } from "./_data";
 import { ReportForm } from "./_components/report-form";
 
-export const metadata: Metadata = { title: "Lesson report" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("teacher.report");
+  return { title: t("metaTitle") };
+}
 
 export default async function LessonReportPage({ params }: { params: Promise<{ lessonId: string }> }) {
   const { lessonId } = await params;

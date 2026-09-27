@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "title": "Amerivo English — 按你的方式学英语",
+    "description": "与经过严格筛选的美国英语老师进行一对一在线直播课。灵活、个性化、面向全球。"
+  },
+  "language": {
+    "label": "语言"
+  },
+  "nav": {
+    "main": "主导航",
+    "home": "首页",
+    "teachers": "老师",
+    "howItWorks": "使用方式",
+    "pricing": "价格",
+    "business": "企业服务",
+    "becomeTeacher": "成为老师",
+    "logIn": "登录",
+    "getStarted": "立即开始",
+    "mySpace": "我的空间",
+    "logOut": "退出登录",
+    "homeLink": "Amerivo English 首页"
+  },
+  "footer": {
+    "tagline": "真实的人，真实的对话，更好的你。",
+    "learn": "学习",
+    "findTeacher": "寻找老师",
+    "placementTest": "水平测试",
+    "pricing": "价格",
+    "teach": "教学",
+    "becomeTeacher": "成为老师",
+    "teacherFaq": "老师常见问题",
+    "company": "公司",
+    "about": "关于我们",
+    "support": "客服支持",
+    "privacy": "隐私与 GDPR",
+    "terms": "服务条款",
+    "rights": "© {year} Amerivo English LLC。保留所有权利。",
+    "motto": "学习 · 交流 · 成长"
+  },
+  "sidebar": {
+    "nav": "控制面板",
+    "viewing": "{role} · {space}空间"
+  },
+  "roles": {
+    "student": "学生",
+    "teacher": "老师",
+    "admin": "管理员"
+  },
+  "spaces": {
+    "student": "学生",
+    "teacher": "老师",
+    "admin": "管理"
+  },
+  "gate": {
+    "loading": "正在加载你的空间…",
+    "unreachable": "暂时无法连接 Amerivo，服务可能正在启动，请一分钟后重试。",
+    "tryAgain": "重试"
+  },
+  "rating": {
+    "new": "新老师",
+    "outOf5": "（满分 5）",
+    "stars": "{count} 星（满分 5 星）"
+  },
+  "notFound": {
+    "title": "页面不存在",
+    "description": "你要找的页面不存在或已被移动。",
+    "back": "返回首页"
+  },
+  "progress": "进度",
+  "loading": "加载中…",
+  "specialties": {
+    "Business English": "商务英语",
+    "Conversation": "口语会话",
+    "Interview Prep": "面试准备",
+    "IELTS Prep": "雅思备考",
+    "TOEFL Prep": "托福备考",
+    "Teens": "青少年",
+    "General English": "综合英语",
+    "Travel": "旅行英语",
+    "Corporate": "企业培训",
+    "Reading": "阅读",
+    "Grammar": "语法"
+  },
+  "audiences": {
+    "Adults": "成人",
+    "Teens": "青少年"
+  }
+}

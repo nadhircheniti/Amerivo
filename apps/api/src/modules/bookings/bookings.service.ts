@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
-import { and, eq, getTableColumns, gte, inArray, ne, sql } from "drizzle-orm";
+import { and, eq, getTableColumns, gte, inArray, lt, ne, or, sql } from "drizzle-orm";
 import { DB, type Db } from "../../db/db";
 import { auditLogs, bookings, earnings, lessonPackages, lessons, payments, processedEvents, teacherProfiles, users } from "../../db/schema";
 import { CLOCK, type Clock } from "../../common/clock";
@@ -7,6 +7,7 @@ import { badRequest, conflict, forbidden, notFound } from "../../common/errors";
 import { isSlotAvailable } from "../../domain/availability";
 import { decideCancellation, teacherShouldBeWarned, TEACHER_WARNING_WINDOW_DAYS } from "../../domain/cancellation";
 import { splitEarning } from "../../domain/earnings";
+import { holdCutoff } from "../../domain/holds";
 import { perLessonValue, quote, PricingError, type Offer } from "../../domain/pricing";
 import { ADMIN_REFUND_WINDOW_HOURS } from "../../domain/cancellation";
 import type { AuthUser } from "../../auth/decorators";
@@ -23,6 +24,7 @@ export interface CreateBookingInput {
 }
 
 const PG_UNIQUE_VIOLATION = "23505";
+
 const isUniqueViolation = (e: unknown) => {
   const err = e as { code?: string; cause?: { code?: string } };
   return err?.code === PG_UNIQUE_VIOLATION || err?.cause?.code === PG_UNIQUE_VIOLATION;
@@ -60,6 +62,9 @@ export class BookingsService {
       throw e;
     }
 
+    await this.releaseStaleHolds({ teacherId: teacher.id });
+    const resumed = await this.resumePending(student.id, teacher.id, input.startsAt);
+    if (resumed) return resumed;
     await this.assertSlotFree(teacher.id, input.startsAt, q.durationMin);
     if (input.offer === "trial") await this.assertFirstTrial(student.id, teacher.id);
 
@@ -88,6 +93,7 @@ export class BookingsService {
             priceCents: firstLessonPrice,
             status: free ? "confirmed" : "pending_payment",
             topic: input.topic,
+            createdAt: this.clock.now(),
           })
           .returning();
         const [payment] = free
@@ -155,6 +161,7 @@ export class BookingsService {
             priceCents: perLessonValue(pkg.totalCents, pkg.lessonCount, pkg.lessonsUsed),
             status: "confirmed",
             topic: input.topic,
+            createdAt: this.clock.now(),
           })
           .returning();
         return { booking, package: updated, payment: null };
@@ -185,10 +192,27 @@ export class BookingsService {
   async onPaymentSucceeded(eventId: string, providerRef: string) {
     const fresh = await this.claimEvent(eventId);
     if (!fresh) return { duplicate: true };
-    const [payment] = await this.db.update(payments).set({ status: "succeeded" }).where(eq(payments.providerRef, providerRef)).returning();
+    // Only the first confirmation counts (webhook and return-page sync can both arrive).
+    const [payment] = await this.db
+      .update(payments)
+      .set({ status: "succeeded" })
+      .where(and(eq(payments.providerRef, providerRef), eq(payments.status, "requires_payment")))
+      .returning();
     if (!payment) {
-      this.log.warn(`Payment ${providerRef} not found`);
-      return { duplicate: false, found: false };
+      const [known] = await this.db.select({ id: payments.id }).from(payments).where(eq(payments.providerRef, providerRef));
+      if (!known) this.log.warn(`Payment ${providerRef} not found`);
+      return { duplicate: !!known, found: !!known };
+    }
+    // Paid after the hold was released (booking cancelled meanwhile): refund in full.
+    const held = await this.db
+      .select({ id: bookings.id })
+      .from(bookings)
+      .where(and(payment.packageId ? eq(bookings.packageId, payment.packageId) : eq(bookings.id, payment.bookingId!), inArray(bookings.status, ["pending_payment", "confirmed"])));
+    if (held.length === 0) {
+      this.log.warn(`Payment ${providerRef} succeeded for a released booking — refunding`);
+      if (this.stripe.isConfigured() && providerRef.startsWith("pi_")) await this.stripe.refund(providerRef, payment.amountCents, `late_${payment.id}`);
+      await this.db.update(payments).set({ status: "refunded" }).where(eq(payments.id, payment.id));
+      return { duplicate: false, found: true, refunded: true };
     }
     if (payment.packageId) {
       await this.db.update(lessonPackages).set({ status: "active" }).where(eq(lessonPackages.id, payment.packageId));
@@ -204,13 +228,106 @@ export class BookingsService {
 
   async onPaymentFailed(eventId: string, providerRef: string) {
     if (!(await this.claimEvent(eventId))) return { duplicate: true };
-    const [payment] = await this.db.update(payments).set({ status: "failed" }).where(eq(payments.providerRef, providerRef)).returning();
+    const [payment] = await this.db
+      .update(payments)
+      .set({ status: "failed" })
+      .where(and(eq(payments.providerRef, providerRef), eq(payments.status, "requires_payment")))
+      .returning();
     if (payment?.bookingId) await this.db.update(bookings).set({ status: "cancelled", cancelReason: "Payment failed" }).where(eq(bookings.id, payment.bookingId));
     if (payment?.packageId) {
       await this.db.update(lessonPackages).set({ status: "refunded" }).where(eq(lessonPackages.id, payment.packageId));
       await this.db.update(bookings).set({ status: "cancelled", cancelReason: "Payment failed" }).where(eq(bookings.packageId, payment.packageId));
     }
     return { duplicate: false };
+  }
+
+  /** The student's payment page calls this after paying: confirms without waiting for the webhook. */
+  async syncPayment(user: AuthUser, bookingId: string) {
+    const booking = await this.get(bookingId);
+    if (booking.studentId !== user.id && user.role !== "admin") throw forbidden();
+    if (booking.status === "pending_payment") {
+      const payment = await this.paymentFor(booking);
+      if (payment?.providerRef?.startsWith("pi_") && this.stripe.isConfigured()) {
+        const intent = await this.stripe.retrieveIntent(payment.providerRef);
+        if (intent.status === "succeeded") await this.onPaymentSucceeded(`sync_${intent.id}`, intent.id);
+        else if (intent.status === "canceled") await this.onPaymentFailed(`sync_${intent.id}`, intent.id);
+      }
+    }
+    return this.get(bookingId);
+  }
+
+  /**
+   * Unpaid bookings older than PAYMENT_HOLD_MIN free their slot. A payment that went through
+   * in the meantime is confirmed instead; otherwise the PaymentIntent is cancelled.
+   */
+  async releaseStaleHolds(filter: { teacherId?: string; studentId?: string } = {}) {
+    const cutoff = holdCutoff(this.clock.now());
+    const stale = await this.db
+      .select()
+      .from(bookings)
+            .where(
+        and(
+          eq(bookings.status, "pending_payment"),
+          lt(bookings.createdAt, cutoff),
+          filter.teacherId ? eq(bookings.teacherId, filter.teacherId) : undefined,
+          filter.studentId ? eq(bookings.studentId, filter.studentId) : undefined,
+        ),
+      );
+    for (const b of stale) {
+      const payment = await this.paymentFor(b);
+      const ref = payment?.providerRef;
+      if (ref?.startsWith("pi_") && this.stripe.isConfigured()) {
+        const intent = await this.stripe.retrieveIntent(ref);
+        if (intent.status === "succeeded") {
+          await this.onPaymentSucceeded(`sync_${ref}`, ref);
+          continue;
+        }
+        if (intent.status === "processing") continue; // bank still deciding: keep the hold
+        const cancelled = await this.stripe.cancelIntent(ref);
+        if (!cancelled) {
+          // Could not cancel: it was paid in the meantime.
+          const again = await this.stripe.retrieveIntent(ref);
+          if (again.status === "succeeded") await this.onPaymentSucceeded(`sync_${ref}`, ref);
+          continue;
+        }
+      }
+      await this.expireHold(b, payment?.id);
+    }
+    return stale.length;
+  }
+
+  private async expireHold(b: typeof bookings.$inferSelect, paymentId?: string) {
+    const now = this.clock.now();
+    const reason = "Payment not completed in time";
+    await this.db
+      .update(bookings)
+      .set({ status: "cancelled", cancelledAt: now, cancelReason: reason })
+      .where(and(b.packageId ? eq(bookings.packageId, b.packageId) : eq(bookings.id, b.id), eq(bookings.status, "pending_payment")));
+    if (b.packageId) await this.db.update(lessonPackages).set({ status: "expired" }).where(and(eq(lessonPackages.id, b.packageId), eq(lessonPackages.status, "pending_payment")));
+    if (paymentId) await this.db.update(payments).set({ status: "failed" }).where(and(eq(payments.id, paymentId), eq(payments.status, "requires_payment")));
+  }
+
+  /** Same student, same teacher, same time, still unpaid → reuse it instead of "slot taken". */
+  private async resumePending(studentId: string, teacherId: string, startsAt: Date) {
+    const [b] = await this.db
+      .select()
+      .from(bookings)
+      .where(and(eq(bookings.studentId, studentId), eq(bookings.teacherId, teacherId), eq(bookings.startsAt, startsAt), eq(bookings.status, "pending_payment")));
+    if (!b) return null;
+    const payment = await this.paymentFor(b);
+    if (!payment?.providerRef?.startsWith("pi_") || !this.stripe.isConfigured()) return null;
+    const intent = await this.stripe.retrieveIntent(payment.providerRef);
+    if (!intent.client_secret || ["succeeded", "canceled"].includes(intent.status)) return null;
+    const [pkg] = b.packageId ? await this.db.select().from(lessonPackages).where(eq(lessonPackages.id, b.packageId)) : [null];
+    return { booking: b, package: pkg ?? null, payment: { id: payment.id, clientSecret: intent.client_secret, amountCents: payment.amountCents } };
+  }
+
+  private async paymentFor(b: { id: string; packageId: string | null }) {
+    const [payment] = await this.db
+      .select()
+      .from(payments)
+      .where(b.packageId ? or(eq(payments.bookingId, b.id), eq(payments.packageId, b.packageId)) : eq(payments.bookingId, b.id));
+    return payment;
   }
 
   private async claimEvent(eventId: string) {
@@ -228,6 +345,12 @@ export class BookingsService {
     const now = this.clock.now();
     if (booking.status === "pending_payment") {
       await this.db.update(bookings).set({ status: "cancelled", cancelledBy: by, cancelledAt: now, cancelReason: reason }).where(eq(bookings.id, booking.id));
+      // Stop the PaymentIntent so it can't be paid anymore. If it was paid at the same moment,
+      // the success webhook finds the booking cancelled and refunds in full.
+      const payment = await this.paymentFor(booking);
+      if (payment?.providerRef?.startsWith("pi_") && this.stripe.isConfigured() && (await this.stripe.cancelIntent(payment.providerRef))) {
+        await this.db.update(payments).set({ status: "failed" }).where(and(eq(payments.id, payment.id), eq(payments.status, "requires_payment")));
+      }
       return { status: "cancelled", refundCents: 0, reason: "Cancelled before payment" };
     }
 
@@ -324,7 +447,8 @@ export class BookingsService {
     return b;
   }
 
-  listForUser(user: AuthUser, scope: "upcoming" | "past") {
+  async listForUser(user: AuthUser, scope: "upcoming" | "past") {
+    await this.releaseStaleHolds(user.role === "teacher" ? { teacherId: user.id } : { studentId: user.id });
     const col = user.role === "teacher" ? bookings.teacherId : bookings.studentId;
     const other = user.role === "teacher" ? bookings.studentId : bookings.teacherId;
     const now = this.clock.now();

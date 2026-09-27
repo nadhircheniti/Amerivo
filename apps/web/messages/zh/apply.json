@@ -1,0 +1,270 @@
+{
+  "page": {
+    "metaTitle": "在 Amerivo 授课",
+    "metaDescription": "申请在 Amerivo 在线教授美式英语。自主定价，按月结算收入。",
+    "brandSuffix": "老师版",
+    "saveExit": "保存并退出",
+    "faqEyebrow": "老师常见问题",
+    "faqTitle": "申请前的常见问题",
+    "faq": {
+      "earn": {
+        "q": "我能赚多少钱？",
+        "a": "每节 50 分钟的课，您可以在 {min} 到 {max} 之间自主定价。Amerivo 收取 {commission}% 的平台佣金，因此定价 {example} 时，您每节课可得 {net}。您还可以提供 5 节和 10 节课时包。"
+      },
+      "paid": {
+        "q": "何时以及如何收款？",
+        "a": "收入每月结算一次，最迟于 28 日通过 Stripe Connect 转入您的银行账户。每次提现涵盖上一周期内完成的课程。"
+      },
+      "who": {
+        "q": "谁可以申请？",
+        "a": "Amerivo 的老师均为以英语为母语的美国人。强烈建议具备教学证书（TESOL、TEFL 或 CELTA）或课堂教学经验，且每位申请人都需完成身份验证和一次简短面试。"
+      },
+      "equipment": {
+        "q": "我需要哪些设备？",
+        "a": "一台带摄像头的电脑、一副耳麦或优质麦克风、稳定的网络连接（10 Mbps 或以上），以及一个安静、光线充足的环境。课程在浏览器中进行，无需安装任何软件。"
+      }
+    }
+  },
+  "steps": {
+    "personal": {
+      "title": "个人信息",
+      "heading": "个人信息",
+      "continue": "继续填写个人信息"
+    },
+    "professional": {
+      "title": "职业信息",
+      "heading": "职业信息",
+      "continue": "继续填写职业信息"
+    },
+    "identity": {
+      "title": "身份验证",
+      "heading": "身份验证",
+      "continue": "继续进行身份验证"
+    },
+    "video": {
+      "title": "视频自我介绍",
+      "heading": "视频自我介绍",
+      "continue": "继续录制视频自我介绍"
+    },
+    "review": {
+      "title": "审核与面试",
+      "heading": "审核与面试",
+      "continue": "继续进入审核与面试"
+    },
+    "approval": {
+      "title": "审批",
+      "heading": "申请状态",
+      "continue": "继续进入审批"
+    }
+  },
+  "wizard": {
+    "navLabel": "申请步骤",
+    "yourApplication": "您的申请",
+    "completed": "（已完成）",
+    "usOnly": "只有以英语为母语的美国人才能在 Amerivo 授课。",
+    "progress": "第 {current} 步，共 {total} 步",
+    "back": "返回",
+    "submit": "提交申请",
+    "backHome": "返回 Amerivo"
+  },
+  "options": {
+    "subjects": {
+      "businessEnglish": "商务英语",
+      "conversation": "会话（口语）",
+      "reading": "阅读",
+      "generalEnglish": "通用英语",
+      "interviewPrep": "面试准备",
+      "examPrep": "IELTS / TOEFL 备考"
+    },
+    "groups": {
+      "adults": "成人",
+      "teens": "青少年（13–17 岁）",
+      "corporate": "企业团体"
+    },
+    "education": {
+      "bachelor": "学士学位",
+      "master": "硕士学位",
+      "phd": "博士学位",
+      "associate": "副学士学位",
+      "other": "其他"
+    },
+    "experience": {
+      "lessThan1": "不到 1 年",
+      "oneToTwo": "1–2 年",
+      "threeToFive": "3–5 年",
+      "fiveToTen": "5–10 年",
+      "tenPlus": "10 年以上"
+    },
+    "countryOther": "其他",
+    "genders": {
+      "female": "女",
+      "male": "男",
+      "undisclosed": "不愿透露"
+    },
+    "timeZones": {
+      "newYork": "美国东部时间（ET）",
+      "chicago": "美国中部时间（CT）",
+      "denver": "美国山地时间（MT）",
+      "phoenix": "亚利桑那（MST）",
+      "losAngeles": "美国太平洋时间（PT）",
+      "anchorage": "阿拉斯加时间（AKT）",
+      "honolulu": "夏威夷时间（HT）",
+      "london": "伦敦（GMT/BST）",
+      "madrid": "中欧时间（CET）",
+      "tokyo": "东京（JST）"
+    },
+    "idTypes": {
+      "passport": "护照",
+      "license": "驾照",
+      "government": "政府签发的身份证件"
+    },
+    "interviewSlots": {
+      "weekdayMornings": "工作日上午",
+      "weekdayAfternoons": "工作日下午",
+      "weekdayEvenings": "工作日晚上",
+      "weekends": "周末"
+    }
+  },
+  "fields": {
+    "add": "添加…",
+    "remove": "移除 {value}",
+    "selectedFiles": "已选文件"
+  },
+  "personal": {
+    "photo": "头像",
+    "photoHint": "一张亲切、光线充足的头像照。学生会在您的主页和搜索结果中看到它。",
+    "replacePhoto": "更换照片",
+    "uploadPhoto": "上传照片（JPG、PNG）",
+    "firstName": "名",
+    "lastName": "姓",
+    "email": "电子邮箱",
+    "phone": "电话",
+    "country": "居住国家",
+    "timeZone": "时区",
+    "timeZoneHint": "用于按学生的当地时间显示您的可预约时间。",
+    "gender": "性别",
+    "genderHint": "部分学生会按偏好的老师性别进行筛选。您之后可以更改。"
+  },
+  "professional": {
+    "education": "最高学历",
+    "experience": "教学经验年限",
+    "subjects": "您可以教授哪些内容？",
+    "groups": "您可以教授的群体",
+    "certifications": "证书",
+    "uploadCertificates": "上传证书（PDF、JPG）",
+    "languages": "掌握的语言",
+    "languagesPlaceholder": "例如：法语 · B1",
+    "rate": "每节 50 分钟课程的价格",
+    "rateValue": "每节课 {price}",
+    "net": "扣除 {commission}% 平台佣金后，您可得 {net}",
+    "trial": "提供 20 分钟免费试听课",
+    "trialHint": "学生可在预约前与您见面一次。您之后可以更改。"
+  },
+  "previews": {
+    "label": "接下来",
+    "step3": "第 3 步 · 预览",
+    "identityTitle": "身份验证",
+    "identityText": "政府签发的身份证件、护照或驾照，外加一张自拍。由 Stripe Identity 安全处理。",
+    "identityUpload": "上传身份证件",
+    "step4": "第 4 步 · 预览",
+    "videoTitle": "2 分钟视频自我介绍",
+    "videoText": "背景 · 经验 · 教学风格。学生会在您的主页上看到它。"
+  },
+  "identity": {
+    "intro": "每位老师在接受预约前都需通过验证。请上传有效的带照片身份证件；随后系统会请您快速自拍一张以进行比对。",
+    "documentType": "证件类型",
+    "upload": {
+      "passport": "上传您的护照",
+      "license": "上传您的驾照",
+      "government": "上传您的政府身份证件"
+    },
+    "uploadHint": "如适用，请上传正反两面 · JPG、PNG 或 PDF",
+    "secure": "<strong>由 Stripe Identity 安全处理。</strong>Amerivo 绝不保存您的证件副本，我们只接收验证结果。",
+    "taxTitle": "税务信息（W-9）",
+    "taxText": "我们会收集您的 W-9 表格，1099 表格将自动开具。您将在绑定提现账户时填写。"
+  },
+  "video": {
+    "intro": "录制一段不超过 2 分钟的视频。学生在预约前会在您的主页上观看，所以请自然表达并看着镜头。",
+    "browserRecording": "浏览器录制（{duration}）",
+    "recordingTime": "录制时长",
+    "recording": "录制中",
+    "stop": "停止录制",
+    "again": "重新录制",
+    "record": "在浏览器中录制",
+    "upload": "上传视频文件",
+    "formats": "MP4、MOV 或 WebM · 最长 2 分钟",
+    "whatToCover": "介绍内容",
+    "topics": {
+      "background": {
+        "title": "背景",
+        "text": "您来自美国哪里，并简单介绍一下自己。"
+      },
+      "experience": {
+        "title": "经验",
+        "text": "您教过哪些学生，他们取得了什么成果。"
+      },
+      "style": {
+        "title": "教学风格",
+        "text": "和您上课是什么感觉。"
+      }
+    },
+    "topic": "{number}. {title}"
+  },
+  "review": {
+    "notProvided": "未填写",
+    "edit": "编辑",
+    "editSection": "编辑{section}",
+    "name": "姓名",
+    "email": "电子邮箱",
+    "phone": "电话",
+    "country": "国家",
+    "gender": "性别",
+    "timeZone": "时区",
+    "photo": "照片",
+    "education": "学历",
+    "experience": "经验",
+    "teaches": "教授内容",
+    "groups": "教学群体",
+    "certifications": "证书",
+    "languages": "语言",
+    "rate": "价格",
+    "rateValue": "每节课 {price} · 您可得 {net} · 免费试听课{trial, select, on {已开启} other {已关闭}}",
+    "document": "证件",
+    "documentValue": "{type} · {count, plural, other {# 个文件}}",
+    "w9": "W-9",
+    "w9Value": "在绑定提现账户时收集",
+    "video": "视频",
+    "interviewTitle": "简短面试",
+    "interviewText": "如果您的申请通过审核，我们将邀请您与我们的教学团队进行一次 15 分钟的视频面试。",
+    "interviewTime": "首选面试时间",
+    "confirm": "我确认本人是以英语为母语的美国人，且本申请中的信息真实准确。"
+  },
+  "approval": {
+    "submitted": "申请已提交",
+    "pendingReview": "待审核",
+    "thanks": "谢谢！",
+    "thanksName": "谢谢，{name}！",
+    "emailTo": "我们将在 3–5 个工作日内发送邮件至 {email}，安排您的面试。",
+    "emailYou": "我们将在 3–5 个工作日内给您发送邮件，安排您的面试。",
+    "statusTitle": "各状态的含义",
+    "current": "（您当前的状态）",
+    "statuses": {
+      "pending": {
+        "label": "待审核",
+        "text": "我们正在审核您的材料、视频和面试，通常需要 3–5 个工作日。"
+      },
+      "approved": {
+        "label": "已通过",
+        "text": "您的主页将上线。设置可预约时间并绑定 Stripe，即可开始接受预约。"
+      },
+      "rejected": {
+        "label": "未通过",
+        "text": "您的申请这次未达到我们的要求。我们会通过邮件告知原因。"
+      },
+      "suspended": {
+        "label": "已暂停",
+        "text": "如未遵守我们的老师标准或条款，已通过的账户可能会被暂停。"
+      }
+    }
+  }
+}

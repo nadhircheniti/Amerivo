@@ -62,6 +62,30 @@ Parcours : inscription → code reçu par e-mail → `/welcome` crée le compte 
 l'API) → questionnaire. Connexion → `/welcome` → espace élève, professeur ou admin selon le rôle.
 Les pages `/student`, `/teacher`, `/admin`, `/classroom`, `/onboarding` exigent d'être connecté.
 
+## 5. Paiements — Stripe (mode test)
+
+Sans clés Stripe, `PAYMENTS_SIMULATED=1` confirme les réservations sans paiement. Dès que
+`STRIPE_SECRET_KEY` est présente sur Render, les vrais paiements (test) prennent le relais.
+
+1. dashboard.stripe.com → créer le compte → vérifier que **Test mode** (Sandbox) est activé.
+2. **Developers → API keys** : copier `pk_test_…` et `sk_test_…`.
+3. **Vercel** : `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` = `pk_test_…` → **Redeploy**.
+4. **Render** : `STRIPE_SECRET_KEY` = `sk_test_…`.
+5. **Webhook** (sécurité : confirme la réservation même si l'élève ferme la page) :
+   Stripe → **Developers → Webhooks → Add endpoint**
+   - URL : `https://amerivo-api.onrender.com/api/webhooks/stripe`
+   - Événements : `payment_intent.succeeded`, `payment_intent.payment_failed`, `payment_intent.canceled`
+   - Copier le **Signing secret** (`whsec_…`) → Render : `STRIPE_WEBHOOK_SECRET`.
+   Puis **Save, rebuild and deploy**.
+6. **Apple Pay** (facultatif en test) : Stripe → **Settings → Payment method domains** → ajouter
+   `amerivo-api.vercel.app`.
+
+Cartes de test : `4242 4242 4242 4242` (acceptée), `4000 0027 6000 3184` (validation 3-D Secure),
+`4000 0000 0000 9995` (refusée) — date future quelconque, CVC quelconque.
+
+Fonctionnement : le créneau est réservé 30 minutes pendant le paiement ; passé ce délai il est
+libéré et le paiement annulé. Un paiement arrivé après annulation est remboursé automatiquement.
+
 ## Fonctionnement au quotidien
 
 - Chaque fusion sur `main` redéploie automatiquement Render et Vercel.

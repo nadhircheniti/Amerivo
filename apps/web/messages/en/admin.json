@@ -1,0 +1,209 @@
+{
+  "nav": {
+    "analytics": "Analytics",
+    "teachers": "Teachers",
+    "students": "Students",
+    "bookings": "Bookings",
+    "payments": "Payments & payouts",
+    "disputes": "Disputes & refunds",
+    "settings": "Settings & audit log",
+    "signedIn2fa": "Signed in with 2FA"
+  },
+  "comingSoon": {
+    "back": "Back to analytics",
+    "bookingsTitle": "Bookings",
+    "bookingsDescription": "Upcoming, completed and cancelled lessons with reschedule and override.",
+    "disputesTitle": "Disputes & refunds",
+    "disputesDescription": "Complaints and refund requests (24-hour window).",
+    "paymentsTitle": "Payments & payouts",
+    "paymentsDescription": "Revenue, teacher payouts, refunds and outstanding payments.",
+    "settingsTitle": "Settings & audit log",
+    "settingsDescription": "Payout schedule, commission, admin users with 2FA and the audit log.",
+    "studentsTitle": "Students",
+    "studentsDescription": "Add, edit, block, contact and refund students."
+  },
+  "overview": {
+    "metaTitle": "Platform analytics · Amerivo Admin",
+    "title": "Platform analytics",
+    "subtitle": "Sample data shown · figures update in real time",
+    "period": "Period",
+    "last30": "Last 30 days",
+    "last90": "Last 90 days",
+    "thisYear": "This year",
+    "keyMetrics": "Key metrics",
+    "kpi": {
+      "totalStudents": "Total students",
+      "totalStudentsHint": "Up vs previous period",
+      "activeStudents": "Active students",
+      "activeStudentsHint": "Booked in last 30 days",
+      "totalTeachers": "Total teachers",
+      "totalTeachersHint": "{count, plural, one {# application pending} other {# applications pending}}",
+      "revenue": "Revenue (gross)",
+      "revenueHint": "Commission {percent}%: {amount}",
+      "lessonsCompleted": "Lessons completed",
+      "retention": "Retention rate",
+      "retentionHint": "Students booking again within 30 days",
+      "conversion": "Conversion rate",
+      "conversionHint": "Trial → paid lesson",
+      "payouts": "Outstanding payouts",
+      "payoutsHint": "Due {date}"
+    }
+  },
+  "export": {
+    "button": "Export CSV",
+    "bookingId": "Booking ID",
+    "amountUsd": "Amount (USD)"
+  },
+  "chart": {
+    "title": "Revenue & lessons",
+    "sample": "Sample data",
+    "legend": "Legend",
+    "revenue": "Revenue",
+    "lessons": "Lessons",
+    "aria": "Revenue and lessons trend, sample data, {from} to {to}. Both series rise steadily: revenue index from {revenueFrom} to {revenueTo}, lessons index from {lessonsFrom} to {lessonsTo}.",
+    "note": "Relative scale (peak month = 100). Real figures appear once the analytics API is connected."
+  },
+  "refunds": {
+    "title": "Refund requests",
+    "window": "Within 24 h after the lesson",
+    "lessonOn": "Lesson of {date}",
+    "refunded": "Refunded",
+    "declined": "Declined",
+    "awaitingReply": "Awaiting reply",
+    "liveRefunded": "{amount} refunded to {name}.",
+    "liveDeclined": "Refund request from {name} declined.",
+    "liveContacted": "Message sent to {name}.",
+    "returned": "{amount} returned to the original payment method.",
+    "notified": "The student has been notified.",
+    "undo": "Undo",
+    "refund": "Refund",
+    "contact": "Contact",
+    "contacted": "Contacted",
+    "decline": "Decline",
+    "teacherWarning": "Teacher warning",
+    "warningText": "{count, selectordinal, one {#st} two {#nd} few {#rd} other {#th}} cancellation this month — automatic warning sent."
+  },
+  "bookings": {
+    "title": "Bookings",
+    "statusTabs": "Booking status",
+    "tabs": {
+      "upcoming": "Upcoming",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "status": {
+      "confirmed": "Confirmed",
+      "pendingPayment": "Pending payment",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded"
+    },
+    "type": {
+      "single": "Single · 50 min",
+      "trial": "Trial · 20 min",
+      "pack": "{size}-lesson pack ({used}/{size})",
+      "corporate": "Corporate pack · {size} lessons"
+    },
+    "dateUtc": "Date (UTC)",
+    "student": "Student",
+    "teacher": "Teacher",
+    "typeHeader": "Type",
+    "amount": "Amount",
+    "statusHeader": "Status",
+    "actions": "Actions",
+    "empty": "No bookings in this view.",
+    "free": "Free",
+    "newDate": "New date and time (UTC) for {booking}",
+    "save": "Save",
+    "cancel": "Cancel",
+    "reschedule": "Reschedule",
+    "rescheduleAria": "Reschedule {booking}",
+    "cancelAria": "Cancel {booking}",
+    "override": "Override",
+    "overrideAria": "Override status of {booking}",
+    "noticeMoved": "Booking for {name} moved to {when} UTC. Student and teacher notified.",
+    "noticeCancelled": "Booking for {name} cancelled. It is now in the Cancelled tab.",
+    "noticePaid": "Payment marked as received for {name}. Override logged in the audit log.",
+    "noticeRestored": "Booking for {name} restored to Upcoming. Override logged in the audit log.",
+    "noticeOverride": "Override for {name} logged in the audit log."
+  },
+  "teachers": {
+    "metaTitle": "Teacher management · Amerivo Admin",
+    "title": "Teacher management",
+    "search": "Search teachers",
+    "searchPlaceholder": "Search by name or email",
+    "statusTabs": "Teacher status",
+    "tabs": {
+      "all": "All",
+      "pending": "Pending ({count})",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "suspended": "Suspended"
+    },
+    "status": {
+      "pending": "Pending review",
+      "interview": "Interview requested",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "suspended": "Suspended"
+    },
+    "flags": {
+      "idPending": "ID pending",
+      "noVideo": "No video"
+    },
+    "notice": {
+      "interview": "Interview requested from {name}. They stay in Pending.",
+      "pending": "{name}'s application was reopened and moved to the Pending tab.",
+      "approved": "{name} is now approved and moved to the Approved tab.",
+      "rejected": "{name} is now rejected and moved to the Rejected tab.",
+      "suspended": "{name} is now suspended and moved to the Suspended tab."
+    },
+    "applicants": "Applicants",
+    "empty": "No teachers match this view.",
+    "applied": "{city} · applied {date}",
+    "since": "{city} · since {date}",
+    "selectPrompt": "Select a teacher to review.",
+    "playVideo": "Play {name}'s introduction video ({length})",
+    "introVideo": "Introduction video · {length}",
+    "noVideo": "No introduction video uploaded",
+    "education": "Education",
+    "experience": "Experience",
+    "experienceYears": "{count, plural, =0 {Less than 1 year} one {# year} other {# years}}",
+    "teaches": "Teaches",
+    "rate": "Rate",
+    "ratePer": "{price} / 50 min",
+    "certifications": "Certifications",
+    "noneProvided": "None provided",
+    "identity": "Identity (Stripe Identity)",
+    "identityVerified": "Verified · {document}",
+    "identityPending": "Pending · Document submitted",
+    "documents": {
+      "passport": "Passport",
+      "driversLicense": "Driver's license"
+    },
+    "evaluation": "Evaluation",
+    "evalFields": {
+      "fluency": "English fluency",
+      "professionalism": "Professionalism",
+      "teaching": "Teaching ability",
+      "camera": "Camera quality",
+      "internet": "Internet quality"
+    },
+    "scores": {
+      "5": "5 – Excellent",
+      "4": "4 – Good",
+      "3": "3 – Average",
+      "2": "2 – Weak",
+      "1": "1 – Poor"
+    },
+    "internalNotes": "Internal notes",
+    "notesPlaceholder": "Visible to admins only",
+    "requestInterview": "Request interview",
+    "interviewRequested": "Interview requested",
+    "reject": "Reject",
+    "approve": "Approve teacher",
+    "suspend": "Suspend",
+    "reinstate": "Reinstate",
+    "reopen": "Reopen application"
+  }
+}

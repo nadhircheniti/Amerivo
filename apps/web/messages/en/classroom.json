@@ -1,0 +1,50 @@
+{
+  "page": {
+    "metaTitle": "Live lesson",
+    "backToDashboard": "Back to dashboard",
+    "participants": "{teacher} & {student}",
+    "connectionGood": "Connection good"
+  },
+  "timer": {
+    "label": "Elapsed time {elapsed} of {total}"
+  },
+  "controls": {
+    "toolbar": "Call controls",
+    "muteMic": "Mute microphone",
+    "cameraOff": "Turn camera off",
+    "shareScreen": "Share screen",
+    "whiteboard": "Whiteboard",
+    "endLesson": "End lesson"
+  },
+  "stage": {
+    "whiteboard": "Shared whiteboard",
+    "tools": "Whiteboard tools",
+    "tool": {
+      "pen": "Pen",
+      "text": "Text",
+      "shape": "Shape",
+      "eraser": "Eraser"
+    },
+    "videoCall": "Video call with {name}",
+    "videoFeed": "VIDEO FEED",
+    "sharing": "You are sharing your screen",
+    "teacherLabel": "{name} · Teacher",
+    "you": "You",
+    "cameraOff": "Camera off",
+    "micMuted": "Microphone muted"
+  },
+  "panel": {
+    "label": "Lesson panel",
+    "chat": "Chat",
+    "notes": "Lesson notes",
+    "files": "Files",
+    "chatMessages": "Chat messages",
+    "youPrefix": "You:",
+    "chatMessage": "Chat message",
+    "messagePlaceholder": "Message {name}…",
+    "send": "Send message",
+    "notesLabel": "Shared lesson notes · saved automatically",
+    "sharedFiles": "Shared files",
+    "upload": "Upload a file"
+  }
+}

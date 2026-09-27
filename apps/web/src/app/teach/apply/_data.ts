@@ -1,39 +1,31 @@
 /** Options and sample defaults for the teacher application wizard. */
 
-export const steps = [
-  { id: "personal", title: "Personal info", heading: "Personal information" },
-  { id: "professional", title: "Professional info", heading: "Professional information" },
-  { id: "identity", title: "Identity verification", heading: "Identity verification" },
-  { id: "video", title: "Video introduction", heading: "Video introduction" },
-  { id: "review", title: "Review & interview", heading: "Review & interview" },
-  { id: "approval", title: "Approval", heading: "Application status" },
-] as const;
+/** Labels live in messages/<locale>/apply.json ("steps.<id>", "options.<group>.<id>"). */
+export const steps = [{ id: "personal" }, { id: "professional" }, { id: "identity" }, { id: "video" }, { id: "review" }, { id: "approval" }] as const;
+export type StepId = (typeof steps)[number]["id"];
 
-export const subjects = ["Business English", "Conversation (Speaking)", "Reading", "General English", "Interview Preparation", "IELTS / TOEFL Prep"];
+export const subjects = ["businessEnglish", "conversation", "reading", "generalEnglish", "interviewPrep", "examPrep"] as const;
 /** Students are 13+ (client decision): no children group. */
-export const groups = ["Adults", "Teens (13–17)", "Corporate groups"];
-export const educationLevels = ["Bachelor's degree", "Master's degree", "PhD", "Associate degree", "Other"];
-export const experienceLevels = ["Less than 1 year", "1–2 years", "3–5 years", "5–10 years", "10+ years"];
-export const countries = ["United States", "Canada", "Mexico", "United Kingdom", "Spain", "Portugal", "Germany", "Japan", "Other"];
-export const genders = ["Female", "Male", "Prefer not to say"];
+export const groups = ["adults", "teens", "corporate"] as const;
+export const educationLevels = ["bachelor", "master", "phd", "associate", "other"] as const;
+export const experienceLevels = ["lessThan1", "oneToTwo", "threeToFive", "fiveToTen", "tenPlus"] as const;
+/** ISO 3166 region codes (names come from Intl.DisplayNames), plus "other". */
+export const countries = ["US", "CA", "MX", "GB", "ES", "PT", "DE", "JP", "other"] as const;
+export const genders = ["female", "male", "undisclosed"] as const;
 export const timeZones = [
-  { value: "America/New_York", label: "Eastern Time (ET)" },
-  { value: "America/Chicago", label: "Central Time (CT)" },
-  { value: "America/Denver", label: "Mountain Time (MT)" },
-  { value: "America/Phoenix", label: "Arizona (MST)" },
-  { value: "America/Los_Angeles", label: "Pacific Time (PT)" },
-  { value: "America/Anchorage", label: "Alaska Time (AKT)" },
-  { value: "Pacific/Honolulu", label: "Hawaii Time (HT)" },
-  { value: "Europe/London", label: "London (GMT/BST)" },
-  { value: "Europe/Madrid", label: "Central Europe (CET)" },
-  { value: "Asia/Tokyo", label: "Tokyo (JST)" },
-];
-export const idTypes = [
-  { value: "passport", label: "Passport" },
-  { value: "license", label: "Driver's license" },
-  { value: "government", label: "Government ID" },
+  { value: "America/New_York", key: "newYork" },
+  { value: "America/Chicago", key: "chicago" },
+  { value: "America/Denver", key: "denver" },
+  { value: "America/Phoenix", key: "phoenix" },
+  { value: "America/Los_Angeles", key: "losAngeles" },
+  { value: "America/Anchorage", key: "anchorage" },
+  { value: "Pacific/Honolulu", key: "honolulu" },
+  { value: "Europe/London", key: "london" },
+  { value: "Europe/Madrid", key: "madrid" },
+  { value: "Asia/Tokyo", key: "tokyo" },
 ] as const;
-export const interviewSlots = ["Weekday mornings", "Weekday afternoons", "Weekday evenings", "Weekends"];
+export const idTypes = ["passport", "license", "government"] as const;
+export const interviewSlots = ["weekdayMornings", "weekdayAfternoons", "weekdayEvenings", "weekends"] as const;
 
 export type Application = {
   photo: string[];
@@ -41,22 +33,22 @@ export type Application = {
   lastName: string;
   email: string;
   phone: string;
-  country: string;
-  gender: string;
+  country: (typeof countries)[number];
+  gender: (typeof genders)[number] | "";
   timeZone: string;
-  education: string;
-  experience: string;
-  subjects: string[];
-  groups: string[];
+  education: (typeof educationLevels)[number];
+  experience: (typeof experienceLevels)[number];
+  subjects: (typeof subjects)[number][];
+  groups: (typeof groups)[number][];
   certifications: string[];
   certificateFiles: string[];
   languages: string[];
   rate: number;
   offersTrial: boolean;
-  idType: (typeof idTypes)[number]["value"];
+  idType: (typeof idTypes)[number];
   idFiles: string[];
   video: string[];
-  interviewSlot: string;
+  interviewSlot: (typeof interviewSlots)[number];
 };
 
 export const initialApplication: Application = {
@@ -65,20 +57,21 @@ export const initialApplication: Application = {
   lastName: "",
   email: "",
   phone: "",
-  country: "United States",
+  country: "US",
   gender: "",
   timeZone: "America/Chicago",
-  education: "Bachelor's degree",
-  experience: "5–10 years",
-  subjects: ["Business English", "Conversation (Speaking)", "Interview Preparation"],
-  groups: ["Adults", "Teens"],
+  education: "bachelor",
+  experience: "fiveToTen",
+  subjects: ["businessEnglish", "conversation", "interviewPrep"],
+  groups: ["adults", "teens"],
   certifications: ["TESOL", "CELTA"],
   certificateFiles: [],
+  // Sample tags typed by the applicant (user content, not translated).
   languages: ["English · Native", "Spanish · B2"],
   rate: 35,
   offersTrial: true,
   idType: "passport",
   idFiles: [],
   video: [],
-  interviewSlot: "Weekday afternoons",
+  interviewSlot: "weekdayAfternoons",
 };

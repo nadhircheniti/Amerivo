@@ -1,0 +1,251 @@
+{
+  "home": {
+    "eyebrow": "在线英语学习",
+    "title": "学英语<br></br>用你的方式",
+    "tagline": "灵活 · 个性化 · 全球化",
+    "intro": "与严格筛选的美国英语老师一对一实时上课。练出真实的对话能力，实现你的目标——随时随地。",
+    "searchLabel": "你想学什么？",
+    "searchPlaceholder": "你想学什么？例如：商务英语",
+    "searchSubmit": "搜索老师",
+    "perks": {
+      "placementTest": "免费水平测试",
+      "trialLessons": "免费试听课",
+      "usTeachers": "全部为美国老师"
+    },
+    "photoLabel": "黄昏时分的纽约天际线",
+    "handwritten": "更好的<br></br>英语<br></br>更大的<br></br>舞台",
+    "whyLabel": "为什么选择 Amerivo",
+    "values": {
+      "teachers": {
+        "title": "专业老师",
+        "body": "来自美国的<br></br>合格母语老师。"
+      },
+      "scheduling": {
+        "title": "灵活安排",
+        "body": "按你的节奏预约课程，<br></br>显示你所在时区的时间。"
+      },
+      "personalized": {
+        "title": "个性化学习",
+        "body": "根据你的水平和目标<br></br>量身定制学习计划。"
+      },
+      "community": {
+        "title": "全球社区",
+        "body": "一起学习、交流、成长——<br></br>携手同行。"
+      }
+    },
+    "how": {
+      "eyebrow": "如何开始",
+      "title": "从第一次测试到流利对话",
+      "steps": {
+        "test": {
+          "title": "参加水平测试",
+          "body": "告诉我们你的目标，获得你的 CEFR 等级（A1 至 C2）。"
+        },
+        "match": {
+          "title": "匹配老师",
+          "body": "我们根据你的目标、可预约时间、老师专长和评分为你推荐老师。"
+        },
+        "book": {
+          "title": "安全预约与支付",
+          "body": "按你所在时区选择时间。支持银行卡、Apple Pay、Google Pay 或 PayPal。"
+        },
+        "learn": {
+          "title": "实时上课",
+          "body": "一键进入视频课堂，课后获得笔记和作业。"
+        }
+      }
+    },
+    "teachers": {
+      "eyebrow": "认识我们的老师",
+      "title": "真实的人，真实的对话。",
+      "browseAll": "查看全部老师",
+      "introVideo": "介绍视频",
+      "perLesson": "/50 分钟",
+      "meta": "{city} · {years, plural, other {# 年}}教学经验"
+    },
+    "pricing": {
+      "eyebrow": "简单透明的价格",
+      "title": "按课付费，或购买课时包更省钱",
+      "intro": "每位老师自行定价，每节 50 分钟课程 20 至 50 美元。课前 24 小时以上取消可全额退款。",
+      "popular": "热门",
+      "plans": {
+        "trial": {
+          "title": "试听课",
+          "price": "20 分钟",
+          "body": "提供试听课的老师免费：预约前先认识老师，聊聊你的目标。"
+        },
+        "single": {
+          "title": "单节课",
+          "price": "$20–50",
+          "body": "一节 50 分钟的实时课程，按老师定价收费。"
+        },
+        "pack5": {
+          "title": "5 节课时包",
+          "price": "最高优惠 5%",
+          "body": "由参与活动的老师提供。"
+        },
+        "pack10": {
+          "title": "10 节课时包",
+          "price": "最高优惠 10%",
+          "body": "稳步进步的超值之选。"
+        }
+      }
+    },
+    "business": {
+      "title": "为你的团队提供英语培训",
+      "body": "告诉我们贵公司的语言需求，为员工预约 10 节、20 节或更多课程。",
+      "cta": "申请企业方案"
+    },
+    "teach": {
+      "title": "教授美式英语",
+      "body": "自主定价，随时随地授课，按月结算收入。只需一段 2 分钟的介绍视频即可申请。",
+      "cta": "成为老师"
+    }
+  },
+  "pages": {
+    "backHome": "返回首页",
+    "about": {
+      "title": "关于 Amerivo",
+      "description": "公司故事与团队介绍——内容将由 Amerivo 提供。"
+    },
+    "terms": {
+      "title": "服务条款",
+      "description": "最终条款将由 Amerivo 的法律顾问提供。"
+    },
+    "privacy": {
+      "title": "隐私政策",
+      "description": "GDPR / CCPA 隐私政策——将由 Amerivo 的法律顾问提供。"
+    }
+  },
+  "search": {
+    "metaTitle": "寻找老师",
+    "metaDescription": "按专长、价格和授课对象浏览经过认证的美国母语英语老师。",
+    "title": "找到你的美式英语老师",
+    "subtitle": "所有老师均为美国母语者，并经过我们团队的审核与面试。",
+    "sortBy": "排序方式",
+    "sort": {
+      "best": "最佳匹配",
+      "rating": "评分最高",
+      "price": "价格：从低到高",
+      "experience": "经验最丰富"
+    },
+    "showFilters": "显示筛选条件",
+    "hideFilters": "隐藏筛选条件",
+    "filters": "筛选条件",
+    "wantToLearn": "我想学",
+    "specialties": {
+      "businessEnglish": "商务英语",
+      "conversation": "口语会话",
+      "interviewPrep": "面试准备",
+      "ieltsPrep": "雅思备考",
+      "toeflPrep": "托福备考",
+      "teens": "青少年（13 岁以上）"
+    },
+    "pricePerLesson": "每节课价格",
+    "priceRange": "{min} – {max}",
+    "upTo": "最高 {price}",
+    "availability": "可预约时间",
+    "yourTime": "（你的当地时间）",
+    "slots": {
+      "Morning": "上午",
+      "Afternoon": "下午",
+      "Evening": "晚上",
+      "Weekend": "周末"
+    },
+    "teaches": "授课对象",
+    "gender": "老师性别",
+    "genderAny": "不限",
+    "genderFemale": "女",
+    "genderMale": "男",
+    "alsoSpeaks": "还会说",
+    "anyLanguage": "任何语言",
+    "clearFilters": "清除所有筛选条件",
+    "results": "搜索结果",
+    "count": "{count, plural, other {# 位老师}}",
+    "countFor": "<strong>{specialties}</strong>：{count, plural, other {# 位老师}}",
+    "listSeparator": "、",
+    "pricesNote": "价格以美元显示，每节课 50 分钟",
+    "matching": "匹配“<strong>{text}</strong>”",
+    "clearSearch": "清除搜索",
+    "emptyTitle": "没有符合这些筛选条件的老师",
+    "emptyBody": "试试提高价格上限或减少专长选项。",
+    "pagination": "分页",
+    "previousPage": "上一页",
+    "nextPage": "下一页",
+    "verified": "已认证",
+    "cardMeta": "{city}（{tz}）· {years, plural, other {# 年}}经验",
+    "speaks": "会说{languages}",
+    "reviewsPlaceholder": "[N] 条评价",
+    "lessonsPlaceholder": "[N] 节课",
+    "perLesson": "每节 50 分钟课程",
+    "bookLesson": "预约课程",
+    "bookLessonWith": "预约 {name} 的课程",
+    "freeTrial": "免费 20 分钟试听",
+    "freeTrialWith": "与 {name} 免费试听 20 分钟"
+  },
+  "languages": {
+    "English": "英语",
+    "Spanish": "西班牙语",
+    "French": "法语",
+    "Arabic": "阿拉伯语",
+    "Portuguese": "葡萄牙语",
+    "native": "母语"
+  },
+  "profile": {
+    "breadcrumb": "页面路径",
+    "idVerified": "身份已认证",
+    "averageRating": "平均评分",
+    "lessonsCompleted": "已完成课程",
+    "experience": "教学经验",
+    "yearsShort": "{count, plural, other {# 年}}",
+    "timeZones": {
+      "EST": "美国东部时间",
+      "EDT": "美国东部时间",
+      "CST": "美国中部时间",
+      "CDT": "美国中部时间",
+      "MST": "美国山地时间",
+      "MDT": "美国山地时间",
+      "PST": "美国太平洋时间",
+      "PDT": "美国太平洋时间"
+    },
+    "videoSection": "介绍视频",
+    "playVideo": "播放 {name} 的介绍视频",
+    "meet": "认识 {name} · 2 分钟介绍",
+    "aboutMe": "关于我",
+    "bioPlaceholder": "[老师简介]——背景、教学经验和教学风格，由老师在入驻时填写。",
+    "specialties": "专长",
+    "teaches": "授课对象",
+    "languages": "语言",
+    "certifications": "证书",
+    "reviews": "学生评价",
+    "noReviews": "暂无评价",
+    "reviewsSummary": "平均 {rating} · {count, plural, other {# 条评价}}",
+    "reviewsSummaryUnknown": "平均 {rating} · [N] 条评价",
+    "reviewPlaceholder": "[学生评价内容——完成课程后显示]",
+    "reviewMeta": "学生姓名 · 国家 · 日期",
+    "fallbackHeadline": "美式英语老师",
+    "fallbackCity": "美国"
+  },
+  "booking": {
+    "title": "预约 {name} 的课程",
+    "perLesson": "每节 50 分钟课程",
+    "lessonType": "课程类型",
+    "trial": "试听课 · 20 分钟",
+    "single": "单节课 · 50 分钟",
+    "pack5": "5 节课",
+    "pack10": "10 节课",
+    "free": "免费",
+    "pickTime": "选择时间",
+    "previousWeek": "上一周",
+    "nextWeek": "下一周",
+    "timezone": "时间按你所在时区显示：{tz}（自动检测）",
+    "detecting": "正在检测你的时区…",
+    "noSlots": "本周没有空闲时间——请查看下一周。",
+    "unavailable": "{time}，不可预约",
+    "selectTime": "请选择一个时间继续",
+    "continue": "继续付款",
+    "message": "给 {name} 发消息",
+    "cancellation": "课前 24 小时以上可免费取消。",
+    "loadError": "无法加载该老师的日程，请稍后刷新页面。"
+  }
+}

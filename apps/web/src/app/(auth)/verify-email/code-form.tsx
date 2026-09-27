@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/form";
 import { Icon } from "@/components/ui/icon";
@@ -10,6 +11,7 @@ const COOLDOWN = 30;
 
 /** 6-digit email code sent by Clerk; on success the session starts and /welcome creates the account. */
 export function VerifyCodeForm() {
+  const t = useTranslations("auth");
   const flow = useSignUpFlow();
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState("");
@@ -32,11 +34,11 @@ export function VerifyCodeForm() {
         setPending(true);
         flow
           .verify(code)
-          .catch((err) => setError(clerkMessage(err)))
+          .catch((err) => setError(clerkMessage(err, t("errors.generic"))))
           .finally(() => setPending(false));
       }}
     >
-      <Field label="Verification code" hint="Enter the 6-digit code from the email." className="max-w-[320px]">
+      <Field label={t("verify.codeLabel")} hint={t("verify.codeHint")} className="max-w-[320px]">
         <Input name="code" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9 ]{6,7}" maxLength={7} placeholder="123456" required className="text-lg tracking-[6px]" />
       </Field>
       {error && (
@@ -46,7 +48,7 @@ export function VerifyCodeForm() {
       )}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
         <Button type="submit" variant="teal" size="lg" className="font-bold" disabled={pending || !flow.ready}>
-          {pending ? "Checking…" : "Verify and continue"}
+          {pending ? t("verify.checking") : t("verify.submit")}
           <Icon name="arrowRight" size={18} strokeWidth={2} />
         </Button>
         <Button
@@ -58,13 +60,13 @@ export function VerifyCodeForm() {
             flow
               .resend()
               .then(() => {
-                setStatus("We sent you a new code.");
+                setStatus(t("verify.codeResent"));
                 setLeft(COOLDOWN);
               })
-              .catch((err) => setError(clerkMessage(err)));
+              .catch((err) => setError(clerkMessage(err, t("errors.generic"))));
           }}
         >
-          {left > 0 ? `Resend code (${left}s)` : "Resend code"}
+          {left > 0 ? t("verify.resendCodeIn", { seconds: left }) : t("verify.resendCode")}
         </Button>
       </div>
       <p role="status" className="text-sm text-teal-deep">

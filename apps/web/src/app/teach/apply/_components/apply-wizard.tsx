@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState, type FormEvent } from "react";
+import { useTranslations } from "next-intl";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { cn } from "@/lib/cn";
@@ -8,6 +9,8 @@ import { initialApplication, steps, type Application } from "../_data";
 import { ApprovalStep, IdentityStep, PersonalStep, ProfessionalStep, ReviewStep, StepPreviews, VideoStep } from "./steps";
 
 export function ApplyWizard() {
+  const t = useTranslations("apply.wizard");
+  const ts = useTranslations("apply.steps");
   const [step, setStep] = useState(0);
   const [app, setApp] = useState<Application>(initialApplication);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -41,9 +44,9 @@ export function ApplyWizard() {
       )}
     >
       {/* Stepper */}
-      <nav aria-label="Application steps" className="flex min-w-0 flex-col gap-1 rounded-3xl bg-white p-5 lg:p-7">
-        <h2 className="mb-2 text-lg font-bold lg:mb-4">Your application</h2>
-        <ol className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:gap-1 lg:overflow-visible lg:pb-0">
+      <nav aria-label={t("navLabel")} className="flex min-w-0 flex-col gap-1 rounded-3xl bg-white p-5 lg:p-7">
+        <h2 className="mb-2 text-lg font-bold lg:mb-4">{t("yourApplication")}</h2>
+        <ol className="relative flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:gap-1 lg:overflow-visible lg:pb-0">
           {steps.map((s, i) => {
             const state = i < step ? "done" : i === step ? "current" : "upcoming";
             const canJump = state === "done" && step < last;
@@ -60,15 +63,15 @@ export function ApplyWizard() {
                   {state === "done" ? <Icon name="check" size={16} strokeWidth={2.6} /> : i + 1}
                 </span>
                 <span className={cn("text-[15px]", state === "current" ? "font-bold" : "sr-only lg:not-sr-only", state === "current" && "whitespace-nowrap")}>
-                  {s.title}
-                  {state === "done" && <span className="sr-only"> (completed)</span>}
+                  {ts(`${s.id}.title`)}
+                  {state === "done" && <span className="sr-only"> {t("completed")}</span>}
                 </span>
               </>
             );
             return (
               <li key={s.id} aria-current={state === "current" ? "step" : undefined}>
                 {canJump ? (
-                  <button type="button" onClick={() => go(i)} className="flex w-full items-center gap-3.5 rounded-xl py-2.5 text-left hover:bg-beige lg:-mx-3 lg:w-[calc(100%+24px)] lg:px-3">
+                  <button type="button" onClick={() => go(i)} className="flex w-full items-center gap-3.5 rounded-xl py-2.5 text-start hover:bg-beige lg:-mx-3 lg:w-[calc(100%+24px)] lg:px-3">
                     {inner}
                   </button>
                 ) : (
@@ -86,17 +89,17 @@ export function ApplyWizard() {
             );
           })}
         </ol>
-        <p className="mt-3 rounded-[14px] bg-cream p-3.5 text-[13px] leading-normal text-orange-text lg:mt-[18px]">Only U.S. native English speakers can teach on Amerivo.</p>
+        <p className="mt-3 rounded-[14px] bg-cream p-3.5 text-[13px] leading-normal text-orange-text lg:mt-[18px]">{t("usOnly")}</p>
       </nav>
 
       {/* Current step */}
       <form onSubmit={onSubmit} className="flex flex-col gap-6 rounded-3xl bg-white p-6 sm:p-9" aria-labelledby="apply-step-heading">
         <div className="flex flex-col gap-1.5">
           <span className="text-sm text-muted">
-            Step {step + 1} of {steps.length}
+            {t("progress", { current: step + 1, total: steps.length })}
           </span>
           <h1 id="apply-step-heading" ref={headingRef} tabIndex={-1} className="text-[26px] font-extrabold focus:outline-none sm:text-[30px]">
-            {current.heading}
+            {ts(`${current.id}.heading`)}
           </h1>
         </div>
 
@@ -110,24 +113,24 @@ export function ApplyWizard() {
         <div className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-line-soft pt-[22px]">
           {step > 0 && step < last ? (
             <button type="button" onClick={() => go(step - 1)} className="font-semibold text-teal-dark hover:text-navy">
-              Back
+              {t("back")}
             </button>
           ) : (
             <span />
           )}
           {step < submitStep && (
             <Button type="submit" variant="teal" className="h-auto min-h-[52px] px-8 py-3 font-bold">
-              Continue to {steps[step + 1].title.toLowerCase()}
+              {ts(`${steps[step + 1].id}.continue`)}
             </Button>
           )}
           {step === submitStep && (
             <Button type="submit" variant="primary" className="h-auto min-h-[52px] px-8 py-3">
-              Submit application
+              {t("submit")}
             </Button>
           )}
           {step === last && (
             <ButtonLink href="/" variant="outline">
-              Back to Amerivo
+              {t("backHome")}
             </ButtonLink>
           )}
         </div>

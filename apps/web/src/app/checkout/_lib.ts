@@ -1,3 +1,4 @@
+import { intlTags, type Locale } from "@/i18n/config";
 import { packagePrice, type Teacher } from "@/lib/mock-data";
 
 export type LessonType = "trial" | "single" | "pack5" | "pack10";
@@ -29,15 +30,15 @@ function zonedToUtc(y: number, m: number, d: number, h: number, min: number, tz:
   return new Date(utc);
 }
 
-const fmtDate = (d: Date, tz: string) =>
-  d.toLocaleDateString("en-US", {
+const fmtDate = (d: Date, tz: string, locale: Locale) =>
+  d.toLocaleDateString(intlTags[locale], {
     timeZone: tz,
     weekday: "short",
     month: "short",
     day: "numeric",
   });
-const fmtTime = (d: Date, tz: string) =>
-  d.toLocaleTimeString("en-US", {
+const fmtTime = (d: Date, tz: string, locale: Locale) =>
+  d.toLocaleTimeString(intlTags[locale], {
     timeZone: tz,
     hour: "2-digit",
     minute: "2-digit",
@@ -46,25 +47,28 @@ const fmtTime = (d: Date, tz: string) =>
 
 /**
  * Parses a slot like "Wed, Oct 14 · 18:00" (student's local time) and returns
- * display strings for both the student's and the teacher's time zone.
+ * display strings (in `locale`) for both the student's and the teacher's time zone.
+ * `teacherDate` is only set when the teacher's calendar day differs from the student's.
  */
-export function describeSlot(slot: string, studentTz: string, teacherTz: string) {
+export function describeSlot(slot: string, studentTz: string, teacherTz: string, locale: Locale = "en") {
   // Booking card sends an ISO UTC instant (…Z); older sample links use "Wed, Oct 14 · 18:00".
   const iso = /^\d{4}-\d{2}-\d{2}T/.test(slot) ? new Date(slot) : null;
   const m = iso ? null : /^\s*\w{3},\s*(\w{3})\s+(\d{1,2})\s*·\s*(\d{1,2}):(\d{2})\s*$/.exec(slot);
   const month = m ? MONTHS.indexOf(m[1]) : -1;
-  if (!iso && (!m || month < 0)) return { date: slot, studentTime: "", teacherTime: "", iso: null };
+  if (!iso && (!m || month < 0)) return { date: slot, studentTime: "", teacherDate: null, teacherTime: "", iso: null };
   const instant = iso && !Number.isNaN(iso.getTime()) ? iso : zonedToUtc(SAMPLE_YEAR, month, Number(m![2]), Number(m![3]), Number(m![4]), studentTz);
-  const studentDate = fmtDate(instant, studentTz);
-  const teacherDate = fmtDate(instant, teacherTz);
+  const studentDate = fmtDate(instant, studentTz, locale);
+  const teacherDate = fmtDate(instant, teacherTz, locale);
   return {
     date: studentDate,
-    studentTime: fmtTime(instant, studentTz),
-    teacherTime: (teacherDate !== studentDate ? `${teacherDate} · ` : "") + fmtTime(instant, teacherTz),
+    studentTime: fmtTime(instant, studentTz, locale),
+    teacherDate: teacherDate !== studentDate ? teacherDate : null,
+    teacherTime: fmtTime(instant, teacherTz, locale),
     iso: instant.toISOString(),
   };
 }
 
+/** Price breakdown of an order. The page labels it with t(`order.${type}`) (checkout namespace). */
 export function describeOrder(teacher: Teacher, requested: LessonType) {
   // Trial and packs are opt-in per teacher; fall back to a single lesson if the teacher doesn't offer it.
   const type: LessonType =
@@ -74,7 +78,6 @@ export function describeOrder(teacher: Teacher, requested: LessonType) {
     case "trial":
       return {
         type,
-        label: "Free trial · 20 min",
         count: 1,
         subtotal: 0,
         discount: 0,
@@ -83,7 +86,6 @@ export function describeOrder(teacher: Teacher, requested: LessonType) {
     case "pack5":
       return {
         type,
-        label: "5-lesson pack · 50 min each",
         count: 5,
         subtotal: unit * 5,
         discount: unit * 5 - packagePrice(unit, 5),
@@ -92,7 +94,6 @@ export function describeOrder(teacher: Teacher, requested: LessonType) {
     case "pack10":
       return {
         type,
-        label: "10-lesson pack · 50 min each",
         count: 10,
         subtotal: unit * 10,
         discount: unit * 10 - packagePrice(unit, 10),
@@ -101,7 +102,6 @@ export function describeOrder(teacher: Teacher, requested: LessonType) {
     default:
       return {
         type,
-        label: "Single · 50 min",
         count: 1,
         subtotal: unit,
         discount: 0,

@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { TeacherManagement } from "./_components/teacher-management";
 import { applicants } from "./_data";
 
-export const metadata: Metadata = { title: "Teacher management · Amerivo Admin" };
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("admin.teachers");
+  return { title: t("metaTitle") };
+}
 
 export default function AdminTeachersPage() {
   return (

@@ -1,0 +1,87 @@
+{
+  "goals": {
+    "metaTitle": "أهدافك",
+    "step": "الخطوة 3 من 4 · أهدافك",
+    "saveLater": "احفظ وأكمل لاحقًا",
+    "title": "أخبرنا عن أهدافك",
+    "subtitle": "نستخدم إجاباتك لنقترح عليك المعلمين المناسبين.",
+    "whyLegend": "لماذا تتعلم الإنجليزية؟",
+    "goals": {
+      "business": "العمل",
+      "businessHint": "الاجتماعات والرسائل والمقابلات",
+      "travel": "السفر",
+      "travelHint": "تنقّل بسهولة",
+      "university": "التعليم",
+      "universityHint": "المدرسة والجامعة والامتحانات",
+      "immigration": "الهجرة",
+      "immigrationHint": "الحياة والعمل في الولايات المتحدة",
+      "conversation": "المحادثة",
+      "conversationHint": "تحدّث بطلاقة كل يوم"
+    },
+    "levelQuestion": "كيف تصف مستواك؟",
+    "levelLabel": "مستواك في الإنجليزية",
+    "levels": {
+      "beginner": "مبتدئ",
+      "intermediate": "متوسط",
+      "advanced": "متقدم"
+    },
+    "teacherLegend": "المعلم المفضّل",
+    "teacherPrefs": {
+      "none": "لا تفضيل",
+      "female": "معلمة",
+      "male": "معلم"
+    },
+    "timesLegend": "أوقات الدروس المفضّلة",
+    "times": {
+      "morning": "الصباح",
+      "afternoon": "بعد الظهر",
+      "evening": "المساء",
+      "weekend": "عطلة نهاية الأسبوع"
+    },
+    "back": "رجوع",
+    "continue": "المتابعة إلى اختبار المستوى",
+    "aboutTest": "عن اختبار تحديد المستوى",
+    "nextEyebrow": "التالي · اختبار تحديد المستوى",
+    "duration": "حوالي 15 دقيقة",
+    "testDescription": "أربعة أقسام قصيرة تمنحك مستوى وفق الإطار الأوروبي المرجعي (CEFR) من A1 إلى C2، يُحفظ في ملفك الشخصي.",
+    "sampleLegend": "سؤال نموذجي · القواعد"
+  },
+  "skills": {
+    "grammar": "القواعد",
+    "reading": "القراءة",
+    "listening": "الاستماع",
+    "speaking": "التحدث"
+  },
+  "results": {
+    "metaTitle": "مستواك والمعلمون المناسبون لك",
+    "step": "الخطوة 4 من 4 · اكتمل",
+    "dashboard": "الانتقال إلى لوحة التحكم",
+    "levelAria": "مستواك: {level}، {label}",
+    "eyebrow": "نتيجة اختبار تحديد المستوى",
+    "title": "أحسنت يا {name}! مستواك {level}.",
+    "description": "يمكنك التعامل مع معظم المواقف اليومية. هدفك التالي: التحدث بطلاقة أكبر في الاجتماعات وفهم المتحدثين الأصليين بسرعتهم الطبيعية (B2).",
+    "cefrScale": "مقياس CEFR",
+    "bySkill": "المستوى حسب المهارة",
+    "recommendedTitle": "معلمون نوصي بهم لك",
+    "recommendedSubtitle": "اخترناهم بناءً على هدفك ({goal}) ومستواك وتوفرك في المساء وتقييمهم.",
+    "seeAll": "عرض جميع المعلمين",
+    "bestMatch": "الأنسب لك",
+    "perLesson": "{price} / درس",
+    "reasons": {
+      "specialist": "متخصص في {specialty}",
+      "evenings": "متاح في أمسياتك",
+      "speaksSpanish": "يتحدث الإسبانية",
+      "negotiation": "التفاوض والعروض التقديمية",
+      "experience": "{years, plural, zero {بدون خبرة} one {سنة واحدة من الخبرة} two {سنتان من الخبرة} few {# سنوات من الخبرة} many {# سنة من الخبرة} other {# سنة من الخبرة}}",
+      "weekend": "مواعيد في عطلة نهاية الأسبوع",
+      "fluency": "تركيز على الطلاقة في التحدث",
+      "budget": "أسعار مناسبة"
+    },
+    "bookTrial": "درس تجريبي مجاني",
+    "bookTrialWith": "احجز درسًا تجريبيًا مجانيًا مع {name}",
+    "bookLesson": "احجز درسًا",
+    "bookLessonWith": "احجز درسًا مع {name}",
+    "profile": "الملف الشخصي",
+    "profileOf": "الملف الشخصي لـ {name}"
+  }
+}

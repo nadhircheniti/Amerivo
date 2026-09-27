@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Field, Input } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { clerkMessage, useSignInFlow } from "@/lib/auth-flows";
 
 export function LoginForm() {
+  const t = useTranslations("auth");
   const flow = useSignInFlow();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -20,23 +22,23 @@ export function LoginForm() {
         setPending(true);
         flow
           .signIn(String(data.get("email") ?? "").trim(), String(data.get("password") ?? ""), next)
-          .catch((err) => setError(clerkMessage(err)))
+          .catch((err) => setError(clerkMessage(err, t("errors.generic"))))
           .finally(() => setPending(false));
       }}
     >
-      <Field label="Email">
-        <Input name="email" type="email" autoComplete="email" placeholder="you@example.com" required />
+      <Field label={t("fields.email")}>
+        <Input name="email" type="email" autoComplete="email" placeholder={t("fields.emailPlaceholder")} required />
       </Field>
-      <Field label="Password">
-        <Input name="password" type="password" autoComplete="current-password" placeholder="Your password" required />
+      <Field label={t("fields.password")}>
+        <Input name="password" type="password" autoComplete="current-password" placeholder={t("login.passwordPlaceholder")} required />
       </Field>
       <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
         <label className="flex items-center gap-2.5 text-navy-soft">
           <input type="checkbox" name="remember" className="size-[18px]" />
-          Keep me logged in
+          {t("login.remember")}
         </label>
         <a href="mailto:support@amerivo.example" className="font-semibold text-teal-dark hover:text-navy">
-          Forgot password?
+          {t("login.forgot")}
         </a>
       </div>
       {error && (
@@ -45,7 +47,7 @@ export function LoginForm() {
         </p>
       )}
       <Button type="submit" variant="teal" size="lg" className="mt-2.5 font-bold" disabled={pending || !flow.ready}>
-        {pending ? "Logging in…" : "Log in"}
+        {pending ? t("login.submitting") : t("login.submit")}
       </Button>
     </form>
   );

@@ -9,6 +9,8 @@ import { Logo } from "@/components/ui/logo";
 import { Avatar, type AvatarTone } from "@/components/ui/primitives";
 import { SidebarSignOut } from "./auth-nav";
 import { useMe } from "./role-gate";
+import { useTranslations } from "next-intl";
+import { LanguageSwitcher } from "./language-switcher";
 
 export type SidebarItem = {
   href: string;
@@ -39,12 +41,13 @@ export function AppSidebar({
   const dark = variant === "teacher";
   // Signed in: show the real account (and its role) instead of the sample profile.
   const me = useMe();
+  const t = useTranslations("common");
   if (me) {
     const name = `${me.firstName} ${me.lastName}`.trim() || me.email;
-    const roleLabel = me.role === "admin" ? "Administrator" : me.role === "teacher" ? "Teacher" : "Student";
+    const roleLabel = t(`roles.${me.role}`);
     user = {
       name,
-      subtitle: me.role === variant ? roleLabel : `${roleLabel} · viewing ${variant} space`,
+      subtitle: me.role === variant ? roleLabel : t("sidebar.viewing", { role: roleLabel, space: t(`spaces.${variant}`) }),
       initials: `${me.firstName.charAt(0)}${me.lastName.charAt(0)}`.toUpperCase() || "A",
       tone: user?.tone ?? "teal",
     };
@@ -56,7 +59,7 @@ export function AppSidebar({
       className={cn(
         "sticky top-0 hidden h-screen shrink-0 flex-col gap-1.5 overflow-y-auto md:flex",
         variant === "admin" ? "w-[248px] px-4 py-[26px]" : "w-[264px] px-[18px] py-7",
-        dark ? "bg-navy text-white" : "border-r border-sand bg-white",
+        dark ? "bg-navy text-white" : "border-e border-sand bg-white",
       )}
     >
       <div className="px-2.5 pb-6">
@@ -64,7 +67,7 @@ export function AppSidebar({
         {variant === "teacher" && <Logo size="sm" onDark subtitle="TEACHER" subtitleClassName="text-yellow tracking-[3px] font-semibold" href="/teacher" />}
         {variant === "admin" && <Logo size="sm" subtitle="ADMIN" subtitleClassName="text-teal-dark tracking-[3px] font-bold" href="/admin" />}
       </div>
-      <nav aria-label="Dashboard" className="flex flex-col gap-1">
+      <nav aria-label={t("sidebar.nav")} className="flex flex-col gap-1">
         {items.map((item) => {
           const active = isActive(item);
           return (
@@ -91,7 +94,7 @@ export function AppSidebar({
               <Icon name={item.icon} size={variant === "admin" ? 18 : 20} />
               {item.label}
               {item.badge && (
-                <span className={cn("ml-auto rounded-full px-2 py-0.5 text-xs font-bold", item.badge.tone === "danger" ? "bg-danger-100 text-danger-text" : "bg-orange text-navy")}>
+                <span className={cn("ms-auto rounded-full px-2 py-0.5 text-xs font-bold", item.badge.tone === "danger" ? "bg-danger-100 text-danger-text" : "bg-orange text-navy")}>
                   {item.badge.text}
                 </span>
               )}
@@ -101,6 +104,7 @@ export function AppSidebar({
       </nav>
       <div className="mt-auto pt-6">
         {footer}
+        <LanguageSwitcher dark={dark} className="mb-2 px-3.5" />
         <SidebarSignOut dark={dark} />
         {user && (
           <div className={cn("flex items-center gap-3 rounded-2xl p-3.5", dark ? "bg-white/8" : "bg-beige")}>

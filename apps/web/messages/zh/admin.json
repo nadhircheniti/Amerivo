@@ -1,0 +1,209 @@
+{
+  "nav": {
+    "analytics": "数据分析",
+    "teachers": "老师",
+    "students": "学生",
+    "bookings": "预约",
+    "payments": "付款与提现",
+    "disputes": "纠纷与退款",
+    "settings": "设置与审计日志",
+    "signedIn2fa": "已通过双重验证登录"
+  },
+  "comingSoon": {
+    "back": "返回数据分析",
+    "bookingsTitle": "预约",
+    "bookingsDescription": "即将开始、已完成和已取消的课，支持改期和手动更改状态。",
+    "disputesTitle": "纠纷与退款",
+    "disputesDescription": "投诉与退款申请（24 小时内）。",
+    "paymentsTitle": "付款与提现",
+    "paymentsDescription": "营收、老师提现、退款和待付款项。",
+    "settingsTitle": "设置与审计日志",
+    "settingsDescription": "提现周期、平台佣金、启用双重验证的管理员以及审计日志。",
+    "studentsTitle": "学生",
+    "studentsDescription": "添加、编辑、封禁、联系学生并为其退款。"
+  },
+  "overview": {
+    "metaTitle": "平台数据分析 · Amerivo Admin",
+    "title": "平台数据分析",
+    "subtitle": "当前显示示例数据 · 数据实时更新",
+    "period": "时间范围",
+    "last30": "最近 30 天",
+    "last90": "最近 90 天",
+    "thisYear": "今年",
+    "keyMetrics": "关键指标",
+    "kpi": {
+      "totalStudents": "学生总数",
+      "totalStudentsHint": "较上一周期有所增长",
+      "activeStudents": "活跃学生",
+      "activeStudentsHint": "最近 30 天内有预约",
+      "totalTeachers": "老师总数",
+      "totalTeachersHint": "{count, plural, other {# 份申请待审核}}",
+      "revenue": "营收（总额）",
+      "revenueHint": "佣金 {percent}%：{amount}",
+      "lessonsCompleted": "已完成课程",
+      "retention": "留存率",
+      "retentionHint": "30 天内再次预约的学生",
+      "conversion": "转化率",
+      "conversionHint": "试听课 → 付费课",
+      "payouts": "待提现金额",
+      "payoutsHint": "{date}到期"
+    }
+  },
+  "export": {
+    "button": "导出 CSV",
+    "bookingId": "预约编号",
+    "amountUsd": "金额（USD）"
+  },
+  "chart": {
+    "title": "营收与课程",
+    "sample": "示例数据",
+    "legend": "图例",
+    "revenue": "营收",
+    "lessons": "课程",
+    "aria": "营收与课程趋势（示例数据），{from}至{to}。两条曲线均稳步上升：营收指数从 {revenueFrom} 升至 {revenueTo}，课程指数从 {lessonsFrom} 升至 {lessonsTo}。",
+    "note": "相对刻度（峰值月份 = 100）。接入分析 API 后将显示真实数据。"
+  },
+  "refunds": {
+    "title": "退款申请",
+    "window": "课后 24 小时内",
+    "lessonOn": "{date}的课",
+    "refunded": "已退款",
+    "declined": "已拒绝",
+    "awaitingReply": "等待回复",
+    "liveRefunded": "已向 {name} 退款 {amount}。",
+    "liveDeclined": "已拒绝 {name} 的退款申请。",
+    "liveContacted": "已向 {name} 发送消息。",
+    "returned": "{amount} 已退回原支付方式。",
+    "notified": "已通知该学生。",
+    "undo": "撤销",
+    "refund": "退款",
+    "contact": "联系",
+    "contacted": "已联系",
+    "decline": "拒绝",
+    "teacherWarning": "老师警告",
+    "warningText": "本月第 {count} 次取消课程——已自动发送警告。"
+  },
+  "bookings": {
+    "title": "预约",
+    "statusTabs": "预约状态",
+    "tabs": {
+      "upcoming": "即将开始",
+      "completed": "已完成",
+      "cancelled": "已取消"
+    },
+    "status": {
+      "confirmed": "已确认",
+      "pendingPayment": "待付款",
+      "completed": "已完成",
+      "cancelled": "已取消",
+      "refunded": "已退款"
+    },
+    "type": {
+      "single": "单节课 · 50 分钟",
+      "trial": "试听课 · 20 分钟",
+      "pack": "{size} 节课时包（{used}/{size}）",
+      "corporate": "企业课时包 · {size} 节课"
+    },
+    "dateUtc": "日期（UTC）",
+    "student": "学生",
+    "teacher": "老师",
+    "typeHeader": "类型",
+    "amount": "金额",
+    "statusHeader": "状态",
+    "actions": "操作",
+    "empty": "此视图中暂无预约。",
+    "free": "免费",
+    "newDate": "{booking} 的新日期和时间（UTC）",
+    "save": "保存",
+    "cancel": "取消",
+    "reschedule": "改期",
+    "rescheduleAria": "为 {booking} 改期",
+    "cancelAria": "取消 {booking}",
+    "override": "手动更改",
+    "overrideAria": "手动更改 {booking} 的状态",
+    "noticeMoved": "{name} 的预约已改至 {when} UTC，已通知学生和老师。",
+    "noticeCancelled": "{name} 的预约已取消，现位于“已取消”标签页。",
+    "noticePaid": "已将 {name} 的付款标记为已收到，此次手动更改已记入审计日志。",
+    "noticeRestored": "{name} 的预约已恢复至“即将开始”，此次手动更改已记入审计日志。",
+    "noticeOverride": "{name} 的手动更改已记入审计日志。"
+  },
+  "teachers": {
+    "metaTitle": "老师管理 · Amerivo Admin",
+    "title": "老师管理",
+    "search": "搜索老师",
+    "searchPlaceholder": "按姓名或邮箱搜索",
+    "statusTabs": "老师状态",
+    "tabs": {
+      "all": "全部",
+      "pending": "待审核（{count}）",
+      "approved": "已通过",
+      "rejected": "已拒绝",
+      "suspended": "已停用"
+    },
+    "status": {
+      "pending": "待审核",
+      "interview": "已邀请面试",
+      "approved": "已通过",
+      "rejected": "已拒绝",
+      "suspended": "已停用"
+    },
+    "flags": {
+      "idPending": "身份待验证",
+      "noVideo": "无视频"
+    },
+    "notice": {
+      "interview": "已邀请 {name} 参加面试，申请仍在“待审核”中。",
+      "pending": "{name} 的申请已重新打开，并移至“待审核”标签页。",
+      "approved": "{name} 已通过审核，并移至“已通过”标签页。",
+      "rejected": "{name} 的申请已被拒绝，并移至“已拒绝”标签页。",
+      "suspended": "{name} 已被停用，并移至“已停用”标签页。"
+    },
+    "applicants": "申请人",
+    "empty": "没有符合此视图的老师。",
+    "applied": "{city} · {date}申请",
+    "since": "{city} · 自{date}起",
+    "selectPrompt": "请选择一位老师进行审核。",
+    "playVideo": "播放 {name} 的自我介绍视频（{length}）",
+    "introVideo": "自我介绍视频 · {length}",
+    "noVideo": "未上传自我介绍视频",
+    "education": "学历",
+    "experience": "教学经验",
+    "experienceYears": "{count, plural, =0 {不到 1 年} other {# 年}}",
+    "teaches": "教授课程",
+    "rate": "课时费",
+    "ratePer": "{price} / 50 分钟",
+    "certifications": "资格证书",
+    "noneProvided": "未提供",
+    "identity": "身份（Stripe Identity）",
+    "identityVerified": "已验证 · {document}",
+    "identityPending": "待验证 · 已提交证件",
+    "documents": {
+      "passport": "护照",
+      "driversLicense": "驾照"
+    },
+    "evaluation": "评估",
+    "evalFields": {
+      "fluency": "英语流利度",
+      "professionalism": "专业素养",
+      "teaching": "教学能力",
+      "camera": "摄像头画质",
+      "internet": "网络质量"
+    },
+    "scores": {
+      "5": "5 – 优秀",
+      "4": "4 – 良好",
+      "3": "3 – 一般",
+      "2": "2 – 较弱",
+      "1": "1 – 差"
+    },
+    "internalNotes": "内部备注",
+    "notesPlaceholder": "仅管理员可见",
+    "requestInterview": "邀请面试",
+    "interviewRequested": "已邀请面试",
+    "reject": "拒绝",
+    "approve": "通过审核",
+    "suspend": "停用",
+    "reinstate": "恢复",
+    "reopen": "重新打开申请"
+  }
+}
