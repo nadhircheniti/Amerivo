@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { ApiError, API_URL } from "@/lib/api";
 import { clerkEnabled, homeForRole, canOpen, type Role } from "@/lib/auth-config";
 import { useApi } from "@/lib/use-api";
@@ -11,6 +11,11 @@ import { useApi } from "@/lib/use-api";
  * Wrong role → sent to their own space. Signed in without an Amerivo account → /welcome.
  * Demo mode (no Clerk or no API): screens stay open so the design can be reviewed.
  */
+/** The signed-in Amerivo account (from GET /me), available inside a RoleGate. */
+export type Me = { id: string; role: Role; firstName: string; lastName: string; email: string };
+const MeContext = createContext<Me | null>(null);
+export const useMe = () => useContext(MeContext);
+
 export function RoleGate({ space, children }: { space: Role; children: ReactNode }) {
   if (!clerkEnabled || !API_URL) return <>{children}</>;
   return <CheckedGate space={space}>{children}</CheckedGate>;
@@ -21,6 +26,7 @@ function CheckedGate({ space, children }: { space: Role; children: ReactNode }) 
   const router = useRouter();
   const pathname = usePathname();
   const [state, setState] = useState<"checking" | "ok" | "error">("checking");
+  const [me, setMe] = useState<Me | null>(null);
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -29,11 +35,12 @@ function CheckedGate({ space, children }: { space: Role; children: ReactNode }) 
       return;
     }
     let cancelled = false;
-    call<{ role: Role }>("/me")
-      .then((me) => {
+    call<Me>("/me")
+      .then((account) => {
         if (cancelled) return;
-        if (canOpen(me.role, space)) setState("ok");
-        else router.replace(homeForRole(me.role));
+        setMe(account);
+        if (canOpen(account.role, space)) setState("ok");
+        else router.replace(homeForRole(account.role));
       })
       .catch((e) => {
         if (cancelled) return;
@@ -45,7 +52,7 @@ function CheckedGate({ space, children }: { space: Role; children: ReactNode }) 
     };
   }, [call, isLoaded, isSignedIn, router, pathname, space]);
 
-  if (state === "ok") return <>{children}</>;
+  if (state === "ok") return <MeContext.Provider value={me}>{children}</MeContext.Provider>;
   return (
     <div className="flex min-h-screen items-center justify-center bg-beige px-6 text-center text-navy-soft" role="status">
       {state === "checking" ? (

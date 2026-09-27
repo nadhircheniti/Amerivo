@@ -95,7 +95,10 @@ export function WelcomeFlow() {
         const me = await call<{ role: string }>("/me");
         // Only follow ?next= when it belongs to this role's space (an admin isn't sent to the student questionnaire).
         const nextSpace = safeNext ? spaceOf(safeNext) : null;
-        const followNext = safeNext && (nextSpace === null || canOpen(me.role, nextSpace)) && !(me.role !== "student" && safeNext.startsWith("/onboarding"));
+        // Admins may open every space for support, but after signing in they always start in /admin.
+        const followNext =
+          safeNext &&
+          (me.role === "admin" ? nextSpace === "admin" : (nextSpace === null || canOpen(me.role, nextSpace)) && !(me.role !== "student" && safeNext.startsWith("/onboarding")));
         router.replace(followNext ? safeNext : homeForRole(me.role));
       } catch (e) {
         if (!(e instanceof ApiError) || e.status !== 401 || !/no amerivo account/i.test(e.message)) {
