@@ -9,7 +9,7 @@ Premium online marketplace connecting students worldwide with vetted **American 
 | **Web** (`apps/web`) | Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 |
 | **API** (`apps/api`) | NestJS 11 · Drizzle ORM · PostgreSQL |
 | **Auth** | Clerk (Google / Apple login, 2FA for admins) |
-| **Payments** | Stripe Connect (separate charges & transfers, 20 % commission) · PayPal fallback |
+| **Payments** | Stripe Connect (separate charges & transfers, 25 % commission) · PayPal fallback |
 | **Video** | Daily.co (private room per lesson, meeting tokens) |
 | **Email / SMS** | Resend · Twilio |
 | **Hosting** | Vercel (web) · AWS (API + RDS PostgreSQL + S3) |
@@ -95,7 +95,7 @@ apps/
 | Booking: *Pending payment* → Stripe webhook → *Confirmed* (idempotent), notifications to both | `bookings.service.ts` |
 | Cancellation: student > 24 h full refund, < 24 h none; teacher cancel = full refund + admin notified; 3 teacher cancellations / 30 days → warning | `domain/cancellation.ts` |
 | Admin refund only within 24 h after the lesson | `admin.service.ts` |
-| 20 % commission; earnings available after the 24 h refund window; withdraw on demand or automatic payout on the 28th (admin can run it) | `domain/earnings.ts`, `earnings.service.ts` |
+| 25 % commission; earnings available after the 24 h refund window; withdraw on demand or automatic payout on the 28th (admin can run it) | `domain/earnings.ts`, `earnings.service.ts` |
 | Classroom opens 10 min before; Daily.co room + token; teacher report (private student rating hidden from student); homework | `lessons.service.ts` |
 | Reviews 1–5★ update the teacher's average | `lessons.service.ts` |
 | Teacher application: draft → pending (needs video + ID) → approved / rejected / suspended, with evaluation scores and audit log | `applications.service.ts`, `admin.service.ts` |

@@ -1,10 +1,10 @@
 /**
  * Teacher earnings & payouts (spec §8, §9).
- * Platform collects the payment, keeps a 20% commission; the rest becomes available to the
+ * Platform collects the payment, keeps a 25% commission; the rest becomes available to the
  * teacher once the lesson is completed. Teachers can withdraw on demand, otherwise the
  * available balance is paid automatically on the 28th of each month (admin can override).
  */
-export const COMMISSION_RATE = 0.2;
+export const COMMISSION_RATE = 0.25;
 export const MONTHLY_PAYOUT_DAY = 28;
 export const MIN_WITHDRAWAL_CENTS = 2000;
 

@@ -3,7 +3,7 @@ import Stripe from "stripe";
 
 /**
  * Stripe Connect — "separate charges and transfers":
- * the platform charges the student, keeps the 20% commission, and later transfers the
+ * the platform charges the student, keeps the 25% commission, and later transfers the
  * teacher's net balance to their connected Express account (monthly or on demand).
  */
 @Injectable()

@@ -236,7 +236,7 @@ describe("Amerivo API", () => {
 
     clock.set("2026-10-14T16:50:00Z");
     const done = await http().post(`/api/bookings/${singleId}/complete`).set(as("clerk_sarah")).send({ attendance: "attended" }).expect(201);
-    assert.deepEqual(done.body.earning, { grossCents: 3500, commissionCents: 700, netCents: 2800 });
+    assert.deepEqual(done.body.earning, { grossCents: 3500, commissionCents: 875, netCents: 2625 });
 
     await http()
       .put(`/api/bookings/${singleId}/report`)
@@ -254,20 +254,20 @@ describe("Amerivo API", () => {
     assert.equal(profile.body.lessonsCompleted, 1);
 
     let e = await http().get("/api/teacher/earnings").set(as("clerk_sarah")).expect(200);
-    assert.equal(e.body.pendingCents, 2800);
+    assert.equal(e.body.pendingCents, 2625);
     assert.equal(e.body.availableCents, 0);
 
     clock.set("2026-10-15T17:00:00Z"); // after the 24 h refund window
     e = await http().get("/api/teacher/earnings").set(as("clerk_sarah")).expect(200);
-    assert.equal(e.body.availableCents, 2800);
+    assert.equal(e.body.availableCents, 2625);
     assert.equal(e.body.nextPayoutDate, "2026-10-28T00:00:00.000Z");
 
     const payout = await http().post("/api/teacher/earnings/withdraw").set(as("clerk_sarah")).expect(201);
-    assert.equal(payout.body.amountCents, 2800);
-    assert.deepEqual(stripeCalls.transfers, [{ account: "acct_sarah", amount: 2800 }]);
+    assert.equal(payout.body.amountCents, 2625);
+    assert.deepEqual(stripeCalls.transfers, [{ account: "acct_sarah", amount: 2625 }]);
     e = await http().get("/api/teacher/earnings").set(as("clerk_sarah")).expect(200);
     assert.equal(e.body.availableCents, 0);
-    assert.equal(e.body.paidCents, 2800);
+    assert.equal(e.body.paidCents, 2625);
 
     // Admin refund window (24 h after the lesson) has passed.
     await http().post(`/api/admin/bookings/${singleId}/refund`).set(as("clerk_admin")).send({ reason: "Complaint" }).expect(400);
@@ -300,7 +300,7 @@ describe("Amerivo API", () => {
     assert.equal(a.body.totalTeachers, 1);
     assert.equal(a.body.lessonsCompleted, 1);
     assert.ok(a.body.revenueCents >= 3500 + 16625);
-    assert.equal(a.body.commissionCents, 700);
+    assert.equal(a.body.commissionCents, 875);
   });
 
   it("ADMIN_EMAILS: a listed, verified e-mail registers as admin (no date of birth needed)", async () => {
