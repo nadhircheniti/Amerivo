@@ -154,8 +154,8 @@ export function packagePrice(unit: number, count: 1 | 5 | 10) {
   return Math.round(unit * count * (1 - discount) * 100) / 100;
 }
 
-/** Platform commission from the spec: 20%. */
-export const PLATFORM_COMMISSION = 0.2;
+/** Platform commission: 25% (client decision, Sep 2026). Must match COMMISSION_RATE in the API. */
+export const PLATFORM_COMMISSION = 0.25;
 export const teacherNet = (gross: number) => Math.round(gross * (1 - PLATFORM_COMMISSION) * 100) / 100;
 
 import { intlTags, type Locale } from "@/i18n/config";

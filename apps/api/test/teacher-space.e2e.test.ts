@@ -76,7 +76,7 @@ describe("teacher space", () => {
     assert.equal(l.history.lessons, 1);
     assert.equal(body.upcomingCount, 2);
     assert.equal(new Date(body.nextLessonAt).toISOString(), "2026-10-14T16:00:00.000Z");
-    assert.equal(body.earnings.monthPendingCents, 2800); // $35 − 20 %
+    assert.equal(body.earnings.monthPendingCents, 2625); // $35 − 25 %
     assert.equal(new Date(body.earnings.nextPayoutDate).toISOString().slice(0, 10), "2026-10-28");
     assert.equal(body.students.active, 2);
     assert.equal(body.students.total, 2);
@@ -159,9 +159,9 @@ describe("teacher space", () => {
   it("earnings details: balances, ledger rows, monthly chart", async () => {
     const { body } = await h.http().get("/api/teacher/earnings/details").set(h.as("clerk_ts_t")).expect(200);
     // Alice's first lesson is past its 24 h refund window (available); today's is still pending.
-    assert.equal(body.balances.availableCents, 2800);
+    assert.equal(body.balances.availableCents, 2625);
     assert.equal(body.balances.availableLessons, 1);
-    assert.equal(body.balances.pendingCents, 2800);
+    assert.equal(body.balances.pendingCents, 2625);
     assert.equal(body.balances.paidCents, 0);
     assert.equal(body.minWithdrawalCents, 2000);
     assert.equal(body.stripeConnected, true);
@@ -169,10 +169,10 @@ describe("teacher space", () => {
     const row = body.rows.find((r: { bookingId: string }) => r.bookingId === ids.past);
     assert.deepEqual(
       { gross: row.grossCents, commission: row.commissionCents, net: row.netCents, status: row.status, student: row.student.firstName, type: row.type },
-      { gross: 3500, commission: 700, net: 2800, status: "available", student: "Alice", type: "single" },
+      { gross: 3500, commission: 875, net: 2625, status: "available", student: "Alice", type: "single" },
     );
     assert.equal(body.monthly.length, 6);
-    assert.deepEqual(body.monthly.at(-1), { month: "2026-10", netCents: 5600 });
+    assert.deepEqual(body.monthly.at(-1), { month: "2026-10", netCents: 5250 });
     assert.deepEqual(body.payouts, []);
   });
 
@@ -182,11 +182,11 @@ describe("teacher space", () => {
     assert.match(refused.body.message, /Stripe/);
     account = { details_submitted: true, payouts_enabled: true, capabilities: { transfers: "active" }, requirements: { currently_due: [] }, external_accounts: { data: [{ bank_name: "CHASE", last4: "4821" }] } };
     const paid = await h.http().post("/api/teacher/earnings/withdraw").set(T).expect(201);
-    assert.equal(paid.body.amountCents, 2800);
+    assert.equal(paid.body.amountCents, 2625);
     const { body } = await h.http().get("/api/teacher/earnings/details").set(T).expect(200);
     assert.equal(body.balances.availableCents, 0);
-    assert.equal(body.balances.paidCents, 2800);
-    assert.equal(body.balances.paidThisYearCents, 2800);
+    assert.equal(body.balances.paidCents, 2625);
+    assert.equal(body.balances.paidThisYearCents, 2625);
     assert.equal(body.payouts.length, 1);
     assert.equal(body.payouts[0].status, "paid");
     assert.equal(body.payouts[0].lessons, 1);

@@ -207,7 +207,7 @@ export const samplePayments: PaymentsData = {
     grossCents: 38500,
     refundedCents: 3500,
     netCents: 35000,
-    commissionCents: 7000,
+    commissionCents: 8750,
     paidOutCents: 84000,
     outstandingCents: 28000,
     availableCents: 22400,
@@ -267,7 +267,7 @@ export const sampleAudit = {
 };
 
 export const sampleSettings: PlatformSettings = {
-  commissionRate: 0.2,
+  commissionRate: 0.25,
   priceRangeCents: { min: 2000, max: 5000 },
   lessonMinutes: 50,
   packDiscounts: [

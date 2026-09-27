@@ -268,7 +268,7 @@ describe("admin space & disputes", () => {
     assert.equal(o.body.pendingApplications, 0);
     assert.equal(o.body.lessonsCompleted, 1); // Ben's late lesson
     assert.equal(o.body.openDisputes, 0);
-    assert.equal(o.body.commissionRate, 0.2);
+    assert.equal(o.body.commissionRate, 0.25);
     assert.equal(o.body.months.length, 12);
     assert.equal(o.body.months.at(-1).month, "2026-12");
     assert.equal(o.body.months.find((m: { month: string }) => m.month === "2026-10").lessons, 1);
@@ -303,7 +303,7 @@ describe("admin space & disputes", () => {
     assert.ok(onlyUsers.body.items.every((l: { entity: string }) => l.entity === "user"));
 
     const s = await h.http().get("/api/admin/settings").set(admin()).expect(200);
-    assert.equal(s.body.commissionRate, 0.2);
+    assert.equal(s.body.commissionRate, 0.25);
     assert.deepEqual(s.body.priceRangeCents, { min: 2000, max: 5000 });
     assert.deepEqual(s.body.packDiscounts, [
       { lessons: 5, discountPct: 5 },

@@ -61,9 +61,9 @@ describe("cancellation", () => {
 });
 
 describe("earnings", () => {
-  it("keeps a 20% commission", () => {
-    assert.deepEqual(splitEarning(3500), { grossCents: 3500, commissionCents: 700, netCents: 2800 });
-    assert.deepEqual(splitEarning(3325), { grossCents: 3325, commissionCents: 665, netCents: 2660 });
+  it("keeps a 25% commission", () => {
+    assert.deepEqual(splitEarning(3500), { grossCents: 3500, commissionCents: 875, netCents: 2625 });
+    assert.deepEqual(splitEarning(3325), { grossCents: 3325, commissionCents: 831, netCents: 2494 });
   });
   it("next payout is the 28th", () => {
     assert.equal(nextMonthlyPayoutDate(new Date("2026-10-14T12:00:00Z")).toISOString(), "2026-10-28T00:00:00.000Z");

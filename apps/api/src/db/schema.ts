@@ -327,7 +327,7 @@ export const reviews = pgTable(
 );
 
 /* ------------------------------------------------------ teacher earnings */
-/** Ledger: one row per paid lesson taught. gross − 20% commission = net. */
+/** Ledger: one row per paid lesson taught. gross − 25% commission = net. */
 export const earnings = pgTable("earnings", {
   id: id(),
   teacherId: uuid("teacher_id")
