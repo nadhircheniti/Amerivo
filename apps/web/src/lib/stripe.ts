@@ -6,20 +6,33 @@ import { API_URL } from "./api";
 // Tolerates spaces or quotes pasted around the value in the hosting dashboard.
 const RAW_KEY = (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "").trim().replace(/^["']|["']$/g, "") || null;
 
+/** Clerk publishable keys also start with pk_ but encode the Clerk domain ("….clerk.accounts.dev$"). */
+function looksLikeClerkKey(key: string) {
+  const body = key.replace(/^pk_(test|live)_/, "");
+  try {
+    const decoded = typeof atob === "function" ? atob(body) : Buffer.from(body, "base64").toString("utf8");
+    return decoded.endsWith("$") || decoded.includes("clerk");
+  } catch {
+    return false;
+  }
+}
+
 /** Why card payments are off on this build (shown to help fix the configuration). */
-export const stripeKeyProblem: "missing" | "secret" | "invalid" | null = !RAW_KEY
+export const stripeKeyProblem: "missing" | "secret" | "invalid" | "clerk" | null = !RAW_KEY
   ? "missing"
   : /^(sk|rk)_/.test(RAW_KEY)
     ? "secret"
     : !RAW_KEY.startsWith("pk_")
       ? "invalid"
-      : null;
+      : looksLikeClerkKey(RAW_KEY)
+        ? "clerk"
+        : null;
 
 /**
  * Only a publishable key (pk_…) may reach the browser. A secret key (sk_…/rk_…) set here by mistake is
  * ignored so it is never handed to Stripe.js — roll that secret key in the Stripe dashboard.
  */
-export const stripeKeyMisconfigured = stripeKeyProblem === "secret" || stripeKeyProblem === "invalid";
+export const stripeKeyMisconfigured = stripeKeyProblem === "secret" || stripeKeyProblem === "invalid" || stripeKeyProblem === "clerk";
 export const STRIPE_PUBLISHABLE_KEY = stripeKeyMisconfigured ? null : RAW_KEY;
 if (stripeKeyMisconfigured && typeof window !== "undefined") {
   console.error("NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY must be a publishable key (pk_…). A secret key must never be used in the website.");
