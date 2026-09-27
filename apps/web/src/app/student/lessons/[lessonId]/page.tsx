@@ -43,8 +43,7 @@ export default async function LessonSummaryPage({ params }: { params: Promise<{ 
   const t = await getTranslations("student");
   const locale = (await getLocale()) as Locale;
   // Sample dates are calendar days: format them in UTC so they never shift.
-  const fmtDate = (iso: string) =>
-    new Intl.DateTimeFormat(intlTags[locale], { month: "short", day: "numeric", timeZone: "UTC" }).format(new Date(`${iso}T12:00:00Z`));
+  const fmtDate = (iso: string) => new Intl.DateTimeFormat(intlTags[locale], { month: "short", day: "numeric", timeZone: "UTC" }).format(new Date(`${iso}T12:00:00Z`));
 
   return (
     <div className="mx-auto flex max-w-[1120px] flex-col gap-6 px-4 py-8 sm:px-6 lg:px-10">

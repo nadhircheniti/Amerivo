@@ -108,7 +108,9 @@
       "confirmed": "Confirmed",
       "pending_payment": "Awaiting payment"
     },
-    "timeZoneNote": "Times shown in your time zone ({tz})."
+    "timeZoneNote": "Times shown in your time zone ({tz}).",
+    "classroom": "Classroom",
+    "emptyTeacher": "No upcoming lessons yet. New bookings will appear here."
   },
   "lesson": {
     "metaTitle": "Lesson summary",

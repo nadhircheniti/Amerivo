@@ -7,6 +7,8 @@ import { Icon } from "@/components/ui/icon";
 import { Avatar, StatTile, type AvatarTone } from "@/components/ui/primitives";
 import { intlTags, type Locale } from "@/i18n/config";
 import { currentTeacher, formatUsd } from "@/lib/mock-data";
+import { Suspense } from "react";
+import { LiveLessons } from "@/app/student/_components/live-lessons";
 import { ModeToggle } from "./_components/mode-toggle";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -62,6 +64,11 @@ export default function TeacherDashboardPage() {
         </div>
         <ModeToggle label={tm("vacation")} onNote={tm("hiddenNote")} />
       </header>
+
+      {/* Real bookings (API) with the classroom link; the tiles below are still sample data. */}
+      <Suspense>
+        <LiveLessons forTeacher />
+      </Suspense>
 
       <section aria-label={t("keyFigures")} className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatTile label={t("todaysLessons")} value={num(3)} hint={t("nextAt", { time: "11:00" })} />
@@ -138,8 +145,7 @@ export default function TeacherDashboardPage() {
               <div className="flex grow flex-col gap-1.5">
                 <p className="text-base font-bold">Lucas Moreau · {ts("Conversation")} · B2</p>
                 <p className="text-[13px] text-navy-soft">
-                  <span className="me-1 rounded-md bg-orange-100 px-2 py-[3px] font-semibold">{t("returning")}</span>{" "}
-                  {t("returningShort", { lessons: 4, hours: num(3.3) })}
+                  <span className="me-1 rounded-md bg-orange-100 px-2 py-[3px] font-semibold">{t("returning")}</span> {t("returningShort", { lessons: 4, hours: num(3.3) })}
                 </p>
               </div>
               <Link href="/teacher/messages" className="self-start text-sm font-semibold text-teal-dark hover:text-navy sm:self-center">
@@ -191,7 +197,11 @@ export default function TeacherDashboardPage() {
               </h2>
               <span className="text-[13px] text-muted">{t("studentsCount", { active: num(14), past: num(31) })}</span>
             </div>
-            <div className="flex" role="img" aria-label={t("studentsAvatars", { first: studentStack[0].name, second: studentStack[1].name, third: studentStack[2].name, count: 11 })}>
+            <div
+              className="flex"
+              role="img"
+              aria-label={t("studentsAvatars", { first: studentStack[0].name, second: studentStack[1].name, third: studentStack[2].name, count: 11 })}
+            >
               {studentStack.map((s, i) => (
                 <Avatar key={s.initials} initials={s.initials} tone={s.tone} size={40} className={i > 0 ? "-ms-2.5 border-2 border-white" : "border-2 border-white"} />
               ))}

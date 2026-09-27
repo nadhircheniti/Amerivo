@@ -108,7 +108,9 @@
       "confirmed": "Confirmé",
       "pending_payment": "En attente de paiement"
     },
-    "timeZoneNote": "Heures affichées dans votre fuseau horaire ({tz})."
+    "timeZoneNote": "Heures affichées dans votre fuseau horaire ({tz}).",
+    "classroom": "Salle de classe",
+    "emptyTeacher": "Aucun cours à venir pour l'instant. Les nouvelles réservations apparaîtront ici."
   },
   "lesson": {
     "metaTitle": "Résumé du cours",

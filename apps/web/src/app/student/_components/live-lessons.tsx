@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Icon } from "@/components/ui/icon";
+import { ButtonLink } from "@/components/ui/button";
 import { Badge } from "@/components/ui/primitives";
 import { intlTags, type Locale } from "@/i18n/config";
 import { API_URL } from "@/lib/api";
@@ -23,7 +24,7 @@ type ApiBooking = {
  * Real bookings from the API (shown once the site is connected and the student is signed in).
  * The rest of the dashboard still uses sample data until each module is connected.
  */
-export function LiveLessons() {
+export function LiveLessons({ forTeacher = false }: { forTeacher?: boolean } = {}) {
   const { call, isLoaded, isSignedIn } = useApi();
   const booked = useSearchParams().get("booked");
   const [items, setItems] = useState<ApiBooking[] | null>(null);
@@ -72,7 +73,7 @@ export function LiveLessons() {
         </h2>
         {failed && <p className="text-sm text-orange-text">{t("loadError")}</p>}
         {!failed && items === null && <p className="text-sm text-muted">{tc("loading")}</p>}
-        {items?.length === 0 && <p className="text-sm text-muted">{t("empty")}</p>}
+        {items?.length === 0 && <p className="text-sm text-muted">{forTeacher ? t("emptyTeacher") : t("empty")}</p>}
         {!!items?.length && (
           <ul className="flex flex-col gap-3">
             {items.map((b) => {
@@ -81,14 +82,20 @@ export function LiveLessons() {
                 <li key={b.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 rounded-2xl bg-beige p-3.5">
                   <span className="font-display text-[15px] font-bold">{fmtDay.format(new Date(b.startsAt))}</span>
                   <span className="text-[15px]">
-                    {fmtTime.format(new Date(b.startsAt))}–{fmtTime.format(new Date(new Date(b.startsAt).getTime() + b.durationMin * 60_000))}
+                    <bdi dir="ltr">
+                      {fmtTime.format(new Date(b.startsAt))}–{fmtTime.format(new Date(new Date(b.startsAt).getTime() + b.durationMin * 60_000))}
+                    </bdi>
                   </span>
-                  <span className="text-[15px] text-navy-soft">
-                    {name ? t(`withName.${b.type}`, { name }) : t(`withYourTeacher.${b.type}`)}
-                  </span>
+                  <span className="text-[15px] text-navy-soft">{name ? t(`withName.${b.type}`, { name }) : t(`withYourTeacher.${b.type}`)}</span>
                   <Badge tone={b.status === "confirmed" ? "success" : "warning"} className="ms-auto">
                     {t(`status.${b.status}`)}
                   </Badge>
+                  {b.status === "confirmed" && (
+                    <ButtonLink href={`/classroom/${b.id}`} size="sm" variant="teal">
+                      <Icon name="video" size={16} />
+                      {t("classroom")}
+                    </ButtonLink>
+                  )}
                 </li>
               );
             })}
