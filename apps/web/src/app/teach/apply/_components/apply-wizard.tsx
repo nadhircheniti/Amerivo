@@ -71,17 +71,15 @@ export function ApplyWizard() {
             return (
               <li key={s.id} aria-current={state === "current" ? "step" : undefined}>
                 {canJump ? (
-                  <button type="button" onClick={() => go(i)} className="flex w-full items-center gap-3.5 rounded-xl py-2.5 text-start hover:bg-beige lg:-mx-3 lg:w-[calc(100%+24px)] lg:px-3">
+                  <button
+                    type="button"
+                    onClick={() => go(i)}
+                    className="flex w-full items-center gap-3.5 rounded-xl py-2.5 text-start hover:bg-beige lg:-mx-3 lg:w-[calc(100%+24px)] lg:px-3"
+                  >
                     {inner}
                   </button>
                 ) : (
-                  <div
-                    className={cn(
-                      "flex items-center gap-3.5 rounded-xl py-2.5",
-                      state === "current" && "bg-teal-50 px-3 lg:-mx-3",
-                      state === "upcoming" && "text-muted",
-                    )}
-                  >
+                  <div className={cn("flex items-center gap-3.5 rounded-xl py-2.5", state === "current" && "bg-teal-50 px-3 lg:-mx-3", state === "upcoming" && "text-muted")}>
                     {inner}
                   </div>
                 )}
@@ -95,9 +93,7 @@ export function ApplyWizard() {
       {/* Current step */}
       <form onSubmit={onSubmit} className="flex flex-col gap-6 rounded-3xl bg-white p-6 sm:p-9" aria-labelledby="apply-step-heading">
         <div className="flex flex-col gap-1.5">
-          <span className="text-sm text-muted">
-            {t("progress", { current: step + 1, total: steps.length })}
-          </span>
+          <span className="text-sm text-muted">{t("progress", { current: step + 1, total: steps.length })}</span>
           <h1 id="apply-step-heading" ref={headingRef} tabIndex={-1} className="text-[26px] font-extrabold focus:outline-none sm:text-[30px]">
             {ts(`${current.id}.heading`)}
           </h1>

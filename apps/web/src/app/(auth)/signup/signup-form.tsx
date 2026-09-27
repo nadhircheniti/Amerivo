@@ -4,13 +4,10 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { clerkMessage, useSignUpFlow } from "@/lib/auth-flows";
 import Link from "next/link";
-import { Field, Input, Select } from "@/components/ui/form";
+import { Field, Input } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { ageOn, latestBirthDate, MIN_STUDENT_AGE } from "@/lib/age";
-
-/** Option values stay in English (stored on the profile); only the labels are translated. */
-const countries = ["Brazil", "France", "Japan", "Mexico"] as const;
-const nativeLanguages = ["Portuguese", "French", "Spanish", "Arabic"] as const;
+import { CountrySelect, DialCodeSelect, dialCodeFromEvent, LanguageSelect } from "@/components/ui/geo-selects";
 
 export function SignupForm() {
   const t = useTranslations("auth");
@@ -18,6 +15,8 @@ export function SignupForm() {
   const [ageError, setAgeError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  // Follows the country until the visitor picks a code by hand.
+  const [dialCode, setDialCode] = useState("");
 
   return (
     <form
@@ -86,37 +85,29 @@ export function SignupForm() {
         />
       </Field>
       <Field label={t("fields.country")}>
-        <Select name="country" autoComplete="country-name" defaultValue="" required>
-          <option value="" disabled>
-            {t("fields.selectCountry")}
-          </option>
-          {countries.map((c) => (
-            <option key={c} value={c}>
-              {t(`countries.${c}`)}
-            </option>
-          ))}
-        </Select>
+        <CountrySelect
+          name="country"
+          autoComplete="country-name"
+          defaultValue=""
+          required
+          placeholder={t("fields.selectCountry")}
+          onChange={(e) => setDialCode(dialCodeFromEvent(e))}
+        />
       </Field>
       <Field label={t("fields.nativeLanguage")}>
-        <Select name="nativeLanguage" defaultValue="" required>
-          <option value="" disabled>
-            {t("fields.selectLanguage")}
-          </option>
-          {nativeLanguages.map((l) => (
-            <option key={l} value={l}>
-              {t(`languages.${l}`)}
-            </option>
-          ))}
-        </Select>
+        <LanguageSelect name="nativeLanguage" defaultValue="" required placeholder={t("fields.selectLanguage")} />
       </Field>
       <fieldset className="flex min-w-0 flex-col gap-1.5 sm:col-span-2">
         <legend className="mb-1.5 text-sm font-semibold">{t("fields.phone")}</legend>
         <div className="flex gap-2">
-          <Select name="dialCode" aria-label={t("fields.dialCode")} defaultValue="+55" className="w-[110px] shrink-0">
-            <option>+55</option>
-            <option>+33</option>
-            <option>+1</option>
-          </Select>
+          <DialCodeSelect
+            name="dialCode"
+            aria-label={t("fields.dialCode")}
+            value={dialCode}
+            onChange={(e) => setDialCode(e.target.value)}
+            placeholder="+ …"
+            className="w-[120px] shrink-0"
+          />
           <Input name="phone" type="tel" autoComplete="tel-national" aria-label={t("fields.phone")} placeholder={t("fields.phonePlaceholder")} className="min-w-0" />
         </div>
       </fieldset>
