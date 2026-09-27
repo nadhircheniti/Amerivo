@@ -29,7 +29,7 @@ export function FocusHeader({
               {(right as { label: string }).label}
             </Link>
           ) : (
-            (right as ReactNode) ?? <span />
+            ((right as ReactNode) ?? <span />)
           )}
         </div>
       </header>

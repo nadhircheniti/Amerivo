@@ -5,6 +5,7 @@ import { studentProfiles, teacherProfiles, users } from "../../db/schema";
 import { badRequest, conflict } from "../../common/errors";
 import { CLOCK, type Clock } from "../../common/clock";
 import { isOldEnough, MIN_STUDENT_AGE } from "../../domain/age";
+import { clerkClient } from "../clerk";
 
 export interface RegisterInput {
   role: "student" | "teacher";
@@ -80,10 +81,10 @@ export class AccountsService {
 
   async me(userId: string) {
     const [u] = await this.db.select().from(users).where(eq(users.id, userId));
-    // An account created before its e-mail was added to ADMIN_EMAILS is promoted on its next visit.
-    // "active" means the e-mail was verified with Clerk at sign-up.
-    if (u && u.role !== "admin" && u.status === "active" && isAdminEmail(u.email)) {
-      const [promoted] = await this.db.update(users).set({ role: "admin" }).where(eq(users.id, u.id)).returning();
+    // An account created before its e-mail was added to ADMIN_EMAILS is promoted on its next visit,
+    // once Clerk confirms the e-mail is verified (e-mail code, Google or Apple).
+    if (u && u.role !== "admin" && isAdminEmail(u.email) && (await clerkClient.isEmailVerified(u.clerkId, u.email))) {
+      const [promoted] = await this.db.update(users).set({ role: "admin", status: "active" }).where(eq(users.id, u.id)).returning();
       return promoted;
     }
     return u;
