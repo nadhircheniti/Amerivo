@@ -5,7 +5,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Avatar, CheckItem, Eyebrow } from "@/components/ui/primitives";
 import { cn } from "@/lib/cn";
-import { cefrLevels, currentStudent, formatUsd, getTeacher, type Teacher } from "@/lib/mock-data";
+import { cefrLevels, currentStudent, formatUsd, getTeacher, ratingText, type Teacher } from "@/lib/mock-data";
 
 export const metadata: Metadata = { title: "Your level and matches" };
 
@@ -19,16 +19,23 @@ const skills = [
 ];
 
 const matches: { slug: string; reasons: string[] }[] = [
-  { slug: "sarah-mitchell", reasons: ["Business English specialist", "Available on your evenings", "Speaks Spanish"] },
-  { slug: "michael-brooks", reasons: ["Negotiation & presentations", "10 years of experience", "Weekend slots"] },
-  { slug: "james-robinson", reasons: ["Focus on speaking fluency", "Budget friendly", "Available on your evenings"] },
+  {
+    slug: "sarah-mitchell",
+    reasons: ["Business English specialist", "Available on your evenings", "Speaks Spanish"],
+  },
+  {
+    slug: "michael-brooks",
+    reasons: ["Negotiation & presentations", "10 years of experience", "Weekend slots"],
+  },
+  {
+    slug: "james-robinson",
+    reasons: ["Focus on speaking fluency", "Budget friendly", "Available on your evenings"],
+  },
 ];
 
 export default function ResultsPage() {
   const reached = cefrLevels.indexOf(result.level);
-  const recommended = matches
-    .map((m) => ({ ...m, teacher: getTeacher(m.slug) }))
-    .filter((m): m is { slug: string; reasons: string[]; teacher: Teacher } => Boolean(m.teacher));
+  const recommended = matches.map((m) => ({ ...m, teacher: getTeacher(m.slug) })).filter((m): m is { slug: string; reasons: string[]; teacher: Teacher } => Boolean(m.teacher));
 
   return (
     <>
@@ -92,15 +99,13 @@ export default function ResultsPage() {
         <div className="grid gap-6 pt-3 md:grid-cols-2 xl:grid-cols-3">
           {recommended.map(({ teacher: t, reasons }, i) => (
             <article key={t.slug} className={cn("relative flex flex-col gap-4 rounded-3xl bg-white p-7", i === 0 && "border-2 border-teal")}>
-              {i === 0 && (
-                <span className="absolute -top-3.5 left-6 rounded-full bg-teal-dark px-3 py-1.5 text-xs font-bold tracking-[1px] text-white">BEST MATCH</span>
-              )}
+              {i === 0 && <span className="absolute -top-3.5 left-6 rounded-full bg-teal-dark px-3 py-1.5 text-xs font-bold tracking-[1px] text-white">BEST MATCH</span>}
               <div className="flex items-center gap-4">
                 <Avatar initials={t.initials} tone={t.tone} size={72} />
                 <div className="flex flex-col gap-1">
                   <h3 className="text-[19px] font-bold">{t.name}</h3>
                   <span className="inline-flex items-center gap-1 text-sm text-muted">
-                    {t.rating.toFixed(1)} <Icon name="star" size={14} className="text-orange" />
+                    {ratingText(t)} <Icon name="star" size={14} className="text-orange" />
                     <span className="sr-only">out of 5</span> · {formatUsd(t.priceUsd).replace(".00", "")} / lesson
                   </span>
                 </div>

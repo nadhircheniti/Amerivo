@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
-import { and, eq, gte, inArray, ne, sql } from "drizzle-orm";
+import { and, eq, getTableColumns, gte, inArray, ne, sql } from "drizzle-orm";
 import { DB, type Db } from "../../db/db";
 import { auditLogs, bookings, earnings, lessonPackages, lessons, payments, processedEvents, teacherProfiles, users } from "../../db/schema";
 import { CLOCK, type Clock } from "../../common/clock";
@@ -106,6 +106,15 @@ export class BookingsService {
     if (free) {
       await this.notifyConfirmed(created.booking.id);
       return { booking: created.booking, package: created.pkg ?? null, payment: null };
+    }
+
+    // Staging without Stripe: PAYMENTS_SIMULATED=1 confirms the booking as if the card was charged.
+    if (!this.stripe.isConfigured() && process.env.PAYMENTS_SIMULATED === "1") {
+      const ref = `simulated_${created.payment!.id}`;
+      await this.db.update(payments).set({ providerRef: ref }).where(eq(payments.id, created.payment!.id));
+      await this.onPaymentSucceeded(`sim_evt_${created.payment!.id}`, ref);
+      const [booking] = await this.db.select().from(bookings).where(eq(bookings.id, created.booking.id));
+      return { booking, package: created.pkg ?? null, payment: { id: created.payment!.id, clientSecret: null, amountCents: q.totalCents, simulated: true } };
     }
 
     const intent = await this.stripe.createPaymentIntent({
@@ -317,10 +326,12 @@ export class BookingsService {
 
   listForUser(user: AuthUser, scope: "upcoming" | "past") {
     const col = user.role === "teacher" ? bookings.teacherId : bookings.studentId;
+    const other = user.role === "teacher" ? bookings.studentId : bookings.teacherId;
     const now = this.clock.now();
     return this.db
-      .select()
+      .select({ ...getTableColumns(bookings), withFirstName: users.firstName, withLastName: users.lastName })
       .from(bookings)
+      .leftJoin(users, eq(users.id, other))
       .where(
         and(
           eq(col, user.id),

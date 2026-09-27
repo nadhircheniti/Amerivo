@@ -3,22 +3,20 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Icon } from "@/components/ui/icon";
 import { StarRow } from "@/components/ui/primitives";
-import { getTeacher, teachers } from "@/lib/mock-data";
+import { ratingText } from "@/lib/mock-data";
+import { getTeacherBySlug } from "@/lib/teachers";
 import { cn } from "@/lib/cn";
 import { toneTile, tzLongName } from "../../_components/tone";
 import { BookingCard } from "./_components/booking-card";
 
 type Params = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return teachers.map((t) => ({ slug: t.slug }));
-}
-
-export const dynamicParams = false;
+/** Profiles are rendered on demand and cached for a minute (teachers come from the API). */
+export const revalidate = 60;
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const t = getTeacher(slug);
+  const t = await getTeacherBySlug(slug);
   if (!t) return {};
   return { title: `${t.name} — ${t.headline}`, description: t.summary };
 }
@@ -27,7 +25,7 @@ const sectionLabel = "font-sans text-sm font-semibold tracking-[1px] text-muted 
 
 export default async function TeacherProfilePage({ params }: Params) {
   const { slug } = await params;
-  const t = getTeacher(slug);
+  const t = await getTeacherBySlug(slug);
   if (!t) notFound();
 
   const firstName = t.name.split(" ")[0];
@@ -76,11 +74,11 @@ export default async function TeacherProfilePage({ params }: Params) {
                   value={
                     <span className="flex items-center gap-1.5">
                       <Icon name="star" size={20} className="text-orange" />
-                      {t.rating.toFixed(1)}
+                      {ratingText(t)}
                     </span>
                   }
                 />
-                <Stat label="Lessons completed" value="[N]" />
+                <Stat label="Lessons completed" value={t.lessonsCompleted !== undefined ? String(t.lessonsCompleted) : "[N]"} />
                 <Stat label="Experience" value={`${t.yearsExperience} yrs`} />
                 <Stat label={`${tzLongName[t.tzLabel] ?? t.timezone} (${t.tzLabel})`} value={t.city} />
               </dl>
@@ -137,7 +135,7 @@ export default async function TeacherProfilePage({ params }: Params) {
           <section className="flex flex-col gap-5 rounded-3xl bg-white p-6 sm:p-8">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-[22px] font-bold">Student reviews</h2>
-              <span className="text-[15px] text-muted">{t.rating.toFixed(1)} average · [N] reviews</span>
+              <span className="text-[15px] text-muted">{t.reviewCount === 0 ? "No reviews yet" : `${ratingText(t)} average · ${t.reviewCount ?? "[N]"} reviews`}</span>
             </div>
             <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {[0, 1].map((i) => (

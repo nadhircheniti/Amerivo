@@ -1,17 +1,27 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Field, Input } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { clerkMessage, useSignInFlow } from "@/lib/auth-flows";
 
 export function LoginForm() {
-  const router = useRouter();
+  const flow = useSignInFlow();
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
   return (
     <form
       className="flex flex-col gap-4"
       onSubmit={(e) => {
         e.preventDefault();
-        router.push("/student");
+        const data = new FormData(e.currentTarget);
+        const next = new URLSearchParams(window.location.search).get("redirect_url");
+        setError(null);
+        setPending(true);
+        flow
+          .signIn(String(data.get("email") ?? "").trim(), String(data.get("password") ?? ""), next)
+          .catch((err) => setError(clerkMessage(err)))
+          .finally(() => setPending(false));
       }}
     >
       <Field label="Email">
@@ -29,8 +39,13 @@ export function LoginForm() {
           Forgot password?
         </a>
       </div>
-      <Button type="submit" variant="teal" size="lg" className="mt-2.5 font-bold">
-        Log in
+      {error && (
+        <p role="alert" className="rounded-xl bg-danger-100 px-4 py-3 text-sm font-semibold text-danger-text">
+          {error}
+        </p>
+      )}
+      <Button type="submit" variant="teal" size="lg" className="mt-2.5 font-bold" disabled={pending || !flow.ready}>
+        {pending ? "Logging in…" : "Log in"}
       </Button>
     </form>
   );

@@ -33,6 +33,11 @@ npm run dev:api          # http://localhost:4000/api
 npm run dev:web          # http://localhost:3000
 ```
 
+**Web auth modes** (chosen at build time, see `apps/web/src/lib/auth-config.ts`):
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` set → real sign-up / sign-in with Clerk (`CLERK_SECRET_KEY` needed too).
+- `NEXT_PUBLIC_DEV_USER=dev_maria` (with an API running `DEV_AUTH=1`) → the site acts as that user, no Clerk.
+- neither → demo mode on sample data. `NEXT_PUBLIC_API_URL` connects teachers, slots and bookings to the API.
+
 In development (`DEV_AUTH=1`) you can call the API without Clerk by sending `x-dev-user: <clerkId>`
 (`dev_admin`, `dev_maria`, `dev_sarah-mitchell`, …):
 
@@ -104,7 +109,7 @@ apps/
 - API with the core business rules, database schema and migrations, fully tested.
 
 **Next milestones**
-1. Connect the web screens to the API; Clerk sign-in; Stripe Payment Element; Daily.co call frame in the classroom.
+1. ~~Teachers, slots and bookings from the API; Clerk sign-in~~ (done). Stripe Payment Element + webhook; Daily.co call frame in the classroom; teacher application → API.
 2. Messaging in real time, file uploads (S3), notification e-mails/SMS, scheduled jobs (lesson reminders, monthly payouts).
 3. Remaining screens: student lessons/homework/progress/payments, teacher students & messages, admin students/bookings/payments/disputes/settings, corporate request form.
 4. Legal pages (Terms, Privacy/GDPR/CCPA), production deployment, monitoring (Sentry).

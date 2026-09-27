@@ -7,8 +7,15 @@ import { cn } from "@/lib/cn";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { Logo } from "@/components/ui/logo";
 import { Avatar, type AvatarTone } from "@/components/ui/primitives";
+import { SidebarSignOut } from "./auth-nav";
 
-export type SidebarItem = { href: string; label: string; icon: IconName; badge?: { text: string; tone?: "orange" | "danger" }; exact?: boolean };
+export type SidebarItem = {
+  href: string;
+  label: string;
+  icon: IconName;
+  badge?: { text: string; tone?: "orange" | "danger" };
+  exact?: boolean;
+};
 
 /**
  * Left navigation used by the three signed-in spaces.
@@ -71,12 +78,7 @@ export function AppSidebar({
               <Icon name={item.icon} size={variant === "admin" ? 18 : 20} />
               {item.label}
               {item.badge && (
-                <span
-                  className={cn(
-                    "ml-auto rounded-full px-2 py-0.5 text-xs font-bold",
-                    item.badge.tone === "danger" ? "bg-danger-100 text-danger-text" : "bg-orange text-navy",
-                  )}
-                >
+                <span className={cn("ml-auto rounded-full px-2 py-0.5 text-xs font-bold", item.badge.tone === "danger" ? "bg-danger-100 text-danger-text" : "bg-orange text-navy")}>
                   {item.badge.text}
                 </span>
               )}
@@ -86,6 +88,7 @@ export function AppSidebar({
       </nav>
       <div className="mt-auto pt-6">
         {footer}
+        <SidebarSignOut dark={dark} />
         {user && (
           <div className={cn("flex items-center gap-3 rounded-2xl p-3.5", dark ? "bg-white/8" : "bg-beige")}>
             <Avatar initials={user.initials} tone={user.tone} size={42} />

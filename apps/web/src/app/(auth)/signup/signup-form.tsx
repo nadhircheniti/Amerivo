@@ -1,15 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { clerkMessage, useSignUpFlow } from "@/lib/auth-flows";
 import Link from "next/link";
 import { Field, Input, Select } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { ageOn, latestBirthDate, MIN_STUDENT_AGE } from "@/lib/age";
 
 export function SignupForm() {
-  const router = useRouter();
+  const flow = useSignUpFlow();
   const [ageError, setAgeError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
 
   return (
     <form
@@ -22,12 +24,27 @@ export function SignupForm() {
           setAgeError(`You must be at least ${MIN_STUDENT_AGE} years old to create an account.`);
           return;
         }
-        const email = String(data.get("email") ?? "");
-        router.push(`/verify-email?${new URLSearchParams({ email })}`);
+        const get = (k: string) => String(data.get(k) ?? "").trim();
+        const phone = get("phone") ? `${get("dialCode")} ${get("phone")}` : "";
+        setError(null);
+        setPending(true);
+        flow
+          .start({
+            firstName: get("firstName"),
+            lastName: get("lastName"),
+            email: get("email"),
+            password: String(data.get("password") ?? ""),
+            birthDate,
+            country: get("country"),
+            nativeLanguage: get("nativeLanguage"),
+            phone,
+          })
+          .catch((err) => setError(clerkMessage(err)))
+          .finally(() => setPending(false));
       }}
     >
       <Field label="First name">
-        <Input name="firstName" autoComplete="given-name" defaultValue="Maria" required />
+        <Input name="firstName" autoComplete="given-name" placeholder="Your first name" required />
       </Field>
       <Field label="Last name">
         <Input name="lastName" autoComplete="family-name" placeholder="Your last name" required />
@@ -109,8 +126,13 @@ export function SignupForm() {
           (GDPR / CCPA).
         </span>
       </label>
-      <Button type="submit" variant="teal" size="lg" className="mt-2.5 font-bold sm:col-span-2">
-        Create account
+      {error && (
+        <p role="alert" className="rounded-xl bg-danger-100 px-4 py-3 text-sm font-semibold text-danger-text sm:col-span-2">
+          {error}
+        </p>
+      )}
+      <Button type="submit" variant="teal" size="lg" className="mt-2.5 font-bold sm:col-span-2" disabled={pending || !flow.ready}>
+        {pending ? "Creating your account…" : "Create account"}
       </Button>
     </form>
   );

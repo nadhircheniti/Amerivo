@@ -5,23 +5,64 @@ import { ButtonLink } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { Avatar, StatTile } from "@/components/ui/primitives";
 import { currentStudent, formatUsd, getTeacher, teachers } from "@/lib/mock-data";
+import { Suspense } from "react";
 import { HomeworkList, type HomeworkItem } from "./_components/homework-list";
+import { LiveLessons } from "./_components/live-lessons";
 
 export const metadata: Metadata = { title: "Overview" };
 
 // Sample dashboard data — swapped for the API per module.
 const sarah = getTeacher("sarah-mitchell") ?? teachers[0];
-const nextLesson = { id: "l-1014", teacher: sarah, startsIn: "8 min", when: "Today · 18:00–18:50 (your time)", topic: "Leading a team meeting" };
+const nextLesson = {
+  id: "l-1014",
+  teacher: sarah,
+  startsIn: "8 min",
+  when: "Today · 18:00–18:50 (your time)",
+  topic: "Leading a team meeting",
+};
 
 const upcoming = [
-  { id: "l-1015", dow: "THU", day: 15, teacher: "Sarah Mitchell", subject: "Business English", time: "18:00–18:50", topic: "Negotiation phrases" },
-  { id: "l-1016", dow: "MON", day: 19, teacher: "James Robinson", subject: "Conversation", time: "19:00–19:50", topic: "Small talk at work" },
+  {
+    id: "l-1015",
+    dow: "THU",
+    day: 15,
+    teacher: "Sarah Mitchell",
+    subject: "Business English",
+    time: "18:00–18:50",
+    topic: "Negotiation phrases",
+  },
+  {
+    id: "l-1016",
+    dow: "MON",
+    day: 19,
+    teacher: "James Robinson",
+    subject: "Conversation",
+    time: "19:00–19:50",
+    topic: "Small talk at work",
+  },
 ];
 
 const homework: HomeworkItem[] = [
-  { id: "hw-1", title: "Write a meeting agenda (150 words)", due: "Due tomorrow", teacher: "Sarah", urgent: true },
-  { id: "hw-2", title: "Listening: podcast episode + 5 questions", due: "Due Mon", teacher: "James" },
-  { id: "hw-3", title: "Phrasal verbs worksheet", due: "Due Oct 9", teacher: "Sarah", done: true },
+  {
+    id: "hw-1",
+    title: "Write a meeting agenda (150 words)",
+    due: "Due tomorrow",
+    teacher: "Sarah",
+    urgent: true,
+  },
+  {
+    id: "hw-2",
+    title: "Listening: podcast episode + 5 questions",
+    due: "Due Mon",
+    teacher: "James",
+  },
+  {
+    id: "hw-3",
+    title: "Phrasal verbs worksheet",
+    due: "Due Oct 9",
+    teacher: "Sarah",
+    done: true,
+  },
 ];
 
 const payments = [
@@ -70,8 +111,15 @@ export default function StudentDashboardPage() {
         </div>
       </div>
 
+      <Suspense>
+        <LiveLessons />
+      </Suspense>
+
       {/* Next lesson */}
-      <section className="relative flex flex-col gap-6 overflow-hidden rounded-3xl bg-navy px-6 py-7 text-white sm:flex-row sm:items-center sm:gap-7 sm:px-[34px] sm:py-[30px]" aria-labelledby="next-lesson">
+      <section
+        className="relative flex flex-col gap-6 overflow-hidden rounded-3xl bg-navy px-6 py-7 text-white sm:flex-row sm:items-center sm:gap-7 sm:px-[34px] sm:py-[30px]"
+        aria-labelledby="next-lesson"
+      >
         <div className="pointer-events-none absolute -top-20 -right-[60px] size-[260px] rounded-full bg-teal opacity-[0.22]" aria-hidden="true" />
         <Avatar initials={nextLesson.teacher.initials} tone={nextLesson.teacher.tone} size={76} />
         <div className="relative flex flex-1 flex-col gap-1.5">

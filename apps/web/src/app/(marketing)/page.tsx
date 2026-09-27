@@ -2,38 +2,96 @@ import Link from "next/link";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { ButtonLink } from "@/components/ui/button";
 import { Eyebrow, PhotoPlaceholder, Tag } from "@/components/ui/primitives";
-import { teachers, type Teacher } from "@/lib/mock-data";
+import type { Teacher } from "@/lib/mock-data";
+import { getTeachers } from "@/lib/teachers";
 import { cn } from "@/lib/cn";
 import { toneTile } from "./_components/tone";
 
-const valueProps: { icon: IconName; title: string; body: [string, string]; tone: string }[] = [
-  { icon: "user", title: "Expert Teachers", body: ["Qualified, native speakers", "from the U.S."], tone: "bg-teal-100 text-teal-dark" },
-  { icon: "calendar", title: "Flexible Scheduling", body: ["Book lessons that fit your life,", "in your own time zone."], tone: "bg-orange-100 text-orange-dark" },
-  { icon: "target", title: "Personalized Learning", body: ["A plan built on your level", "and your goals."], tone: "bg-sky-100 text-sky" },
-  { icon: "globe", title: "Global Community", body: ["Learn, connect, grow —", "together."], tone: "bg-lilac-100 text-lilac" },
+const valueProps: {
+  icon: IconName;
+  title: string;
+  body: [string, string];
+  tone: string;
+}[] = [
+  {
+    icon: "user",
+    title: "Expert Teachers",
+    body: ["Qualified, native speakers", "from the U.S."],
+    tone: "bg-teal-100 text-teal-dark",
+  },
+  {
+    icon: "calendar",
+    title: "Flexible Scheduling",
+    body: ["Book lessons that fit your life,", "in your own time zone."],
+    tone: "bg-orange-100 text-orange-dark",
+  },
+  {
+    icon: "target",
+    title: "Personalized Learning",
+    body: ["A plan built on your level", "and your goals."],
+    tone: "bg-sky-100 text-sky",
+  },
+  {
+    icon: "globe",
+    title: "Global Community",
+    body: ["Learn, connect, grow —", "together."],
+    tone: "bg-lilac-100 text-lilac",
+  },
 ];
 
 const steps = [
-  { title: "Take the placement test", body: "Tell us your goals and get your CEFR level, from A1 to C2." },
-  { title: "Get matched", body: "We recommend teachers by goal, availability, specialty and rating." },
-  { title: "Book & pay securely", body: "Pick a time in your time zone. Card, Apple Pay, Google Pay or PayPal." },
-  { title: "Learn live", body: "Join your video classroom in one click, then get notes and homework." },
+  {
+    title: "Take the placement test",
+    body: "Tell us your goals and get your CEFR level, from A1 to C2.",
+  },
+  {
+    title: "Get matched",
+    body: "We recommend teachers by goal, availability, specialty and rating.",
+  },
+  {
+    title: "Book & pay securely",
+    body: "Pick a time in your time zone. Card, Apple Pay, Google Pay or PayPal.",
+  },
+  {
+    title: "Learn live",
+    body: "Join your video classroom in one click, then get notes and homework.",
+  },
 ];
 
 const plans = [
-  { title: "Trial lesson", price: "20 min", body: "Free with teachers who offer it: meet and discuss your goals before you book." },
-  { title: "Single lesson", price: "$20–50", body: "One 50-minute live lesson at the teacher's rate." },
-  { title: "5-lesson pack", price: "Up to 5% off", body: "Offered by participating teachers.", featured: true },
-  { title: "10-lesson pack", price: "Up to 10% off", body: "Best value for steady progress." },
+  {
+    title: "Trial lesson",
+    price: "20 min",
+    body: "Free with teachers who offer it: meet and discuss your goals before you book.",
+  },
+  {
+    title: "Single lesson",
+    price: "$20–50",
+    body: "One 50-minute live lesson at the teacher's rate.",
+  },
+  {
+    title: "5-lesson pack",
+    price: "Up to 5% off",
+    body: "Offered by participating teachers.",
+    featured: true,
+  },
+  {
+    title: "10-lesson pack",
+    price: "Up to 10% off",
+    body: "Best value for steady progress.",
+  },
 ];
 
 const featuredSlugs = ["sarah-mitchell", "james-robinson", "amanda-lee", "david-king"];
-const featured = featuredSlugs.map((s) => teachers.find((t) => t.slug === s)).filter((t): t is Teacher => Boolean(t));
 
 /** Two specialties shown on the home cards, as in the design. */
 const cardTags = (t: Teacher) => (t.specialties.includes("Travel") ? ["Conversation", "Travel"] : t.specialties.slice(0, 2));
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { teachers } = await getTeachers();
+  const picked = featuredSlugs.map((s) => teachers.find((t) => t.slug === s)).filter((t): t is Teacher => Boolean(t));
+  const featured = (picked.length >= 4 ? picked : [...picked, ...teachers.filter((t) => !picked.includes(t))]).slice(0, 4);
+
   return (
     <div className="relative overflow-hidden">
       {/* decorative blobs */}
@@ -90,16 +148,9 @@ export default function HomePage() {
         {/* photo area */}
         <div className="relative mx-6 h-[380px] overflow-hidden rounded-[32px] sm:h-[460px] lg:absolute lg:top-0 lg:right-0 lg:mx-0 lg:h-[620px] lg:w-[min(820px,57vw)] lg:rounded-none lg:rounded-l-[420px]">
           <div aria-hidden="true" className="absolute inset-0 bg-linear-to-b from-[#f3d9a8] via-[#e9b87a] to-[#c98c58]" />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute right-0 bottom-0 left-[17%] flex h-[58%] items-end gap-2.5 opacity-55"
-          >
+          <div aria-hidden="true" className="pointer-events-none absolute right-0 bottom-0 left-[17%] flex h-[58%] items-end gap-2.5 opacity-55">
             {[220, 300, 180, 360, 240, 280, 160, 320, 200].map((h, i) => (
-              <div
-                key={i}
-                className={cn("flex-1", i % 3 === 1 ? "bg-[#6b4430]" : i % 4 === 3 ? "bg-[#5c3a28]" : "bg-[#7a4e34]")}
-                style={{ height: `${(h / 360) * 100}%` }}
-              />
+              <div key={i} className={cn("flex-1", i % 3 === 1 ? "bg-[#6b4430]" : i % 4 === 3 ? "bg-[#5c3a28]" : "bg-[#7a4e34]")} style={{ height: `${(h / 360) * 100}%` }} />
             ))}
           </div>
           <PhotoPlaceholder label="New York skyline at golden hour" className="absolute inset-0 bg-transparent!" />
@@ -119,10 +170,7 @@ export default function HomePage() {
       {/* VALUE PROPS */}
       <section aria-label="Why Amerivo" className="relative mx-auto grid max-w-[1440px] grid-cols-1 gap-10 px-6 pt-12 pb-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:px-20">
         {valueProps.map((v, i) => (
-          <div
-            key={v.title}
-            className={cn("flex flex-col items-center gap-3 px-6 text-center", i < 3 && "lg:border-r lg:border-line")}
-          >
+          <div key={v.title} className={cn("flex flex-col items-center gap-3 px-6 text-center", i < 3 && "lg:border-r lg:border-line")}>
             <div className={cn("flex size-20 items-center justify-center rounded-full", v.tone)}>
               <Icon name={v.icon} size={34} strokeWidth={1.7} />
             </div>
@@ -176,10 +224,7 @@ export default function HomePage() {
         <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {featured.map((t) => (
             <li key={t.slug}>
-              <Link
-                href={`/teachers/${t.slug}`}
-                className="flex h-full flex-col overflow-hidden rounded-3xl bg-white text-navy shadow-card transition-shadow hover:shadow-float"
-              >
+              <Link href={`/teachers/${t.slug}`} className="flex h-full flex-col overflow-hidden rounded-3xl bg-white text-navy shadow-card transition-shadow hover:shadow-float">
                 <div className={cn("relative flex h-[220px] items-center justify-center", toneTile[t.tone])}>
                   <span aria-hidden="true" className="font-display text-[56px] font-bold">
                     {t.initials}
@@ -226,16 +271,8 @@ export default function HomePage() {
           </div>
           <ul className="grid grid-cols-1 gap-5 pt-3 sm:grid-cols-2 lg:grid-cols-4">
             {plans.map((p) => (
-              <li
-                key={p.title}
-                className={cn(
-                  "relative flex flex-col gap-3.5 rounded-3xl p-8",
-                  p.featured ? "bg-white text-navy" : "border border-white/14 bg-white/6",
-                )}
-              >
-                {p.featured && (
-                  <span className="absolute -top-3.5 left-8 rounded-full bg-orange px-3 py-1.5 text-xs font-bold tracking-[1px] text-navy">POPULAR</span>
-                )}
+              <li key={p.title} className={cn("relative flex flex-col gap-3.5 rounded-3xl p-8", p.featured ? "bg-white text-navy" : "border border-white/14 bg-white/6")}>
+                {p.featured && <span className="absolute -top-3.5 left-8 rounded-full bg-orange px-3 py-1.5 text-xs font-bold tracking-[1px] text-navy">POPULAR</span>}
                 <h3 className={cn("text-xl font-bold", !p.featured && "text-white")}>{p.title}</h3>
                 <p className="font-display text-[34px] font-bold">{p.price}</p>
                 <p className={cn("text-[15px] leading-normal", p.featured ? "text-navy-soft" : "text-ink-soft")}>{p.body}</p>
@@ -252,9 +289,7 @@ export default function HomePage() {
             <Icon name="building" size={28} />
           </div>
           <h2 className="text-[28px] font-extrabold lg:text-[32px]">English for your team</h2>
-          <p className="text-[17px] leading-relaxed text-navy-soft">
-            Tell us your company&apos;s language needs and book 10, 20 or more sessions for your employees.
-          </p>
+          <p className="text-[17px] leading-relaxed text-navy-soft">Tell us your company&apos;s language needs and book 10, 20 or more sessions for your employees.</p>
           <ButtonLink href="mailto:business@amerivo.example" variant="teal" className="self-start px-[26px]">
             Request a company plan
           </ButtonLink>
@@ -264,9 +299,7 @@ export default function HomePage() {
             <Icon name="video" size={28} />
           </div>
           <h2 className="text-[28px] font-extrabold lg:text-[32px]">Teach American English</h2>
-          <p className="text-[17px] leading-relaxed">
-            Set your own rate, teach from anywhere and get paid monthly. Apply with a 2-minute intro video.
-          </p>
+          <p className="text-[17px] leading-relaxed">Set your own rate, teach from anywhere and get paid monthly. Apply with a 2-minute intro video.</p>
           <ButtonLink href="/teach/apply" variant="navy" className="self-start px-[26px]">
             Become a Teacher
           </ButtonLink>

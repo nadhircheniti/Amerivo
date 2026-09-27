@@ -34,6 +34,34 @@
    `NEXT_PUBLIC_API_URL` = `https://amerivo-api.onrender.com/api`
 4. **Deploy**.
 
+> Où ajouter une variable : projet Vercel → **Settings** → **Environment Variables** → Key / Value → cocher
+> Production, Preview et Development → **Save**. Les variables `NEXT_PUBLIC_…` sont intégrées au moment de la
+> construction : après un ajout ou une modification, **Deployments → ⋯ → Redeploy**.
+
+## 4. Connexion des utilisateurs — Clerk
+
+Sans clés Clerk, le site reste en **mode démonstration** (les formulaires naviguent sans créer de compte).
+
+1. clerk.com → créer une application « Amerivo English ».
+   - Méthodes : **Email** (avec mot de passe), **Google**, **Apple**.
+   - Vérification de l'e-mail : **code par e-mail** (Email verification code).
+2. Clerk → **API Keys** : copier `pk_test_…` et `sk_test_…`.
+3. **Vercel** (Settings → Environment Variables) :
+   - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` = `pk_test_…`
+   - `CLERK_SECRET_KEY` = `sk_test_…`
+   - `NEXT_PUBLIC_API_URL` = `https://amerivo-api.onrender.com/api`
+   puis **Redeploy**.
+4. **Render** (service amerivo-api → Environment) :
+   - `CLERK_SECRET_KEY` = `sk_test_…` (la même)
+   - `ADMIN_EMAILS` = l'adresse (ou les adresses, séparées par des virgules) qui doivent être administrateur
+   - `WEB_URL` = `https://amerivo-api.vercel.app,https://amerivo-api-*.vercel.app`
+   - `PAYMENTS_SIMULATED` = `1` (tant que Stripe n'est pas branché : les réservations sont confirmées sans paiement)
+   puis **Save, rebuild and deploy**.
+
+Parcours : inscription → code reçu par e-mail → `/welcome` crée le compte Amerivo (âge ≥ 13 ans vérifié par
+l'API) → questionnaire. Connexion → `/welcome` → espace élève, professeur ou admin selon le rôle.
+Les pages `/student`, `/teacher`, `/admin`, `/classroom`, `/onboarding` exigent d'être connecté.
+
 ## Fonctionnement au quotidien
 
 - Chaque fusion sur `main` redéploie automatiquement Render et Vercel.

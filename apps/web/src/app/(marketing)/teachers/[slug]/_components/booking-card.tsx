@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useMemo, useState, useSyncExternalStore } from "react";
+import { useEffect, useId, useMemo, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/ui/icon";
 import { Button, ButtonLink } from "@/components/ui/button";
@@ -8,7 +8,8 @@ import { ChoiceTile } from "@/components/ui/form";
 import { formatUsd, packagePrice } from "@/lib/mock-data";
 import { cn } from "@/lib/cn";
 import { shortUsd } from "../../../_components/tone";
-import { addDays, buildWeek, civilDate, dayLabel, firstMonday, timeLabel } from "./slots";
+import { API_URL } from "@/lib/api";
+import { addDays, buildWeek, civilDate, dayLabel, firstMonday, groupApiSlots, timeLabel, zonedToInstant, type SlotDay } from "./slots";
 
 type LessonType = "trial" | "single" | "pack5" | "pack10";
 const WEEKS_AHEAD = 4;
@@ -76,29 +77,56 @@ export function BookingCard({
 
   const options = [
     ...(offersTrial ? [{ value: "trial" as const, label: "Trial lesson · 20 min", price: 0 }] : []),
-    { value: "single" as const, label: "Single lesson · 50 min", price: priceUsd },
-    ...(offersPack5 ? [{ value: "pack5" as const, label: "5 lessons", discount: "−5%", price: packagePrice(priceUsd, 5) }] : []),
-    ...(offersPack10 ? [{ value: "pack10" as const, label: "10 lessons", discount: "−10%", price: packagePrice(priceUsd, 10) }] : []),
+    {
+      value: "single" as const,
+      label: "Single lesson · 50 min",
+      price: priceUsd,
+    },
+    ...(offersPack5
+      ? [
+          {
+            value: "pack5" as const,
+            label: "5 lessons",
+            discount: "−5%",
+            price: packagePrice(priceUsd, 5),
+          },
+        ]
+      : []),
+    ...(offersPack10
+      ? [
+          {
+            value: "pack10" as const,
+            label: "10 lessons",
+            discount: "−10%",
+            price: packagePrice(priceUsd, 10),
+          },
+        ]
+      : []),
   ];
   const requested = chosenType ?? queryType ?? "single";
   const type = options.some((o) => o.value === requested) ? requested : "single";
   const current = options.find((o) => o.value === type)!;
   const duration = type === "trial" ? 20 : 50;
 
-  const days = useMemo(() => {
-    if (!clock) return null;
-    const monday = addDays(firstMonday(clock.today), week * 7);
-    return buildWeek({ seed: slug, teacherTz: teacherTimezone, viewerTz: clock.tz, monday, now: clock.now });
-  }, [clock, week, slug, teacherTimezone]);
+  const monday = clock ? addDays(firstMonday(clock.today), week * 7) : null;
+  const demoDays = useMemo(() => {
+    if (!clock || !monday || API_URL) return null;
+    return buildWeek({
+      seed: slug,
+      teacherTz: teacherTimezone,
+      viewerTz: clock.tz,
+      monday,
+      now: clock.now,
+    });
+  }, [clock, monday, slug, teacherTimezone]);
+  const live = useLiveSlots(slug, clock?.tz ?? null, monday, type === "trial");
+  const days = API_URL ? live.days : demoDays;
 
-  const weekRange = days ? `${shortDate(days[0].date)} – ${shortDate(days[4].date)}` : "";
+  const weekRange = days ? `${shortDate(days[0].date)} – ${shortDate(days[6].date)}` : "";
 
-  const summary =
-    slot && clock
-      ? `${dayLabel(slot.instant, clock.tz)} · ${timeLabel(slot.instant, clock.tz)}–${timeLabel(slot.instant + duration * 60_000, clock.tz)}`
-      : null;
+  const summary = slot && clock ? `${dayLabel(slot.instant, clock.tz)} · ${timeLabel(slot.instant, clock.tz)}–${timeLabel(slot.instant + duration * 60_000, clock.tz)}` : null;
 
-  const checkoutHref = slot ? `/checkout?${new URLSearchParams({ teacher: slug, type, slot: slot.iso }).toString()}` : null;
+  const checkoutHref = slot && clock ? `/checkout?${new URLSearchParams({ teacher: slug, type, slot: slot.iso, tz: clock.tz }).toString()}` : null;
 
   return (
     <aside
@@ -167,7 +195,13 @@ export function BookingCard({
           {clock ? `Times shown in your time zone: ${clock.tz} (auto-detected)` : "Detecting your time zone…"}
         </p>
 
-        <div className="grid grid-cols-5 gap-1.5 text-center" aria-live="polite">
+        {live.error && (
+          <p role="status" className="rounded-[10px] bg-cream px-3 py-2 text-[13px] text-orange-text">
+            {live.error}
+          </p>
+        )}
+        {days && days.every((d) => d.slots.length === 0) && !live.error && <p className="text-[13px] text-muted">No free times this week — try the next week.</p>}
+        <div className="grid grid-cols-7 gap-1 text-center" aria-live="polite">
           {days
             ? days.map((d) => (
                 <div key={d.date} role="group" aria-label={dayLabel(Date.parse(`${d.date}T12:00:00Z`), "UTC")} className="flex flex-col gap-1.5">
@@ -188,7 +222,7 @@ export function BookingCard({
                         aria-label={`${s.label}${s.booked ? ", unavailable" : ""}`}
                         onClick={() => setSlot({ iso: s.iso, instant: s.instant })}
                         className={cn(
-                          "h-10 rounded-[10px] text-[13px]",
+                          "h-10 rounded-[10px] text-[12px] tabular-nums",
                           s.booked
                             ? "cursor-not-allowed bg-beige-2 text-muted line-through"
                             : selected
@@ -202,7 +236,7 @@ export function BookingCard({
                   })}
                 </div>
               ))
-            : Array.from({ length: 5 }, (_, i) => (
+            : Array.from({ length: 7 }, (_, i) => (
                 <div key={i} className="flex flex-col gap-1.5" aria-hidden="true">
                   <div className="h-[38px]" />
                   {[0, 1, 2].map((k) => (
@@ -238,5 +272,63 @@ export function BookingCard({
 
 /** "2026-10-14" -> "Oct 14" */
 function shortDate(civil: string) {
-  return new Date(`${civil}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+  return new Date(`${civil}T12:00:00Z`).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+/**
+ * Loads the teacher's real free slots for one week from the API (already converted to the
+ * viewer's time zone). The free Render plan may take up to a minute to wake up: we show the
+ * loading grid meanwhile and a retry message if it fails.
+ */
+function useLiveSlots(slug: string, tz: string | null, monday: string | null, trial: boolean) {
+  const [state, setState] = useState<{
+    key: string;
+    days: SlotDay[] | null;
+    error: string | null;
+  }>({ key: "", days: null, error: null });
+  const key = `${slug}|${tz}|${monday}|${trial}`;
+
+  useEffect(() => {
+    if (!API_URL || !tz || !monday) return;
+    const from = new Date(zonedToInstant(monday, 0, tz)).toISOString();
+    const to = new Date(zonedToInstant(addDays(monday, 7), 0, tz) - 1).toISOString();
+    const ctrl = new AbortController();
+    const qs = new URLSearchParams({
+      from,
+      to,
+      tz,
+      ...(trial ? { trial: "1" } : {}),
+    });
+    fetch(`${API_URL}/teachers/${encodeURIComponent(slug)}/slots?${qs}`, {
+      signal: ctrl.signal,
+    })
+      .then(async (r) => {
+        if (!r.ok) throw new Error(String(r.status));
+        const slots = (await r.json()) as { startsAt: string }[];
+        setState({
+          key,
+          days: groupApiSlots(
+            slots.map((s) => s.startsAt),
+            tz,
+            monday,
+          ),
+          error: null,
+        });
+      })
+      .catch((e: unknown) => {
+        if ((e as Error).name === "AbortError") return;
+        setState({
+          key,
+          days: null,
+          error: "We couldn't load this teacher's calendar. Please refresh in a moment.",
+        });
+      });
+    return () => ctrl.abort();
+  }, [key, slug, tz, monday, trial]);
+
+  return state.key === key ? state : { key, days: null, error: null };
 }

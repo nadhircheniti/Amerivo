@@ -6,6 +6,7 @@ import { splitEarning, nextMonthlyPayoutDate, balances } from "../src/domain/ear
 import { generateSlots, isSlotAvailable, type SlotQuery } from "../src/domain/availability";
 import { recommend } from "../src/domain/matching";
 import { ageOn, isOldEnough } from "../src/domain/age";
+import { corsOrigins } from "../src/common/cors";
 
 const teacher = { priceCents: 3500, offersTrial: true, offersPack5: true, offersPack10: true };
 
@@ -140,5 +141,16 @@ describe("minimum age (13+)", () => {
     assert.equal(isOldEnough("2013-10-01", today), true);
     assert.equal(isOldEnough("2013-10-02", today), false);
     assert.equal(isOldEnough("not-a-date", today), false);
+  });
+});
+
+describe("CORS origins", () => {
+  it("accepts exact origins and Vercel preview wildcards", () => {
+    const [exact, preview] = corsOrigins("https://amerivo-api.vercel.app/, https://amerivo-api-*.vercel.app");
+    assert.equal(exact, "https://amerivo-api.vercel.app");
+    assert.ok(preview instanceof RegExp);
+    assert.ok((preview as RegExp).test("https://amerivo-api-git-feat-api-auth-nadhir.vercel.app"));
+    assert.ok(!(preview as RegExp).test("https://amerivo-api-x.vercel.app.evil.com"));
+    assert.ok(!(preview as RegExp).test("https://evil.com/amerivo-api-x.vercel.app"));
   });
 });

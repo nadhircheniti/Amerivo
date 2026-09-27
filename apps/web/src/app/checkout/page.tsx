@@ -4,7 +4,9 @@ import Link from "next/link";
 import { FocusHeader } from "@/components/layout/focus-header";
 import { Icon } from "@/components/ui/icon";
 import { Avatar, Card, CheckItem } from "@/components/ui/primitives";
-import { currentStudent, formatUsd, getTeacher, teachers } from "@/lib/mock-data";
+import { notFound } from "next/navigation";
+import { currentStudent, formatUsd } from "@/lib/mock-data";
+import { getTeacherBySlug } from "@/lib/teachers";
 import { describeOrder, describeSlot, isLessonType } from "./_lib";
 import { PaymentForm } from "./payment-form";
 
@@ -24,10 +26,12 @@ function Row({ label, value }: { label: string; value: ReactNode }) {
 
 export default async function CheckoutPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const sp = await searchParams;
-  const teacher = getTeacher(first(sp.teacher) ?? "sarah-mitchell") ?? teachers[0];
+  const teacher = await getTeacherBySlug(first(sp.teacher) ?? "sarah-mitchell");
+  if (!teacher) notFound();
+  const studentTz = validTz(first(sp.tz)) ?? currentStudent.timezone;
   const rawType = first(sp.type);
   const order = describeOrder(teacher, isLessonType(rawType) ? rawType : "single");
-  const slot = describeSlot(first(sp.slot) ?? "Wed, Oct 14 · 18:00", currentStudent.timezone, teacher.timezone);
+  const slot = describeSlot(first(sp.slot) ?? "Wed, Oct 14 · 18:00", studentTz, teacher.timezone);
   const isPack = order.count > 1;
   const firstName = teacher.name.split(" ")[0];
   const cta = order.total === 0 ? "Confirm free trial lesson" : `Pay ${formatUsd(order.total)} and confirm ${isPack ? "package" : "lesson"}`;
@@ -39,7 +43,8 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
           <span className="flex items-center gap-2 text-sm text-muted">
             <Icon name="lock" size={16} strokeWidth={2} className="shrink-0 text-teal-dark" />
             <span>
-              Secure checkout<span className="hidden sm:inline"> · Payments by Stripe</span>
+              Secure checkout
+              <span className="hidden sm:inline"> · Payments by Stripe</span>
             </span>
           </span>
         }
@@ -53,7 +58,19 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
             </Link>
             <h1 className="text-[28px] font-extrabold sm:text-[32px]">Confirm and pay</h1>
           </div>
-          <PaymentForm ctaLabel={cta} />
+          <PaymentForm
+            ctaLabel={cta}
+            free={order.total === 0}
+            booking={
+              slot.iso
+                ? {
+                    teacherSlug: teacher.slug,
+                    offer: order.type,
+                    startsAt: slot.iso,
+                  }
+                : null
+            }
+          />
         </Card>
 
         <aside className="flex w-full shrink-0 flex-col gap-5 lg:w-[440px]">
@@ -69,7 +86,7 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
             <dl className="flex flex-col gap-3 border-t border-line-soft pt-[18px] text-[15px]">
               <Row label="Lesson" value={order.label} />
               <Row label={isPack ? "First lesson" : "Date"} value={slot.date} />
-              {slot.studentTime && <Row label="Your time" value={`${slot.studentTime} (${cityOf(currentStudent.timezone)})`} />}
+              {slot.studentTime && <Row label="Your time" value={`${slot.studentTime} (${cityOf(studentTz)})`} />}
               {slot.teacherTime && <Row label="Teacher's time" value={`${slot.teacherTime} (${teacher.city.split(",")[0]})`} />}
             </dl>
             <dl className="flex flex-col gap-3 border-t border-line-soft pt-[18px] text-[15px]">
@@ -114,4 +131,14 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
       </main>
     </>
   );
+}
+
+function validTz(tz: string | undefined) {
+  if (!tz) return null;
+  try {
+    new Intl.DateTimeFormat("en-US", { timeZone: tz });
+    return tz;
+  } catch {
+    return null;
+  }
 }
