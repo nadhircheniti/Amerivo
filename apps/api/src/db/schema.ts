@@ -495,6 +495,45 @@ export const files = pgTable(
   (t) => [index("files_owner_idx").on(t.ownerId)],
 );
 
+/* ------------------------------------------------------------------ support inbox */
+export const supportStatus = pgEnum("support_status", ["open", "answered", "closed"]);
+
+/** A message sent from the public contact form (visitors, students, teachers, companies). */
+export const supportMessages = pgTable(
+  "support_messages",
+  {
+    id: id(),
+    name: text("name").notNull(),
+    email: text("email").notNull(),
+    /** general | student | teacher | billing | business | technical */
+    topic: text("topic").notNull(),
+    message: text("message").notNull(),
+    locale: text("locale"),
+    /** The Amerivo account using this e-mail address, if any (shown to the admin). */
+    userId: uuid("user_id").references(() => users.id, { onDelete: "set null" }),
+    status: supportStatus("status").notNull().default("open"),
+    lastReplyAt: timestamp("last_reply_at", { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => [index("support_status_idx").on(t.status, t.createdAt)],
+);
+
+/** An admin answer to a support message (e-mailed to the sender when e-mail is configured). */
+export const supportReplies = pgTable(
+  "support_replies",
+  {
+    id: id(),
+    messageId: uuid("message_id")
+      .notNull()
+      .references(() => supportMessages.id, { onDelete: "cascade" }),
+    authorId: uuid("author_id").references(() => users.id, { onDelete: "set null" }),
+    body: text("body").notNull(),
+    emailed: boolean("emailed").notNull().default(false),
+    createdAt: createdAt(),
+  },
+  (t) => [index("support_replies_msg_idx").on(t.messageId, t.createdAt)],
+);
+
 /** Stripe/PayPal webhook idempotency. */
 export const processedEvents = pgTable(
   "processed_events",

@@ -247,5 +247,43 @@
     "message": "Écrire à {name}",
     "cancellation": "Annulation gratuite jusqu'à 24 heures avant le cours.",
     "loadError": "Impossible de charger le calendrier de ce professeur. Veuillez actualiser dans un instant."
+  },
+  "contact": {
+    "metaTitle": "Nous contacter",
+    "eyebrow": "Contact",
+    "title": "Comment pouvons-nous vous aider ?",
+    "subtitle": "Une question sur les cours, les paiements, l’enseignement avec Amerivo ou une offre pour votre entreprise ? Écrivez-nous, un membre de l’équipe vous répondra.",
+    "emailLabel": "Écrivez-nous directement",
+    "responseTime": "Nous répondons sous 1 à 2 jours ouvrés.",
+    "businessHint": "Entreprises : indiquez le nombre d’apprenants et de séances souhaités, nous vous enverrons un devis.",
+    "languagesHint": "Vous pouvez nous écrire en anglais, espagnol, français, arabe, chinois ou russe.",
+    "formTitle": "Envoyez-nous un message",
+    "fields": {
+      "name": "Votre nom",
+      "email": "Votre e-mail",
+      "topic": "Sujet",
+      "message": "Message",
+      "messageHint": "Si votre question concerne un cours, indiquez la date de la réservation ou le nom du professeur."
+    },
+    "privacy": "Vos données servent uniquement à répondre à votre message.",
+    "send": "Envoyer le message",
+    "sending": "Envoi…",
+    "sentTitle": "Message envoyé, merci !",
+    "sentBody": "Nous avons bien reçu votre message et vous répondrons par e-mail sous 1 à 2 jours ouvrés.",
+    "sendAnother": "Envoyer un autre message",
+    "errors": {
+      "messageShort": "Écrivez un peu plus (au moins 10 caractères).",
+      "tooMany": "Trop de messages en peu de temps. Patientez une minute puis réessayez.",
+      "invalid": "Vérifiez votre nom, votre e-mail et votre message.",
+      "generic": "Votre message n’a pas pu être envoyé. Réessayez ou écrivez-nous à {email}."
+    },
+    "topics": {
+      "general": "Question générale",
+      "student": "Aide élève",
+      "teacher": "Aide professeur",
+      "billing": "Paiements et facturation",
+      "business": "Entreprises",
+      "technical": "Problème technique"
+    }
   }
 }

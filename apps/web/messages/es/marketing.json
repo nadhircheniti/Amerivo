@@ -247,5 +247,43 @@
     "message": "Enviar mensaje a {name}",
     "cancellation": "Cancelación gratuita hasta 24 horas antes de la clase.",
     "loadError": "No pudimos cargar el calendario de este profesor. Actualiza la página en un momento."
+  },
+  "contact": {
+    "metaTitle": "Contacto",
+    "eyebrow": "Contacto",
+    "title": "¿Cómo podemos ayudarte?",
+    "subtitle": "Preguntas sobre clases, pagos, enseñar con Amerivo o programas para tu empresa: escríbenos y alguien de nuestro equipo te responderá.",
+    "emailLabel": "Escríbenos directamente",
+    "responseTime": "Respondemos en 1–2 días hábiles.",
+    "businessHint": "Empresas: cuéntanos cuántos estudiantes y sesiones necesitan y les enviaremos una cotización.",
+    "languagesHint": "Puedes escribirnos en inglés, español, francés, árabe, chino o ruso.",
+    "formTitle": "Envíanos un mensaje",
+    "fields": {
+      "name": "Tu nombre",
+      "email": "Tu correo electrónico",
+      "topic": "Tema",
+      "message": "Mensaje",
+      "messageHint": "Si tu pregunta es sobre una clase, indica la fecha de la reserva o el nombre del profesor."
+    },
+    "privacy": "Solo usamos tus datos para responder a tu mensaje.",
+    "send": "Enviar mensaje",
+    "sending": "Enviando…",
+    "sentTitle": "Mensaje enviado. ¡Gracias!",
+    "sentBody": "Recibimos tu mensaje y te responderemos por correo en 1–2 días hábiles.",
+    "sendAnother": "Enviar otro mensaje",
+    "errors": {
+      "messageShort": "Escribe un poco más (al menos 10 caracteres).",
+      "tooMany": "Demasiados mensajes en poco tiempo. Espera un minuto e inténtalo de nuevo.",
+      "invalid": "Revisa tu nombre, tu correo y tu mensaje.",
+      "generic": "No se pudo enviar tu mensaje. Inténtalo de nuevo o escríbenos a {email}."
+    },
+    "topics": {
+      "general": "Pregunta general",
+      "student": "Ayuda para estudiantes",
+      "teacher": "Ayuda para profesores",
+      "billing": "Pagos y facturación",
+      "business": "Empresas",
+      "technical": "Problema técnico"
+    }
   }
 }

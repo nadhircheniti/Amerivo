@@ -171,4 +171,25 @@ export type PlatformSettings = {
   nextPayoutDate: string;
 };
 
-export type Badges = { pendingApplications: number; openDisputes: number };
+export type Badges = { pendingApplications: number; openDisputes: number; openSupport?: number };
+
+/* ---------- Support inbox (contact form) ---------- */
+export type SupportStatus = "open" | "answered" | "closed";
+export type SupportTopic = "general" | "student" | "teacher" | "billing" | "business" | "technical";
+export type SupportMessage = {
+  id: string;
+  name: string;
+  email: string;
+  topic: SupportTopic;
+  message: string;
+  locale: string | null;
+  status: SupportStatus;
+  hasAccount: boolean;
+  role: "student" | "teacher" | "admin" | null;
+  lastReplyAt: string | null;
+  createdAt: string;
+};
+export type SupportListItem = SupportMessage & { replies: number };
+export type SupportList = { items: SupportListItem[]; total: number; page: number; pageSize: number };
+export type SupportReply = { id: string; body: string; emailed: boolean; createdAt: string; author: string | null };
+export type SupportDetail = SupportMessage & { replies: SupportReply[]; emailEnabled: boolean; supportEmail: string };

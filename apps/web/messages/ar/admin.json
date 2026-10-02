@@ -6,6 +6,7 @@
     "bookings": "الحجوزات",
     "payments": "المدفوعات وتحويل الأرباح",
     "disputes": "النزاعات والاسترداد",
+    "support": "صندوق الدعم",
     "settings": "الإعدادات وسجل التدقيق",
     "signedIn2fa": "تم تسجيل الدخول بالتحقق الثنائي"
   },
@@ -661,6 +662,69 @@
         "dispute_open": "الإبلاغ عن مشكلة",
         "dispute_reject": "رفض نزاع"
       }
+    }
+  },
+  "supportPage": {
+    "metaTitle": "صندوق الدعم",
+    "title": "صندوق الدعم",
+    "subtitle": "رسائل نموذج الاتصال. تُرسَل الردود بالبريد الإلكتروني من {email}.",
+    "search": "البحث في الرسائل",
+    "searchPlaceholder": "الاسم أو البريد أو النص",
+    "statusTabs": "حالة الرسالة",
+    "tabs": {
+      "open": "بانتظار الرد",
+      "answered": "تم الرد",
+      "closed": "مغلقة"
+    },
+    "what": "الرسائل",
+    "emptySearch": "لا توجد رسالة تطابق بحثك.",
+    "empty": {
+      "open": "لا توجد رسائل بانتظار الرد.",
+      "answered": "لا توجد رسائل تم الرد عليها.",
+      "closed": "لا توجد رسائل مغلقة."
+    },
+    "pagination": "صفحات الرسائل",
+    "roles": {
+      "student": "طالب",
+      "teacher": "معلم",
+      "admin": "مسؤول",
+      "none": "بلا حساب"
+    },
+    "status": {
+      "open": "بانتظار الرد",
+      "answered": "تم الرد",
+      "closed": "مغلقة"
+    },
+    "repliesCount": "{count, plural, zero {لا ردود} one {رد واحد} two {ردّان} few {# ردود} many {# ردًا} other {# رد}}",
+    "answer": "رد",
+    "view": "عرض المحادثة",
+    "replyRequired": "اكتب ردك أولًا.",
+    "noticeEmailed": "تم إرسال الرد بالبريد إلى {email}.",
+    "noticeSaved": "تم حفظ الرد. إرسال البريد غير مُعدّ، لذا أكمل إرساله إلى {email} من بريدك.",
+    "noticeClosed": "تم إغلاق رسالة {name}.",
+    "noticeReopened": "تمت إعادة فتح رسالة {name}.",
+    "loading": "جارٍ تحميل المحادثة…",
+    "repliesLabel": "الردود",
+    "replyBy": "{name} · {date}",
+    "emailedYes": "أُرسل بالبريد",
+    "emailedNo": "محفوظ فقط (لم يُرسَل)",
+    "emailOff": "لم يتم إعداد البريد التلقائي بعد (RESEND_API_KEY). يُحفظ ردك هنا ثم يُفتح تطبيق البريد لإرساله من {email}.",
+    "replyLabel": "ردك على {name}",
+    "replyPlaceholder": "مرحبًا، شكرًا على رسالتك…",
+    "sending": "جارٍ الإرسال…",
+    "sendReply": "إرسال الرد",
+    "saveAndOpenMail": "حفظ وفتح بريدي",
+    "openMail": "الرد من بريدي",
+    "reopen": "إعادة الفتح",
+    "close": "إغلاق (لا حاجة للرد)",
+    "collapse": "إخفاء",
+    "topics": {
+      "general": "سؤال عام",
+      "student": "دعم الطلاب",
+      "teacher": "دعم المعلمين",
+      "billing": "المدفوعات والفواتير",
+      "business": "الشركات",
+      "technical": "مشكلة تقنية"
     }
   }
 }

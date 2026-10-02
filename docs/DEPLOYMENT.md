@@ -124,6 +124,17 @@ Stripe (mode test) :
 
 Pas encore disponible : envoi de fichiers (photo de profil, certificats) — le professeur les ajoutera plus tard.
 
+## 8. Contact & support — contact@amerivoenglish.com
+
+- Le site affiche **contact@amerivoenglish.com** (pied de page « Contact us », page `/contact`, connexion, candidature professeur, offre entreprises).
+- Le formulaire de `/contact` enregistre chaque message dans l'admin → **Support inbox** (badge = messages à traiter). Les admins y répondent ; la réponse est gardée dans l'historique.
+- **Sans e-mail configuré** : « Save & open in my mailbox » enregistre la réponse puis ouvre la messagerie de l'admin, prête à être envoyée depuis contact@amerivoenglish.com.
+- **Avec e-mail automatique (recommandé)** — Resend, gratuit jusqu'à 3 000 e-mails/mois :
+  1. resend.com → créer un compte → **Domains** → **Add domain** → `amerivoenglish.com` → ajouter les enregistrements DNS indiqués (chez Namecheap) → attendre « Verified ».
+  2. **API Keys** → **Create API key** (permission « Sending access »).
+  3. Render → amerivo-api → **Environment** : `RESEND_API_KEY` = la clé, `EMAIL_FROM` = `Amerivo English <contact@amerivoenglish.com>`, `SUPPORT_EMAIL` = `contact@amerivoenglish.com` → **Save, rebuild and deploy**.
+  4. Ensuite : chaque message du formulaire arrive aussi dans la boîte contact@ (Reply-To = le client), le client reçoit un accusé de réception, et les réponses de l'admin partent automatiquement avec Reply-To = contact@ — la conversation peut continuer depuis la boîte mail.
+
 ## Fonctionnement au quotidien
 
 - Chaque fusion sur `main` redéploie automatiquement Render et Vercel.

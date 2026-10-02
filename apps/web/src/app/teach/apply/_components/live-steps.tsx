@@ -296,7 +296,7 @@ export function LiveApproval({ onEdit }: { onEdit: () => void }) {
           </span>
           <p className="text-sm leading-normal text-navy-soft">{t("suspendedText")}</p>
           {notesBlock(t("reviewerNotes"))}
-          <ButtonLink href="mailto:support@amerivo.example" variant="outline">
+          <ButtonLink href="/contact?topic=teacher" variant="outline">
             {t("contactSupport")}
           </ButtonLink>
         </div>

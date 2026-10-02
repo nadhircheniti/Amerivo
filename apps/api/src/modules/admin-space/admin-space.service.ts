@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { and, asc, count, desc, eq, gte, ilike, inArray, lt, ne, or, sql, type SQL } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { DB, type Db } from "../../db/db";
-import { auditLogs, bookings, disputes, earnings, lessonPackages, lessons, payments, payouts, studentProfiles, teacherProfiles, users } from "../../db/schema";
+import { auditLogs, bookings, disputes, earnings, lessonPackages, lessons, payments, payouts, studentProfiles, teacherProfiles, users, supportMessages } from "../../db/schema";
 import { CLOCK, type Clock } from "../../common/clock";
 import { notFound } from "../../common/errors";
 import { MIN_STUDENT_AGE } from "../../domain/age";
@@ -478,10 +478,11 @@ export class AdminSpaceService {
 
   /** Small figures for the sidebar badges (cheap, polled every minute). */
   async badges() {
-    const [[apps], [disp]] = await Promise.all([
+    const [[apps], [disp], [support]] = await Promise.all([
       this.db.select({ n: count() }).from(teacherProfiles).where(eq(teacherProfiles.status, "pending")),
       this.db.select({ n: count() }).from(disputes).where(eq(disputes.status, "open")),
+      this.db.select({ n: count() }).from(supportMessages).where(eq(supportMessages.status, "open")),
     ]);
-    return { pendingApplications: apps.n, openDisputes: disp.n };
+    return { pendingApplications: apps.n, openDisputes: disp.n, openSupport: support.n };
   }
 }

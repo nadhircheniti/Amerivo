@@ -44,5 +44,7 @@ services:
         value: "1440"
       - key: RESEND_API_KEY
         sync: false
-      - key: EMAIL_FROM
+      - key: EMAIL_FROM          # once amerivoenglish.com is verified in Resend: "Amerivo English <contact@amerivoenglish.com>"
         value: "Amerivo English <onboarding@resend.dev>"
+      - key: SUPPORT_EMAIL       # receives the contact form copies; Reply-To of every e-mail sent to customers
+        value: "contact@amerivoenglish.com"

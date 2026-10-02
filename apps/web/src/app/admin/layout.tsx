@@ -4,7 +4,7 @@ import { Icon } from "@/components/ui/icon";
 import { useTranslations } from "next-intl";
 import { AdminSidebar } from "./_components/admin-sidebar";
 
-type NavKey = "analytics" | "teachers" | "students" | "bookings" | "payments" | "disputes" | "settings";
+type NavKey = "analytics" | "teachers" | "students" | "bookings" | "payments" | "disputes" | "support" | "settings";
 const nav: (Omit<SidebarItem, "label"> & { key: NavKey })[] = [
   { key: "analytics", href: "/admin", icon: "chart", exact: true },
   { key: "teachers", href: "/admin/teachers", icon: "user" },
@@ -12,6 +12,7 @@ const nav: (Omit<SidebarItem, "label"> & { key: NavKey })[] = [
   { key: "bookings", href: "/admin/bookings", icon: "calendar" },
   { key: "payments", href: "/admin/payments", icon: "wallet" },
   { key: "disputes", href: "/admin/disputes", icon: "shield" },
+  { key: "support", href: "/admin/support", icon: "message" },
   { key: "settings", href: "/admin/settings", icon: "settings" },
 ];
 
@@ -21,7 +22,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <RoleGate space="admin">
       <div className="flex min-h-screen bg-beige-2">
-        {/* Live badges: pending applications and open disputes. */}
+        {/* Live badges: pending applications, open disputes and unanswered support messages. */}
         <AdminSidebar
           items={items}
           footer={

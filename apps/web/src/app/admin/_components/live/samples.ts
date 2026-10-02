@@ -1,5 +1,5 @@
 /** Demo-mode data (no API configured) in the same shapes as the admin API. Placeholders, not real figures. */
-import type { AdminBooking, AdminDispute, AuditEntry, PaymentsData, PlatformSettings, StudentDetail, StudentList } from "./types";
+import type { AdminBooking, AdminDispute, AuditEntry, PaymentsData, PlatformSettings, StudentDetail, StudentList, SupportList } from "./types";
 
 const person = (id: string, name: string, email: string) => ({ id, name, email });
 const maria = person("s-1", "Maria Silva", "maria@example.com");
@@ -284,4 +284,41 @@ export const sampleSettings: PlatformSettings = {
   paymentHoldMinutes: 30,
   teacherWarning: { cancellations: 3, windowDays: 30 },
   nextPayoutDate: "2026-10-28T00:00:00Z",
+};
+
+/* ---------- Support inbox (demo mode) ---------- */
+export const sampleSupport: SupportList = {
+  items: [
+    {
+      id: "sup-1",
+      name: "Maria Silva",
+      email: "maria@example.com",
+      topic: "billing",
+      message: "Hello, I booked a lesson with Sarah for Thursday but I can't find the receipt. Could you send it to me?",
+      locale: "es",
+      status: "open",
+      hasAccount: true,
+      role: "student",
+      lastReplyAt: null,
+      createdAt: "2026-10-02T09:14:00Z",
+      replies: 0,
+    },
+    {
+      id: "sup-2",
+      name: "Acme HR team",
+      email: "hr@acme.example",
+      topic: "business",
+      message: "We are interested in 20 conversation sessions for our sales team. What are your rates for companies?",
+      locale: "en",
+      status: "answered",
+      hasAccount: false,
+      role: null,
+      lastReplyAt: "2026-10-01T15:02:00Z",
+      createdAt: "2026-10-01T11:40:00Z",
+      replies: 1,
+    },
+  ],
+  total: 2,
+  page: 1,
+  pageSize: 25,
 };

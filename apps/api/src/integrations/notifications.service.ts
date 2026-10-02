@@ -21,15 +21,29 @@ export class NotificationsService {
   }
 
   private async email(userId: string, subject: string, text: string) {
-    const key = process.env.RESEND_API_KEY;
-    if (!key || key === "re_xxx") return;
     const [u] = await this.db.select({ email: users.email }).from(users).where(eq(users.id, userId));
     if (!u) return;
+    await this.sendEmail({ to: u.email, subject, text });
+  }
+
+  /** True when e-mail can actually be sent (Resend key configured). */
+  emailEnabled() {
+    const key = process.env.RESEND_API_KEY;
+    return !!key && key !== "re_xxx";
+  }
+
+  /**
+   * Sends one e-mail through Resend. Returns false (without throwing) when e-mail is not configured;
+   * throws when Resend refuses the message so callers can report it.
+   */
+  async sendEmail(m: { to: string; subject: string; text: string; replyTo?: string }) {
+    if (!this.emailEnabled()) return false;
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: process.env.EMAIL_FROM, to: u.email, subject, text }),
+      headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ from: process.env.EMAIL_FROM, to: m.to, subject: m.subject, text: m.text, ...(m.replyTo ? { reply_to: m.replyTo } : {}) }),
     });
     if (!res.ok) throw new Error(`Resend ${res.status}`);
+    return true;
   }
 }
