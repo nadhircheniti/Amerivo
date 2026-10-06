@@ -6,6 +6,7 @@
     "bookings": "预约",
     "payments": "付款与提现",
     "disputes": "纠纷与退款",
+    "support": "客服收件箱",
     "settings": "设置与审计日志",
     "signedIn2fa": "已通过双重验证登录"
   },
@@ -661,6 +662,69 @@
         "dispute_open": "学生反馈问题",
         "dispute_reject": "纠纷已驳回"
       }
+    }
+  },
+  "supportPage": {
+    "metaTitle": "客服收件箱",
+    "title": "客服收件箱",
+    "subtitle": "来自联系表单的留言。回复将从 {email} 通过邮件发送。",
+    "search": "搜索留言",
+    "searchPlaceholder": "姓名、邮箱或内容",
+    "statusTabs": "留言状态",
+    "tabs": {
+      "open": "待回复",
+      "answered": "已回复",
+      "closed": "已关闭"
+    },
+    "what": "留言",
+    "emptySearch": "没有符合搜索条件的留言。",
+    "empty": {
+      "open": "没有待回复的留言。",
+      "answered": "没有已回复的留言。",
+      "closed": "没有已关闭的留言。"
+    },
+    "pagination": "留言分页",
+    "roles": {
+      "student": "学生",
+      "teacher": "老师",
+      "admin": "管理员",
+      "none": "无账号"
+    },
+    "status": {
+      "open": "待回复",
+      "answered": "已回复",
+      "closed": "已关闭"
+    },
+    "repliesCount": "{count, plural, other {# 条回复}}",
+    "answer": "回复",
+    "view": "查看对话",
+    "replyRequired": "请先填写回复内容。",
+    "noticeEmailed": "回复已通过邮件发送至 {email}。",
+    "noticeSaved": "回复已保存。尚未配置邮件发送，请在您的邮箱中完成发送至 {email}。",
+    "noticeClosed": "{name} 的留言已关闭。",
+    "noticeReopened": "{name} 的留言已重新打开。",
+    "loading": "正在加载对话…",
+    "repliesLabel": "回复",
+    "replyBy": "{name} · {date}",
+    "emailedYes": "已通过邮件发送",
+    "emailedNo": "仅保存（未发送邮件）",
+    "emailOff": "尚未配置自动邮件（RESEND_API_KEY）。您的回复会保存在这里，随后打开邮件应用，从 {email} 发送。",
+    "replyLabel": "回复 {name}",
+    "replyPlaceholder": "您好，感谢您的留言…",
+    "sending": "正在发送…",
+    "sendReply": "发送回复",
+    "saveAndOpenMail": "保存并打开我的邮箱",
+    "openMail": "从我的邮箱回复",
+    "reopen": "重新打开",
+    "close": "关闭（无需回复）",
+    "collapse": "收起",
+    "topics": {
+      "general": "一般问题",
+      "student": "学生支持",
+      "teacher": "教师支持",
+      "billing": "付款与账单",
+      "business": "企业合作",
+      "technical": "技术问题"
     }
   }
 }

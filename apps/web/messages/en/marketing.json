@@ -247,5 +247,43 @@
     "message": "Message {name}",
     "cancellation": "Free cancellation up to 24 hours before the lesson.",
     "loadError": "We couldn't load this teacher's calendar. Please refresh in a moment."
+  },
+  "contact": {
+    "metaTitle": "Contact us",
+    "eyebrow": "Contact",
+    "title": "How can we help?",
+    "subtitle": "Questions about lessons, payments, teaching with Amerivo or programs for your company — write to us and a member of our team will answer you.",
+    "emailLabel": "E-mail us directly",
+    "responseTime": "We reply within 1–2 business days.",
+    "businessHint": "Companies: tell us how many learners and sessions you need and we'll send you a quote.",
+    "languagesHint": "You can write to us in English, Spanish, French, Arabic, Chinese or Russian.",
+    "formTitle": "Send us a message",
+    "fields": {
+      "name": "Your name",
+      "email": "Your e-mail",
+      "topic": "Topic",
+      "message": "Message",
+      "messageHint": "Include your booking date or teacher's name if your question is about a lesson."
+    },
+    "privacy": "We only use your details to answer your message.",
+    "send": "Send message",
+    "sending": "Sending…",
+    "sentTitle": "Message sent — thank you!",
+    "sentBody": "We received your message and will reply to your e-mail within 1–2 business days.",
+    "sendAnother": "Send another message",
+    "errors": {
+      "messageShort": "Please write a little more (at least 10 characters).",
+      "tooMany": "Too many messages in a short time. Please wait a minute and try again.",
+      "invalid": "Please check your name, e-mail and message.",
+      "generic": "Your message couldn't be sent. Please try again or e-mail us at {email}."
+    },
+    "topics": {
+      "general": "General question",
+      "student": "Student support",
+      "teacher": "Teacher support",
+      "billing": "Payments & billing",
+      "business": "Business / companies",
+      "technical": "Technical problem"
+    }
   }
 }

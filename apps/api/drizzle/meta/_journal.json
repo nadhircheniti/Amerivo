@@ -29,6 +29,13 @@
       "when": 1790519466933,
       "tag": "0003_disputes_files",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790944322495,
+      "tag": "0004_support_inbox",
+      "breakpoints": true
     }
   ]
 }

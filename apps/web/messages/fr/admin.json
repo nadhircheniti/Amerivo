@@ -6,6 +6,7 @@
     "bookings": "Réservations",
     "payments": "Paiements et versements",
     "disputes": "Litiges et remboursements",
+    "support": "Messagerie support",
     "settings": "Paramètres et journal d'audit",
     "signedIn2fa": "Connecté avec la double authentification"
   },
@@ -661,6 +662,69 @@
         "dispute_open": "Problème signalé",
         "dispute_reject": "Litige refusé"
       }
+    }
+  },
+  "supportPage": {
+    "metaTitle": "Messagerie support",
+    "title": "Messagerie support",
+    "subtitle": "Messages reçus via le formulaire de contact. Les réponses partent par e-mail depuis {email}.",
+    "search": "Rechercher un message",
+    "searchPlaceholder": "Nom, e-mail ou texte",
+    "statusTabs": "Statut du message",
+    "tabs": {
+      "open": "À traiter",
+      "answered": "Répondus",
+      "closed": "Clos"
+    },
+    "what": "les messages",
+    "emptySearch": "Aucun message ne correspond à votre recherche.",
+    "empty": {
+      "open": "Aucun message en attente de réponse.",
+      "answered": "Aucun message répondu.",
+      "closed": "Aucun message clos."
+    },
+    "pagination": "Pages des messages",
+    "roles": {
+      "student": "Élève",
+      "teacher": "Professeur",
+      "admin": "Admin",
+      "none": "Sans compte"
+    },
+    "status": {
+      "open": "À traiter",
+      "answered": "Répondu",
+      "closed": "Clos"
+    },
+    "repliesCount": "{count, plural, one {# réponse} other {# réponses}}",
+    "answer": "Répondre",
+    "view": "Voir l’échange",
+    "replyRequired": "Écrivez d’abord votre réponse.",
+    "noticeEmailed": "Réponse envoyée par e-mail à {email}.",
+    "noticeSaved": "Réponse enregistrée. L’envoi d’e-mails n’est pas configuré : terminez l’envoi à {email} depuis votre messagerie.",
+    "noticeClosed": "Message de {name} clos.",
+    "noticeReopened": "Message de {name} rouvert.",
+    "loading": "Chargement de l’échange…",
+    "repliesLabel": "Réponses",
+    "replyBy": "{name} · {date}",
+    "emailedYes": "envoyée par e-mail",
+    "emailedNo": "enregistrée seulement (non envoyée)",
+    "emailOff": "L’envoi automatique d’e-mails n’est pas encore configuré (RESEND_API_KEY). Votre réponse est enregistrée ici, puis votre messagerie s’ouvre pour l’envoyer depuis {email}.",
+    "replyLabel": "Votre réponse à {name}",
+    "replyPlaceholder": "Bonjour, merci pour votre message…",
+    "sending": "Envoi…",
+    "sendReply": "Envoyer la réponse",
+    "saveAndOpenMail": "Enregistrer et ouvrir ma messagerie",
+    "openMail": "Répondre depuis ma messagerie",
+    "reopen": "Rouvrir",
+    "close": "Clore (pas de réponse nécessaire)",
+    "collapse": "Masquer",
+    "topics": {
+      "general": "Question générale",
+      "student": "Aide élève",
+      "teacher": "Aide professeur",
+      "billing": "Paiements et facturation",
+      "business": "Entreprises",
+      "technical": "Problème technique"
     }
   }
 }

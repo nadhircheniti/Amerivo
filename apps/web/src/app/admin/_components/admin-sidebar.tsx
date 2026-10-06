@@ -10,7 +10,7 @@ import type { Badges } from "./live/types";
 
 const POLL_MS = 60_000;
 
-/** Admin sidebar with live badges: pending teacher applications and open disputes (polled every minute). */
+/** Admin sidebar with live badges: pending teacher applications, open disputes and open support messages (polled every minute). */
 export function AdminSidebar({ items, footer }: { items: (SidebarItem & { key: string })[]; footer: ReactNode }) {
   const { call, isLoaded, isSignedIn } = useApi();
   const locale = useLocale() as Locale;
@@ -35,7 +35,7 @@ export function AdminSidebar({ items, footer }: { items: (SidebarItem & { key: s
 
   const count = (n: number | undefined) => (n ? n.toLocaleString(intlTags[locale]) : null);
   const withBadges: SidebarItem[] = items.map(({ key, ...item }) => {
-    const text = key === "teachers" ? count(badges?.pendingApplications) : key === "disputes" ? count(badges?.openDisputes) : null;
+    const text = key === "teachers" ? count(badges?.pendingApplications) : key === "disputes" ? count(badges?.openDisputes) : key === "support" ? count(badges?.openSupport) : null;
     return text ? { ...item, badge: { text, tone: key === "disputes" ? "danger" : "orange" } } : item;
   });
 

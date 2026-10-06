@@ -22,7 +22,7 @@ const columns = [
     title: "company",
     links: [
       { href: "/about", key: "about" },
-      { href: "mailto:support@amerivo.example", key: "support" },
+      { href: "/contact", key: "contact" },
       { href: "/privacy", key: "privacy" },
       { href: "/terms", key: "terms" },
     ],

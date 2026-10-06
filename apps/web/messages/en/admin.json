@@ -6,6 +6,7 @@
     "bookings": "Bookings",
     "payments": "Payments & payouts",
     "disputes": "Disputes & refunds",
+    "support": "Support inbox",
     "settings": "Settings & audit log",
     "signedIn2fa": "Signed in with 2FA"
   },
@@ -661,6 +662,69 @@
         "dispute_open": "Problem reported",
         "dispute_reject": "Dispute rejected"
       }
+    }
+  },
+  "supportPage": {
+    "metaTitle": "Support inbox",
+    "title": "Support inbox",
+    "subtitle": "Messages from the contact form. Replies are e-mailed from {email}.",
+    "search": "Search messages",
+    "searchPlaceholder": "Name, e-mail or text",
+    "statusTabs": "Message status",
+    "tabs": {
+      "open": "To answer",
+      "answered": "Answered",
+      "closed": "Closed"
+    },
+    "what": "the messages",
+    "emptySearch": "No message matches your search.",
+    "empty": {
+      "open": "No message waiting for an answer.",
+      "answered": "No answered message.",
+      "closed": "No closed message."
+    },
+    "pagination": "Messages pages",
+    "roles": {
+      "student": "Student",
+      "teacher": "Teacher",
+      "admin": "Admin",
+      "none": "No account"
+    },
+    "status": {
+      "open": "To answer",
+      "answered": "Answered",
+      "closed": "Closed"
+    },
+    "repliesCount": "{count, plural, one {# reply} other {# replies}}",
+    "answer": "Answer",
+    "view": "View conversation",
+    "replyRequired": "Write your reply first.",
+    "noticeEmailed": "Reply e-mailed to {email}.",
+    "noticeSaved": "Reply saved. E-mail sending isn't set up, so finish sending it to {email} from your mailbox.",
+    "noticeClosed": "{name}'s message closed.",
+    "noticeReopened": "{name}'s message reopened.",
+    "loading": "Loading the conversation…",
+    "repliesLabel": "Replies",
+    "replyBy": "{name} · {date}",
+    "emailedYes": "sent by e-mail",
+    "emailedNo": "saved only (not e-mailed)",
+    "emailOff": "Automatic e-mail isn't set up yet (RESEND_API_KEY). Your reply is saved here, then your mail app opens so you can send it from {email}.",
+    "replyLabel": "Your reply to {name}",
+    "replyPlaceholder": "Hi, thank you for your message…",
+    "sending": "Sending…",
+    "sendReply": "Send reply",
+    "saveAndOpenMail": "Save & open in my mailbox",
+    "openMail": "Reply from my mailbox",
+    "reopen": "Reopen",
+    "close": "Close (no reply needed)",
+    "collapse": "Hide",
+    "topics": {
+      "general": "General question",
+      "student": "Student support",
+      "teacher": "Teacher support",
+      "billing": "Payments & billing",
+      "business": "Business / companies",
+      "technical": "Technical problem"
     }
   }
 }

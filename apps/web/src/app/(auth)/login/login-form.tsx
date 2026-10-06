@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Field, Input } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { clerkMessage, useSignInFlow } from "@/lib/auth-flows";
+import { CONTACT_MAILTO } from "@/lib/contact";
 
 export function LoginForm() {
   const t = useTranslations("auth");
@@ -37,7 +38,7 @@ export function LoginForm() {
           <input type="checkbox" name="remember" className="size-[18px]" />
           {t("login.remember")}
         </label>
-        <a href="mailto:support@amerivo.example" className="font-semibold text-teal-dark hover:text-navy">
+        <a href={CONTACT_MAILTO} className="font-semibold text-teal-dark hover:text-navy">
           {t("login.forgot")}
         </a>
       </div>

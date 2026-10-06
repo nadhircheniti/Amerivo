@@ -33,14 +33,16 @@ import { ApplicationsService } from "./modules/teachers/applications.service";
 import { TeachersService } from "./modules/teachers/teachers.service";
 import { FilesController } from "./modules/files/files.controller";
 import { FilesService } from "./modules/files/files.service";
+import { AdminSupportController, ContactController } from "./modules/support/support.controller";
+import { SupportService } from "./modules/support/support.service";
 import { TeacherDashboardController } from "./modules/teacher-space/teacher-space.controller";
 import { TeacherSpaceService } from "./modules/teacher-space/teacher-space.service";
 
-export const services = [AccountsService, AdminService, ApplicationsService, BookingsService, EarningsService, LessonsService, StudentsService, TeachersService, StudentSpaceService, MessagingService, AdminSpaceService, DisputesService, FilesService, TeacherSpaceService];
+export const services = [AccountsService, AdminService, ApplicationsService, BookingsService, EarningsService, LessonsService, StudentsService, TeachersService, StudentSpaceService, MessagingService, AdminSpaceService, DisputesService, FilesService, TeacherSpaceService, SupportService];
 
 @Module({
   imports: [DbModule, IntegrationsModule, ThrottlerModule.forRoot([{ ttl: 60_000, limit: 120 }])],
-  controllers: [HealthController, AccountsController, TeachersController, TeacherSpaceController, StudentController, StudentSpaceController, StudentAccountController, BookingsController, AdminController, WebhooksController, MessagingController, NotificationsController, AdminSpaceController, BookingDisputesController, AdminDisputesController, FilesController, TeacherDashboardController],
+  controllers: [HealthController, AccountsController, TeachersController, TeacherSpaceController, StudentController, StudentSpaceController, StudentAccountController, BookingsController, AdminController, WebhooksController, MessagingController, NotificationsController, AdminSpaceController, BookingDisputesController, AdminDisputesController, FilesController, TeacherDashboardController, ContactController, AdminSupportController],
   providers: [{ provide: CLOCK, useValue: systemClock }, { provide: APP_GUARD, useClass: ThrottlerGuard }, { provide: APP_GUARD, useClass: AuthGuard }, ...services],
 })
 export class AppModule {}

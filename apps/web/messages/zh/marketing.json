@@ -247,5 +247,43 @@
     "message": "给 {name} 发消息",
     "cancellation": "课前 24 小时以上可免费取消。",
     "loadError": "无法加载该老师的日程，请稍后刷新页面。"
+  },
+  "contact": {
+    "metaTitle": "联系我们",
+    "eyebrow": "联系",
+    "title": "我们能为您做些什么？",
+    "subtitle": "关于课程、付款、在 Amerivo 任教或企业培训的问题，请给我们留言，团队成员会尽快回复您。",
+    "emailLabel": "直接发邮件给我们",
+    "responseTime": "我们会在 1–2 个工作日内回复。",
+    "businessHint": "企业客户：请告诉我们学员人数和所需课时，我们将为您报价。",
+    "languagesHint": "您可以用英语、西班牙语、法语、阿拉伯语、中文或俄语给我们写信。",
+    "formTitle": "给我们留言",
+    "fields": {
+      "name": "您的姓名",
+      "email": "您的邮箱",
+      "topic": "主题",
+      "message": "留言内容",
+      "messageHint": "如果问题与某节课有关，请注明预约日期或老师姓名。"
+    },
+    "privacy": "您的信息仅用于回复您的留言。",
+    "send": "发送留言",
+    "sending": "正在发送…",
+    "sentTitle": "留言已发送，谢谢！",
+    "sentBody": "我们已收到您的留言，将在 1–2 个工作日内通过邮件回复您。",
+    "sendAnother": "再发一条留言",
+    "errors": {
+      "messageShort": "请多写一些（至少 10 个字符）。",
+      "tooMany": "短时间内发送的留言过多，请稍等一分钟后再试。",
+      "invalid": "请检查您的姓名、邮箱和留言内容。",
+      "generic": "留言发送失败。请重试，或发送邮件至 {email}。"
+    },
+    "topics": {
+      "general": "一般问题",
+      "student": "学生支持",
+      "teacher": "教师支持",
+      "billing": "付款与账单",
+      "business": "企业合作",
+      "technical": "技术问题"
+    }
   }
 }

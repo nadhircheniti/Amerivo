@@ -6,6 +6,7 @@
     "bookings": "Reservas",
     "payments": "Cobros y pagos",
     "disputes": "Disputas y reembolsos",
+    "support": "Bandeja de soporte",
     "settings": "Configuración y registro de auditoría",
     "signedIn2fa": "Sesión iniciada con 2FA"
   },
@@ -661,6 +662,69 @@
         "dispute_open": "Problema reportado",
         "dispute_reject": "Disputa rechazada"
       }
+    }
+  },
+  "supportPage": {
+    "metaTitle": "Bandeja de soporte",
+    "title": "Bandeja de soporte",
+    "subtitle": "Mensajes del formulario de contacto. Las respuestas se envían por correo desde {email}.",
+    "search": "Buscar mensajes",
+    "searchPlaceholder": "Nombre, correo o texto",
+    "statusTabs": "Estado del mensaje",
+    "tabs": {
+      "open": "Por responder",
+      "answered": "Respondidos",
+      "closed": "Cerrados"
+    },
+    "what": "los mensajes",
+    "emptySearch": "Ningún mensaje coincide con tu búsqueda.",
+    "empty": {
+      "open": "No hay mensajes pendientes de respuesta.",
+      "answered": "No hay mensajes respondidos.",
+      "closed": "No hay mensajes cerrados."
+    },
+    "pagination": "Páginas de mensajes",
+    "roles": {
+      "student": "Estudiante",
+      "teacher": "Profesor",
+      "admin": "Admin",
+      "none": "Sin cuenta"
+    },
+    "status": {
+      "open": "Por responder",
+      "answered": "Respondido",
+      "closed": "Cerrado"
+    },
+    "repliesCount": "{count, plural, one {# respuesta} other {# respuestas}}",
+    "answer": "Responder",
+    "view": "Ver conversación",
+    "replyRequired": "Escribe primero tu respuesta.",
+    "noticeEmailed": "Respuesta enviada por correo a {email}.",
+    "noticeSaved": "Respuesta guardada. El envío de correos no está configurado: termina de enviarla a {email} desde tu buzón.",
+    "noticeClosed": "Mensaje de {name} cerrado.",
+    "noticeReopened": "Mensaje de {name} reabierto.",
+    "loading": "Cargando la conversación…",
+    "repliesLabel": "Respuestas",
+    "replyBy": "{name} · {date}",
+    "emailedYes": "enviada por correo",
+    "emailedNo": "solo guardada (no enviada)",
+    "emailOff": "El correo automático aún no está configurado (RESEND_API_KEY). Tu respuesta se guarda aquí y luego se abre tu aplicación de correo para enviarla desde {email}.",
+    "replyLabel": "Tu respuesta a {name}",
+    "replyPlaceholder": "Hola, gracias por tu mensaje…",
+    "sending": "Enviando…",
+    "sendReply": "Enviar respuesta",
+    "saveAndOpenMail": "Guardar y abrir mi correo",
+    "openMail": "Responder desde mi correo",
+    "reopen": "Reabrir",
+    "close": "Cerrar (sin respuesta)",
+    "collapse": "Ocultar",
+    "topics": {
+      "general": "Pregunta general",
+      "student": "Ayuda para estudiantes",
+      "teacher": "Ayuda para profesores",
+      "billing": "Pagos y facturación",
+      "business": "Empresas",
+      "technical": "Problema técnico"
     }
   }
 }

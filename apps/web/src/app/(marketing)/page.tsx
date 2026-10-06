@@ -221,7 +221,7 @@ export default async function HomePage() {
           </div>
           <h2 className="text-[28px] font-extrabold lg:text-[32px]">{t("business.title")}</h2>
           <p className="text-[17px] leading-relaxed text-navy-soft">{t("business.body")}</p>
-          <ButtonLink href="mailto:business@amerivo.example" variant="teal" className="h-auto min-h-12 self-start px-[26px] py-2 text-center">
+          <ButtonLink href="/contact?topic=business" variant="teal" className="h-auto min-h-12 self-start px-[26px] py-2 text-center">
             {t("business.cta")}
           </ButtonLink>
         </div>
