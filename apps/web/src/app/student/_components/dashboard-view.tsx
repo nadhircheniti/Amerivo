@@ -171,6 +171,11 @@ function Dashboard({ o }: { o: Overview }) {
               <span className="text-[12px] text-muted" aria-hidden="true">
                 A1 · A2 · B1 · B2 · C1 · C2
               </span>
+              {o.level.placement === "skipped" && (
+                <Link href="/onboarding/test" className="text-[13px] font-semibold text-teal-dark hover:text-navy">
+                  {t("stats.estimatedTakeTest")}
+                </Link>
+              )}
             </>
           ) : (
             <>

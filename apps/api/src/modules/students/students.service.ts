@@ -47,27 +47,35 @@ export class StudentsService {
       .returning();
   }
 
-  async saveTestResult(studentId: string, scores: Partial<Record<"grammar" | "reading" | "listening" | "speaking", Cefr>>) {
-    const level = overallLevel(scores);
-    const [row] = await this.db
-      .insert(studentProfiles)
-      .values({ userId: studentId, placementScores: scores, cefrLevel: level })
-      .onConflictDoUpdate({ target: studentProfiles.userId, set: { placementScores: scores, cefrLevel: level } })
-      .returning();
-    return row;
-  }
-
   async recommendations(studentId: string) {
     const [profile] = await this.db.select().from(studentProfiles).where(eq(studentProfiles.userId, studentId));
     const teachers = await this.db
-      .select({ id: teacherProfiles.userId, slug: teacherProfiles.slug, firstName: users.firstName, lastName: users.lastName, specialties: teacherProfiles.specialties, yearsExperience: teacherProfiles.yearsExperience, ratingAvgX100: teacherProfiles.ratingAvg, ratingCount: teacherProfiles.ratingCount, gender: teacherProfiles.gender, priceCents: teacherProfiles.priceCents })
+      .select({
+        id: teacherProfiles.userId,
+        slug: teacherProfiles.slug,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        specialties: teacherProfiles.specialties,
+        yearsExperience: teacherProfiles.yearsExperience,
+        ratingAvgX100: teacherProfiles.ratingAvg,
+        ratingCount: teacherProfiles.ratingCount,
+        gender: teacherProfiles.gender,
+        priceCents: teacherProfiles.priceCents,
+        headline: teacherProfiles.headline,
+        avatarUrl: users.avatarUrl,
+        offersTrial: teacherProfiles.offersTrial,
+      })
       .from(teacherProfiles)
       .innerJoin(users, eq(users.id, teacherProfiles.userId))
       .where(and(eq(teacherProfiles.status, "approved"), eq(teacherProfiles.vacationMode, false)));
     const rules = await this.db.select().from(availabilityRules);
     const ranked = recommend(
       teachers.map((t) => ({ ...t, ratingAvg: t.ratingAvgX100 / 100, openBuckets: buckets(rules.filter((r) => r.teacherId === t.id)) })),
-      { goal: profile?.goal ?? null, preferredTimes: (profile?.preferredTimes ?? []) as TimeBucket[], preferredGender: profile?.preferredTeacherGender === "other" ? null : profile?.preferredTeacherGender },
+      {
+        goal: profile?.goal ?? null,
+        preferredTimes: (profile?.preferredTimes ?? []) as TimeBucket[],
+        preferredGender: profile?.preferredTeacherGender === "other" ? null : profile?.preferredTeacherGender,
+      },
     );
     return ranked.map((r) => ({ ...r, teacher: teachers.find((t) => t.id === r.teacherId)! }));
   }

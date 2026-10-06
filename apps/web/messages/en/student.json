@@ -84,7 +84,8 @@
       "lessonsLeftWith": "{count, plural, one {# lesson left with {name}} other {# lessons left with {name}}}",
       "morePacks": "{count, plural, one {+ # more pack} other {+ # more packs}}",
       "payAsYouGo": "Pay as you go",
-      "noPack": "No active lesson pack"
+      "noPack": "No active lesson pack",
+      "estimatedTakeTest": "Estimated · Take the test"
     },
     "upcoming": {
       "title": "Upcoming lessons",
@@ -299,7 +300,9 @@
     "openReport": "Open",
     "strengths": "Strengths",
     "toWorkOn": "To work on",
-    "recommendation": "Recommendation"
+    "recommendation": "Recommendation",
+    "seeCorrections": "See my test result and corrections",
+    "retakeTest": "Retake the level test"
   },
   "payments": {
     "title": "Payments",

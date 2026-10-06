@@ -85,7 +85,7 @@ export type PackageRow = {
   teacher: TeacherRef;
 };
 
-export type Level = { current: Cefr | null; target: Cefr | null; selfLevel: "beginner" | "intermediate" | "advanced" | null };
+export type Level = { current: Cefr | null; target: Cefr | null; selfLevel: "beginner" | "intermediate" | "advanced" | null; placement?: "not_started" | "skipped" | "completed" };
 
 export type Overview = {
   firstName: string;
@@ -105,7 +105,15 @@ export type Overview = {
   recentPayments: PaymentRow[];
 };
 
-export type Dispute = { id: string; bookingId: string; status: "open" | "refunded" | "rejected"; reason: string; resolution?: string | null; createdAt: string; resolvedAt?: string | null };
+export type Dispute = {
+  id: string;
+  bookingId: string;
+  status: "open" | "refunded" | "rejected";
+  reason: string;
+  resolution?: string | null;
+  createdAt: string;
+  resolvedAt?: string | null;
+};
 
 export type LessonDetail = StudentBooking & {
   lesson: { startedAt: string | null; endedAt: string | null; attendance: "attended" | "late" | "no_show" | null } | null;

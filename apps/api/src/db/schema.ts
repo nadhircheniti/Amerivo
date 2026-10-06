@@ -36,6 +36,8 @@ export const userStatus = pgEnum("user_status", ["pending_verification", "active
 export const learningGoal = pgEnum("learning_goal", ["business", "travel", "university", "immigration", "conversation"]);
 export const selfLevel = pgEnum("self_level", ["beginner", "intermediate", "advanced"]);
 export const cefrLevel = pgEnum("cefr_level", ["A1", "A2", "B1", "B2", "C1", "C2"]);
+export const placementStatus = pgEnum("placement_status", ["not_started", "skipped", "completed"]);
+export const placementAttemptStatus = pgEnum("placement_attempt_status", ["in_progress", "completed", "abandoned"]);
 export const genderPref = pgEnum("gender", ["female", "male", "other", "no_preference"]);
 export const teacherStatus = pgEnum("teacher_status", ["draft", "pending", "approved", "rejected", "suspended"]);
 export const identityStatus = pgEnum("identity_status", ["not_started", "pending", "verified", "failed"]);
@@ -85,11 +87,31 @@ export const studentProfiles = pgTable("student_profiles", {
   cefrLevel: cefrLevel("cefr_level"),
   /** Per-skill results of the placement test: { grammar, reading, listening, speaking } → CEFR */
   placementScores: jsonb("placement_scores").$type<Partial<Record<"grammar" | "reading" | "listening" | "speaking", string>>>(),
+  /** not_started → skipped (level = own estimate) or completed (level measured by the test) */
+  placementStatus: placementStatus("placement_status").notNull().default("not_started"),
+  placementCompletedAt: timestamp("placement_completed_at", { withTimezone: true }),
   preferredTeacherGender: genderPref("preferred_teacher_gender").default("no_preference"),
   /** morning | afternoon | evening | weekend */
   preferredTimes: text("preferred_times").array().notNull().default(sql`'{}'::text[]`),
   updatedAt: updatedAt(),
 });
+
+/** One run of the placement test. `state` holds the drawn questions and the graded stages (keys stay server-side). */
+export const placementAttempts = pgTable(
+  "placement_attempts",
+  {
+    id: id(),
+    studentId: uuid("student_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    status: placementAttemptStatus("status").notNull().default("in_progress"),
+    state: jsonb("state").$type<import("../domain/placement/engine").AttemptState>().notNull(),
+    result: jsonb("result").$type<import("../domain/placement/engine").PlacementResult>(),
+    startedAt: createdAt(),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+  },
+  (t) => [index("placement_attempts_student_idx").on(t.studentId, t.startedAt)],
+);
 
 /* --------------------------------------------------------------- teachers */
 export const teacherProfiles = pgTable(

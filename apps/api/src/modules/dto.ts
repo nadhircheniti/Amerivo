@@ -73,13 +73,6 @@ export class PlacementDto {
   @IsArray() @IsIn(["morning", "afternoon", "evening", "weekend"], { each: true }) preferredTimes!: ("morning" | "afternoon" | "evening" | "weekend")[];
 }
 
-const CEFR = ["A1", "A2", "B1", "B2", "C1", "C2"];
-export class TestResultDto {
-  @IsOptional() @IsIn(CEFR) grammar?: "A1";
-  @IsOptional() @IsIn(CEFR) reading?: "A1";
-  @IsOptional() @IsIn(CEFR) listening?: "A1";
-  @IsOptional() @IsIn(CEFR) speaking?: "A1";
-}
 
 export class RuleDto {
   @IsInt() @Min(1) @Max(7) weekday!: number;
