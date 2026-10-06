@@ -84,7 +84,8 @@
       "lessonsLeftWith": "{count, plural, one {Остался # урок с преподавателем {name}} few {Осталось # урока с преподавателем {name}} many {Осталось # уроков с преподавателем {name}} other {Осталось # урока с преподавателем {name}}}",
       "morePacks": "{count, plural, one {+ ещё # пакет} few {+ ещё # пакета} many {+ ещё # пакетов} other {+ ещё # пакета}}",
       "payAsYouGo": "Оплата за урок",
-      "noPack": "Нет активного пакета уроков"
+      "noPack": "Нет активного пакета уроков",
+      "estimatedTakeTest": "Примерно · Пройти тест"
     },
     "upcoming": {
       "title": "Ближайшие уроки",
@@ -299,7 +300,9 @@
     "openReport": "Открыть",
     "strengths": "Сильные стороны",
     "toWorkOn": "Над чем поработать",
-    "recommendation": "Рекомендация"
+    "recommendation": "Рекомендация",
+    "seeCorrections": "Мой результат и разбор ответов",
+    "retakeTest": "Пройти тест заново"
   },
   "payments": {
     "title": "Платежи",

@@ -84,7 +84,8 @@
       "lessonsLeftWith": "{count, plural, zero {لم يتبقَّ أي درس مع {name}} one {تبقّى درس واحد مع {name}} two {تبقّى درسان مع {name}} few {تبقّت # دروس مع {name}} many {تبقّى # درسًا مع {name}} other {تبقّى # درس مع {name}}}",
       "morePacks": "{count, plural, zero {+ # باقات أخرى} one {+ باقة أخرى} two {+ باقتان أخريان} few {+ # باقات أخرى} many {+ # باقة أخرى} other {+ # باقة أخرى}}",
       "payAsYouGo": "الدفع لكل درس",
-      "noPack": "لا توجد باقة دروس نشطة"
+      "noPack": "لا توجد باقة دروس نشطة",
+      "estimatedTakeTest": "تقديري · أجرِ الاختبار"
     },
     "upcoming": {
       "title": "الدروس القادمة",
@@ -299,7 +300,9 @@
     "openReport": "فتح",
     "strengths": "نقاط القوة",
     "toWorkOn": "نقاط للتحسين",
-    "recommendation": "التوصية"
+    "recommendation": "التوصية",
+    "seeCorrections": "عرض نتيجتي والتصحيحات",
+    "retakeTest": "إعادة اختبار المستوى"
   },
   "payments": {
     "title": "المدفوعات",

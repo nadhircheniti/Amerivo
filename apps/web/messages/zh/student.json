@@ -84,7 +84,8 @@
       "lessonsLeftWith": "{count, plural, other {与{name}还剩 # 节课}}",
       "morePacks": "{count, plural, other {另有 # 个课时包}}",
       "payAsYouGo": "按节付费",
-      "noPack": "没有生效中的课时包"
+      "noPack": "没有生效中的课时包",
+      "estimatedTakeTest": "估计等级 · 参加测试"
     },
     "upcoming": {
       "title": "即将开始的课程",
@@ -299,7 +300,9 @@
     "openReport": "查看",
     "strengths": "优点",
     "toWorkOn": "待提高",
-    "recommendation": "建议"
+    "recommendation": "建议",
+    "seeCorrections": "查看测试结果和解析",
+    "retakeTest": "重新进行水平测试"
   },
   "payments": {
     "title": "付款",

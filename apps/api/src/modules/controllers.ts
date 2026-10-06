@@ -27,7 +27,6 @@ import {
   ReviewDto,
   RulesDto,
   TeacherProfileDto,
-  TestResultDto,
   ToggleDto,
   UserStatusDto,
 } from "./dto";
@@ -159,9 +158,6 @@ export class StudentController {
 
   @Put("placement") placement(@CurrentUser() u: AuthUser, @Body() dto: PlacementDto) {
     return this.students.savePlacement(u.id, dto);
-  }
-  @Put("placement/result") result(@CurrentUser() u: AuthUser, @Body() dto: TestResultDto) {
-    return this.students.saveTestResult(u.id, dto as never);
   }
   @Get("recommendations") recommendations(@CurrentUser() u: AuthUser) {
     return this.students.recommendations(u.id);

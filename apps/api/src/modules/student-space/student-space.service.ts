@@ -133,7 +133,7 @@ export class StudentSpaceService {
   private levels(profile: typeof studentProfiles.$inferSelect | undefined) {
     const current = profile?.cefrLevel ?? null;
     const i = current ? CEFR.indexOf(current) : -1;
-    return { current, target: i >= 0 ? CEFR[Math.min(i + 1, CEFR.length - 1)] : null, selfLevel: profile?.selfLevel ?? null };
+    return { current, target: i >= 0 ? CEFR[Math.min(i + 1, CEFR.length - 1)] : null, selfLevel: profile?.selfLevel ?? null, placement: profile?.placementStatus ?? "not_started" };
   }
 
   private async completedStats(studentId: string, tz: string) {

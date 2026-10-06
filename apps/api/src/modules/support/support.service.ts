@@ -119,7 +119,7 @@ export class SupportService {
       .from(supportMessages)
       .leftJoin(users, eq(users.id, supportMessages.userId))
       .where(eq(supportMessages.id, id));
-    if (!row) throw notFound("Message not found");
+    if (!row) throw notFound("Message");
     const replies = await this.db
       .select({ r: supportReplies, firstName: users.firstName, lastName: users.lastName })
       .from(supportReplies)
@@ -143,7 +143,7 @@ export class SupportService {
 
   async reply(admin: AuthUser, id: string, body: string) {
     const [m] = await this.db.select().from(supportMessages).where(eq(supportMessages.id, id));
-    if (!m) throw notFound("Message not found");
+    if (!m) throw notFound("Message");
     const text = body.trim();
     let emailed = false;
     let emailError: string | null = null;
@@ -167,7 +167,7 @@ export class SupportService {
 
   async setStatus(admin: AuthUser, id: string, status: SupportStatus) {
     const [m] = await this.db.update(supportMessages).set({ status }).where(eq(supportMessages.id, id)).returning({ id: supportMessages.id });
-    if (!m) throw notFound("Message not found");
+    if (!m) throw notFound("Message");
     await this.db.insert(auditLogs).values({ actorId: admin.id, action: `support.${status}`, entity: "support_message", entityId: id });
     return { id, status };
   }

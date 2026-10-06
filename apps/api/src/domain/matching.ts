@@ -31,8 +31,13 @@ const goalSpecialties: Record<Goal, string[]> = {
   conversation: ["Conversation", "General English"],
 };
 
+/** Machine-readable reason (translated by the website). */
+export type ReasonCode =
+  { id: "specialist"; specialty: string } | { id: "times"; buckets: TimeBucket[] } | { id: "experience"; years: number } | { id: "topRated"; rating: number };
+
 export function scoreTeacher(t: MatchTeacher, s: MatchStudent) {
   const reasons: string[] = [];
+  const codes: ReasonCode[] = [];
   let score = 0;
 
   if (s.goal) {
@@ -41,6 +46,7 @@ export function scoreTeacher(t: MatchTeacher, s: MatchStudent) {
     if (hit) {
       score += 40;
       reasons.push(`${hit} specialist`);
+      codes.push({ id: "specialist", specialty: hit });
     }
   }
 
@@ -48,6 +54,7 @@ export function scoreTeacher(t: MatchTeacher, s: MatchStudent) {
   if (s.preferredTimes.length && overlap.length) {
     score += 25 * (overlap.length / s.preferredTimes.length);
     reasons.push(`Available in your preferred times (${overlap.join(", ")})`);
+    codes.push({ id: "times", buckets: overlap });
   }
 
   if (s.preferredGender && s.preferredGender !== "no_preference" && t.gender && t.gender !== s.preferredGender) {
@@ -61,9 +68,13 @@ export function scoreTeacher(t: MatchTeacher, s: MatchStudent) {
   score += (smoothed / 5) * 25;
 
   score += Math.min(t.yearsExperience, 10);
-  if (t.yearsExperience >= 8) reasons.push(`${t.yearsExperience} years of experience`);
+  if (t.yearsExperience >= 8) {
+    reasons.push(`${t.yearsExperience} years of experience`);
+    codes.push({ id: "experience", years: t.yearsExperience });
+  }
+  if (t.ratingCount >= 3 && t.ratingAvg >= 4.8) codes.push({ id: "topRated", rating: t.ratingAvg });
 
-  return { score: Math.round(score * 10) / 10, reasons };
+  return { score: Math.round(score * 10) / 10, reasons, codes };
 }
 
 export function recommend(teachers: MatchTeacher[], student: MatchStudent, limit = 3) {

@@ -1,11 +1,15 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ButtonLink } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Segmented } from "@/components/ui/form";
+import { API_URL } from "@/lib/api";
 import { cn } from "@/lib/cn";
+import { useApi } from "@/lib/use-api";
+import type { PlacementStatus } from "../_lib/types";
 
 const goals = ["business", "travel", "university", "immigration", "conversation"] as const;
 
@@ -39,16 +43,59 @@ function Group({ legend, children, className }: { legend: string; children: Reac
 
 export function GoalsForm() {
   const t = useTranslations("onboarding.goals");
+  const router = useRouter();
+  const { call, isLoaded, isSignedIn } = useApi();
   const [goal, setGoal] = useState<string>("business");
   const [level, setLevel] = useState<Level>("intermediate");
   const [teacher, setTeacher] = useState<string>("none");
   const [times, setTimes] = useState<string[]>(["evening", "weekend"]);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const toggleTime = (id: string) => setTimes((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
-  // TODO(api): persist answers to the student profile before moving on to the level test.
+  // Pre-fill with what the student already answered (coming back from the dashboard).
+  useEffect(() => {
+    if (!API_URL || !isLoaded || !isSignedIn) return;
+    let cancelled = false;
+    call<PlacementStatus>("/student/placement")
+      .then((p) => {
+        if (cancelled || !p.goal) return;
+        setGoal(p.goal);
+        if (p.selfLevel) setLevel(p.selfLevel);
+        setTeacher(p.preferredTeacherGender === "female" || p.preferredTeacherGender === "male" ? p.preferredTeacherGender : "none");
+        setTimes(p.preferredTimes);
+      })
+      .catch(() => undefined); // keep the defaults
+    return () => {
+      cancelled = true;
+    };
+  }, [call, isLoaded, isSignedIn]);
+
+  async function save() {
+    if (!API_URL) return router.push("/onboarding/test");
+    setSaving(true);
+    setError(null);
+    try {
+      await call("/student/placement", {
+        method: "PUT",
+        body: JSON.stringify({ goal, selfLevel: level, preferredTeacherGender: teacher === "none" ? "no_preference" : teacher, preferredTimes: times }),
+      });
+      router.push("/onboarding/test");
+    } catch {
+      setError(t("saveError"));
+      setSaving(false);
+    }
+  }
+
   return (
-    <form className="flex flex-col gap-[30px]" onSubmit={(e) => e.preventDefault()}>
+    <form
+      className="flex flex-col gap-[30px]"
+      onSubmit={(e) => {
+        e.preventDefault();
+        void save();
+      }}
+    >
       <Group legend={t("whyLegend")}>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {goals.map((g) => (
@@ -93,13 +140,18 @@ export function GoalsForm() {
         </Group>
       </div>
 
+      {error && (
+        <p role="alert" className="rounded-2xl bg-danger-100 px-5 py-4 text-sm font-semibold text-danger-text">
+          {error}
+        </p>
+      )}
       <div className="flex items-center justify-between gap-4 border-t border-line-soft pt-6">
-        <Link href="/verify-email" className="text-[15px] font-semibold text-teal-dark hover:text-navy">
+        <Link href="/student" className="text-[15px] font-semibold text-teal-dark hover:text-navy">
           {t("back")}
         </Link>
-        <ButtonLink href="/onboarding/results" variant="teal" size="lg" className="px-9 font-bold">
-          {t("continue")}
-        </ButtonLink>
+        <Button type="submit" variant="teal" size="lg" className="px-9 font-bold" disabled={saving}>
+          {saving ? t("saving") : t("continue")}
+        </Button>
       </div>
     </form>
   );

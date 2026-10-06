@@ -119,11 +119,12 @@ describe("Amerivo API", () => {
     assert.equal(res.body.status, "active");
     await http().post("/api/me/register").set(as("clerk_maria")).send({ role: "student", email: "maria@example.com", firstName: "Maria", lastName: "Silva", timezone: "Europe/Zurich", birthDate: "1994-05-12" }).expect(409);
     await http().put("/api/student/placement").set(as("clerk_maria")).send({ goal: "business", selfLevel: "intermediate", preferredTeacherGender: "no_preference", preferredTimes: ["morning"] }).expect(200);
-    const result = await http().put("/api/student/placement/result").set(as("clerk_maria")).send({ grammar: "B1", reading: "B2", listening: "B1", speaking: "A2" }).expect(200);
-    assert.equal(result.body.cefrLevel, "B1");
+    // The level can no longer be self-reported: it comes from the graded test (see placement.e2e).
+    await http().put("/api/student/placement/result").set(as("clerk_maria")).send({ grammar: "C2" }).expect(404);
     const recs = await http().get("/api/student/recommendations").set(as("clerk_maria")).expect(200);
     assert.equal(recs.body[0].teacher.slug, "sarah-mitchell");
     assert.ok(recs.body[0].reasons.includes("Business English specialist"));
+    assert.deepEqual(recs.body[0].codes[0], { id: "specialist", specialty: "Business English" });
   });
 
   it("roles are enforced", async () => {

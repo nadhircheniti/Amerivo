@@ -84,7 +84,8 @@
       "lessonsLeftWith": "{count, plural, one {# cours restant avec {name}} other {# cours restants avec {name}}}",
       "morePacks": "{count, plural, one {+ # autre forfait} other {+ # autres forfaits}}",
       "payAsYouGo": "Paiement à l'unité",
-      "noPack": "Aucun forfait actif"
+      "noPack": "Aucun forfait actif",
+      "estimatedTakeTest": "Estimé · Passer le test"
     },
     "upcoming": {
       "title": "Cours à venir",
@@ -299,7 +300,9 @@
     "openReport": "Ouvrir",
     "strengths": "Points forts",
     "toWorkOn": "À travailler",
-    "recommendation": "Conseil"
+    "recommendation": "Conseil",
+    "seeCorrections": "Voir mon résultat et les corrections",
+    "retakeTest": "Repasser le test de niveau"
   },
   "payments": {
     "title": "Paiements",

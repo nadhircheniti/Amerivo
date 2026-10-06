@@ -84,7 +84,8 @@
       "lessonsLeftWith": "{count, plural, one {Te queda # clase con {name}} other {Te quedan # clases con {name}}}",
       "morePacks": "{count, plural, one {+ # paquete más} other {+ # paquetes más}}",
       "payAsYouGo": "Pago por clase",
-      "noPack": "Sin paquete de clases activo"
+      "noPack": "Sin paquete de clases activo",
+      "estimatedTakeTest": "Estimado · Hacer la prueba"
     },
     "upcoming": {
       "title": "Próximas clases",
@@ -299,7 +300,9 @@
     "openReport": "Abrir",
     "strengths": "Fortalezas",
     "toWorkOn": "Por mejorar",
-    "recommendation": "Recomendación"
+    "recommendation": "Recomendación",
+    "seeCorrections": "Ver mi resultado y las correcciones",
+    "retakeTest": "Repetir la prueba de nivel"
   },
   "payments": {
     "title": "Pagos",

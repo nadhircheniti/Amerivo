@@ -37,7 +37,11 @@ function ProgressBody({ p }: { p: Progress }) {
         <StatTile label={t("totalHours")} value={f.num(p.totalHours, 1)} hint={t("thisMonth", { hours: f.num(p.hoursThisMonth, 1) })} />
         <StatTile label={t("lessonsCompleted")} value={f.num(p.lessonsCompleted)} />
         <StatTile label={t("teachers")} value={f.num(p.teachersCount)} />
-        <StatTile label={t("currentLevel")} value={p.level.current ?? "—"} hint={p.level.target && p.level.target !== p.level.current ? t("nextGoal", { level: p.level.target }) : undefined} />
+        <StatTile
+          label={t("currentLevel")}
+          value={p.level.current ?? "—"}
+          hint={p.level.target && p.level.target !== p.level.current ? t("nextGoal", { level: p.level.target }) : undefined}
+        />
       </section>
 
       <div className="grid gap-5 lg:grid-cols-2">
@@ -80,6 +84,16 @@ function ProgressBody({ p }: { p: Progress }) {
                   </ul>
                 </div>
               )}
+              <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+                {p.level.placement === "completed" && (
+                  <Link href="/onboarding/results" className="font-semibold text-teal-dark hover:text-navy">
+                    {t("seeCorrections")}
+                  </Link>
+                )}
+                <Link href="/onboarding/test" className="font-semibold text-teal-dark hover:text-navy">
+                  {p.level.placement === "skipped" ? t("takeTest") : t("retakeTest")}
+                </Link>
+              </div>
               <ul className="flex flex-col gap-1.5 border-t border-line-soft pt-3 text-sm">
                 {p.levelHistory.map((h, i) => (
                   <li key={i} className="flex justify-between gap-3">
@@ -94,7 +108,7 @@ function ProgressBody({ p }: { p: Progress }) {
           ) : (
             <div className="flex flex-col items-start gap-3">
               <p className="text-sm text-navy-soft">{t("noLevel")}</p>
-              <ButtonLink href="/onboarding/goals" size="sm" variant="teal">
+              <ButtonLink href="/onboarding/test" size="sm" variant="teal">
                 {t("takeTest")}
               </ButtonLink>
             </div>

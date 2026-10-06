@@ -67,7 +67,7 @@ describe("student space — overview", () => {
     const o = res.body;
     assert.equal(o.firstName, "Maria");
     assert.equal(o.timezone, "Europe/Zurich");
-    assert.deepEqual(o.level, { current: "B1", target: "B2", selfLevel: null });
+    assert.deepEqual(o.level, { current: "B1", target: "B2", selfLevel: null, placement: "not_started" });
     assert.equal(o.lessonsCompleted, 2);
     assert.equal(o.hoursStudied, 1.7); // 100 min
     assert.equal(o.teachersCount, 2);
