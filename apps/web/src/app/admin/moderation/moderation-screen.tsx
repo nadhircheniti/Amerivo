@@ -11,8 +11,8 @@ import { errorText, isLive, useAdminData } from "../_components/live/use-admin-d
 
 const TABS: ModerationStatus[] = ["open", "warned", "blocked", "dismissed"];
 const STATUS_TONE: Record<ModerationStatus, BadgeTone> = { open: "warning", warned: "orange", blocked: "danger", dismissed: "neutral" };
-const TYPES = ["email", "phone", "link", "handle", "app"] as const;
-const TYPE_TONE: Record<(typeof TYPES)[number], BadgeTone> = { email: "danger", phone: "danger", link: "danger", handle: "danger", app: "info" };
+const TYPES = ["email", "phone", "link", "handle", "app", "report"] as const;
+const TYPE_TONE: Record<(typeof TYPES)[number], BadgeTone> = { email: "danger", phone: "danger", link: "danger", handle: "danger", app: "info", report: "lilac" };
 const knownType = (s: string): s is (typeof TYPES)[number] => (TYPES as readonly string[]).includes(s);
 
 const sample: ModerationList = {
@@ -135,7 +135,7 @@ function FlagCard({ flag: f, onChanged }: { flag: ModerationFlag; onChanged: (no
               </span>
             </>
           )}
-          {f.recipient && (
+          {f.recipient && f.context !== "report" && (
             <>
               {" → "}
               <strong>{fullName(f.recipient)}</strong> <span className="text-muted">({t(`roles.${f.recipient.role}`)})</span>
@@ -157,19 +157,30 @@ function FlagCard({ flag: f, onChanged }: { flag: ModerationFlag; onChanged: (no
         {f.senderFlags30d > 1 && <Badge tone="danger">{t("repeat", { count: f.senderFlags30d })}</Badge>}
         {f.sender.status === "blocked" && <Badge tone="danger">{t("accountBlocked")}</Badge>}
       </div>
-      <dl className="grid gap-2 text-[13px] sm:grid-cols-2">
+      {f.context === "report" && (
+        <p className="text-[13px] text-navy">
+          {t.rich("reportedBy", {
+            name: f.reporter ? `${fullName(f.reporter)} (${t(`roles.${f.reporter.role}`)})` : "—",
+            reason: f.reason ? t(`reasons.${f.reason}`) : "—",
+            b: (c) => <strong>{c}</strong>,
+          })}
+        </p>
+      )}
+      <dl className={f.context === "report" ? "grid gap-2 text-[13px]" : "grid gap-2 text-[13px] sm:grid-cols-2"}>
         <div className="rounded-xl bg-white p-3">
-          <dt className="mb-1 font-semibold text-muted">{t("original")}</dt>
+          <dt className="mb-1 font-semibold text-muted">{f.context === "report" ? t("reportDetails") : t("original")}</dt>
           <dd dir="auto" className="break-words whitespace-pre-line text-navy">
             {f.originalText}
           </dd>
         </div>
-        <div className="rounded-xl bg-white p-3">
-          <dt className="mb-1 font-semibold text-muted">{t("delivered")}</dt>
-          <dd dir="auto" className="break-words whitespace-pre-line text-navy">
-            {f.deliveredText ?? t("notDelivered")}
-          </dd>
-        </div>
+        {f.context !== "report" && (
+          <div className="rounded-xl bg-white p-3">
+            <dt className="mb-1 font-semibold text-muted">{t("delivered")}</dt>
+            <dd dir="auto" className="break-words whitespace-pre-line text-navy">
+              {f.deliveredText ?? t("notDelivered")}
+            </dd>
+          </div>
+        )}
       </dl>
       {f.reviewNote && <p className="text-[13px] text-navy-soft">{t("reviewNote", { note: f.reviewNote })}</p>}
 
@@ -207,7 +218,7 @@ function FlagCard({ flag: f, onChanged }: { flag: ModerationFlag; onChanged: (no
         />
       ) : (
         <div className="flex flex-wrap items-center gap-2">
-          {(f.context === "message" || f.context === "lesson_chat") && !context && (
+          {(f.context === "message" || f.context === "lesson_chat" || (f.context === "report" && (f.conversationId || f.bookingId))) && !context && (
             <Button variant="outline" size="sm" className="h-[38px] px-3.5 text-[13px]" onClick={() => void showContext()}>
               {t("showContext")}
             </Button>

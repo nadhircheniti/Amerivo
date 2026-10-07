@@ -175,7 +175,7 @@ export type Badges = { pendingApplications: number; openDisputes: number; openSu
 
 /* ---------- Trust & safety (contact details detected in user-to-user texts) ---------- */
 export type ModerationStatus = "open" | "dismissed" | "warned" | "blocked";
-export type ModerationContext = "message" | "lesson_chat" | "lesson_notes" | "lesson_report" | "review" | "profile" | "material" | "booking";
+export type ModerationContext = "message" | "lesson_chat" | "lesson_notes" | "lesson_report" | "review" | "profile" | "material" | "booking" | "report";
 export type ModerationPerson = { id: string; firstName: string; lastName: string; role: "student" | "teacher" | "admin"; email?: string; status?: string };
 export type ModerationFlag = {
   id: string;
@@ -191,6 +191,9 @@ export type ModerationFlag = {
   createdAt: string;
   sender: ModerationPerson;
   recipient: ModerationPerson | null;
+  /** context "report": who reported `sender` and why. */
+  reporter?: ModerationPerson | null;
+  reason?: "harassment" | "inappropriate" | "contact_sharing" | "off_platform" | "no_show" | "other" | null;
   senderFlags30d: number;
 };
 export type ModerationList = { items: ModerationFlag[]; total: number; page: number; pageSize: number };

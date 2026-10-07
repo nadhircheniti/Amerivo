@@ -9,6 +9,7 @@ import type apply from "../../messages/en/apply.json";
 import type admin from "../../messages/en/admin.json";
 import type classroom from "../../messages/en/classroom.json";
 import type messaging from "../../messages/en/messaging.json";
+import type company from "../../messages/en/company.json";
 import type { Locale } from "./config";
 
 /** English files are the reference: t("…") keys are type-checked against them. */
@@ -27,6 +28,7 @@ declare module "next-intl" {
       admin: typeof admin;
       classroom: typeof classroom;
       messaging: typeof messaging;
+      company: typeof company;
     };
   }
 }

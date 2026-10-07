@@ -767,14 +767,16 @@
       "review": "Reseña",
       "profile": "Perfil del profesor",
       "material": "Documento",
-      "booking": "Tema de la clase"
+      "booking": "Tema de la clase",
+      "report": "Reporte de usuario"
     },
     "types": {
       "email": "Correo electrónico",
       "phone": "Teléfono",
       "link": "Enlace",
       "handle": "Usuario de red social",
-      "app": "Aplicación de mensajería"
+      "app": "Aplicación de mensajería",
+      "report": "Reporte"
     },
     "repeat": "{count} reportes en 30 días",
     "accountBlocked": "Cuenta bloqueada",
@@ -802,6 +804,16 @@
       "dismiss": "Se descartó el reporte sobre {name}.",
       "warn": "Se advirtió a {name}.",
       "block": "La cuenta de {name} está bloqueada."
+    },
+    "reportedBy": "Reportado por <b>{name}</b> · Motivo: <b>{reason}</b>",
+    "reportDetails": "Lo que escribió quien reportó",
+    "reasons": {
+      "harassment": "Acoso",
+      "inappropriate": "Comportamiento inapropiado",
+      "contact_sharing": "Datos de contacto",
+      "off_platform": "Clases o pagos fuera de la plataforma",
+      "no_show": "No se presentó",
+      "other": "Otro"
     }
   },
   "materialsPage": {

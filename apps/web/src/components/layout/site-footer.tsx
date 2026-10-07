@@ -15,13 +15,14 @@ const columns = [
     title: "teach",
     links: [
       { href: "/teach/apply", key: "becomeTeacher" },
-      { href: "/teach/apply#faq", key: "teacherFaq" },
+      { href: "/faq#teachers", key: "teacherFaq" },
     ],
   },
   {
     title: "company",
     links: [
       { href: "/about", key: "about" },
+      { href: "/faq", key: "faq" },
       { href: "/contact", key: "contact" },
       { href: "/privacy", key: "privacy" },
       { href: "/terms", key: "terms" },

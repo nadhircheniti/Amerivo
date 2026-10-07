@@ -286,7 +286,8 @@
       "billing": "المدفوعات والفواتير",
       "business": "الشركات",
       "technical": "مشكلة تقنية"
-    }
+    },
+    "phoneLabel": "اتصل بنا"
   },
   "terms": {
     "metaTitle": "شروط الخدمة",

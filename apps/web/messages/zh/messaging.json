@@ -76,5 +76,28 @@
     "contactHidden": "你的部分消息已被隐藏：Amerivo 禁止分享联系方式（邮箱、电话、链接、社交媒体）。",
     "termsLink": "查看规则",
     "safetyNotice": "为保障所有人的安全，消息会经过自动检查。所有课程和付款都须在 Amerivo 上进行。"
+  },
+  "report": {
+    "button": "举报",
+    "title": "举报 {name}",
+    "intro": "请告诉我们发生了什么。我们的团队会对每一条举报进行保密审核，不会告知对方是谁举报的。",
+    "reasonLabel": "遇到了什么问题？",
+    "reasons": {
+      "harassment": "骚扰、辱骂或威胁",
+      "inappropriate": "不当行为或性相关行为",
+      "contact_sharing": "索要或分享个人联系方式",
+      "off_platform": "提议在 Amerivo 之外上课或付款",
+      "no_show": "未到场 / 未上课",
+      "other": "其他问题"
+    },
+    "detailsLabel": "详细情况",
+    "detailsPlaceholder": "发生了什么？是什么时候？",
+    "urgent": "如果有人正面临紧急危险，请先联系当地紧急服务。",
+    "submit": "提交举报",
+    "sending": "正在提交…",
+    "cancel": "取消",
+    "sent": "谢谢。你的举报已发送给 Amerivo 团队，我们会进行审核。",
+    "close": "关闭",
+    "error": "举报提交失败，请重试。"
   }
 }

@@ -767,14 +767,16 @@
       "review": "تقييم",
       "profile": "الملف الشخصي للمعلم",
       "material": "مستند",
-      "booking": "موضوع الدرس"
+      "booking": "موضوع الدرس",
+      "report": "بلاغ من مستخدم"
     },
     "types": {
       "email": "البريد الإلكتروني",
       "phone": "الهاتف",
       "link": "رابط",
       "handle": "معرّف على وسائل التواصل",
-      "app": "تطبيق مراسلة"
+      "app": "تطبيق مراسلة",
+      "report": "بلاغ"
     },
     "repeat": "{count} بلاغات خلال 30 يومًا",
     "accountBlocked": "الحساب محظور",
@@ -802,6 +804,16 @@
       "dismiss": "تم رفض البلاغ بشأن {name}.",
       "warn": "تم تحذير {name}.",
       "block": "تم حظر حساب {name}."
+    },
+    "reportedBy": "أبلغ عنه <b>{name}</b> · السبب: <b>{reason}</b>",
+    "reportDetails": "ما كتبه المُبلِّغ",
+    "reasons": {
+      "harassment": "تحرّش",
+      "inappropriate": "سلوك غير لائق",
+      "contact_sharing": "معلومات الاتصال",
+      "off_platform": "دروس أو مدفوعات خارج المنصة",
+      "no_show": "عدم الحضور",
+      "other": "أخرى"
     }
   },
   "materialsPage": {

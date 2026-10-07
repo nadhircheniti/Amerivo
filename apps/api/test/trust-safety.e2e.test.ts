@@ -233,6 +233,35 @@ describe("trust & safety", () => {
     });
   });
 
+  describe("report button", () => {
+    it("a student reports the teacher of their lesson; admins see who, why and the classroom chat", async () => {
+      const body = { reportedUserId: teacher.id, reason: "inappropriate", details: "Asked me to pay him directly on PayPal.", bookingId };
+      await http().post("/api/reports").set(as("clerk_ts_s")).send({ ...body, reason: "bad" }).expect(400);
+      await http().post("/api/reports").set(as("clerk_ts_s")).send({ ...body, details: "short" }).expect(400);
+      await http().post("/api/reports").set(as("clerk_ts_s")).send({ ...body, reportedUserId: student.id }).expect(400);
+      await http().post("/api/reports").set(as("clerk_ts_other")).send(body).expect(403); // not their lesson
+      await http().post("/api/reports").set(as("clerk_ts_admin")).send(body).expect(403); // students and teachers only
+      const { body: created } = await http().post("/api/reports").set(as("clerk_ts_s")).send(body).expect(201);
+
+      const list = await http().get("/api/admin/moderation?status=open").set(as("clerk_ts_admin")).expect(200);
+      const r = list.body.items.find((f: { id: string }) => f.id === created.id);
+      assert.equal(r.context, "report");
+      assert.equal(r.reason, "inappropriate");
+      assert.equal(r.sender.id, teacher.id, "the reported user");
+      assert.equal(r.reporter.id, student.id);
+      assert.match(r.originalText, /PayPal/);
+      const ctx = await http().get(`/api/admin/moderation/${created.id}/context`).set(as("clerk_ts_admin")).expect(200);
+      assert.equal(ctx.body.kind, "lesson_chat");
+      assert.ok(ctx.body.messages.length >= 1);
+    });
+
+    it("a teacher can report a student from their conversation", async () => {
+      const [c] = await h.db.select().from(h.schema.conversations).where(eq(h.schema.conversations.studentId, student.id));
+      await http().post("/api/reports").set(as("clerk_ts_t")).send({ reportedUserId: student.id, reason: "harassment", details: "Insulting messages after the lesson.", conversationId: c.id }).expect(201);
+      await http().post("/api/reports").set(as("clerk_ts_t")).send({ reportedUserId: student.id, reason: "harassment", details: "Insulting messages after the lesson." }).expect(400);
+    });
+  });
+
   describe("teaching documents", () => {
     let materialId: string;
     let fileUrl: string;

@@ -4,21 +4,10 @@
  * ⚠ Before launch: complete the [BRACKETED] values in lib/legal.ts and have a US-licensed attorney
  * review this text, in particular §8 (non-circumvention fees) and §19 (arbitration).
  */
-import type { ReactNode } from "react";
+import { B, Caps, L, P, type LegalSection } from "@/components/legal/legal-document";
 import { COMPANY, NON_CIRCUMVENTION as NC, PLATFORM_RULES as R } from "@/lib/legal";
 
-export type TermsSection = { id: string; title: string; body: ReactNode };
-
-const P = ({ children }: { children: ReactNode }) => <p>{children}</p>;
-const L = ({ items }: { items: ReactNode[] }) => (
-  <ul className="list-disc space-y-1.5 ps-6">
-    {items.map((it, i) => (
-      <li key={i}>{it}</li>
-    ))}
-  </ul>
-);
-const B = ({ children }: { children: ReactNode }) => <strong className="font-semibold text-navy">{children}</strong>;
-const Caps = ({ children }: { children: ReactNode }) => <p className="font-semibold tracking-[0.01em] text-navy uppercase">{children}</p>;
+export type TermsSection = LegalSection;
 
 const fee = `US$${NC.minimumFeeUsd.toLocaleString("en-US")}`;
 
@@ -227,7 +216,7 @@ export const termsSections: TermsSection[] = [
           described above. You agree that this amount is a reasonable estimate of Amerivo’s lost commission and costs. This fee does not limit any other remedy available to
           Amerivo under these Terms or the law, including injunctive relief.
         </P>
-        <P>If another User asks you to communicate or pay outside Amerivo, please decline and report it to {COMPANY.email}. Reports are treated confidentially.</P>
+        <P>If another User asks you to communicate or pay outside Amerivo, please decline and report it with the “Report” button (in your messages or in the classroom) or to {COMPANY.email}. Reports are treated confidentially.</P>
       </>
     ),
   },
@@ -434,7 +423,7 @@ export const termsSections: TermsSection[] = [
     title: "23. Contact",
     body: (
       <P>
-        {COMPANY.legalName} · {COMPANY.address} · {COMPANY.email}
+        {COMPANY.legalName} · {COMPANY.address} · {COMPANY.email} · {COMPANY.phone}
       </P>
     ),
   },
