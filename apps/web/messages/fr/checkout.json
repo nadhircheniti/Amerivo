@@ -26,7 +26,16 @@
     "afterJoin": "Rejoignez le cours depuis votre tableau de bord, sans téléchargement",
     "ctaFree": "Confirmer le cours d'essai gratuit",
     "ctaPayLesson": "Payer {amount} et confirmer le cours",
-    "ctaPayPackage": "Payer {amount} et confirmer le forfait"
+    "ctaPayPackage": "Payer {amount} et confirmer le forfait",
+    "promoApplied": "Code {code} : −{percent} %",
+    "promoRemove": "Retirer",
+    "promoChecking": "Vérification…",
+    "promoSignIn": "Connectez-vous pour utiliser un code promo.",
+    "promoInvalid": "Ce code n’est pas valide ou a déjà été utilisé.",
+    "promoTooMany": "Trop de tentatives. Veuillez patienter une minute et réessayer.",
+    "promoError": "Nous n’avons pas pu vérifier ce code. Veuillez réessayer.",
+    "promoDiscount": "Code promo (−{percent} %)",
+    "ctaFreeWithCode": "Confirmer mon cours gratuit"
   },
   "order": {
     "trial": "Essai gratuit · 20 min",

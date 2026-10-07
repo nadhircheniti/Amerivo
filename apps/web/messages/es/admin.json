@@ -10,7 +10,8 @@
     "settings": "Configuración y registro de auditoría",
     "signedIn2fa": "Sesión iniciada con 2FA",
     "moderation": "Reportes de seguridad",
-    "materials": "Documentos de profesores"
+    "materials": "Documentos de profesores",
+    "discounts": "Códigos de descuento"
   },
   "overview": {
     "metaTitle": "Analíticas de la plataforma · Amerivo Admin",
@@ -848,5 +849,49 @@
     "rejectPlaceholder": "Por ejemplo: el documento contiene un número de teléfono.",
     "noticeApproved": "\"{title}\" se aprobó y se compartió con los estudiantes del profesor.",
     "noticeRejected": "\"{title}\" se rechazó. Se notificó al profesor."
+  },
+  "discountsPage": {
+    "metaTitle": "Códigos de descuento",
+    "title": "Códigos de descuento",
+    "subtitle": "Códigos de un solo uso: un porcentaje de descuento en una clase o un paquete. Amerivo asume el descuento — los profesores cobran el precio completo.",
+    "what": "los códigos de descuento",
+    "createTitle": "Nuevo código",
+    "createHint": "Cada código se puede usar una sola vez, por un solo estudiante. Deja el código vacío para generar uno aleatorio imposible de adivinar.",
+    "percentLabel": "Descuento",
+    "percentInvalid": "Introduce un porcentaje entero entre 1 y 100.",
+    "codeLabel": "Código (opcional)",
+    "codePlaceholder": "Aleatorio, p. ej. AMV-7KQ2-XH9M",
+    "noteLabel": "Nota (solo la ven los administradores)",
+    "notePlaceholder": "Para quién es y por qué",
+    "expiresLabel": "Válido hasta (opcional)",
+    "create": "Crear código",
+    "creating": "Creando…",
+    "createError": "No se pudo crear el código. Inténtalo de nuevo.",
+    "created": "Código {code} creado. Cópialo y envíaselo al estudiante.",
+    "listTitle": "Códigos",
+    "summary": "{used, plural, =0 {Ningún código usado todavía} one {# código usado} other {# códigos usados}} · {amount} en descuentos otorgados",
+    "empty": "Aún no hay códigos de descuento.",
+    "colCode": "Código",
+    "colPercent": "Descuento",
+    "colStatus": "Estado",
+    "colUsedBy": "Usado por",
+    "colNote": "Nota",
+    "colCreated": "Creado",
+    "colExpires": "Válido hasta",
+    "colActions": "Acciones",
+    "percentValue": "−{percent} %",
+    "status": {
+      "available": "Disponible",
+      "reserved": "Pago pendiente",
+      "used": "Usado",
+      "disabled": "Desactivado",
+      "expired": "Caducado"
+    },
+    "never": "Sin fecha de fin",
+    "disable": "Desactivar",
+    "disableConfirm": "¿Desactivar {code}? Nadie podrá usarlo.",
+    "disabled": "Código {code} desactivado.",
+    "copy": "Copiar",
+    "copied": "Copiado"
   }
 }

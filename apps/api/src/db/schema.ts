@@ -214,6 +214,32 @@ export const blockedDates = pgTable("blocked_dates", {
 
 /* --------------------------------------------------------------- commerce */
 /** A purchased bundle of lessons with one teacher (1, 5 or 10 lessons). */
+/* ---------------------------------------------------------------- discount codes */
+/**
+ * One-time discount codes created by an admin (a percentage, 1–100 %, usable once in total).
+ * A code is "claimed" when a booking/package is created with it; it is given back if that order is
+ * never paid or the lesson is cancelled. Amerivo bears the discount: the teacher's share is
+ * computed on the full price (bookings.earning_base_cents).
+ */
+export const discountCodes = pgTable(
+  "discount_codes",
+  {
+    id: id(),
+    /** Stored upper-case, without spaces. */
+    code: text("code").notNull().unique(),
+    percent: smallint("percent").notNull(),
+    /** Admin's internal note (who it is for, why). */
+    note: text("note"),
+    createdBy: uuid("created_by").references(() => users.id, { onDelete: "set null" }),
+    createdAt: createdAt(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }),
+    disabledAt: timestamp("disabled_at", { withTimezone: true }),
+    claimedAt: timestamp("claimed_at", { withTimezone: true }),
+    claimedBy: uuid("claimed_by").references(() => users.id, { onDelete: "set null" }),
+  },
+  (t) => [check("discount_percent_range", sql`${t.percent} between 1 and 100`)],
+);
+
 export const lessonPackages = pgTable("lesson_packages", {
   id: id(),
   studentId: uuid("student_id")
@@ -227,6 +253,9 @@ export const lessonPackages = pgTable("lesson_packages", {
   unitPriceCents: integer("unit_price_cents").notNull(),
   discountPct: smallint("discount_pct").notNull().default(0),
   totalCents: integer("total_cents").notNull(),
+  /** Discount code used for this package, and its price before that code (the teacher is paid on it). */
+  discountCodeId: uuid("discount_code_id").references(() => discountCodes.id),
+  earningBaseCents: integer("earning_base_cents"),
   status: packageStatus("status").notNull().default("pending_payment"),
   createdAt: createdAt(),
 });
@@ -245,7 +274,11 @@ export const bookings = pgTable(
     type: bookingType("type").notNull(),
     startsAt: timestamp("starts_at", { withTimezone: true }).notNull(),
     durationMin: smallint("duration_min").notNull(),
+    /** What the student paid for this lesson (refunds use it). */
     priceCents: integer("price_cents").notNull(),
+    /** Discount code used (single lessons) and the lesson's value before it: the teacher's share is computed on it. */
+    discountCodeId: uuid("discount_code_id").references(() => discountCodes.id),
+    earningBaseCents: integer("earning_base_cents"),
     status: bookingStatus("status").notNull().default("pending_payment"),
     topic: text("topic"),
     cancelledBy: cancelledBy("cancelled_by"),

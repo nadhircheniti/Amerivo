@@ -26,7 +26,16 @@
     "afterJoin": "从控制面板直接进入，无需下载",
     "ctaFree": "确认免费试听课",
     "ctaPayLesson": "支付 {amount} 并确认课程",
-    "ctaPayPackage": "支付 {amount} 并确认课时包"
+    "ctaPayPackage": "支付 {amount} 并确认课时包",
+    "promoApplied": "优惠码 {code}：−{percent}%",
+    "promoRemove": "移除",
+    "promoChecking": "正在验证…",
+    "promoSignIn": "登录后即可使用优惠码。",
+    "promoInvalid": "该优惠码无效或已被使用。",
+    "promoTooMany": "尝试次数过多，请稍等一分钟后重试。",
+    "promoError": "无法验证该优惠码，请重试。",
+    "promoDiscount": "优惠码（−{percent}%）",
+    "ctaFreeWithCode": "确认我的免费课程"
   },
   "order": {
     "trial": "免费试听 · 20 分钟",

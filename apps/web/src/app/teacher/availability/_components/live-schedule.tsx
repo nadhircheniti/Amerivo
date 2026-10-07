@@ -41,6 +41,14 @@ export function LiveSchedule() {
     },
     [call],
   );
+  const saveTimezone = useCallback(
+    async (timezone: string) => {
+      await call("/teacher/profile", { method: "PUT", body: JSON.stringify({ timezone }) });
+      // Reload so every screen (dashboard, students, lessons) uses the new zone at once.
+      window.location.reload();
+    },
+    [call],
+  );
   const addBlocked = useCallback(
     (b: { startDate: string; endDate: string; reason?: string }) => call<BlockedDate>("/teacher/blocked-dates", { method: "POST", body: JSON.stringify(b) }),
     [call],
@@ -87,7 +95,7 @@ export function LiveSchedule() {
 
   return (
     <div className="flex flex-col gap-6 px-4 py-8 sm:px-6 lg:px-10 xl:flex-row">
-      <LiveAvailabilityGrid timezone={profile.timezone} rules={profile.availability} onSave={saveRules} />
+      <LiveAvailabilityGrid timezone={profile.timezone} rules={profile.availability} onSave={saveRules} onSaveTimezone={saveTimezone} />
 
       <aside aria-label={t("settingsLabel")} className="flex w-full shrink-0 flex-col gap-5 xl:w-80">
         <section aria-labelledby="modes-heading" className="flex flex-col gap-3.5 rounded-3xl bg-white p-6">

@@ -10,7 +10,8 @@
     "settings": "Paramètres et journal d'audit",
     "signedIn2fa": "Connecté avec la double authentification",
     "moderation": "Signalements de sécurité",
-    "materials": "Documents des professeurs"
+    "materials": "Documents des professeurs",
+    "discounts": "Codes promo"
   },
   "overview": {
     "metaTitle": "Statistiques de la plateforme · Amerivo Admin",
@@ -848,5 +849,49 @@
     "rejectPlaceholder": "ex. Le document contient un numéro de téléphone.",
     "noticeApproved": "« {title} » approuvé et partagé avec les élèves du professeur.",
     "noticeRejected": "« {title} » refusé. Le professeur a été prévenu."
+  },
+  "discountsPage": {
+    "metaTitle": "Codes promo",
+    "title": "Codes promo",
+    "subtitle": "Codes à usage unique : un pourcentage de réduction sur un cours ou un forfait. Amerivo prend la remise en charge — les professeurs sont payés sur le prix plein.",
+    "what": "les codes promo",
+    "createTitle": "Nouveau code",
+    "createHint": "Chaque code ne peut être utilisé qu’une fois, par un seul élève. Laissez le code vide pour en obtenir un aléatoire, impossible à deviner.",
+    "percentLabel": "Remise",
+    "percentInvalid": "Saisissez un pourcentage entier entre 1 et 100.",
+    "codeLabel": "Code (facultatif)",
+    "codePlaceholder": "Aléatoire, ex. AMV-7KQ2-XH9M",
+    "noteLabel": "Note (visible uniquement par les admins)",
+    "notePlaceholder": "Pour qui, pourquoi",
+    "expiresLabel": "Valable jusqu’au (facultatif)",
+    "create": "Créer le code",
+    "creating": "Création…",
+    "createError": "Impossible de créer le code. Veuillez réessayer.",
+    "created": "Code {code} créé. Copiez-le et envoyez-le à l’élève.",
+    "listTitle": "Codes",
+    "summary": "{used, plural, =0 {Aucun code utilisé pour l’instant} one {# code utilisé} other {# codes utilisés}} · {amount} de remises accordées",
+    "empty": "Aucun code promo pour l’instant.",
+    "colCode": "Code",
+    "colPercent": "Remise",
+    "colStatus": "Statut",
+    "colUsedBy": "Utilisé par",
+    "colNote": "Note",
+    "colCreated": "Créé le",
+    "colExpires": "Valable jusqu’au",
+    "colActions": "Actions",
+    "percentValue": "−{percent} %",
+    "status": {
+      "available": "Disponible",
+      "reserved": "Paiement en attente",
+      "used": "Utilisé",
+      "disabled": "Désactivé",
+      "expired": "Expiré"
+    },
+    "never": "Sans date de fin",
+    "disable": "Désactiver",
+    "disableConfirm": "Désactiver {code} ? Plus personne ne pourra l’utiliser.",
+    "disabled": "Code {code} désactivé.",
+    "copy": "Copier",
+    "copied": "Copié"
   }
 }

@@ -89,7 +89,12 @@
       "unsaved": "你有尚未保存的更改。",
       "emptyWarning": "目前没有开放的时段：开放时段后学生才能预约你。",
       "misaligned": "你已保存的部分时间不是从整点开始或结束的。保存时只会保留表格中显示的整点时段。",
-      "saveError": "无法保存可预约时间，请重试。"
+      "saveError": "无法保存可预约时间，请重试。",
+      "saveTimeZone": "保存时区",
+      "useDeviceTimeZone": "使用本设备的时区（{tz}）",
+      "timeZoneHint": "您的每周时间按此时区设置。学生看到的时间始终会换算成他们自己的时区。",
+      "timeZoneSaved": "时区已保存。",
+      "timeZoneError": "无法保存您的时区，请重试。"
     },
     "blocked": {
       "title": "不可预约日期",
@@ -324,7 +329,8 @@
     "noNotifications": "暂无通知。",
     "noStudents": "学生首次预约后会显示在这里。",
     "recentStudents": "最近的学生",
-    "moreStudents": "{count, plural, other {还有 # 名学生}}"
+    "moreStudents": "{count, plural, other {还有 # 名学生}}",
+    "studentTime": "{name}：{time}（{city}）"
   },
   "students": {
     "metaTitle": "学生 · Amerivo English",

@@ -86,7 +86,8 @@
       "morePacks": "{count, plural, zero {+ # باقات أخرى} one {+ باقة أخرى} two {+ باقتان أخريان} few {+ # باقات أخرى} many {+ # باقة أخرى} other {+ # باقة أخرى}}",
       "payAsYouGo": "الدفع لكل درس",
       "noPack": "لا توجد باقة دروس نشطة",
-      "estimatedTakeTest": "تقديري · أجرِ الاختبار"
+      "estimatedTakeTest": "تقديري · أجرِ الاختبار",
+      "bookFromPack": "احجز درسي التالي"
     },
     "upcoming": {
       "title": "الدروس القادمة",
@@ -413,7 +414,8 @@
     "timeZoneNote": "الأوقات معروضة حسب منطقتك الزمنية ({tz}).",
     "classroom": "الفصل الافتراضي",
     "emptyTeacher": "لا توجد دروس قادمة بعد. ستظهر الحجوزات الجديدة هنا.",
-    "opensAt": "يفتح في {time}"
+    "opensAt": "يفتح في {time}",
+    "otherTime": "{name}: {time} {zone}"
   },
   "messages": {
     "metaTitle": "الرسائل",

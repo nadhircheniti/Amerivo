@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useMemo, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { Icon } from "@/components/ui/icon";
 import { Button, ButtonLink } from "@/components/ui/button";
@@ -9,11 +10,14 @@ import { ChoiceTile } from "@/components/ui/form";
 import { formatUsd, packagePrice } from "@/lib/mock-data";
 import { cn } from "@/lib/cn";
 import { shortUsd } from "../../../_components/tone";
-import { API_URL } from "@/lib/api";
+import { API_URL, ApiError } from "@/lib/api";
+import { useApi } from "@/lib/use-api";
 import { intlTags } from "@/i18n/config";
 import { addDays, buildWeek, civilDate, dayLabel, firstMonday, groupApiSlots, timeLabel, zonedToInstant, type SlotDay } from "./slots";
 
-type LessonType = "trial" | "single" | "pack5" | "pack10";
+type LessonType = "trial" | "single" | "pack5" | "pack10" | "package";
+/** A package the student already paid for, with lessons left to book with this teacher. */
+type MyPackage = { id: string; lessonCount: number; remaining: number };
 const WEEKS_AHEAD = 4;
 
 const noopSubscribe = () => () => {};
@@ -42,10 +46,29 @@ function useQueryType(): LessonType | null {
     noopSubscribe,
     () => {
       const t = new URLSearchParams(window.location.search).get("type");
-      return t === "trial" || t === "single" || t === "pack5" || t === "pack10" ? t : null;
+      return t === "trial" || t === "single" || t === "pack5" || t === "pack10" || t === "package" ? t : null;
     },
     () => null,
   );
+}
+
+/** Signed-in student: their package with this teacher that still has lessons to book (oldest first). */
+function useMyPackage(slug: string) {
+  const { call, isLoaded, isSignedIn } = useApi();
+  const [pkg, setPkg] = useState<MyPackage | null>(null);
+  const [nonce, setNonce] = useState(0);
+  useEffect(() => {
+    if (!API_URL || !isLoaded || !isSignedIn) return;
+    let cancelled = false;
+    call<MyPackage[]>(`/student/packages?${new URLSearchParams({ teacher: slug })}`).then(
+      (rows) => !cancelled && setPkg(rows[0] ?? null),
+      () => undefined, // not a student (teacher/admin viewing the page) or the API is waking up
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [call, isLoaded, isSignedIn, slug, nonce]);
+  return { pkg, refresh: () => setNonce((n) => n + 1) };
 }
 
 export function BookingCard({
@@ -80,7 +103,15 @@ export function BookingCard({
   const [week, setWeek] = useState(0);
   const [slot, setSlot] = useState<{ iso: string; instant: number } | null>(null);
 
+  const { pkg } = useMyPackage(slug);
+  const { call } = useApi();
+  const router = useRouter();
+  const [booking, setBooking] = useState(false);
+  const [bookError, setBookError] = useState<string | null>(null);
+
   const options = [
+    // Lessons already paid in a package come first: booking one costs nothing more.
+    ...(pkg ? [{ value: "package" as const, label: t("usePackage", { count: pkg.remaining }), price: 0, included: true }] : []),
     ...(offersTrial ? [{ value: "trial" as const, label: t("trial"), price: 0 }] : []),
     {
       value: "single" as const,
@@ -108,7 +139,7 @@ export function BookingCard({
         ]
       : []),
   ];
-  const requested = chosenType ?? queryType ?? "single";
+  const requested = chosenType ?? queryType ?? (pkg ? "package" : "single");
   const type = options.some((o) => o.value === requested) ? requested : "single";
   const current = options.find((o) => o.value === type)!;
   const duration = type === "trial" ? 20 : 50;
@@ -165,7 +196,7 @@ export function BookingCard({
                 {o.label}
                 {"discount" in o && <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-normal">{o.discount}</span>}
               </span>
-              <strong className="shrink-0">{o.price === 0 ? t("free") : shortUsd(o.price, locale)}</strong>
+              <strong className="shrink-0">{"included" in o ? t("included") : o.price === 0 ? t("free") : shortUsd(o.price, locale)}</strong>
             </span>
           </ChoiceTile>
         ))}
@@ -256,10 +287,39 @@ export function BookingCard({
 
       <div className="flex justify-between gap-3 rounded-[14px] bg-beige px-4 py-3.5 text-sm" aria-live="polite">
         <span>{summary ?? t("selectTime")}</span>
-        <strong className="shrink-0">{current.price === 0 ? t("free") : formatUsd(current.price, locale)}</strong>
+        <strong className="shrink-0">{type === "package" ? t("included") : current.price === 0 ? t("free") : formatUsd(current.price, locale)}</strong>
       </div>
 
-      {checkoutHref ? (
+      {bookError && (
+        <p role="alert" className="rounded-[10px] bg-danger-100 px-3 py-2 text-sm text-danger-text">
+          {bookError}
+        </p>
+      )}
+      {type === "package" && pkg ? (
+        // From the package: booked at once, no checkout (the lesson is already paid).
+        <Button
+          size="lg"
+          className="w-full"
+          disabled={!slot || booking}
+          onClick={async () => {
+            if (!slot) return;
+            setBooking(true);
+            setBookError(null);
+            try {
+              const res = await call<{ booking: { id: string } }>("/bookings", {
+                method: "POST",
+                body: JSON.stringify({ teacherSlug: slug, offer: "from_package", packageId: pkg.id, startsAt: slot.iso }),
+              });
+              router.push(`/student?booked=${res.booking.id}`);
+            } catch (e) {
+              setBookError(e instanceof ApiError && e.message ? e.message : t("bookError"));
+              setBooking(false);
+            }
+          }}
+        >
+          {booking ? t("booking") : t("bookFromPackage")}
+        </Button>
+      ) : checkoutHref ? (
         <ButtonLink href={checkoutHref} size="lg" className="w-full">
           {t("continue")}
         </ButtonLink>

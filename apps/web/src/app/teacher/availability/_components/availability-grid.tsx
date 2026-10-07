@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Segmented } from "@/components/ui/form";
 import { Icon } from "@/components/ui/icon";
+import { TimeZoneSelect } from "@/components/ui/time-zone-select";
 import { intlTags, type Locale } from "@/i18n/config";
 import { ApiError } from "@/lib/api";
 import { cn } from "@/lib/cn";
+import { deviceTimeZone, isValidTimeZone, zoneAbbrev } from "@/lib/time-zone";
 import type { AvailabilityRule } from "./types";
 
 /** Monday-first week: day index 0 = Monday … 6 = Sunday (API weekday = index + 1). */
@@ -26,11 +28,8 @@ const BOOKED: Record<string, string> = {
   "1-10": "Kenji T.",
 };
 
-const TIME_ZONES = [
-  { value: "America/Chicago", label: "America/Chicago (CST)" },
-  { value: "America/New_York", label: "America/New_York (EST)" },
-  { value: "America/Los_Angeles", label: "America/Los_Angeles (PST)" },
-];
+// Sample zones (demo mode). The abbreviation is today's (CDT in summer, CST in winter…), never hard-coded.
+const TIME_ZONES = ["America/Chicago", "America/New_York", "America/Los_Angeles"].map((value) => ({ value, label: `${value} (${zoneAbbrev(value)})` }));
 
 type Mode = "recurring" | "week";
 type OpenMap = Record<string, boolean>;
@@ -258,7 +257,17 @@ export function AvailabilityGrid() {
 type SaveState = { kind: "idle" } | { kind: "saving" } | { kind: "saved" } | { kind: "error"; message: string };
 
 /** Live mode: the teacher's recurring weekly rules, saved with PUT /teacher/availability. */
-export function LiveAvailabilityGrid({ timezone, rules, onSave }: { timezone: string; rules: AvailabilityRule[]; onSave: (rules: AvailabilityRule[]) => Promise<void> }) {
+export function LiveAvailabilityGrid({
+  timezone,
+  rules,
+  onSave,
+  onSaveTimezone,
+}: {
+  timezone: string;
+  rules: AvailabilityRule[];
+  onSave: (rules: AvailabilityRule[]) => Promise<void>;
+  onSaveTimezone: (timezone: string) => Promise<void>;
+}) {
   const t = useTranslations("teacher.availability.grid");
   const [open, setOpen] = useState<OpenMap>(() => rulesToCells(rules));
   const [saved, setSaved] = useState(() => signature(cellsToRules(rulesToCells(rules))));
@@ -305,10 +314,11 @@ export function LiveAvailabilityGrid({ timezone, rules, onSave }: { timezone: st
       <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-[13px]">
         <p className="flex items-center gap-2 rounded-full bg-teal-50 px-3.5 py-2 text-sm">
           <Icon name="clock" size={16} className="shrink-0 text-teal-dark" />
-          <span>{t.rich("yourTimeZone", { strong: (c) => <strong>{c}</strong>, tz: timezone })}</span>
+          <span>{t.rich("yourTimeZone", { strong: (c) => <strong>{c}</strong>, tz: `${timezone.replace(/_/g, " ")} (${zoneAbbrev(timezone)})` })}</span>
         </p>
         <Legend showBooked={false} />
       </div>
+      <TimeZoneEditor timezone={timezone} onSave={onSaveTimezone} />
 
       <p className="text-[13px] leading-normal text-navy-soft">{t("liveHelp")}</p>
       {misaligned && <p className="rounded-xl bg-orange-100 px-3.5 py-2.5 text-[13px] text-orange-text">{t("misaligned")}</p>}
@@ -324,5 +334,59 @@ export function LiveAvailabilityGrid({ timezone, rules, onSave }: { timezone: st
         </Button>
       </div>
     </section>
+  );
+}
+
+/**
+ * The teacher's time zone (their weekly hours are in it). Shown with a way to change it: a wrong zone
+ * shifts every slot students see. The hours stay the same local times in the new zone.
+ */
+function TimeZoneEditor({ timezone, onSave }: { timezone: string; onSave: (tz: string) => Promise<void> }) {
+  const t = useTranslations("teacher.availability.grid");
+  const [value, setValue] = useState(timezone);
+  const [state, setState] = useState<"idle" | "saving" | "saved" | "error">("idle");
+  const device = deviceTimeZone();
+  const id = useId();
+  const save = async () => {
+    setState("saving");
+    try {
+      await onSave(value);
+      setState("saved");
+    } catch {
+      setState("error");
+    }
+  };
+  return (
+    <div className="flex flex-col gap-2 rounded-2xl bg-beige p-4 text-sm">
+      <label htmlFor={id} className="font-semibold">
+        {t("timeZone")}
+      </label>
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="min-w-[240px] flex-1">
+          <TimeZoneSelect
+            id={id}
+            value={value}
+            disabled={state === "saving"}
+            onChange={(v) => {
+              setValue(v);
+              setState("idle");
+            }}
+          />
+        </div>
+        {value !== timezone && state !== "saved" && (
+          <Button variant="teal" size="sm" onClick={() => void save()} disabled={state === "saving"}>
+            {state === "saving" ? t("saving") : t("saveTimeZone")}
+          </Button>
+        )}
+      </div>
+      {device !== value && isValidTimeZone(device) && (
+        <button type="button" onClick={() => (setValue(device), setState("idle"))} className="self-start font-semibold text-teal-dark underline hover:text-navy">
+          {t("useDeviceTimeZone", { tz: device.replace(/_/g, " ") })}
+        </button>
+      )}
+      <p role="status" className={cn("text-[13px]", state === "error" ? "text-danger-text" : state === "saved" ? "font-semibold text-teal-deep" : "text-muted")}>
+        {state === "error" ? t("timeZoneError") : state === "saved" ? t("timeZoneSaved") : t("timeZoneHint")}
+      </p>
+    </div>
   );
 }

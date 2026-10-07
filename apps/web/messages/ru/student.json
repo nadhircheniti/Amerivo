@@ -86,7 +86,8 @@
       "morePacks": "{count, plural, one {+ ещё # пакет} few {+ ещё # пакета} many {+ ещё # пакетов} other {+ ещё # пакета}}",
       "payAsYouGo": "Оплата за урок",
       "noPack": "Нет активного пакета уроков",
-      "estimatedTakeTest": "Примерно · Пройти тест"
+      "estimatedTakeTest": "Примерно · Пройти тест",
+      "bookFromPack": "Забронировать следующий урок"
     },
     "upcoming": {
       "title": "Ближайшие уроки",
@@ -413,7 +414,8 @@
     "timeZoneNote": "Время указано в вашем часовом поясе ({tz}).",
     "classroom": "Класс",
     "emptyTeacher": "Предстоящих уроков пока нет. Новые бронирования появятся здесь.",
-    "opensAt": "Откроется в {time}"
+    "opensAt": "Откроется в {time}",
+    "otherTime": "{name}: {time} {zone}"
   },
   "messages": {
     "metaTitle": "Сообщения",

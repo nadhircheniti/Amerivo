@@ -86,7 +86,8 @@
       "morePacks": "{count, plural, other {另有 # 个课时包}}",
       "payAsYouGo": "按节付费",
       "noPack": "没有生效中的课时包",
-      "estimatedTakeTest": "估计等级 · 参加测试"
+      "estimatedTakeTest": "估计等级 · 参加测试",
+      "bookFromPack": "预订下一节课"
     },
     "upcoming": {
       "title": "即将开始的课程",
@@ -413,7 +414,8 @@
     "timeZoneNote": "时间按你所在的时区显示（{tz}）。",
     "classroom": "进入课堂",
     "emptyTeacher": "暂无即将开始的课程。新的预约会显示在这里。",
-    "opensAt": "{time} 开放"
+    "opensAt": "{time} 开放",
+    "otherTime": "{name}：{time} {zone}"
   },
   "messages": {
     "metaTitle": "消息",

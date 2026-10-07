@@ -248,7 +248,12 @@
     "continue": "Continue to payment",
     "message": "Message {name}",
     "cancellation": "Free cancellation up to 24 hours before the lesson.",
-    "loadError": "We couldn't load this teacher's calendar. Please refresh in a moment."
+    "loadError": "We couldn't load this teacher's calendar. Please refresh in a moment.",
+    "usePackage": "{count, plural, one {Use my package (# lesson left)} other {Use my package (# lessons left)}}",
+    "included": "Included",
+    "bookFromPackage": "Book this lesson",
+    "booking": "Booking…",
+    "bookError": "We couldn't book this lesson. Please try again."
   },
   "contact": {
     "metaTitle": "Contact us",

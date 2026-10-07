@@ -10,7 +10,8 @@
     "settings": "Settings & audit log",
     "signedIn2fa": "Signed in with 2FA",
     "moderation": "Safety reports",
-    "materials": "Teacher documents"
+    "materials": "Teacher documents",
+    "discounts": "Discount codes"
   },
   "overview": {
     "metaTitle": "Platform analytics · Amerivo Admin",
@@ -848,5 +849,49 @@
     "rejectPlaceholder": "e.g. The document contains a phone number.",
     "noticeApproved": "\"{title}\" approved and shared with the teacher's students.",
     "noticeRejected": "\"{title}\" rejected. The teacher has been notified."
+  },
+  "discountsPage": {
+    "metaTitle": "Discount codes",
+    "title": "Discount codes",
+    "subtitle": "One-time codes: a percentage off one lesson or one package. Amerivo pays the discount — teachers are paid on the full price.",
+    "what": "the discount codes",
+    "createTitle": "New code",
+    "createHint": "Each code can be used once, by one student. Leave the code empty to get a random one that can't be guessed.",
+    "percentLabel": "Discount",
+    "percentInvalid": "Enter a whole percentage between 1 and 100.",
+    "codeLabel": "Code (optional)",
+    "codePlaceholder": "Random, e.g. AMV-7KQ2-XH9M",
+    "noteLabel": "Note (only admins see it)",
+    "notePlaceholder": "Who it's for, why",
+    "expiresLabel": "Valid until (optional)",
+    "create": "Create code",
+    "creating": "Creating…",
+    "createError": "Couldn't create the code. Please try again.",
+    "created": "Code {code} created. Copy it and send it to the student.",
+    "listTitle": "Codes",
+    "summary": "{used, plural, =0 {No code used yet} one {# code used} other {# codes used}} · {amount} of discounts given",
+    "empty": "No discount codes yet.",
+    "colCode": "Code",
+    "colPercent": "Discount",
+    "colStatus": "Status",
+    "colUsedBy": "Used by",
+    "colNote": "Note",
+    "colCreated": "Created",
+    "colExpires": "Valid until",
+    "colActions": "Actions",
+    "percentValue": "−{percent} %",
+    "status": {
+      "available": "Available",
+      "reserved": "Payment pending",
+      "used": "Used",
+      "disabled": "Disabled",
+      "expired": "Expired"
+    },
+    "never": "No end date",
+    "disable": "Disable",
+    "disableConfirm": "Disable {code}? Nobody will be able to use it.",
+    "disabled": "Code {code} disabled.",
+    "copy": "Copy",
+    "copied": "Copied"
   }
 }

@@ -10,7 +10,8 @@
     "settings": "设置与审计日志",
     "signedIn2fa": "已通过双重验证登录",
     "moderation": "安全报告",
-    "materials": "老师文档"
+    "materials": "老师文档",
+    "discounts": "优惠码"
   },
   "overview": {
     "metaTitle": "平台数据分析 · Amerivo Admin",
@@ -848,5 +849,49 @@
     "rejectPlaceholder": "例如：文档中包含电话号码。",
     "noticeApproved": "“{title}”已批准，并已与该老师的学生分享。",
     "noticeRejected": "“{title}”已拒绝，已通知老师。"
+  },
+  "discountsPage": {
+    "metaTitle": "优惠码",
+    "title": "优惠码",
+    "subtitle": "一次性优惠码：单节课或单个课时包按百分比减免。折扣由 Amerivo 承担——老师仍按原价获得报酬。",
+    "what": "优惠码",
+    "createTitle": "新建优惠码",
+    "createHint": "每个优惠码仅限一名学生使用一次。留空则自动生成无法猜测的随机码。",
+    "percentLabel": "折扣",
+    "percentInvalid": "请输入 1 到 100 之间的整数百分比。",
+    "codeLabel": "优惠码（选填）",
+    "codePlaceholder": "随机生成，例如 AMV-7KQ2-XH9M",
+    "noteLabel": "备注（仅管理员可见）",
+    "notePlaceholder": "发给谁、原因",
+    "expiresLabel": "有效期至（选填）",
+    "create": "创建优惠码",
+    "creating": "正在创建…",
+    "createError": "无法创建优惠码，请重试。",
+    "created": "优惠码 {code} 已创建。请复制并发送给学生。",
+    "listTitle": "优惠码列表",
+    "summary": "{used, plural, =0 {尚无优惠码被使用} other {已使用 # 个优惠码}} · 共减免 {amount}",
+    "empty": "还没有优惠码。",
+    "colCode": "优惠码",
+    "colPercent": "折扣",
+    "colStatus": "状态",
+    "colUsedBy": "使用者",
+    "colNote": "备注",
+    "colCreated": "创建时间",
+    "colExpires": "有效期至",
+    "colActions": "操作",
+    "percentValue": "−{percent}%",
+    "status": {
+      "available": "可用",
+      "reserved": "待付款",
+      "used": "已使用",
+      "disabled": "已停用",
+      "expired": "已过期"
+    },
+    "never": "无截止日期",
+    "disable": "停用",
+    "disableConfirm": "停用 {code}？停用后任何人都无法使用。",
+    "disabled": "优惠码 {code} 已停用。",
+    "copy": "复制",
+    "copied": "已复制"
   }
 }

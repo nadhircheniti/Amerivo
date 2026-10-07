@@ -73,7 +73,7 @@ function Body({ d }: { d: PaymentsPage }) {
                 <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
                   <span className="text-navy-soft">{t("remaining", { count: p.remaining })}</span>
                   {p.status === "active" && p.remaining > 0 && (
-                    <ButtonLink href={`/teachers/${p.teacher.slug}`} size="sm" variant="teal">
+                    <ButtonLink href={`/teachers/${p.teacher.slug}?type=package#book`} size="sm" variant="teal">
                       {t("bookFromPack")}
                     </ButtonLink>
                   )}

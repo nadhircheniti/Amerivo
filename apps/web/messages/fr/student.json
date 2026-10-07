@@ -86,7 +86,8 @@
       "morePacks": "{count, plural, one {+ # autre forfait} other {+ # autres forfaits}}",
       "payAsYouGo": "Paiement à l'unité",
       "noPack": "Aucun forfait actif",
-      "estimatedTakeTest": "Estimé · Passer le test"
+      "estimatedTakeTest": "Estimé · Passer le test",
+      "bookFromPack": "Réserver mon prochain cours"
     },
     "upcoming": {
       "title": "Cours à venir",
@@ -413,7 +414,8 @@
     "timeZoneNote": "Heures affichées dans votre fuseau horaire ({tz}).",
     "classroom": "Salle de classe",
     "emptyTeacher": "Aucun cours à venir pour l'instant. Les nouvelles réservations apparaîtront ici.",
-    "opensAt": "Ouvre à {time}"
+    "opensAt": "Ouvre à {time}",
+    "otherTime": "{name} : {time} {zone}"
   },
   "messages": {
     "metaTitle": "Messages",

@@ -8,6 +8,8 @@ import { isSlotAvailable } from "../../domain/availability";
 import { decideCancellation, teacherShouldBeWarned, TEACHER_WARNING_WINDOW_DAYS } from "../../domain/cancellation";
 import { splitEarning } from "../../domain/earnings";
 import { holdCutoff } from "../../domain/holds";
+import { applyDiscount } from "../../domain/discount";
+import { DiscountsService } from "../discounts/discounts.service";
 import { perLessonValue, quote, PricingError, type Offer } from "../../domain/pricing";
 import { ADMIN_REFUND_WINDOW_HOURS } from "../../domain/cancellation";
 import type { AuthUser } from "../../auth/decorators";
@@ -23,6 +25,8 @@ export interface CreateBookingInput {
   startsAt: Date;
   packageId?: string;
   topic?: string;
+  /** One-time discount code (admin). Not for trial lessons or lessons booked from a package. */
+  discountCode?: string;
 }
 
 const PG_UNIQUE_VIOLATION = "23505";
@@ -31,6 +35,11 @@ const isUniqueViolation = (e: unknown) => {
   const err = e as { code?: string; cause?: { code?: string } };
   return err?.code === PG_UNIQUE_VIOLATION || err?.cause?.code === PG_UNIQUE_VIOLATION;
 };
+
+/** End of the lesson (start + duration), in SQL. */
+const endsAtSql = sql`(${bookings.startsAt} + ${bookings.durationMin} * interval '1 minute')`;
+/** Booked or being paid, and not over yet (same rule as the student space). */
+const isUpcoming = (now: Date) => and(inArray(bookings.status, ["pending_payment", "confirmed"]), sql`${endsAtSql} > ${now}`)!;
 
 @Injectable()
 export class BookingsService {
@@ -43,6 +52,7 @@ export class BookingsService {
     private readonly stripe: StripeService,
     private readonly notifications: NotificationsService,
     private readonly moderation: ModerationService,
+    private readonly discounts: DiscountsService,
   ) {}
 
   /* ------------------------------------------------------------ create */
@@ -56,6 +66,10 @@ export class BookingsService {
       .from(teacherProfiles)
       .where(eq(teacherProfiles.userId, teacher.id));
 
+    const discountCode = input.discountCode?.trim() || null;
+    if (discountCode && (input.offer === "trial" || input.offer === "from_package")) {
+      throw badRequest(input.offer === "trial" ? "Discount codes can't be used on a free trial lesson" : "This lesson is already paid by your package");
+    }
     // Lessons booked from an already-paid package: no new payment.
     if (input.offer === "from_package") return this.bookFromPackage(student, teacher.id, input);
 
@@ -68,24 +82,40 @@ export class BookingsService {
     }
 
     await this.releaseStaleHolds({ teacherId: teacher.id });
-    const resumed = await this.resumePending(student.id, teacher.id, input.startsAt);
+    // With a code the price changes: an unpaid checkout for the same slot is replaced, not resumed.
+    const resumed = discountCode ? await this.dropPending(student.id, teacher.id, input.startsAt) : await this.resumePending(student.id, teacher.id, input.startsAt);
     if (resumed) return resumed;
     await this.assertSlotFree(teacher.id, input.startsAt, q.durationMin);
     if (input.offer === "trial") await this.assertFirstTrial(student.id, teacher.id);
 
-    const firstLessonPrice = q.lessonCount > 1 ? perLessonValue(q.totalCents, q.lessonCount, 0) : q.totalCents;
-    const free = q.totalCents === 0;
-
     let created;
     try {
       created = await this.db.transaction(async (tx) => {
-        const [pkg] =
-          q.lessonCount > 1
-            ? await tx
-                .insert(lessonPackages)
-                .values({ studentId: student.id, teacherId: teacher.id, lessonCount: q.lessonCount, lessonsUsed: 1, unitPriceCents: q.unitPriceCents, discountPct: q.discountPct, totalCents: q.totalCents })
-                .returning()
-            : [undefined];
+        // The code is reserved in the same transaction: if anything fails (slot taken…), it stays free.
+        const code = discountCode ? await this.discounts.claim(tx, discountCode, student.id) : null;
+        const fullCents = q.totalCents;
+        const paidCents = code ? applyDiscount(fullCents, code.percent).paidCents : fullCents;
+        const free = paidCents === 0;
+        const isPack = q.lessonCount > 1;
+        const firstLessonPrice = isPack ? perLessonValue(paidCents, q.lessonCount, 0) : paidCents;
+        const [pkg] = isPack
+          ? await tx
+              .insert(lessonPackages)
+              .values({
+                studentId: student.id,
+                teacherId: teacher.id,
+                lessonCount: q.lessonCount,
+                lessonsUsed: 1,
+                unitPriceCents: q.unitPriceCents,
+                discountPct: q.discountPct,
+                totalCents: paidCents,
+                // Amerivo bears the code: the teacher is paid on the price before it.
+                discountCodeId: code?.id,
+                earningBaseCents: code ? fullCents : null,
+                ...(free ? { status: "active" as const } : {}),
+              })
+              .returning()
+          : [undefined];
         const [booking] = await tx
           .insert(bookings)
           .values({
@@ -96,6 +126,8 @@ export class BookingsService {
             startsAt: input.startsAt,
             durationMin: q.durationMin,
             priceCents: firstLessonPrice,
+            discountCodeId: isPack ? undefined : code?.id,
+            earningBaseCents: code ? (isPack ? perLessonValue(fullCents, q.lessonCount, 0) : fullCents) : null,
             status: free ? "confirmed" : "pending_payment",
             topic: input.topic,
             createdAt: this.clock.now(),
@@ -105,15 +137,16 @@ export class BookingsService {
           ? [undefined]
           : await tx
               .insert(payments)
-              .values({ studentId: student.id, bookingId: pkg ? undefined : booking.id, packageId: pkg?.id, amountCents: q.totalCents })
+              .values({ studentId: student.id, bookingId: pkg ? undefined : booking.id, packageId: pkg?.id, amountCents: paidCents })
               .returning();
-        return { booking, pkg, payment };
+        return { booking, pkg, payment, paidCents, free };
       });
     } catch (e) {
       if (isUniqueViolation(e)) throw conflict("This time was just booked by someone else. Please pick another slot.");
       throw e;
     }
 
+    const { free, paidCents } = created;
     if (free) {
       await this.notifyConfirmed(created.booking.id);
       return { booking: created.booking, package: created.pkg ?? null, payment: null };
@@ -125,13 +158,13 @@ export class BookingsService {
       await this.db.update(payments).set({ providerRef: ref }).where(eq(payments.id, created.payment!.id));
       await this.onPaymentSucceeded(`sim_evt_${created.payment!.id}`, ref);
       const [booking] = await this.db.select().from(bookings).where(eq(bookings.id, created.booking.id));
-      return { booking, package: created.pkg ?? null, payment: { id: created.payment!.id, clientSecret: null, amountCents: q.totalCents, simulated: true } };
+      return { booking, package: created.pkg ?? null, payment: { id: created.payment!.id, clientSecret: null, amountCents: paidCents, simulated: true } };
     }
 
     let intent;
     try {
       intent = await this.stripe.createPaymentIntent({
-        amountCents: q.totalCents,
+        amountCents: paidCents,
         studentId: student.id,
         paymentId: created.payment!.id,
         description: `Amerivo English — ${q.lessonCount > 1 ? `${q.lessonCount}-lesson package` : "lesson"} with ${teacher.firstName}`,
@@ -144,7 +177,7 @@ export class BookingsService {
       throw new ServiceUnavailableException("Payment is temporarily unavailable. Please try again in a few minutes.");
     }
     await this.db.update(payments).set({ providerRef: intent.id }).where(eq(payments.id, created.payment!.id));
-    return { booking: created.booking, package: created.pkg ?? null, payment: { id: created.payment!.id, clientSecret: intent.client_secret, amountCents: q.totalCents } };
+    return { booking: created.booking, package: created.pkg ?? null, payment: { id: created.payment!.id, clientSecret: intent.client_secret, amountCents: paidCents } };
   }
 
   private async bookFromPackage(student: AuthUser, teacherId: string, input: CreateBookingInput) {
@@ -172,6 +205,7 @@ export class BookingsService {
             startsAt: input.startsAt,
             durationMin: 50,
             priceCents: perLessonValue(pkg.totalCents, pkg.lessonCount, pkg.lessonsUsed),
+            earningBaseCents: pkg.earningBaseCents === null ? null : perLessonValue(pkg.earningBaseCents, pkg.lessonCount, pkg.lessonsUsed),
             status: "confirmed",
             topic: input.topic,
             createdAt: this.clock.now(),
@@ -317,6 +351,34 @@ export class BookingsService {
       .where(and(b.packageId ? eq(bookings.packageId, b.packageId) : eq(bookings.id, b.id), eq(bookings.status, "pending_payment")));
     if (b.packageId) await this.db.update(lessonPackages).set({ status: "expired" }).where(and(eq(lessonPackages.id, b.packageId), eq(lessonPackages.status, "pending_payment")));
     if (paymentId) await this.db.update(payments).set({ status: "failed" }).where(and(eq(payments.id, paymentId), eq(payments.status, "requires_payment")));
+    await this.releaseCodeOf(b);
+  }
+
+  /** Gives back the discount code of an order that won't happen (never paid, or cancelled). */
+  private async releaseCodeOf(b: typeof bookings.$inferSelect) {
+    if (b.discountCodeId) return this.discounts.release(this.db, b.discountCodeId);
+    if (!b.packageId) return;
+    const [pkg] = await this.db.select({ codeId: lessonPackages.discountCodeId }).from(lessonPackages).where(eq(lessonPackages.id, b.packageId));
+    await this.discounts.release(this.db, pkg?.codeId);
+  }
+
+  /** An unpaid checkout for the same slot is cancelled so a new one (with a code) can start. */
+  private async dropPending(studentId: string, teacherId: string, startsAt: Date): Promise<null> {
+    const [b] = await this.db
+      .select()
+      .from(bookings)
+      .where(and(eq(bookings.studentId, studentId), eq(bookings.teacherId, teacherId), eq(bookings.startsAt, startsAt), eq(bookings.status, "pending_payment")));
+    if (!b) return null;
+    const payment = await this.paymentFor(b);
+    const ref = payment?.providerRef;
+    if (ref?.startsWith("pi_") && this.stripe.isConfigured()) {
+      const intent = await this.stripe.retrieveIntent(ref);
+      if (intent.status === "succeeded" || intent.status === "processing" || !(await this.stripe.cancelIntent(ref))) {
+        throw conflict("A payment for this lesson is already being processed. Check your lessons before booking again.");
+      }
+    }
+    await this.expireHold(b, payment?.id, "Replaced by a new checkout");
+    return null;
   }
 
   /** Same student, same teacher, same time, still unpaid → reuse it instead of "slot taken". */
@@ -372,6 +434,7 @@ export class BookingsService {
       if (payment?.providerRef?.startsWith("pi_") && this.stripe.isConfigured() && (await this.stripe.cancelIntent(payment.providerRef))) {
         await this.db.update(payments).set({ status: "failed" }).where(and(eq(payments.id, payment.id), eq(payments.status, "requires_payment")));
       }
+      await this.releaseCodeOf(booking);
       return { status: "cancelled", refundCents: 0, reason: "Cancelled before payment" };
     }
 
@@ -393,6 +456,9 @@ export class BookingsService {
     });
 
     if (refundMode === "money") await this.refundPayment(booking.id, decision.refundCents);
+    // A single lesson booked with a code: the code comes back whenever the price would (e.g. a free
+    // lesson cancelled more than 24 h before). A package keeps its code (its other lessons remain).
+    if (decision.fullRefund && booking.discountCodeId) await this.discounts.release(this.db, booking.discountCodeId);
 
     const lessonWord = booking.type === "trial" ? "trial lesson" : "lesson";
     await this.notifications.notify(booking.studentId, { type: "booking_cancelled", title: `Your ${lessonWord} was cancelled`, body: decision.reason });
@@ -433,7 +499,8 @@ export class BookingsService {
     const now = this.clock.now();
     if (now < booking.startsAt) throw badRequest("The lesson has not started yet");
 
-    const split = splitEarning(booking.priceCents);
+    // Amerivo bears discount codes: the teacher's share is computed on the lesson's full value.
+    const split = splitEarning(booking.earningBaseCents ?? booking.priceCents);
     return this.db.transaction(async (tx) => {
       await tx.update(bookings).set({ status: attendance === "no_show" ? "no_show" : "completed" }).where(eq(bookings.id, booking.id));
       await tx
@@ -474,13 +541,23 @@ export class BookingsService {
     const other = user.role === "teacher" ? bookings.studentId : bookings.teacherId;
     const now = this.clock.now();
     const rows = await this.db
-      .select({ ...getTableColumns(bookings), withFirstName: users.firstName, withLastName: users.lastName })
+      .select({
+        ...getTableColumns(bookings),
+        withFirstName: users.firstName,
+        withLastName: users.lastName,
+        // The other person's time zone (the student's account / the teacher's teaching profile), so
+        // each side can see the lesson time for both.
+        withTimezone: user.role === "teacher" ? users.timezone : teacherProfiles.timezone,
+      })
       .from(bookings)
       .leftJoin(users, eq(users.id, other))
+      .leftJoin(teacherProfiles, eq(teacherProfiles.userId, bookings.teacherId))
       .where(
         and(
           eq(col, user.id),
-          scope === "upcoming" ? and(gte(bookings.startsAt, now), inArray(bookings.status, ["pending_payment", "confirmed"])) : sql`${bookings.startsAt} < ${now}`,
+          // A lesson stays "upcoming" until its planned end, so the classroom button is still there
+          // for someone who arrives after the start (QA: the teacher couldn't find "Join").
+          scope === "upcoming" ? isUpcoming(now) : sql`not (${isUpcoming(now)}) and ${bookings.startsAt} < ${now}`,
         ),
       )
       .orderBy(bookings.startsAt)

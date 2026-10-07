@@ -86,7 +86,8 @@
       "morePacks": "{count, plural, one {+ # paquete más} other {+ # paquetes más}}",
       "payAsYouGo": "Pago por clase",
       "noPack": "Sin paquete de clases activo",
-      "estimatedTakeTest": "Estimado · Hacer la prueba"
+      "estimatedTakeTest": "Estimado · Hacer la prueba",
+      "bookFromPack": "Reservar mi próxima clase"
     },
     "upcoming": {
       "title": "Próximas clases",
@@ -413,7 +414,8 @@
     "timeZoneNote": "Horarios mostrados en tu zona horaria ({tz}).",
     "classroom": "Aula",
     "emptyTeacher": "Aún no hay clases próximas. Las nuevas reservas aparecerán aquí.",
-    "opensAt": "Abre a las {time}"
+    "opensAt": "Abre a las {time}",
+    "otherTime": "{name}: {time} {zone}"
   },
   "messages": {
     "metaTitle": "Mensajes",

@@ -101,6 +101,9 @@
     "chatError": "No se pudo enviar tu mensaje. Inténtalo de nuevo.",
     "contactHidden": "Se ocultaron datos de contacto (correo electrónico, teléfono, enlaces, redes sociales). No está permitido compartirlos en Amerivo.",
     "termsLink": "Leer las reglas",
-    "monitored": "El chat y las notas se guardan con la clase y se revisan por seguridad. Nunca compartas datos de contacto personales."
+    "monitored": "El chat y las notas se guardan con la clase y se revisan por seguridad. Nunca compartas datos de contacto personales.",
+    "endingSoon": "{count, plural, one {La clase termina en # minuto} other {La clase termina en # minutos}} ({time}).",
+    "endingSoonTeacher": "{count, plural, one {La clase termina en # minuto} other {La clase termina en # minutos}} ({time}). Escribirás el informe justo después.",
+    "cancel": "Cancelar"
   }
 }

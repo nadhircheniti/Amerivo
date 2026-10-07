@@ -17,6 +17,8 @@ export type Canceller = "student" | "teacher" | "admin";
 export interface CancellationDecision {
   allowed: boolean;
   refundCents: number;
+  /** The canceller is entitled to everything back (money, package lesson, discount code). */
+  fullRefund: boolean;
   reason: string;
   notifyAdmin: boolean;
 }
@@ -24,19 +26,19 @@ export interface CancellationDecision {
 export function decideCancellation(params: { by: Canceller; startsAt: Date; now: Date; paidCents: number }): CancellationDecision {
   const { by, startsAt, now, paidCents } = params;
   if (now.getTime() >= startsAt.getTime()) {
-    return { allowed: false, refundCents: 0, reason: "The lesson has already started", notifyAdmin: false };
+    return { allowed: false, refundCents: 0, fullRefund: false, reason: "The lesson has already started", notifyAdmin: false };
   }
   if (by === "teacher") {
-    return { allowed: true, refundCents: paidCents, reason: "Cancelled by teacher — full refund", notifyAdmin: true };
+    return { allowed: true, refundCents: paidCents, fullRefund: true, reason: "Cancelled by teacher — full refund", notifyAdmin: true };
   }
   if (by === "admin") {
-    return { allowed: true, refundCents: paidCents, reason: "Cancelled by admin — full refund", notifyAdmin: false };
+    return { allowed: true, refundCents: paidCents, fullRefund: true, reason: "Cancelled by admin — full refund", notifyAdmin: false };
   }
   const hoursBefore = (startsAt.getTime() - now.getTime()) / HOUR;
   if (hoursBefore > FREE_CANCELLATION_HOURS) {
-    return { allowed: true, refundCents: paidCents, reason: "Cancelled more than 24 hours before — full refund", notifyAdmin: false };
+    return { allowed: true, refundCents: paidCents, fullRefund: true, reason: "Cancelled more than 24 hours before — full refund", notifyAdmin: false };
   }
-  return { allowed: true, refundCents: 0, reason: "Cancelled less than 24 hours before — no refund", notifyAdmin: false };
+  return { allowed: true, refundCents: 0, fullRefund: false, reason: "Cancelled less than 24 hours before — no refund", notifyAdmin: false };
 }
 
 export function canAdminRefundAfterLesson(endedAt: Date, now: Date) {

@@ -18,7 +18,7 @@ export class DailyService {
   }
 
   /**
-   * Private room for one lesson, open from `opensAt` until 30 minutes after the end.
+   * Private room for one lesson, open from `opensAt` until the planned end of the lesson.
    * If both participants arrive at the same moment, the second call finds the room created by the first.
    */
   async createRoom(p: { name: string; opensAt: Date; startsAt: Date; durationMin: number }): Promise<Room> {

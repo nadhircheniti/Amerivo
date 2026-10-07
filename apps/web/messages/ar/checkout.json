@@ -26,7 +26,16 @@
     "afterJoin": "انضم من لوحة التحكم دون تنزيل أي برنامج",
     "ctaFree": "تأكيد الدرس التجريبي المجاني",
     "ctaPayLesson": "ادفع {amount} وأكّد الدرس",
-    "ctaPayPackage": "ادفع {amount} وأكّد الباقة"
+    "ctaPayPackage": "ادفع {amount} وأكّد الباقة",
+    "promoApplied": "الرمز {code}: −{percent} %",
+    "promoRemove": "إزالة",
+    "promoChecking": "جارٍ التحقق…",
+    "promoSignIn": "سجّل الدخول لاستخدام رمز خصم.",
+    "promoInvalid": "هذا الرمز غير صالح أو سبق استخدامه.",
+    "promoTooMany": "محاولات كثيرة جدًا. يُرجى الانتظار دقيقة ثم المحاولة مرة أخرى.",
+    "promoError": "تعذّر علينا التحقق من هذا الرمز. يُرجى المحاولة مرة أخرى.",
+    "promoDiscount": "رمز الخصم (−{percent} %)",
+    "ctaFreeWithCode": "تأكيد درسي المجاني"
   },
   "order": {
     "trial": "درس تجريبي مجاني · 20 دقيقة",

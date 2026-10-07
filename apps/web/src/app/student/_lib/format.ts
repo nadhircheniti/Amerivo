@@ -6,6 +6,7 @@ import { useMe } from "@/components/layout/role-gate";
 import { intlTags, type Locale } from "@/i18n/config";
 import { API_URL } from "@/lib/api";
 import { currentStudent, formatUsd } from "@/lib/mock-data";
+import { zoneAbbrev } from "@/lib/time-zone";
 import type { TeacherRef } from "./types";
 
 export const browserTimeZone = () => {
@@ -55,7 +56,8 @@ export function useFormat(timeZone?: string) {
       tag,
       tz,
       time: (iso: string | number | Date) => time.format(new Date(iso)),
-      range: (start: string | number | Date, end: string | number | Date) => `${time.format(new Date(start))}–${time.format(new Date(end))}`,
+      /** "20:00–20:50 GMT+2": the zone as it is on the lesson's date (clocks change on different dates around the world). */
+      range: (start: string | number | Date, end: string | number | Date) => `${time.format(new Date(start))}–${time.format(new Date(end))} ${zoneAbbrev(tz, start)}`,
       dayShort: (iso: string | number | Date) => dayShort.format(new Date(iso)),
       dayLong: (iso: string | number | Date) => dayLong.format(new Date(iso)),
       date: (iso: string | number | Date) => date.format(new Date(iso)),
