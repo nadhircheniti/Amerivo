@@ -99,5 +99,10 @@
     "sent": "Thank you. Your report has been sent to the Amerivo team, who will review it.",
     "close": "Close",
     "error": "The report couldn't be sent. Please try again."
+  },
+  "alert": {
+    "open": "Open the conversation",
+    "dismiss": "Dismiss",
+    "enableDesktop": "Turn on desktop alerts"
   }
 }

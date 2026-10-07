@@ -9,6 +9,7 @@ import { intlTags, type Locale } from "@/i18n/config";
 import { cn } from "@/lib/cn";
 import { fullName, PersonAvatar } from "./person-avatar";
 import type { ApiConversation, ApiMessage, ChatRole, MessagingSource } from "./types";
+import { useUnreadMessages } from "./message-alerts";
 import { usePolling } from "./use-polling";
 import { ReportButton } from "@/components/safety/report-button";
 
@@ -142,7 +143,8 @@ function InfoPanel({ c, role }: { c: ApiConversation; role: ChatRole }) {
 /**
  * Conversation list + thread + composer, shared by the student and teacher spaces.
  * Polls the open thread every 10 s and the list every 30 s; sends optimistically.
- * `deepLink` (from ?with= / ?student=) opens or creates that conversation.
+ * `deepLink` (from ?with= / ?student=) opens or creates that conversation; `?c=` opens one of
+ * the user's existing conversations (ignored if it isn't theirs).
  */
 export function ConversationsView({
   role,
@@ -152,7 +154,7 @@ export function ConversationsView({
 }: {
   role: ChatRole;
   source: MessagingSource;
-  deepLink?: { teacherSlug: string } | { studentId: string } | null;
+  deepLink?: { teacherSlug: string } | { studentId: string } | { conversationId: string } | null;
   demo?: boolean;
 }) {
   const t = useTranslations("messaging.view");
@@ -196,7 +198,10 @@ export function ConversationsView({
     let cancelled = false;
     (async () => {
       let target: string | null = null;
-      if (deepLink) {
+      let wanted: string | null = null;
+      if (deepLink && "conversationId" in deepLink) {
+        wanted = deepLink.conversationId;
+      } else if (deepLink) {
         try {
           target = (await source.start(deepLink)).id;
         } catch {
@@ -205,6 +210,8 @@ export function ConversationsView({
       }
       const list = await loadList();
       if (cancelled || !list) return;
+      // Only a conversation of the list can be opened from `?c=` (the API checks it again).
+      if (wanted && list.some((c) => c.id === wanted)) target = wanted;
       setActiveId((cur) => cur ?? target ?? sortConversations(list)[0]?.id ?? null);
     })();
     return () => {
@@ -247,14 +254,21 @@ export function ConversationsView({
     [source],
   );
 
+  // Reading a conversation lowers the unread badge of the sidebar: ask for the new count while
+  // some are still counted as unread.
+  const unread = useUnreadMessages();
+  const syncUnread = useCallback(() => {
+    if (unread && unread.count > 0) unread.refresh();
+  }, [unread]);
+
   useEffect(() => {
     if (!activeId || threads[activeId]?.state === "ok") return;
-    void loadLatest(activeId);
+    void loadLatest(activeId).then(syncUnread);
     // Only when another conversation opens.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeId, loadLatest]);
 
-  usePolling(() => activeId && void loadLatest(activeId), THREAD_POLL_MS, !!activeId);
+  usePolling(() => activeId && void loadLatest(activeId).then(syncUnread), THREAD_POLL_MS, !!activeId);
 
   const loadEarlier = async () => {
     if (!activeId || !thread || thread.loadingEarlier) return;
@@ -289,12 +303,25 @@ export function ConversationsView({
       setContactHidden(!!saved.moderation?.redacted);
       setThreads((all) => {
         const cur = all[conversationId];
-        return { ...all, [conversationId]: { ...cur, items: merge(cur.items.filter((m) => m.id !== localId), [saved]) } };
+        return {
+          ...all,
+          [conversationId]: {
+            ...cur,
+            items: merge(
+              cur.items.filter((m) => m.id !== localId),
+              [saved],
+            ),
+          },
+        };
       });
       setConvs((list) =>
         list
           ? sortConversations(
-              list.map((c) => (c.id === conversationId ? { ...c, lastMessage: { body: saved.body, kind: saved.kind, senderId: saved.senderId, createdAt: saved.createdAt }, lastMessageAt: saved.createdAt } : c)),
+              list.map((c) =>
+                c.id === conversationId
+                  ? { ...c, lastMessage: { body: saved.body, kind: saved.kind, senderId: saved.senderId, createdAt: saved.createdAt }, lastMessageAt: saved.createdAt }
+                  : c,
+              ),
             )
           : list,
       );
@@ -472,7 +499,13 @@ export function ConversationsView({
             <ReportButton reportedUserId={active.other.id} name={otherName} conversationId={active.id} />
           </div>
 
-          <div ref={scrollRef} className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 sm:p-7" role="log" aria-live="polite" aria-label={t("conversationWith", { name: otherName })}>
+          <div
+            ref={scrollRef}
+            className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 sm:p-7"
+            role="log"
+            aria-live="polite"
+            aria-label={t("conversationWith", { name: otherName })}
+          >
             {thread?.hasMore && (
               <button
                 type="button"

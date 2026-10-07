@@ -398,7 +398,7 @@ export const termsSections: TermsSection[] = [
     body: (
       <P>
         You agree to receive communications from Amerivo electronically (e-mail, in-app notifications), and that these satisfy any legal requirement that communications be in
-        writing. Notices to Amerivo must be sent to {COMPANY.email} or to {COMPANY.address}.
+        writing. Notices to Amerivo must be sent to {COMPANY.email}.
       </P>
     ),
   },
@@ -423,7 +423,7 @@ export const termsSections: TermsSection[] = [
     title: "23. Contact",
     body: (
       <P>
-        {COMPANY.legalName} · {COMPANY.address} · {COMPANY.email} · {COMPANY.phone}
+        {COMPANY.legalName} · {COMPANY.location} · {COMPANY.email} · {COMPANY.phone}
       </P>
     ),
   },

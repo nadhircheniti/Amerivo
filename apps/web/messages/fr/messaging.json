@@ -99,5 +99,10 @@
     "sent": "Merci. Votre signalement a été transmis à l'équipe Amerivo, qui va l'examiner.",
     "close": "Fermer",
     "error": "Le signalement n'a pas pu être envoyé. Veuillez réessayer."
+  },
+  "alert": {
+    "open": "Ouvrir la conversation",
+    "dismiss": "Fermer",
+    "enableDesktop": "Activer les alertes sur l’ordinateur"
   }
 }

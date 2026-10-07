@@ -72,9 +72,16 @@ describe("messaging", () => {
       assert.equal(r.body.readAt, null);
     }
     const unread = await h.http().get("/api/messages/unread-count").set(h.as("clerk_mt1")).expect(200);
-    assert.deepEqual(unread.body, { count: 5 });
+    assert.equal(unread.body.count, 5);
+    // The latest unread message, for the "new message" alert: sender's first name + preview only.
+    assert.equal(unread.body.latest.conversationId, convId);
+    assert.equal(unread.body.latest.senderFirstName, "Sam");
+    assert.equal(unread.body.latest.preview, "Hello 4");
+    assert.equal(unread.body.latest.kind, "text");
+    assert.equal(unread.body.latest.createdAt, "2026-10-01T10:04:00.000Z");
+    assert.deepEqual(Object.keys(unread.body.latest).sort(), ["conversationId", "createdAt", "id", "kind", "preview", "senderFirstName"]);
     const mine = await h.http().get("/api/messages/unread-count").set(h.as("clerk_ms1")).expect(200);
-    assert.equal(mine.body.count, 0);
+    assert.deepEqual(mine.body, { count: 0, latest: null });
 
     const notes = await h.http().get("/api/notifications").set(h.as("clerk_mt1")).expect(200);
     assert.equal(notes.body.length, 5);
@@ -123,7 +130,7 @@ describe("messaging", () => {
     await h.http().get(`/api/conversations/${convId}/messages?before=nope`).set(h.as("clerk_mt1")).expect(400);
 
     const unread = await h.http().get("/api/messages/unread-count").set(h.as("clerk_mt1")).expect(200);
-    assert.equal(unread.body.count, 0);
+    assert.deepEqual(unread.body, { count: 0, latest: null });
     // Everything read → the "new message" notifications are marked read too.
     assert.equal((await h.http().get("/api/notifications/unread-count").set(h.as("clerk_mt1")).expect(200)).body.count, 0);
     // The sender reading their own thread doesn't mark anything.

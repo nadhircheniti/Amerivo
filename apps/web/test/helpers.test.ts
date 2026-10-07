@@ -50,3 +50,52 @@ describe("redirect after accepting the Terms (?next=)", () => {
     }
   });
 });
+
+describe("new-message alerts", async () => {
+  const { nextAlert, parseUnreadSummary, conversationHref } = await import("../src/components/messaging/message-alert-logic.ts");
+  const conv = "8d2f3c1e-5b6a-4c7d-9e8f-0a1b2c3d4e5f";
+  const msg = (id: string, createdAt: string) => ({ id, conversationId: conv, kind: "text" as const, senderFirstName: "Sam", preview: "Hi", createdAt });
+
+  it("doesn't announce messages that were already waiting when the page opened", () => {
+    const first = nextAlert(null, { count: 2, latest: msg("a", "2026-10-07T10:00:00.000Z") }, false);
+    assert.equal(first.announce, null);
+    assert.equal(first.watermark, "2026-10-07T10:00:00.000Z");
+    assert.deepEqual(nextAlert(null, { count: 0, latest: null }, false), { announce: null, watermark: "" });
+  });
+
+  it("announces a newer message once", () => {
+    const b = msg("b", "2026-10-07T10:05:00.000Z");
+    const r = nextAlert("2026-10-07T10:00:00.000Z", { count: 3, latest: b }, false);
+    assert.equal(r.announce, b);
+    assert.equal(nextAlert(r.watermark, { count: 3, latest: b }, false).announce, null, "same message on the next poll");
+    assert.equal(nextAlert("", { count: 1, latest: b }, false).announce, b, "first message after an empty inbox");
+  });
+
+  it("doesn't announce an older unread message revealed after reading the newest one", () => {
+    const r = nextAlert("2026-10-07T10:05:00.000Z", { count: 1, latest: msg("a", "2026-10-07T10:00:00.000Z") }, false);
+    assert.deepEqual(r, { announce: null, watermark: "2026-10-07T10:05:00.000Z" });
+  });
+
+  it("stays quiet on the messages screen but remembers the message", () => {
+    const r = nextAlert("2026-10-07T10:00:00.000Z", { count: 1, latest: msg("c", "2026-10-07T10:09:00.000Z") }, true);
+    assert.deepEqual(r, { announce: null, watermark: "2026-10-07T10:09:00.000Z" });
+  });
+
+  it("only trusts a well-formed API answer", () => {
+    assert.equal(parseUnreadSummary(null), null);
+    assert.equal(parseUnreadSummary({ count: "3" }), null);
+    assert.equal(parseUnreadSummary({ count: -1, latest: null }), null);
+    assert.deepEqual(parseUnreadSummary({ count: 0, latest: null }), { count: 0, latest: null });
+    assert.deepEqual(parseUnreadSummary({ count: 4 }), { count: 4, latest: null }, "older API without `latest`");
+    assert.equal(parseUnreadSummary({ count: 1, latest: { id: "x", conversationId: conv, createdAt: "not a date" } }), null);
+    const ok = parseUnreadSummary({ count: 1, latest: { ...msg("d", "2026-10-07T10:00:00.000Z"), kind: "weird", preview: "p".repeat(500) } });
+    assert.equal(ok?.latest?.kind, "text");
+    assert.equal(ok?.latest?.preview.length, 240);
+  });
+
+  it("links to the conversation, never to an arbitrary path", () => {
+    assert.equal(conversationHref("student", conv), `/student/messages?c=${conv}`);
+    assert.equal(conversationHref("teacher", "../../admin"), "/teacher/messages");
+    assert.equal(conversationHref("teacher", "x&redirect=https://evil.test"), "/teacher/messages");
+  });
+});

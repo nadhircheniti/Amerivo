@@ -99,5 +99,10 @@
     "sent": "谢谢。你的举报已发送给 Amerivo 团队，我们会进行审核。",
     "close": "关闭",
     "error": "举报提交失败，请重试。"
+  },
+  "alert": {
+    "open": "打开对话",
+    "dismiss": "关闭",
+    "enableDesktop": "开启桌面提醒"
   }
 }

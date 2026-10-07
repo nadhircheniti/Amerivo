@@ -1,13 +1,14 @@
 import { useTranslations } from "next-intl";
 import { RoleGate } from "@/components/layout/role-gate";
 import { AppSidebar, type SidebarItem } from "@/components/layout/app-sidebar";
+import { MessageAlerts } from "@/components/messaging/message-alerts";
 import { currentStudent } from "@/lib/mock-data";
 
 const items = [
   { href: "/student", key: "overview", icon: "home", exact: true },
   { href: "/student/lessons", key: "lessons", icon: "calendar" },
   { href: "/teachers", key: "findTeachers", icon: "search" },
-  { href: "/student/messages", key: "messages", icon: "message" },
+  { href: "/student/messages", key: "messages", icon: "message", live: "messages" },
   { href: "/student/homework", key: "homework", icon: "book" },
   { href: "/student/materials", key: "materials", icon: "file" },
   { href: "/student/progress", key: "progress", icon: "chart" },
@@ -20,14 +21,16 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
   const sidebarItems: SidebarItem[] = items.map(({ key, ...item }) => ({ ...item, label: t(key) }));
   return (
     <RoleGate space="student">
-      <div className="flex min-h-screen bg-beige">
-        <AppSidebar
-          variant="student"
-          items={sidebarItems}
-          user={{ name: currentStudent.name, subtitle: t("userSubtitle", { level: currentStudent.level }), initials: currentStudent.initials, tone: currentStudent.tone }}
-        />
-        <main className="min-w-0 flex-1">{children}</main>
-      </div>
+      <MessageAlerts space="student">
+        <div className="flex min-h-screen bg-beige">
+          <AppSidebar
+            variant="student"
+            items={sidebarItems}
+            user={{ name: currentStudent.name, subtitle: t("userSubtitle", { level: currentStudent.level }), initials: currentStudent.initials, tone: currentStudent.tone }}
+          />
+          <main className="min-w-0 flex-1">{children}</main>
+        </div>
+      </MessageAlerts>
     </RoleGate>
   );
 }

@@ -99,5 +99,10 @@
     "sent": "Gracias. Tu reporte se envió al equipo de Amerivo, que lo revisará.",
     "close": "Cerrar",
     "error": "No se pudo enviar el reporte. Inténtalo de nuevo."
+  },
+  "alert": {
+    "open": "Abrir la conversación",
+    "dismiss": "Cerrar",
+    "enableDesktop": "Activar avisos en el escritorio"
   }
 }
