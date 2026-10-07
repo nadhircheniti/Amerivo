@@ -86,7 +86,8 @@
       "morePacks": "{count, plural, one {+ # paquete más} other {+ # paquetes más}}",
       "payAsYouGo": "Pago por clase",
       "noPack": "Sin paquete de clases activo",
-      "estimatedTakeTest": "Estimado · Hacer la prueba"
+      "estimatedTakeTest": "Estimado · Hacer la prueba",
+      "bookFromPack": "Reservar mi próxima clase"
     },
     "upcoming": {
       "title": "Próximas clases",

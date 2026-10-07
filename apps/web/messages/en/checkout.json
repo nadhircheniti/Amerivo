@@ -26,7 +26,16 @@
     "afterJoin": "Join from your dashboard, no download",
     "ctaFree": "Confirm free trial lesson",
     "ctaPayLesson": "Pay {amount} and confirm lesson",
-    "ctaPayPackage": "Pay {amount} and confirm package"
+    "ctaPayPackage": "Pay {amount} and confirm package",
+    "promoApplied": "Code {code}: −{percent} %",
+    "promoRemove": "Remove",
+    "promoChecking": "Checking…",
+    "promoSignIn": "Sign in to use a discount code.",
+    "promoInvalid": "This code is not valid or has already been used.",
+    "promoTooMany": "Too many attempts. Please wait a minute and try again.",
+    "promoError": "We couldn't check this code. Please try again.",
+    "promoDiscount": "Discount code (−{percent} %)",
+    "ctaFreeWithCode": "Confirm my free lesson"
   },
   "order": {
     "trial": "Free trial · 20 min",

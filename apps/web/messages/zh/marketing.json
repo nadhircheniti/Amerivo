@@ -248,7 +248,12 @@
     "continue": "继续付款",
     "message": "给 {name} 发消息",
     "cancellation": "课前 24 小时以上可免费取消。",
-    "loadError": "无法加载该老师的日程，请稍后刷新页面。"
+    "loadError": "无法加载该老师的日程，请稍后刷新页面。",
+    "usePackage": "使用我的课程包（剩余 {count} 节）",
+    "included": "已包含",
+    "bookFromPackage": "预订这节课",
+    "booking": "正在预订…",
+    "bookError": "无法预订这节课，请重试。"
   },
   "contact": {
     "metaTitle": "联系我们",

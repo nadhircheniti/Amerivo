@@ -33,6 +33,10 @@ export class StudentSpaceController {
   @Get("payments") payments(@CurrentUser() u: AuthUser) {
     return this.space.paymentsPage(u);
   }
+  /** GET /student/packages?teacher=<slug> — packages with lessons left to book with that teacher. */
+  @Get("packages") packages(@CurrentUser() u: AuthUser, @Query("teacher") teacher?: string) {
+    return teacher ? this.space.packagesWithTeacher(u, teacher.slice(0, 120)) : [];
+  }
 }
 
 /**

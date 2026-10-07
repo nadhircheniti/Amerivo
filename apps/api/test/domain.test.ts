@@ -7,6 +7,7 @@ import { generateSlots, isSlotAvailable, type SlotQuery } from "../src/domain/av
 import { recommend } from "../src/domain/matching";
 import { ageOn, isOldEnough } from "../src/domain/age";
 import { corsOrigins } from "../src/common/cors";
+import { applyDiscount, generateCode, normalizeCode } from "../src/domain/discount";
 
 const teacher = { priceCents: 3500, offersTrial: true, offersPack5: true, offersPack10: true };
 
@@ -152,5 +153,35 @@ describe("CORS origins", () => {
     assert.ok((preview as RegExp).test("https://amerivo-api-git-feat-api-auth-nadhir.vercel.app"));
     assert.ok(!(preview as RegExp).test("https://amerivo-api-x.vercel.app.evil.com"));
     assert.ok(!(preview as RegExp).test("https://evil.com/amerivo-api-x.vercel.app"));
+  });
+});
+
+describe("discount codes", () => {
+  it("normalizes what the student types and rejects anything else", () => {
+    assert.equal(normalizeCode("  amv-ab12 cd34 "), "AMV-AB12CD34");
+    assert.equal(normalizeCode("WELCOME100"), "WELCOME100");
+    assert.equal(normalizeCode("ab"), null);
+    assert.equal(normalizeCode("-ABC"), null);
+    assert.equal(normalizeCode("A'B;C--"), null);
+    assert.equal(normalizeCode("x".repeat(40)), null);
+    assert.equal(normalizeCode(42), null);
+  });
+  it("generates unambiguous, random codes", () => {
+    const codes = new Set(Array.from({ length: 500 }, generateCode));
+    assert.equal(codes.size, 500);
+    for (const c of codes) {
+      assert.match(c, /^AMV-[A-HJ-NP-Z2-9]{4}-[A-HJ-NP-Z2-9]{4}$/);
+      assert.equal(normalizeCode(c), c);
+    }
+  });
+  it("applies the percentage, 100 % = free, waives a remainder under $0.50", () => {
+    assert.deepEqual(applyDiscount(3500, 20), { paidCents: 2800, discountCents: 700 });
+    assert.deepEqual(applyDiscount(3500, 100), { paidCents: 0, discountCents: 3500 });
+    assert.deepEqual(applyDiscount(3325, 15), { paidCents: 2826, discountCents: 499 });
+    assert.deepEqual(applyDiscount(2000, 98), { paidCents: 0, discountCents: 2000 }, "$0.40 can't be charged by Stripe");
+    assert.deepEqual(applyDiscount(2000, 97), { paidCents: 60, discountCents: 1940 });
+    assert.throws(() => applyDiscount(3500, 0));
+    assert.throws(() => applyDiscount(3500, 101));
+    assert.throws(() => applyDiscount(3500, 12.5));
   });
 });

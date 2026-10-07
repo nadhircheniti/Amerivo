@@ -26,7 +26,16 @@
     "afterJoin": "Entra desde tu panel, sin descargar nada",
     "ctaFree": "Confirmar clase de prueba gratis",
     "ctaPayLesson": "Pagar {amount} y confirmar la clase",
-    "ctaPayPackage": "Pagar {amount} y confirmar el paquete"
+    "ctaPayPackage": "Pagar {amount} y confirmar el paquete",
+    "promoApplied": "Código {code}: −{percent} %",
+    "promoRemove": "Quitar",
+    "promoChecking": "Comprobando…",
+    "promoSignIn": "Inicia sesión para usar un código de descuento.",
+    "promoInvalid": "Este código no es válido o ya se ha usado.",
+    "promoTooMany": "Demasiados intentos. Espera un minuto e inténtalo de nuevo.",
+    "promoError": "No pudimos comprobar este código. Inténtalo de nuevo.",
+    "promoDiscount": "Código de descuento (−{percent} %)",
+    "ctaFreeWithCode": "Confirmar mi clase gratis"
   },
   "order": {
     "trial": "Clase de prueba gratis · 20 min",

@@ -248,7 +248,12 @@
     "continue": "Continuer vers le paiement",
     "message": "Écrire à {name}",
     "cancellation": "Annulation gratuite jusqu'à 24 heures avant le cours.",
-    "loadError": "Impossible de charger le calendrier de ce professeur. Veuillez actualiser dans un instant."
+    "loadError": "Impossible de charger le calendrier de ce professeur. Veuillez actualiser dans un instant.",
+    "usePackage": "{count, plural, one {Utiliser mon forfait (# cours restant)} other {Utiliser mon forfait (# cours restants)}}",
+    "included": "Inclus",
+    "bookFromPackage": "Réserver ce cours",
+    "booking": "Réservation…",
+    "bookError": "Impossible de réserver ce cours. Veuillez réessayer."
   },
   "contact": {
     "metaTitle": "Nous contacter",

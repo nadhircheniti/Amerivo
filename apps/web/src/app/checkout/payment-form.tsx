@@ -10,6 +10,9 @@ import { Icon } from "@/components/ui/icon";
 import { API_URL } from "@/lib/api";
 import { getStripe, stripeAppearance, stripeEnabled, stripeKeyProblem } from "@/lib/stripe";
 import { useApi } from "@/lib/use-api";
+import { formatUsd } from "@/lib/mock-data";
+import type { Locale } from "@/i18n/config";
+import { useDiscount } from "./discount";
 
 type BookingRequest = {
   teacherSlug: string;
@@ -43,11 +46,18 @@ function ErrorNote({ error }: { error: string | null }) {
   );
 }
 
-export function PaymentForm({ ctaLabel, free, booking }: { ctaLabel: string; free: boolean; booking: BookingRequest | null }) {
+export function PaymentForm({ ctaLabel: baseLabel, free: baseFree, booking }: { ctaLabel: string; free: boolean; booking: BookingRequest | null }) {
   const router = useRouter();
   const api = useApi();
   const t = useTranslations("checkout.payment");
+  const tp = useTranslations("checkout.page");
   const locale = useLocale();
+  // A discount code applied in the order summary changes the price (and can make it free).
+  const discount = useDiscount();
+  const free = baseFree || discount?.paidCents === 0;
+  const isPack = booking?.offer === "pack5" || booking?.offer === "pack10";
+  const paid = discount ? formatUsd(discount.paidCents / 100, locale as Locale) : null;
+  const ctaLabel = !discount ? baseLabel : discount.paidCents === 0 ? tp("ctaFreeWithCode") : isPack ? tp("ctaPayPackage", { amount: paid! }) : tp("ctaPayLesson", { amount: paid! });
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [intent, setIntent] = useState<{ bookingId: string; clientSecret: string } | null>(null);
@@ -62,7 +72,7 @@ export function PaymentForm({ ctaLabel, free, booking }: { ctaLabel: string; fre
     setPending(true);
     setError(null);
     try {
-      const res = await api.call<BookingResponse>("/bookings", { method: "POST", body: JSON.stringify(booking) });
+      const res = await api.call<BookingResponse>("/bookings", { method: "POST", body: JSON.stringify(discount ? { ...booking, discountCode: discount.code } : booking) });
       if (res.payment?.clientSecret && !res.payment.simulated) {
         if (!stripeEnabled) {
           // Tells whoever tests the site what is wrong with the configuration (the key itself is never shown).

@@ -43,12 +43,14 @@ import { ModerationService } from "./modules/moderation/moderation.service";
 import { AdminMaterialsController, StudentMaterialsController, TeacherMaterialsController } from "./modules/materials/materials.controller";
 import { MaterialsService } from "./modules/materials/materials.service";
 import { TeacherSpaceService } from "./modules/teacher-space/teacher-space.service";
+import { AdminDiscountsController, DiscountCheckController } from "./modules/discounts/discounts.controller";
+import { DiscountsService } from "./modules/discounts/discounts.service";
 
-export const services = [AccountsService, AdminService, ApplicationsService, BookingsService, EarningsService, LessonsService, StudentsService, TeachersService, StudentSpaceService, MessagingService, AdminSpaceService, DisputesService, FilesService, TeacherSpaceService, SupportService, PlacementService, ModerationService, MaterialsService];
+export const services = [AccountsService, AdminService, ApplicationsService, BookingsService, EarningsService, LessonsService, StudentsService, TeachersService, StudentSpaceService, MessagingService, AdminSpaceService, DisputesService, FilesService, TeacherSpaceService, SupportService, PlacementService, ModerationService, MaterialsService, DiscountsService];
 
 @Module({
   imports: [DbModule, IntegrationsModule, ThrottlerModule.forRoot([{ ttl: 60_000, limit: 120 }])],
-  controllers: [HealthController, AccountsController, TeachersController, TeacherSpaceController, StudentController, StudentSpaceController, StudentAccountController, BookingsController, AdminController, WebhooksController, MessagingController, NotificationsController, AdminSpaceController, BookingDisputesController, AdminDisputesController, FilesController, TeacherDashboardController, ContactController, AdminSupportController, PlacementController, AdminModerationController, ReportsController, TeacherMaterialsController, StudentMaterialsController, AdminMaterialsController],
+  controllers: [HealthController, AccountsController, TeachersController, TeacherSpaceController, StudentController, StudentSpaceController, StudentAccountController, BookingsController, AdminController, WebhooksController, MessagingController, NotificationsController, AdminSpaceController, BookingDisputesController, AdminDisputesController, FilesController, TeacherDashboardController, ContactController, AdminSupportController, PlacementController, AdminModerationController, ReportsController, TeacherMaterialsController, StudentMaterialsController, AdminMaterialsController, DiscountCheckController, AdminDiscountsController],
   providers: [{ provide: CLOCK, useValue: systemClock }, { provide: APP_GUARD, useClass: ThrottlerGuard }, { provide: APP_GUARD, useClass: AuthGuard }, ...services],
 })
 export class AppModule {}

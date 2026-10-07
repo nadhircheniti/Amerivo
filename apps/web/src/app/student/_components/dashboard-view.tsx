@@ -192,6 +192,11 @@ function Dashboard({ o }: { o: Overview }) {
             <>
               <span className="font-display text-[22px] font-extrabold">{t("stats.pack", { count: plan.lessonCount })}</span>
               <span className="text-[13px] text-muted">{t("stats.lessonsLeftWith", { count: plan.remaining, name: plan.teacher.firstName })}</span>
+              {plan.remaining > 0 && plan.teacher.slug && (
+                <Link href={`/teachers/${plan.teacher.slug}?type=package#book`} className="text-[13px] font-semibold text-teal-dark hover:text-navy">
+                  {t("stats.bookFromPack")}
+                </Link>
+              )}
               {o.activePackages.length > 1 && (
                 <Link href="/student/payments" className="text-[13px] font-semibold text-teal-dark hover:text-navy">
                   {t("stats.morePacks", { count: o.activePackages.length - 1 })}

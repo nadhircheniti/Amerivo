@@ -86,7 +86,8 @@
       "morePacks": "{count, plural, one {+ # more pack} other {+ # more packs}}",
       "payAsYouGo": "Pay as you go",
       "noPack": "No active lesson pack",
-      "estimatedTakeTest": "Estimated · Take the test"
+      "estimatedTakeTest": "Estimated · Take the test",
+      "bookFromPack": "Book my next lesson"
     },
     "upcoming": {
       "title": "Upcoming lessons",

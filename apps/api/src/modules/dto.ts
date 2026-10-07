@@ -44,6 +44,7 @@ export class CreateBookingDto {
   @IsDateString() startsAt!: string;
   @IsOptional() @IsString() packageId?: string;
   @IsOptional() @IsString() @MaxLength(200) topic?: string;
+  @IsOptional() @IsString() @MaxLength(40) discountCode?: string;
 }
 
 export class CancelDto {

@@ -170,6 +170,20 @@ export class StudentSpaceService {
       .orderBy(desc(lessonPackages.createdAt));
   }
 
+  /**
+   * Packages with lessons left to book with one teacher (teacher profile → "Use my package").
+   * Oldest first: lessons are taken from the package bought first.
+   */
+  async packagesWithTeacher(student: AuthUser, teacherSlug: string) {
+    const rows = await this.db
+      .select({ id: lessonPackages.id, lessonCount: lessonPackages.lessonCount, lessonsUsed: lessonPackages.lessonsUsed })
+      .from(lessonPackages)
+      .innerJoin(teacherProfiles, eq(teacherProfiles.userId, lessonPackages.teacherId))
+      .where(and(eq(lessonPackages.studentId, student.id), eq(teacherProfiles.slug, teacherSlug), eq(lessonPackages.status, "active"), sql`${lessonPackages.lessonsUsed} < ${lessonPackages.lessonCount}`))
+      .orderBy(asc(lessonPackages.createdAt));
+    return rows.map((r) => ({ ...r, remaining: r.lessonCount - r.lessonsUsed }));
+  }
+
   private homeworkRows(studentId: string, where?: SQL) {
     return this.db
       .select({

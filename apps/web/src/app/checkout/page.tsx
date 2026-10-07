@@ -9,6 +9,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { currentStudent, formatUsd } from "@/lib/mock-data";
 import { getTeacherBySlug } from "@/lib/teachers";
 import { describeOrder, describeSlot, isLessonType } from "./_lib";
+import { CheckoutTotal, DiscountProvider, PromoCodeBox } from "./discount";
 import { PaymentForm } from "./payment-form";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -60,95 +61,84 @@ export default async function CheckoutPage({ searchParams }: { searchParams: Pro
           </span>
         }
       />
-      <main className="mx-auto flex max-w-[1440px] flex-col items-start gap-8 px-4 py-8 sm:px-6 lg:flex-row lg:px-20 lg:py-11">
-        <Card className="flex w-full min-w-0 flex-1 flex-col gap-[26px] p-6 sm:p-10">
-          <div className="flex flex-col gap-2">
-            <Link href={`/teachers/${teacher.slug}`} className="inline-flex items-center gap-1 self-start text-sm font-semibold text-teal-dark hover:text-navy">
-              <Icon name="chevronLeft" size={16} strokeWidth={2} />
-              {t("backToCalendar", { name: firstName })}
-            </Link>
-            <h1 className="text-[28px] font-extrabold sm:text-[32px]">{t("title")}</h1>
-          </div>
-          <PaymentForm
-            ctaLabel={cta}
-            free={order.total === 0}
-            booking={
-              slot.iso
-                ? {
-                    teacherSlug: teacher.slug,
-                    offer: order.type,
-                    startsAt: slot.iso,
-                  }
-                : null
-            }
-          />
-        </Card>
-
-        <aside className="flex w-full shrink-0 flex-col gap-5 lg:w-[440px]">
-          <Card className="flex flex-col gap-5 p-7">
-            <h2 className="text-xl font-bold">{t("orderSummary")}</h2>
-            <div className="flex items-center gap-3.5">
-              <Avatar initials={teacher.initials} tone={teacher.tone} size={60} />
-              <div>
-                <p className="text-base font-semibold">{teacher.name}</p>
-                <p className="text-sm text-muted">{specialty && ts.has(specialty as never) ? ts(specialty as never) : specialty}</p>
-              </div>
+      <DiscountProvider>
+        <main className="mx-auto flex max-w-[1440px] flex-col items-start gap-8 px-4 py-8 sm:px-6 lg:flex-row lg:px-20 lg:py-11">
+          <Card className="flex w-full min-w-0 flex-1 flex-col gap-[26px] p-6 sm:p-10">
+            <div className="flex flex-col gap-2">
+              <Link href={`/teachers/${teacher.slug}`} className="inline-flex items-center gap-1 self-start text-sm font-semibold text-teal-dark hover:text-navy">
+                <Icon name="chevronLeft" size={16} strokeWidth={2} />
+                {t("backToCalendar", { name: firstName })}
+              </Link>
+              <h1 className="text-[28px] font-extrabold sm:text-[32px]">{t("title")}</h1>
             </div>
-            <dl className="flex flex-col gap-3 border-t border-line-soft pt-[18px] text-[15px]">
-              <Row label={t("lesson")} value={tOrder(order.type)} />
-              <Row label={isPack ? t("firstLesson") : t("date")} value={slot.date} />
-              {slot.studentTime && <Row label={t("yourTime")} value={t("timeWithCity", { time: slot.studentTime, city: cityOf(studentTz) })} />}
-              {slot.teacherTime && (
-                <Row
-                  label={t("teacherTime")}
-                  value={
-                    slot.teacherDate
-                      ? t("dateTimeWithCity", { date: slot.teacherDate, time: slot.teacherTime, city: teacherCity })
-                      : t("timeWithCity", { time: slot.teacherTime, city: teacherCity })
-                  }
-                />
-              )}
-            </dl>
-            <dl className="flex flex-col gap-3 border-t border-line-soft pt-[18px] text-[15px]">
-              <Row label={isPack ? t("unitPrice", { count: order.count, price: formatUsd(teacher.priceUsd, locale) }) : t("lessonPrice")} value={formatUsd(order.subtotal, locale)} />
-              <Row label={t("packageDiscount")} value={order.discount > 0 ? t("discountValue", { amount: formatUsd(order.discount, locale) }) : "—"} />
-              <div className="mt-1.5 flex justify-between font-display text-xl font-extrabold">
-                <dt>{t("total")}</dt>
-                <dd>{amount}</dd>
-              </div>
-            </dl>
-            <div className="flex gap-2">
-              <label htmlFor="promo" className="sr-only">
-                {t("promoCode")}
-              </label>
-              <input
-                id="promo"
-                name="promo"
-                placeholder={t("promoCode")}
-                className="h-[46px] min-w-0 flex-1 rounded-xl border border-line bg-white px-3.5 text-sm text-navy placeholder:text-muted/80 focus:border-teal-dark focus:outline-none"
-              />
-              <button type="button" className="h-[46px] rounded-xl border border-navy bg-white px-[18px] font-semibold text-navy hover:bg-beige">
-                {t("apply")}
-              </button>
-            </div>
+            <PaymentForm
+              ctaLabel={cta}
+              free={order.total === 0}
+              booking={
+                slot.iso
+                  ? {
+                      teacherSlug: teacher.slug,
+                      offer: order.type,
+                      startsAt: slot.iso,
+                    }
+                  : null
+              }
+            />
           </Card>
 
-          <div className="flex flex-col gap-3 rounded-3xl bg-navy px-7 py-6 text-sm text-white">
-            <h2 className="font-display text-[15px] font-bold">{t("afterPayment")}</h2>
-            <ul className="flex flex-col gap-3 text-ink-soft">
-              <CheckItem className="gap-2.5" iconClassName="text-yellow">
-                {t("afterConfirmed", { name: firstName })}
-              </CheckItem>
-              <CheckItem className="gap-2.5" iconClassName="text-yellow">
-                {t("afterReminders")}
-              </CheckItem>
-              <CheckItem className="gap-2.5" iconClassName="text-yellow">
-                {t("afterJoin")}
-              </CheckItem>
-            </ul>
-          </div>
-        </aside>
-      </main>
+          <aside className="flex w-full shrink-0 flex-col gap-5 lg:w-[440px]">
+            <Card className="flex flex-col gap-5 p-7">
+              <h2 className="text-xl font-bold">{t("orderSummary")}</h2>
+              <div className="flex items-center gap-3.5">
+                <Avatar initials={teacher.initials} tone={teacher.tone} size={60} />
+                <div>
+                  <p className="text-base font-semibold">{teacher.name}</p>
+                  <p className="text-sm text-muted">{specialty && ts.has(specialty as never) ? ts(specialty as never) : specialty}</p>
+                </div>
+              </div>
+              <dl className="flex flex-col gap-3 border-t border-line-soft pt-[18px] text-[15px]">
+                <Row label={t("lesson")} value={tOrder(order.type)} />
+                <Row label={isPack ? t("firstLesson") : t("date")} value={slot.date} />
+                {slot.studentTime && <Row label={t("yourTime")} value={t("timeWithCity", { time: slot.studentTime, city: cityOf(studentTz) })} />}
+                {slot.teacherTime && (
+                  <Row
+                    label={t("teacherTime")}
+                    value={
+                      slot.teacherDate
+                        ? t("dateTimeWithCity", { date: slot.teacherDate, time: slot.teacherTime, city: teacherCity })
+                        : t("timeWithCity", { time: slot.teacherTime, city: teacherCity })
+                    }
+                  />
+                )}
+              </dl>
+              <dl className="flex flex-col gap-3 border-t border-line-soft pt-[18px] text-[15px]">
+                <Row
+                  label={isPack ? t("unitPrice", { count: order.count, price: formatUsd(teacher.priceUsd, locale) }) : t("lessonPrice")}
+                  value={formatUsd(order.subtotal, locale)}
+                />
+                <Row label={t("packageDiscount")} value={order.discount > 0 ? t("discountValue", { amount: formatUsd(order.discount, locale) }) : "—"} />
+                <CheckoutTotal amount={amount} />
+              </dl>
+              {order.type !== "trial" && slot.iso && <PromoCodeBox teacherSlug={teacher.slug} offer={order.type} />}
+            </Card>
+
+            <div className="flex flex-col gap-3 rounded-3xl bg-navy px-7 py-6 text-sm text-white">
+              <h2 className="font-display text-[15px] font-bold">{t("afterPayment")}</h2>
+              <ul className="flex flex-col gap-3 text-ink-soft">
+                <CheckItem className="gap-2.5" iconClassName="text-yellow">
+                  {t("afterConfirmed", { name: firstName })}
+                </CheckItem>
+                <CheckItem className="gap-2.5" iconClassName="text-yellow">
+                  {t("afterReminders")}
+                </CheckItem>
+                <CheckItem className="gap-2.5" iconClassName="text-yellow">
+                  {t("afterJoin")}
+                </CheckItem>
+              </ul>
+            </div>
+          </aside>
+        </main>
+      </DiscountProvider>
     </>
   );
 }

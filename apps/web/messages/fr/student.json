@@ -86,7 +86,8 @@
       "morePacks": "{count, plural, one {+ # autre forfait} other {+ # autres forfaits}}",
       "payAsYouGo": "Paiement à l'unité",
       "noPack": "Aucun forfait actif",
-      "estimatedTakeTest": "Estimé · Passer le test"
+      "estimatedTakeTest": "Estimé · Passer le test",
+      "bookFromPack": "Réserver mon prochain cours"
     },
     "upcoming": {
       "title": "Cours à venir",

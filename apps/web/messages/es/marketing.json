@@ -248,7 +248,12 @@
     "continue": "Continuar al pago",
     "message": "Enviar mensaje a {name}",
     "cancellation": "Cancelación gratuita hasta 24 horas antes de la clase.",
-    "loadError": "No pudimos cargar el calendario de este profesor. Actualiza la página en un momento."
+    "loadError": "No pudimos cargar el calendario de este profesor. Actualiza la página en un momento.",
+    "usePackage": "{count, plural, one {Usar mi paquete (# clase restante)} other {Usar mi paquete (# clases restantes)}}",
+    "included": "Incluida",
+    "bookFromPackage": "Reservar esta clase",
+    "booking": "Reservando…",
+    "bookError": "No pudimos reservar esta clase. Inténtalo de nuevo."
   },
   "contact": {
     "metaTitle": "Contacto",

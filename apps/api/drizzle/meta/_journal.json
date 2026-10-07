@@ -57,6 +57,13 @@
       "when": 1791391467817,
       "tag": "0007_user_reports",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1791402066910,
+      "tag": "0008_discount_codes",
+      "breakpoints": true
     }
   ]
 }
