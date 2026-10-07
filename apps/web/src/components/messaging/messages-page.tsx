@@ -10,18 +10,21 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
  * Messages screen powered by the API. Deep links: `?with=<teacherSlug>` (student) and
- * `?student=<studentId>` (teacher) open or create that conversation. Wrap in <Suspense>.
+ * `?student=<studentId>` (teacher) open or create that conversation; `?c=<conversationId>` opens
+ * one of the user's conversations (new-message alerts). Wrap in <Suspense>.
  */
 export function LiveMessages({ role }: { role: ChatRole }) {
   const source = useApiMessagingSource();
   const params = useSearchParams();
   const withSlug = params.get("with");
   const studentId = params.get("student");
+  const conversationId = params.get("c");
   const deepLink = useMemo(() => {
     if (role === "student" && withSlug) return { teacherSlug: withSlug.slice(0, 120) };
     if (role === "teacher" && studentId && UUID.test(studentId)) return { studentId };
+    if (conversationId && UUID.test(conversationId)) return { conversationId };
     return null;
-  }, [role, withSlug, studentId]);
+  }, [role, withSlug, studentId, conversationId]);
   // Remount when the deep link changes (e.g. another "Message" button while the page is open).
   return <ConversationsView key={JSON.stringify(deepLink)} role={role} source={source} deepLink={deepLink} />;
 }

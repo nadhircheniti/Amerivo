@@ -19,8 +19,8 @@ export const COMPANY = {
   state: "Indiana",
   /** Venue for arbitration hearings / courts (§19 of the Terms). */
   county: "[COUNTY]",
-  /** Official business address (registered agent or office). */
-  address: "[REGISTERED BUSINESS ADDRESS], Indiana, United States",
+  /** Where the LLC is based, as published in the Terms (no street address, at the client's request). */
+  location: "Indiana, United States",
   email: "contact@amerivoenglish.com",
   /** Business phone (confirmed by the client). */
   phone: "+1 317 516 7573",

@@ -201,15 +201,42 @@ export class MessagingService {
     };
   }
 
+  /**
+   * Unread messages for the signed-in user, with the most recent one (sender's first name and a
+   * short preview of the already-screened text) so the app can show a "new message" alert.
+   */
   async unreadCount(user: AuthUser) {
     this.assertMessagingRole(user);
     const mine = user.role === "student" ? conversations.studentId : conversations.teacherId;
+    const unread = and(eq(mine, user.id), ne(messages.senderId, user.id), isNull(messages.readAt));
     const [r] = await this.db
       .select({ n: sql<number>`count(*)::int` })
       .from(messages)
       .innerJoin(conversations, eq(conversations.id, messages.conversationId))
-      .where(and(eq(mine, user.id), ne(messages.senderId, user.id), isNull(messages.readAt)));
-    return { count: Number(r?.n ?? 0) };
+      .where(unread);
+    const count = Number(r?.n ?? 0);
+    if (count === 0) return { count, latest: null };
+    const [m] = await this.db
+      .select({ id: messages.id, conversationId: messages.conversationId, kind: messages.kind, body: messages.body, createdAt: messages.createdAt, senderFirstName: users.firstName })
+      .from(messages)
+      .innerJoin(conversations, eq(conversations.id, messages.conversationId))
+      .innerJoin(users, eq(users.id, messages.senderId))
+      .where(unread)
+      .orderBy(desc(messages.createdAt), desc(messages.id))
+      .limit(1);
+    if (!m) return { count, latest: null };
+    const body = m.body ?? "";
+    return {
+      count,
+      latest: {
+        id: m.id,
+        conversationId: m.conversationId,
+        kind: m.kind,
+        senderFirstName: m.senderFirstName,
+        preview: body.length > PREVIEW_MAX ? `${body.slice(0, PREVIEW_MAX)}…` : body,
+        createdAt: m.createdAt,
+      },
+    };
   }
 
   /* ------------------------------------------------------------ notifications */

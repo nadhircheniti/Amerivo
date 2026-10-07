@@ -80,6 +80,8 @@ describe("trust & safety", () => {
         .expect(201);
       assert.equal(sent.body.body, "Text me on WhatsApp [hidden] or [hidden]");
       assert.deepEqual(sent.body.moderation, { redacted: true, types: ["app", "phone", "email"] });
+      const alert = await http().get("/api/messages/unread-count").set(as("clerk_ts_t")).expect(200);
+      assert.equal(alert.body.latest.preview, "Text me on WhatsApp [hidden] or [hidden]", "the new-message alert only shows the screened text");
 
       const seen = await http().get(`/api/conversations/${conversationId}/messages`).set(as("clerk_ts_t")).expect(200);
       assert.equal(seen.body.items.at(-1).body, "Text me on WhatsApp [hidden] or [hidden]");

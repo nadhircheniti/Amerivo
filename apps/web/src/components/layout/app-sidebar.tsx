@@ -10,14 +10,18 @@ import { Avatar, type AvatarTone } from "@/components/ui/primitives";
 import { SidebarSignOut } from "./auth-nav";
 import { useMe } from "./role-gate";
 import { fileSrc } from "@/components/ui/file-upload";
-import { useTranslations } from "next-intl";
 import { LanguageSwitcher } from "./language-switcher";
+import { useUnreadMessages } from "@/components/messaging/message-alerts";
+import { intlTags, type Locale } from "@/i18n/config";
+import { useLocale, useTranslations } from "next-intl";
 
 export type SidebarItem = {
   href: string;
   label: string;
   icon: IconName;
-  badge?: { text: string; tone?: "orange" | "danger" };
+  badge?: { text: string; tone?: "orange" | "danger"; /** Read by screen readers instead of the bare number. */ label?: string };
+  /** Live counter shown as the badge: "messages" = unread messages (inside <MessageAlerts>). */
+  live?: "messages";
   exact?: boolean;
 };
 
@@ -43,6 +47,16 @@ export function AppSidebar({
   // Signed in: show the real account (and its role) instead of the sample profile.
   const me = useMe();
   const t = useTranslations("common");
+  const tm = useTranslations("messaging.view");
+  const locale = useLocale() as Locale;
+  const unread = useUnreadMessages();
+  const badgeOf = (item: SidebarItem): SidebarItem["badge"] => {
+    if (item.live === "messages") {
+      const n = unread?.count ?? 0;
+      return n > 0 ? { text: n > 99 ? "99+" : n.toLocaleString(intlTags[locale]), label: tm("unreadCount", { count: n }) } : undefined;
+    }
+    return item.badge;
+  };
   if (me) {
     const name = `${me.firstName} ${me.lastName}`.trim() || me.email;
     const roleLabel = t(`roles.${me.role}`);
@@ -71,6 +85,7 @@ export function AppSidebar({
       <nav aria-label={t("sidebar.nav")} className="flex flex-col gap-1">
         {items.map((item) => {
           const active = isActive(item);
+          const badge = badgeOf(item);
           return (
             <Link
               key={item.href + item.label}
@@ -94,9 +109,16 @@ export function AppSidebar({
             >
               <Icon name={item.icon} size={variant === "admin" ? 18 : 20} />
               {item.label}
-              {item.badge && (
-                <span className={cn("ms-auto rounded-full px-2 py-0.5 text-xs font-bold", item.badge.tone === "danger" ? "bg-danger-100 text-danger-text" : "bg-orange text-navy")}>
-                  {item.badge.text}
+              {badge && (
+                <span className={cn("ms-auto rounded-full px-2 py-0.5 text-xs font-bold", badge.tone === "danger" ? "bg-danger-100 text-danger-text" : "bg-orange text-navy")}>
+                  {badge.label ? (
+                    <>
+                      <span aria-hidden="true">{badge.text}</span>
+                      <span className="sr-only">{badge.label}</span>
+                    </>
+                  ) : (
+                    badge.text
+                  )}
                 </span>
               )}
             </Link>
