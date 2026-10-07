@@ -160,3 +160,53 @@ function useDemoSignInFlow() {
 }
 
 export const useSignInFlow = clerkEnabled ? useClerkSignInFlow : useDemoSignInFlow;
+
+/* ------------------------------------------------------------------ password reset */
+/**
+ * "Forgot password": Clerk e-mails a 6-digit code (strategy reset_password_email_code), the user
+ * types it with a new password, and is signed in. Other sessions of the account are signed out.
+ */
+function useClerkResetPasswordFlow() {
+  const { isLoaded, signIn, setActive } = useSignIn();
+  const router = useRouter();
+  const t = useTranslations("auth.errors");
+  return {
+    ready: isLoaded,
+    async sendCode(email: string) {
+      if (!isLoaded) return;
+      try {
+        await signIn.create({ strategy: "reset_password_email_code", identifier: email });
+      } catch (e) {
+        // Same answer whether or not an account exists (no account enumeration).
+        const code = (e as { errors?: { code?: string }[] }).errors?.[0]?.code;
+        if (code !== "form_identifier_not_found") throw e;
+      }
+    },
+    async reset(code: string, password: string) {
+      if (!isLoaded) return;
+      const attempt = await signIn.attemptFirstFactor({ strategy: "reset_password_email_code", code });
+      const res = attempt.status === "needs_new_password" ? await signIn.resetPassword({ password, signOutOfOtherSessions: true }) : attempt;
+      if (res.status !== "complete" || !res.createdSessionId) throw new Error(t("extraVerification"));
+      await setActive({ session: res.createdSessionId });
+      router.push(welcome());
+    },
+  };
+}
+
+function useDemoResetPasswordFlow() {
+  const router = useRouter();
+  return {
+    ready: true,
+    // Demo mode (no Clerk): nothing is sent; the code step just leads back to the login page.
+    async sendCode(email: string) {
+      void email;
+    },
+    async reset(code: string, password: string) {
+      void code;
+      void password;
+      router.push("/login");
+    },
+  };
+}
+
+export const useResetPasswordFlow = clerkEnabled ? useClerkResetPasswordFlow : useDemoResetPasswordFlow;
