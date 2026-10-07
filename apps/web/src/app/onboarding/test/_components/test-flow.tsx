@@ -58,7 +58,12 @@ export function TestFlow() {
     if (API_URL && isLoaded && isSignedIn) void fetchStatus();
   }, [isLoaded, isSignedIn, fetchStatus]);
 
-  useEffect(() => top.current?.scrollIntoView({ block: "start" }), [phase.name, phase.name === "stage" ? phase.stage.stageIndex : -1]);
+  // Braces matter: recent browsers make scrollIntoView() return a Promise, and an arrow function
+  // without braces would hand that Promise to React as the effect's cleanup → "i is not a function".
+  const stageIndex = phase.name === "stage" ? phase.stage.stageIndex : -1;
+  useEffect(() => {
+    top.current?.scrollIntoView({ block: "start" });
+  }, [phase.name, stageIndex]);
 
   async function start(restart = false) {
     if (!API_URL) return router.push("/onboarding/results");
