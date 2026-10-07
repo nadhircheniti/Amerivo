@@ -587,15 +587,18 @@ export const moderationFlags = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     recipientId: uuid("recipient_id").references(() => users.id, { onDelete: "set null" }),
-    /** message | lesson_chat | lesson_notes | lesson_report | review | profile | material | booking (lesson topic) */
+    /** message | lesson_chat | lesson_notes | lesson_report | review | profile | material | booking (lesson topic) | report (sent by a user) */
     context: text("context").notNull(),
     conversationId: uuid("conversation_id").references(() => conversations.id, { onDelete: "set null" }),
     bookingId: uuid("booking_id").references(() => bookings.id, { onDelete: "set null" }),
     originalText: text("original_text").notNull(),
     deliveredText: text("delivered_text"),
-    /** email | phone | link | handle | app */
+    /** email | phone | link | handle | app — or "report" for a user report */
     types: text("types").array().notNull(),
     status: moderationStatus("status").notNull().default("open"),
+    /** context "report": the user who reported `userId`, and why (harassment, inappropriate, …). */
+    reporterId: uuid("reporter_id").references(() => users.id, { onDelete: "set null" }),
+    reason: text("reason"),
     reviewedBy: uuid("reviewed_by").references(() => users.id, { onDelete: "set null" }),
     reviewedAt: timestamp("reviewed_at", { withTimezone: true }),
     reviewNote: text("review_note"),

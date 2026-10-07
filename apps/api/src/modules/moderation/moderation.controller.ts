@@ -1,11 +1,32 @@
 import { Body, Controller, Get, HttpCode, Param, ParseUUIDPipe, Post, Query } from "@nestjs/common";
-import { IsIn, IsOptional, IsString, MaxLength } from "class-validator";
+import { Throttle } from "@nestjs/throttler";
+import { IsIn, IsOptional, IsString, IsUUID, MaxLength, MinLength } from "class-validator";
 import { CurrentUser, Roles, type AuthUser } from "../../auth/decorators";
-import { MODERATION_STATUSES, ModerationService, type ModerationAction } from "./moderation.service";
+import { MODERATION_STATUSES, ModerationService, REPORT_REASONS, type ModerationAction, type ReportReason } from "./moderation.service";
 
 export class ModerationReviewDto {
   @IsIn(["dismiss", "warn", "block"]) action!: ModerationAction;
   @IsOptional() @IsString() @MaxLength(1000) note?: string;
+}
+
+export class ReportDto {
+  @IsUUID() reportedUserId!: string;
+  @IsIn(REPORT_REASONS) reason!: ReportReason;
+  @IsString() @MinLength(10) @MaxLength(2000) details!: string;
+  @IsOptional() @IsUUID() conversationId?: string;
+  @IsOptional() @IsUUID() bookingId?: string;
+}
+
+/** "Report" button for students and teachers (from a conversation or a lesson). */
+@Controller("reports")
+@Roles("student", "teacher")
+export class ReportsController {
+  constructor(private readonly moderation: ModerationService) {}
+
+  @Post() @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  create(@CurrentUser() u: AuthUser, @Body() dto: ReportDto) {
+    return this.moderation.report(u, dto);
+  }
 }
 
 /** Admin trust & safety queue: contact details detected in messages, classroom chat, notes, reports, reviews. */

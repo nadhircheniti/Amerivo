@@ -1,8 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Icon, type IconName } from "@/components/ui/icon";
 import { ButtonLink } from "@/components/ui/button";
-import { Eyebrow, PhotoPlaceholder, Tag } from "@/components/ui/primitives";
+import { Eyebrow, Tag } from "@/components/ui/primitives";
+import heroPhoto from "@/assets/hero-new-york.jpg";
 import type { Teacher } from "@/lib/mock-data";
 import { getFeaturedTeachers } from "@/lib/teachers";
 import { cn } from "@/lib/cn";
@@ -83,13 +85,16 @@ export default async function HomePage() {
 
         {/* photo area */}
         <div className="relative mx-6 h-[380px] overflow-hidden rounded-[32px] sm:h-[460px] lg:absolute lg:end-0 lg:top-0 lg:mx-0 lg:h-[620px] lg:w-[min(820px,57vw)] lg:rounded-none lg:rounded-s-[420px]">
-          <div aria-hidden="true" className="absolute inset-0 bg-linear-to-b from-[#f3d9a8] via-[#e9b87a] to-[#c98c58]" />
-          <div aria-hidden="true" className="pointer-events-none absolute start-[17%] end-0 bottom-0 flex h-[58%] items-end gap-2.5 opacity-55">
-            {[220, 300, 180, 360, 240, 280, 160, 320, 200].map((h, i) => (
-              <div key={i} className={cn("flex-1", i % 3 === 1 ? "bg-[#6b4430]" : i % 4 === 3 ? "bg-[#5c3a28]" : "bg-[#7a4e34]")} style={{ height: `${(h / 360) * 100}%` }} />
-            ))}
-          </div>
-          <PhotoPlaceholder label={t("photoLabel")} className="absolute inset-0 bg-transparent!" />
+          <Image
+            src={heroPhoto}
+            alt={t("photoLabel")}
+            priority
+            placeholder="blur"
+            sizes="(min-width: 1024px) min(820px, 57vw), 100vw"
+            className="absolute inset-0 size-full object-cover object-[60%_center]"
+          />
+          {/* Lightens the sky behind the handwritten line so it stays readable. */}
+          <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_20%,rgb(250_240_220/0.85),rgb(250_240_220/0.35)_40%,transparent_65%)]" />
           <p className="absolute end-10 top-10 max-w-[calc(100%-5rem)] -rotate-12 font-hand text-4xl leading-[1.05] break-words text-navy sm:end-[90px] sm:top-[70px] sm:text-[46px] rtl:rotate-12">
             {t.rich("handwritten", { br })}
             <span aria-hidden="true" className="mt-1.5 block h-1 w-[150px] rounded bg-orange" />

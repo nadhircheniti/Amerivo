@@ -286,7 +286,8 @@
       "billing": "付款与账单",
       "business": "企业合作",
       "technical": "技术问题"
-    }
+    },
+    "phoneLabel": "致电我们"
   },
   "terms": {
     "metaTitle": "服务条款",

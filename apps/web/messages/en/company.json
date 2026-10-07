@@ -1,0 +1,212 @@
+{
+  "about": {
+    "metaTitle": "About Amerivo English",
+    "metaDescription": "Real English. Real conversations. A brighter future. Learn practical English online with qualified American English teachers.",
+    "eyebrow": "About us",
+    "title": "Real English. Real Conversations. A Brighter Future.",
+    "intro1": "At Amerivo English, we believe learning English should be more than memorizing vocabulary and studying grammar. It should help you speak with confidence, communicate naturally, and open doors to new opportunities.",
+    "intro2": "Amerivo English is an online English-learning platform connecting learners with qualified teachers for personalized, practical English lessons designed around real life.",
+    "intro3": "Whether you’re learning English for work, travel, education, relationships, or simply to become more confident speaking, we’re here to help you move forward, one conversation at a time.",
+    "builtTitle": "English learning built around you",
+    "built1": "Everyone learns differently. That’s why Amerivo isn’t built around a one-size-fits-all classroom.",
+    "built2": "Our platform is designed to give learners the flexibility to choose learning that fits their goals, schedule, level, and lifestyle. You can learn from wherever you are, connect with the teacher who fits your needs, and focus on the English that actually matters to you.",
+    "builtMotto": "Your goals. Your schedule. Your learning journey.",
+    "moreTitle": "More than lessons",
+    "more1": "We don’t want English learning to feel like another obligation. We want it to become something you can actually use.",
+    "more2": "Our approach focuses on practical communication and meaningful interaction, not simply getting the right answer on a worksheet. Through conversation and personalized instruction, learners can work toward becoming more comfortable with:",
+    "skills": {
+      "everyday": "Everyday conversations",
+      "professional": "Professional communication",
+      "travel": "Travel and social situations",
+      "pronunciation": "Pronunciation and speaking",
+      "listening": "Listening comprehension",
+      "vocabulary": "Vocabulary and grammar",
+      "interviews": "Interviews and workplace English",
+      "goals": "Academic and personal goals"
+    },
+    "communityTitle": "A global learning community",
+    "community1": "English connects people across countries, cultures, and backgrounds. Amerivo was created with that idea at its heart.",
+    "community2": "Our goal is to make quality English learning accessible to people wherever they are, and to create a learning environment where different backgrounds are welcomed and respected.",
+    "communityMotto": "Different countries. Different experiences. One shared language.",
+    "teachersTitle": "Our teachers",
+    "teachers1": "Great learning starts with great teachers. Amerivo works with qualified American English instructors who bring their own experience, teaching style, and perspective to every lesson.",
+    "teachers2": "Rather than placing every learner into the same program, we believe students should have the opportunity to find a teacher whose approach works for them.",
+    "teachers3": "Our teachers are here to guide, encourage, correct, explain, and most importantly help you become a more confident communicator.",
+    "missionTitle": "Our mission",
+    "mission": "To make practical, personalized English learning accessible to more people around the world.",
+    "mission2": "We want to help learners develop the confidence to communicate, pursue opportunities, build relationships, and participate more fully in an increasingly connected world.",
+    "visionTitle": "Where we’re going",
+    "vision1": "Amerivo is starting with English, but our vision is bigger than a language lesson. We’re building a platform where technology and human instruction work together to make learning more flexible, more personal, and more accessible.",
+    "vision2": "As Amerivo grows, we want to continue improving the experience for both learners and teachers while building a community centered around learning, connection, and opportunity.",
+    "ctaTitle": "Learn. Connect. Grow.",
+    "ctaText": "Better English can lead to bigger opportunities. Whether you’re taking your first English lesson or working toward becoming a more confident speaker, Amerivo English is here to help you take the next step.",
+    "ctaFind": "Find your teacher",
+    "ctaTest": "Take the placement test"
+  },
+  "faq": {
+    "metaTitle": "Frequently asked questions",
+    "metaDescription": "Answers for students and teachers: lessons, prices, cancellations, payments, safety and becoming an Amerivo teacher.",
+    "eyebrow": "Help center",
+    "title": "Frequently asked questions",
+    "subtitle": "Whether you’re looking for a teacher or ready to start teaching, here’s what you need to know about Amerivo English.",
+    "groups": {
+      "students": "For students",
+      "teachers": "For teachers",
+      "lessons": "Lessons & platform",
+      "about": "About Amerivo"
+    },
+    "students": {
+      "whatIs": {
+        "q": "What is Amerivo?",
+        "a": "Amerivo is an online English-learning platform that connects students with qualified American English teachers. You can browse teacher profiles, compare teaching styles and prices, check availability, book lessons, and learn online."
+      },
+      "findTeacher": {
+        "q": "How do I find a teacher?",
+        "a": "Browse teacher profiles and use the filters to find someone who matches your goals, availability and budget. You can watch each teacher’s introduction video and read their profile, qualifications and student reviews before booking. After the free placement test, we also recommend teachers for your level and goals."
+      },
+      "chooseTeacher": {
+        "q": "Can I choose my own teacher?",
+        "a": "Yes. You choose the teacher you want to learn with based on their profile, availability, experience, price, and teaching style."
+      },
+      "languages": {
+        "q": "What languages can I learn?",
+        "a": "Amerivo is dedicated to English, taught by American English teachers."
+      },
+      "online": {
+        "q": "Are Amerivo lessons online?",
+        "a": "Yes. Lessons take place in Amerivo’s online video classroom, directly in your browser — nothing to install. The classroom opens 5 minutes before your lesson."
+      },
+      "duration": {
+        "q": "How long is a lesson?",
+        "a": "Lessons last 50 minutes. Some teachers also offer a free 20-minute trial lesson."
+      },
+      "price": {
+        "q": "How much do lessons cost?",
+        "a": "Teachers set their own price, between $20 and $50 per 50-minute lesson. The price is shown on each teacher’s profile before you book."
+      },
+      "packages": {
+        "q": "Can I book several lessons?",
+        "a": "Yes. You can book a single lesson, or a package of 5 or 10 lessons with the same teacher when the teacher offers it (5% and 10% off)."
+      },
+      "cancel": {
+        "q": "Can I cancel a lesson?",
+        "a": "Yes. If you cancel more than 24 hours before the lesson, you get a full refund. Less than 24 hours before, the lesson is not refunded. To change the time, cancel and book a new slot."
+      },
+      "teacherCancels": {
+        "q": "What happens if my teacher cancels?",
+        "a": "You get a full refund, and you can book another time with the same teacher or choose another teacher."
+      },
+      "message": {
+        "q": "Can I message a teacher before booking?",
+        "a": "Yes. You can message teachers through Amerivo to discuss your goals and expectations. For everyone’s safety, sharing personal contact details is not allowed, and all lessons and payments stay on Amerivo."
+      },
+      "payments": {
+        "q": "How do payments work?",
+        "a": "You pay securely through Amerivo when you book, by card or other methods offered by our payment provider, Stripe. Amerivo never sees your full card number."
+      },
+      "refund": {
+        "q": "Can I get a refund?",
+        "a": "Cancellations follow the 24-hour rule above. If something went wrong during a lesson, report it from your lesson page within 24 hours after the lesson: our team reviews it and refunds you when it’s justified."
+      }
+    },
+    "teachers": {
+      "who": {
+        "q": "Who can teach on Amerivo?",
+        "a": "Amerivo works with qualified American English teachers who want to teach students online. You’ll be asked about your experience, education, qualifications, and teaching background during the application."
+      },
+      "become": {
+        "q": "How do I become an Amerivo teacher?",
+        "a": "Create a teacher account and complete the application: your profile, a short introduction video, an identity check, and an interview with our team. Your profile becomes visible to students once it’s approved."
+      },
+      "experience": {
+        "q": "Do I need teaching experience?",
+        "a": "Relevant teaching experience, education, certifications, and other qualifications are considered during the application."
+      },
+      "price": {
+        "q": "Can I set my own price?",
+        "a": "Yes. You choose your price per 50-minute lesson, between $20 and $50, and whether you offer a free trial lesson and lesson packages."
+      },
+      "paid": {
+        "q": "When do teachers get paid?",
+        "a": "You keep 75% of the lesson price; Amerivo’s commission is 25%. Your earnings become available once the lesson is completed and are paid through Stripe automatically on the 28th of each month, or earlier on request (from $20)."
+      },
+      "schedule": {
+        "q": "Can I choose my own schedule?",
+        "a": "Yes. You set your weekly availability, block dates, and turn on vacation mode whenever you need."
+      },
+      "countries": {
+        "q": "Can I teach students from different countries?",
+        "a": "Yes. Amerivo connects teachers and students internationally, subject to applicable laws, payment availability, and platform requirements."
+      },
+      "minimum": {
+        "q": "Do I have to teach a minimum number of hours?",
+        "a": "No. Amerivo does not require a minimum teaching schedule unless otherwise stated in your teacher agreement."
+      },
+      "otherPlatforms": {
+        "q": "Can I teach on other platforms?",
+        "a": "Yes, but students you meet on Amerivo must keep booking and paying through Amerivo. Moving them to another platform or to private lessons is not allowed (Terms of Service, section 8)."
+      },
+      "communicate": {
+        "q": "Can I communicate with my students through Amerivo?",
+        "a": "Yes. You can message your students, chat and share notes during lessons, write lesson reports, and share documents once our team has approved them."
+      }
+    },
+    "lessons": {
+      "how": {
+        "q": "How does an Amerivo lesson work?",
+        "a": "1. Find a teacher. 2. Review their profile and availability. 3. Choose a time. 4. Book and pay. 5. Join your online lesson. 6. Continue learning with your teacher, or try another teacher whenever you want."
+      },
+      "tryDifferent": {
+        "q": "Can I try different teachers?",
+        "a": "Yes. You are not locked into one teacher — you can choose different teachers based on your goals and preferences."
+      },
+      "review": {
+        "q": "Can I leave a review?",
+        "a": "Yes. After a completed lesson, you can rate it and leave a review. Reviews must reflect genuine experiences and follow our community guidelines."
+      },
+      "protect": {
+        "q": "How does Amerivo protect users?",
+        "a": "Teachers are reviewed and identity-verified before they can teach. Payments go through Stripe. Messages, classroom chat and shared documents are checked automatically, and personal contact details are hidden. You can report any inappropriate behavior directly from your messages or the classroom, and our team reviews every report."
+      },
+      "record": {
+        "q": "Does Amerivo record lessons?",
+        "a": "No. Lessons are not recorded. The classroom chat and shared notes are kept with the lesson."
+      },
+      "problem": {
+        "q": "What happens if I have a problem with a teacher or student?",
+        "a": "Use the “Report” button in your messages or in the classroom, or write to contact@amerivoenglish.com. Our team reviews safety issues, inappropriate behavior, payment issues, cancellations, and violations of our policies."
+      }
+    },
+    "about": {
+      "why": {
+        "q": "Why was Amerivo created?",
+        "a": "Amerivo was created to make online English learning more accessible, while giving teachers a better way to connect with students and manage their teaching."
+      },
+      "international": {
+        "q": "Is Amerivo available internationally?",
+        "a": "Yes. Amerivo is designed for an international community of learners and teachers. Availability may depend on location, payment methods, and applicable laws."
+      },
+      "school": {
+        "q": "Is Amerivo a language school?",
+        "a": "No. Amerivo is an online marketplace and technology platform that connects students with independent English teachers. Teachers are responsible for the instruction they provide."
+      },
+      "employ": {
+        "q": "Does Amerivo employ the teachers?",
+        "a": "No. Teachers on Amerivo are independent contractors, not employees of Amerivo."
+      },
+      "contact": {
+        "q": "How can I contact Amerivo?",
+        "a": "Use our contact page, e-mail contact@amerivoenglish.com, or call +1 317 516 7573."
+      }
+    },
+    "stillTitle": "Still have questions?",
+    "stillText": "We’re building Amerivo English around the needs of both students and teachers. If you can’t find the answer you’re looking for, our team will be happy to help.",
+    "contactUs": "Contact us"
+  },
+  "privacy": {
+    "metaTitle": "Privacy Policy",
+    "metaDescription": "How Amerivo English collects, uses, shares and protects personal information, and your privacy rights.",
+    "title": "Privacy Policy",
+    "englishNotice": "The Privacy Policy is written in English, which is the legally binding version. If you need help understanding it, contact us."
+  }
+}

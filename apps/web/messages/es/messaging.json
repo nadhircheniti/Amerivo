@@ -76,5 +76,28 @@
     "contactHidden": "Se ocultó parte de tu mensaje: no está permitido compartir datos de contacto (correo electrónico, teléfono, enlaces, redes sociales) en Amerivo.",
     "termsLink": "Leer las reglas",
     "safetyNotice": "Por la seguridad de todos, los mensajes se revisan automáticamente. Mantén todas las clases y los pagos en Amerivo."
+  },
+  "report": {
+    "button": "Reportar",
+    "title": "Reportar a {name}",
+    "intro": "Cuéntanos qué pasó. Nuestro equipo revisa cada reporte de forma confidencial; no le decimos a la otra persona quién la reportó.",
+    "reasonLabel": "¿Cuál es el problema?",
+    "reasons": {
+      "harassment": "Acoso, insultos o amenazas",
+      "inappropriate": "Comportamiento inapropiado o sexual",
+      "contact_sharing": "Pidió o compartió datos de contacto personales",
+      "off_platform": "Propuso clases o pagos fuera de Amerivo",
+      "no_show": "No se presentó / no dio la clase",
+      "other": "Otro motivo"
+    },
+    "detailsLabel": "Detalles",
+    "detailsPlaceholder": "¿Qué pasó y cuándo?",
+    "urgent": "Si alguien está en peligro inmediato, primero comunícate con los servicios de emergencia locales.",
+    "submit": "Enviar el reporte",
+    "sending": "Enviando…",
+    "cancel": "Cancelar",
+    "sent": "Gracias. Tu reporte se envió al equipo de Amerivo, que lo revisará.",
+    "close": "Cerrar",
+    "error": "No se pudo enviar el reporte. Inténtalo de nuevo."
   }
 }

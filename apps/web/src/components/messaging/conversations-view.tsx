@@ -10,6 +10,7 @@ import { cn } from "@/lib/cn";
 import { fullName, PersonAvatar } from "./person-avatar";
 import type { ApiConversation, ApiMessage, ChatRole, MessagingSource } from "./types";
 import { usePolling } from "./use-polling";
+import { ReportButton } from "@/components/safety/report-button";
 
 const THREAD_POLL_MS = 10_000;
 const LIST_POLL_MS = 30_000;
@@ -468,6 +469,7 @@ export function ConversationsView({
                 {t("bookLesson")}
               </ButtonLink>
             )}
+            <ReportButton reportedUserId={active.other.id} name={otherName} conversationId={active.id} />
           </div>
 
           <div ref={scrollRef} className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 sm:p-7" role="log" aria-live="polite" aria-label={t("conversationWith", { name: otherName })}>

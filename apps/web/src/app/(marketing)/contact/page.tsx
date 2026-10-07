@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/ui/icon";
-import { CONTACT_EMAIL, CONTACT_MAILTO } from "@/lib/contact";
+import { CONTACT_EMAIL, CONTACT_MAILTO, CONTACT_PHONE, CONTACT_TEL } from "@/lib/contact";
 import { ContactForm } from "./contact-form";
 import { TOPICS, type Topic } from "./topics";
 
@@ -35,6 +35,20 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ t
                 {/* Line break allowed only after the @ on narrow screens. */}
                 {CONTACT_EMAIL.split("@")[0]}@<wbr />
                 {CONTACT_EMAIL.split("@")[1]}
+              </span>
+            </span>
+          </a>
+
+          <a href={CONTACT_TEL} className="group flex items-center gap-4 rounded-[20px] bg-white p-5 transition hover:shadow-sm">
+            <span className="flex size-12 shrink-0 items-center justify-center rounded-[14px] bg-orange-100 text-orange-dark">
+              <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z" />
+              </svg>
+            </span>
+            <span className="flex min-w-0 flex-col">
+              <span className="text-sm text-muted">{t("phoneLabel")}</span>
+              <span className="font-display text-base font-bold text-navy group-hover:text-teal-dark sm:text-lg" dir="ltr">
+                {CONTACT_PHONE}
               </span>
             </span>
           </a>

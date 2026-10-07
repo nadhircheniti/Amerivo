@@ -767,14 +767,16 @@
       "review": "Review",
       "profile": "Teacher profile",
       "material": "Document",
-      "booking": "Lesson topic"
+      "booking": "Lesson topic",
+      "report": "User report"
     },
     "types": {
       "email": "E-mail",
       "phone": "Phone",
       "link": "Link",
       "handle": "Social handle",
-      "app": "Messaging app"
+      "app": "Messaging app",
+      "report": "Report"
     },
     "repeat": "{count} reports in 30 days",
     "accountBlocked": "Account blocked",
@@ -802,6 +804,16 @@
       "dismiss": "Report about {name} dismissed.",
       "warn": "{name} has been warned.",
       "block": "{name}'s account is blocked."
+    },
+    "reportedBy": "Reported by <b>{name}</b> · Reason: <b>{reason}</b>",
+    "reportDetails": "What the reporter wrote",
+    "reasons": {
+      "harassment": "Harassment",
+      "inappropriate": "Inappropriate behavior",
+      "contact_sharing": "Contact details",
+      "off_platform": "Off-platform lessons or payments",
+      "no_show": "No-show",
+      "other": "Other"
     }
   },
   "materialsPage": {

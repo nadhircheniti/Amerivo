@@ -286,7 +286,8 @@
       "billing": "Pagos y facturación",
       "business": "Empresas",
       "technical": "Problema técnico"
-    }
+    },
+    "phoneLabel": "Llámanos"
   },
   "terms": {
     "metaTitle": "Términos del servicio",

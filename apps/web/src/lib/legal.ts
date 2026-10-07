@@ -13,17 +13,24 @@ export const TERMS_VERSION = "2026-10-07";
 export const TERMS_EFFECTIVE = "October 7, 2026";
 
 export const COMPANY = {
-  /** Registered name of the LLC, e.g. "Amerivo English LLC". */
-  legalName: "[COMPANY LEGAL NAME], LLC",
-  /** US state where the LLC is organized (also the governing law and the venue). */
-  state: "[STATE OF ORGANIZATION]",
+  /** Registered name of the LLC (confirmed by the client). */
+  legalName: "Amerivo English LLC",
+  /** US state where the LLC is organized (also the governing law and the venue). Confirmed: Indiana. */
+  state: "Indiana",
+  /** Venue for arbitration hearings / courts (§19 of the Terms). */
   county: "[COUNTY]",
-  address: "[REGISTERED BUSINESS ADDRESS]",
+  /** Official business address (registered agent or office). */
+  address: "[REGISTERED BUSINESS ADDRESS], Indiana, United States",
   email: "contact@amerivoenglish.com",
+  /** Business phone (confirmed by the client). */
+  phone: "+1 317 516 7573",
   website: "amerivoenglish.com",
   /** DMCA designated agent (register at copyright.gov/dmca-directory). */
   dmcaAgent: "[DMCA DESIGNATED AGENT NAME AND ADDRESS]",
 } as const;
+
+/** Privacy Policy version (shown as "Last updated"). */
+export const PRIVACY_UPDATED = "October 8, 2026";
 
 /**
  * Non-circumvention (Terms §8). Contractual fees, not public "fines": they compensate Amerivo for

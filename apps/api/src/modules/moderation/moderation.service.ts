@@ -3,13 +3,16 @@ import { and, asc, count, desc, eq, gt, gte, inArray, lte } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import type { AuthUser } from "../../auth/decorators";
 import { CLOCK, type Clock } from "../../common/clock";
-import { badRequest, notFound } from "../../common/errors";
+import { badRequest, forbidden, notFound } from "../../common/errors";
 import { DB, type Db } from "../../db/db";
-import { auditLogs, lessonChatMessages, messages, moderationFlags, users } from "../../db/schema";
+import { auditLogs, bookings, conversations, lessonChatMessages, messages, moderationFlags, users } from "../../db/schema";
 import { findingTypes, scanContactDetails, type ContactFindingType } from "../../domain/contact-guard";
 import { NotificationsService } from "../../integrations/notifications.service";
 
-export const MODERATION_CONTEXTS = ["message", "lesson_chat", "lesson_notes", "lesson_report", "review", "profile", "material", "booking"] as const;
+export const MODERATION_CONTEXTS = ["message", "lesson_chat", "lesson_notes", "lesson_report", "review", "profile", "material", "booking", "report"] as const;
+/** Why a student or teacher reports another user. */
+export const REPORT_REASONS = ["harassment", "inappropriate", "contact_sharing", "off_platform", "no_show", "other"] as const;
+export type ReportReason = (typeof REPORT_REASONS)[number];
 export type ModerationContext = (typeof MODERATION_CONTEXTS)[number];
 export const MODERATION_STATUSES = ["open", "dismissed", "warned", "blocked"] as const;
 export type ModerationStatus = (typeof MODERATION_STATUSES)[number];
@@ -117,6 +120,7 @@ export class ModerationService {
     const page = Math.max(1, Math.trunc(q.page ?? 1) || 1);
     const sender = alias(users, "sender");
     const recipient = alias(users, "recipient");
+    const reporter = alias(users, "reporter");
     const where = q.status ? eq(moderationFlags.status, q.status) : undefined;
     const [rows, [{ total }]] = await Promise.all([
       this.db
@@ -134,10 +138,13 @@ export class ModerationService {
           createdAt: moderationFlags.createdAt,
           sender: { id: sender.id, firstName: sender.firstName, lastName: sender.lastName, email: sender.email, role: sender.role, status: sender.status },
           recipient: { id: recipient.id, firstName: recipient.firstName, lastName: recipient.lastName, role: recipient.role },
+          reason: moderationFlags.reason,
+          reporter: { id: reporter.id, firstName: reporter.firstName, lastName: reporter.lastName, role: reporter.role },
         })
         .from(moderationFlags)
         .innerJoin(sender, eq(sender.id, moderationFlags.userId))
         .leftJoin(recipient, eq(recipient.id, moderationFlags.recipientId))
+        .leftJoin(reporter, eq(reporter.id, moderationFlags.reporterId))
         .where(where)
         .orderBy(desc(moderationFlags.createdAt), desc(moderationFlags.id))
         .limit(PAGE)
@@ -155,7 +162,12 @@ export class ModerationService {
       : [];
     const recentBy = new Map(recent.map((r) => [r.userId, Number(r.n)]));
     return {
-      items: rows.map((r) => ({ ...r, recipient: r.recipient?.id ? r.recipient : null, senderFlags30d: recentBy.get(r.sender.id) ?? 0 })),
+      items: rows.map((r) => ({
+        ...r,
+        recipient: r.recipient?.id ? r.recipient : null,
+        reporter: r.reporter?.id ? r.reporter : null,
+        senderFlags30d: recentBy.get(r.sender.id) ?? 0,
+      })),
       total: Number(total),
       page,
       pageSize: PAGE,
@@ -171,14 +183,14 @@ export class ModerationService {
     if (!flag) throw notFound("Report");
     const at = flag.createdAt;
     const pick = { id: messages.id, senderId: messages.senderId, body: messages.body, createdAt: messages.createdAt };
-    if (flag.context === "message" && flag.conversationId) {
+    if ((flag.context === "message" || flag.context === "report") && flag.conversationId) {
       const [before, after] = await Promise.all([
         this.db.select(pick).from(messages).where(and(eq(messages.conversationId, flag.conversationId), lte(messages.createdAt, at))).orderBy(desc(messages.createdAt)).limit(20),
         this.db.select(pick).from(messages).where(and(eq(messages.conversationId, flag.conversationId), gt(messages.createdAt, at))).orderBy(asc(messages.createdAt)).limit(5),
       ]);
       return { kind: "conversation" as const, messages: [...before.reverse(), ...after] };
     }
-    if (flag.context === "lesson_chat" && flag.bookingId) {
+    if ((flag.context === "lesson_chat" || flag.context === "report") && flag.bookingId) {
       const c = { id: lessonChatMessages.id, senderId: lessonChatMessages.senderId, body: lessonChatMessages.body, createdAt: lessonChatMessages.createdAt };
       const [before, after] = await Promise.all([
         this.db.select(c).from(lessonChatMessages).where(and(eq(lessonChatMessages.bookingId, flag.bookingId), lte(lessonChatMessages.createdAt, at))).orderBy(desc(lessonChatMessages.createdAt)).limit(20),
@@ -187,6 +199,41 @@ export class ModerationService {
       return { kind: "lesson_chat" as const, messages: [...before.reverse(), ...after] };
     }
     return { kind: "none" as const, messages: [] };
+  }
+
+  /**
+   * A student or teacher reports the other person of one of their conversations or lessons
+   * (inappropriate behavior, harassment, off-platform proposals…). The report joins the admins'
+   * moderation queue, with the conversation or classroom chat around it.
+   */
+  async report(reporter: AuthUser, p: { reportedUserId: string; reason: ReportReason; details: string; conversationId?: string; bookingId?: string }) {
+    if (p.reportedUserId === reporter.id) throw badRequest("You can't report yourself");
+    if (!p.conversationId && !p.bookingId) throw badRequest("Report from a conversation or a lesson");
+    const pair = (a: string, b: string) => (a === reporter.id && b === p.reportedUserId) || (b === reporter.id && a === p.reportedUserId);
+    if (p.conversationId) {
+      const [c] = await this.db.select({ s: conversations.studentId, t: conversations.teacherId }).from(conversations).where(eq(conversations.id, p.conversationId));
+      if (!c || !pair(c.s, c.t)) throw forbidden("You can only report someone from your own conversation");
+    }
+    if (p.bookingId) {
+      const [b] = await this.db.select({ s: bookings.studentId, t: bookings.teacherId }).from(bookings).where(eq(bookings.id, p.bookingId));
+      if (!b || !pair(b.s, b.t)) throw forbidden("You can only report someone from your own lesson");
+    }
+    const [row] = await this.db
+      .insert(moderationFlags)
+      .values({
+        userId: p.reportedUserId,
+        reporterId: reporter.id,
+        recipientId: reporter.id,
+        context: "report",
+        reason: p.reason,
+        conversationId: p.conversationId ?? null,
+        bookingId: p.bookingId ?? null,
+        originalText: p.details.trim(),
+        types: ["report"],
+        createdAt: this.clock.now(),
+      })
+      .returning({ id: moderationFlags.id });
+    return { id: row.id };
   }
 
   async openCount() {

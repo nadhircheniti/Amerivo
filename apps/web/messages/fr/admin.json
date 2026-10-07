@@ -767,14 +767,16 @@
       "review": "Avis",
       "profile": "Profil du professeur",
       "material": "Document",
-      "booking": "Sujet du cours"
+      "booking": "Sujet du cours",
+      "report": "Signalement d'un utilisateur"
     },
     "types": {
       "email": "E-mail",
       "phone": "Téléphone",
       "link": "Lien",
       "handle": "Pseudo de réseau social",
-      "app": "Application de messagerie"
+      "app": "Application de messagerie",
+      "report": "Signalement"
     },
     "repeat": "{count} signalements en 30 jours",
     "accountBlocked": "Compte bloqué",
@@ -802,6 +804,16 @@
       "dismiss": "Signalement concernant {name} classé.",
       "warn": "{name} a été averti.",
       "block": "Le compte de {name} est bloqué."
+    },
+    "reportedBy": "Signalé par <b>{name}</b> · Motif : <b>{reason}</b>",
+    "reportDetails": "Ce qu'a écrit l'auteur du signalement",
+    "reasons": {
+      "harassment": "Harcèlement",
+      "inappropriate": "Comportement inapproprié",
+      "contact_sharing": "Coordonnées",
+      "off_platform": "Cours ou paiements hors plateforme",
+      "no_show": "Absence",
+      "other": "Autre"
     }
   },
   "materialsPage": {

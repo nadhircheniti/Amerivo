@@ -25,6 +25,7 @@ import { useApi } from "@/lib/use-api";
 import { ElapsedTimer } from "../_components/elapsed-timer";
 import { LocalIcon } from "../_components/local-icons";
 import { usePolling } from "@/components/messaging/use-polling";
+import { ReportButton } from "@/components/safety/report-button";
 import type { ClassroomInfo } from "./types";
 
 /** Creates the Daily call object, joins the private room and cleans up when leaving the page. */
@@ -140,6 +141,7 @@ function Room({ info }: { info: ClassroomInfo }) {
           {t(`status.${status}`)}
         </span>
         <ElapsedTimer durationMin={info.durationMin} startsAt={info.startsAt} />
+        <ReportButton reportedUserId={other.id} name={other.firstName} bookingId={info.bookingId} tone="dark" />
       </header>
 
       <div className="flex flex-1 flex-col gap-4 px-3 pt-4 sm:px-4 lg:min-h-0 lg:flex-row">

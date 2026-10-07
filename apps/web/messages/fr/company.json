@@ -1,0 +1,212 @@
+{
+  "about": {
+    "metaTitle": "À propos d'Amerivo English",
+    "metaDescription": "Un anglais authentique. De vraies conversations. Un avenir plus prometteur. Apprenez un anglais pratique en ligne avec des professeurs d'anglais américains qualifiés.",
+    "eyebrow": "À propos",
+    "title": "Un anglais authentique. De vraies conversations. Un avenir plus prometteur.",
+    "intro1": "Chez Amerivo English, nous pensons qu'apprendre l'anglais, c'est bien plus que mémoriser du vocabulaire et étudier la grammaire. C'est apprendre à parler avec assurance, à communiquer naturellement et à s'ouvrir de nouvelles perspectives.",
+    "intro2": "Amerivo English est une plateforme d'apprentissage de l'anglais en ligne qui met en relation les apprenants avec des professeurs qualifiés, pour des cours personnalisés et concrets, pensés pour la vraie vie.",
+    "intro3": "Que vous appreniez l'anglais pour le travail, les voyages, les études, vos relations ou simplement pour gagner en aisance à l'oral, nous sommes là pour vous aider à progresser, une conversation après l'autre.",
+    "builtTitle": "Un apprentissage de l'anglais pensé pour vous",
+    "built1": "Chacun apprend à sa manière. C'est pourquoi Amerivo ne repose pas sur une salle de classe unique et standardisée.",
+    "built2": "Notre plateforme vous offre la liberté de choisir un apprentissage adapté à vos objectifs, à votre emploi du temps, à votre niveau et à votre mode de vie. Vous pouvez apprendre où que vous soyez, trouver le professeur qui répond à vos besoins et vous concentrer sur l'anglais qui compte vraiment pour vous.",
+    "builtMotto": "Vos objectifs. Votre emploi du temps. Votre parcours.",
+    "moreTitle": "Bien plus que des cours",
+    "more1": "Nous ne voulons pas que l'apprentissage de l'anglais soit une contrainte de plus. Nous voulons qu'il devienne quelque chose que vous pouvez réellement utiliser.",
+    "more2": "Notre approche privilégie la communication concrète et les échanges qui ont du sens, plutôt que la simple bonne réponse sur une fiche d'exercices. Grâce à la conversation et à un accompagnement personnalisé, les apprenants peuvent gagner en aisance dans :",
+    "skills": {
+      "everyday": "Les conversations du quotidien",
+      "professional": "La communication professionnelle",
+      "travel": "Les voyages et les situations sociales",
+      "pronunciation": "La prononciation et l'expression orale",
+      "listening": "La compréhension orale",
+      "vocabulary": "Le vocabulaire et la grammaire",
+      "interviews": "Les entretiens et l'anglais en entreprise",
+      "goals": "Les objectifs scolaires et personnels"
+    },
+    "communityTitle": "Une communauté d'apprentissage mondiale",
+    "community1": "L'anglais rapproche les gens au-delà des pays, des cultures et des origines. Amerivo est né de cette idée.",
+    "community2": "Notre objectif est de rendre un enseignement de l'anglais de qualité accessible à tous, où qu'ils soient, et de créer un environnement d'apprentissage où chaque parcours est accueilli et respecté.",
+    "communityMotto": "Des pays différents. Des expériences différentes. Une langue en partage.",
+    "teachersTitle": "Nos professeurs",
+    "teachers1": "Un bon apprentissage commence par de bons professeurs. Amerivo travaille avec des professeurs d'anglais américains qualifiés, qui apportent à chaque cours leur expérience, leur style d'enseignement et leur regard.",
+    "teachers2": "Plutôt que d'imposer le même programme à tous, nous pensons que chaque élève doit pouvoir trouver le professeur dont l'approche lui convient.",
+    "teachers3": "Nos professeurs sont là pour vous guider, vous encourager, vous corriger, vous expliquer et surtout vous aider à communiquer avec plus d'assurance.",
+    "missionTitle": "Notre mission",
+    "mission": "Rendre un apprentissage de l'anglais concret et personnalisé accessible à davantage de personnes dans le monde.",
+    "mission2": "Nous voulons aider les apprenants à gagner l'assurance nécessaire pour communiquer, saisir des opportunités, tisser des liens et participer pleinement à un monde de plus en plus connecté.",
+    "visionTitle": "Notre vision",
+    "vision1": "Amerivo commence par l'anglais, mais notre ambition va au-delà d'un simple cours de langue. Nous construisons une plateforme où la technologie et l'enseignement humain se complètent pour rendre l'apprentissage plus flexible, plus personnel et plus accessible.",
+    "vision2": "À mesure qu'Amerivo grandit, nous voulons continuer à améliorer l'expérience des apprenants comme des professeurs, tout en bâtissant une communauté centrée sur l'apprentissage, les échanges et les opportunités.",
+    "ctaTitle": "Apprendre. Échanger. Progresser.",
+    "ctaText": "Un meilleur anglais peut ouvrir de plus grandes opportunités. Que vous preniez votre tout premier cours ou que vous cherchiez à parler avec plus d'assurance, Amerivo English est là pour vous aider à franchir la prochaine étape.",
+    "ctaFind": "Trouver votre professeur",
+    "ctaTest": "Passer le test de niveau"
+  },
+  "faq": {
+    "metaTitle": "Questions fréquentes",
+    "metaDescription": "Les réponses pour les élèves et les professeurs : cours, tarifs, annulations, paiements, sécurité et comment devenir professeur sur Amerivo.",
+    "eyebrow": "Centre d'aide",
+    "title": "Questions fréquentes",
+    "subtitle": "Que vous cherchiez un professeur ou que vous soyez prêt à enseigner, voici tout ce qu'il faut savoir sur Amerivo English.",
+    "groups": {
+      "students": "Pour les élèves",
+      "teachers": "Pour les professeurs",
+      "lessons": "Cours et plateforme",
+      "about": "À propos d'Amerivo"
+    },
+    "students": {
+      "whatIs": {
+        "q": "Qu'est-ce qu'Amerivo ?",
+        "a": "Amerivo est une plateforme d'apprentissage de l'anglais en ligne qui met en relation les élèves avec des professeurs d'anglais américains qualifiés. Vous pouvez parcourir les profils des professeurs, comparer leurs styles d'enseignement et leurs tarifs, consulter leurs disponibilités, réserver des cours et apprendre en ligne."
+      },
+      "findTeacher": {
+        "q": "Comment trouver un professeur ?",
+        "a": "Parcourez les profils des professeurs et utilisez les filtres pour trouver celui qui correspond à vos objectifs, à vos disponibilités et à votre budget. Avant de réserver, vous pouvez regarder la vidéo de présentation de chaque professeur et consulter son profil, ses qualifications et les avis de ses élèves. Après le test de niveau gratuit, nous vous recommandons également des professeurs adaptés à votre niveau et à vos objectifs."
+      },
+      "chooseTeacher": {
+        "q": "Puis-je choisir mon professeur ?",
+        "a": "Oui. Vous choisissez le professeur avec qui vous souhaitez apprendre en fonction de son profil, de ses disponibilités, de son expérience, de son tarif et de son style d'enseignement."
+      },
+      "languages": {
+        "q": "Quelles langues puis-je apprendre ?",
+        "a": "Amerivo est entièrement consacré à l'anglais, enseigné par des professeurs d'anglais américains."
+      },
+      "online": {
+        "q": "Les cours Amerivo ont-ils lieu en ligne ?",
+        "a": "Oui. Les cours se déroulent dans la salle de classe vidéo en ligne d'Amerivo, directement dans votre navigateur — rien à installer. La salle de classe ouvre 5 minutes avant le début de votre cours."
+      },
+      "duration": {
+        "q": "Combien de temps dure un cours ?",
+        "a": "Les cours durent 50 minutes. Certains professeurs proposent aussi un cours d'essai gratuit de 20 minutes."
+      },
+      "price": {
+        "q": "Combien coûtent les cours ?",
+        "a": "Chaque professeur fixe son propre tarif, entre 20 $ et 50 $ par cours de 50 minutes. Le tarif est indiqué sur le profil de chaque professeur avant la réservation."
+      },
+      "packages": {
+        "q": "Puis-je réserver plusieurs cours ?",
+        "a": "Oui. Vous pouvez réserver un cours à l'unité, ou un forfait de 5 ou 10 cours avec le même professeur lorsqu'il le propose (5 % et 10 % de réduction)."
+      },
+      "cancel": {
+        "q": "Puis-je annuler un cours ?",
+        "a": "Oui. Si vous annulez plus de 24 heures avant le cours, vous êtes intégralement remboursé. Moins de 24 heures avant, le cours n'est pas remboursé. Pour changer d'horaire, annulez puis réservez un nouveau créneau."
+      },
+      "teacherCancels": {
+        "q": "Que se passe-t-il si mon professeur annule ?",
+        "a": "Vous êtes intégralement remboursé, et vous pouvez réserver un autre créneau avec le même professeur ou choisir un autre professeur."
+      },
+      "message": {
+        "q": "Puis-je envoyer un message à un professeur avant de réserver ?",
+        "a": "Oui. Vous pouvez écrire aux professeurs via Amerivo pour échanger sur vos objectifs et vos attentes. Pour la sécurité de tous, le partage de coordonnées personnelles n'est pas autorisé, et tous les cours et paiements restent sur Amerivo."
+      },
+      "payments": {
+        "q": "Comment fonctionnent les paiements ?",
+        "a": "Vous payez en toute sécurité via Amerivo au moment de la réservation, par carte ou par les autres moyens proposés par notre prestataire de paiement, Stripe. Amerivo n'a jamais accès à votre numéro de carte complet."
+      },
+      "refund": {
+        "q": "Puis-je être remboursé ?",
+        "a": "Les annulations suivent la règle des 24 heures décrite ci-dessus. Si un problème est survenu pendant un cours, signalez-le depuis la page du cours dans les 24 heures qui suivent : notre équipe l'examine et vous rembourse lorsque c'est justifié."
+      }
+    },
+    "teachers": {
+      "who": {
+        "q": "Qui peut enseigner sur Amerivo ?",
+        "a": "Amerivo travaille avec des professeurs d'anglais américains qualifiés qui souhaitent enseigner en ligne. Lors de votre candidature, nous vous interrogerons sur votre expérience, votre formation, vos qualifications et votre parcours d'enseignant."
+      },
+      "become": {
+        "q": "Comment devenir professeur sur Amerivo ?",
+        "a": "Créez un compte professeur et complétez votre candidature : votre profil, une courte vidéo de présentation, une vérification d'identité et un entretien avec notre équipe. Votre profil devient visible par les élèves une fois approuvé."
+      },
+      "experience": {
+        "q": "Faut-il avoir de l'expérience dans l'enseignement ?",
+        "a": "L'expérience d'enseignement pertinente, la formation, les certifications et les autres qualifications sont prises en compte lors de l'examen de la candidature."
+      },
+      "price": {
+        "q": "Puis-je fixer mon propre tarif ?",
+        "a": "Oui. Vous choisissez votre tarif par cours de 50 minutes, entre 20 $ et 50 $, et décidez si vous proposez un cours d'essai gratuit et des forfaits de cours."
+      },
+      "paid": {
+        "q": "Quand les professeurs sont-ils payés ?",
+        "a": "Vous conservez 75 % du prix du cours ; la commission d'Amerivo est de 25 %. Vos revenus deviennent disponibles une fois le cours terminé et sont versés automatiquement via Stripe le 28 de chaque mois, ou plus tôt sur demande (à partir de 20 $)."
+      },
+      "schedule": {
+        "q": "Puis-je choisir mes horaires ?",
+        "a": "Oui. Vous définissez vos disponibilités hebdomadaires, bloquez des dates et activez le mode vacances quand vous le souhaitez."
+      },
+      "countries": {
+        "q": "Puis-je enseigner à des élèves de différents pays ?",
+        "a": "Oui. Amerivo met en relation des professeurs et des élèves du monde entier, sous réserve des lois applicables, de la disponibilité des moyens de paiement et des exigences de la plateforme."
+      },
+      "minimum": {
+        "q": "Dois-je enseigner un nombre minimum d'heures ?",
+        "a": "Non. Amerivo n'impose aucun volume horaire minimum, sauf mention contraire dans votre contrat de professeur."
+      },
+      "otherPlatforms": {
+        "q": "Puis-je enseigner sur d'autres plateformes ?",
+        "a": "Oui, mais les élèves que vous rencontrez sur Amerivo doivent continuer à réserver et à payer via Amerivo. Il est interdit de les orienter vers une autre plateforme ou vers des cours privés (Conditions d'utilisation, section 8)."
+      },
+      "communicate": {
+        "q": "Puis-je communiquer avec mes élèves via Amerivo ?",
+        "a": "Oui. Vous pouvez envoyer des messages à vos élèves, discuter et partager des notes pendant les cours, rédiger des comptes rendus de cours et partager des documents une fois qu'ils ont été approuvés par notre équipe."
+      }
+    },
+    "lessons": {
+      "how": {
+        "q": "Comment se déroule un cours Amerivo ?",
+        "a": "1. Trouvez un professeur. 2. Consultez son profil et ses disponibilités. 3. Choisissez un horaire. 4. Réservez et payez. 5. Rejoignez votre cours en ligne. 6. Continuez avec votre professeur, ou essayez-en un autre quand vous le souhaitez."
+      },
+      "tryDifferent": {
+        "q": "Puis-je essayer plusieurs professeurs ?",
+        "a": "Oui. Vous n'êtes pas lié à un seul professeur — vous pouvez en choisir différents selon vos objectifs et vos préférences."
+      },
+      "review": {
+        "q": "Puis-je laisser un avis ?",
+        "a": "Oui. Après un cours terminé, vous pouvez le noter et laisser un avis. Les avis doivent refléter des expériences réelles et respecter nos règles de la communauté."
+      },
+      "protect": {
+        "q": "Comment Amerivo protège-t-il ses utilisateurs ?",
+        "a": "Les professeurs sont examinés et leur identité est vérifiée avant qu'ils puissent enseigner. Les paiements passent par Stripe. Les messages, le chat de la salle de classe et les documents partagés sont contrôlés automatiquement, et les coordonnées personnelles sont masquées. Vous pouvez signaler tout comportement inapproprié directement depuis vos messages ou la salle de classe, et notre équipe examine chaque signalement."
+      },
+      "record": {
+        "q": "Amerivo enregistre-t-il les cours ?",
+        "a": "Non. Les cours ne sont pas enregistrés. Le chat de la salle de classe et les notes partagées sont conservés avec le cours."
+      },
+      "problem": {
+        "q": "Que faire en cas de problème avec un professeur ou un élève ?",
+        "a": "Utilisez le bouton « Signaler » dans vos messages ou dans la salle de classe, ou écrivez à contact@amerivoenglish.com. Notre équipe examine les problèmes de sécurité, les comportements inappropriés, les problèmes de paiement, les annulations et les manquements à nos règles."
+      }
+    },
+    "about": {
+      "why": {
+        "q": "Pourquoi Amerivo a-t-il été créé ?",
+        "a": "Amerivo a été créé pour rendre l'apprentissage de l'anglais en ligne plus accessible, tout en offrant aux professeurs un meilleur moyen de trouver des élèves et de gérer leur activité d'enseignement."
+      },
+      "international": {
+        "q": "Amerivo est-il disponible à l'international ?",
+        "a": "Oui. Amerivo est conçu pour une communauté internationale d'apprenants et de professeurs. La disponibilité peut dépendre de votre localisation, des moyens de paiement et des lois applicables."
+      },
+      "school": {
+        "q": "Amerivo est-il une école de langues ?",
+        "a": "Non. Amerivo est une place de marché en ligne et une plateforme technologique qui met en relation des élèves avec des professeurs d'anglais indépendants. Les professeurs sont responsables de l'enseignement qu'ils dispensent."
+      },
+      "employ": {
+        "q": "Amerivo emploie-t-il les professeurs ?",
+        "a": "Non. Les professeurs sur Amerivo sont des prestataires indépendants, et non des salariés d'Amerivo."
+      },
+      "contact": {
+        "q": "Comment contacter Amerivo ?",
+        "a": "Utilisez notre page de contact, écrivez à contact@amerivoenglish.com ou appelez le +1 317 516 7573."
+      }
+    },
+    "stillTitle": "Vous avez encore des questions ?",
+    "stillText": "Nous construisons Amerivo English autour des besoins des élèves comme des professeurs. Si vous ne trouvez pas la réponse que vous cherchez, notre équipe se fera un plaisir de vous aider.",
+    "contactUs": "Nous contacter"
+  },
+  "privacy": {
+    "metaTitle": "Politique de confidentialité",
+    "metaDescription": "Comment Amerivo English collecte, utilise, partage et protège vos informations personnelles, et quels sont vos droits en matière de confidentialité.",
+    "title": "Politique de confidentialité",
+    "englishNotice": "La Politique de confidentialité est rédigée en anglais, qui en est la version juridiquement contraignante. Si vous avez besoin d'aide pour la comprendre, contactez-nous."
+  }
+}

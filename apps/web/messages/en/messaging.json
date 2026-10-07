@@ -76,5 +76,28 @@
     "contactHidden": "Part of your message was hidden: sharing contact details (e-mail, phone, links, social media) is not allowed on Amerivo.",
     "termsLink": "Read the rules",
     "safetyNotice": "For everyone's safety, messages are checked automatically. Keep all lessons and payments on Amerivo."
+  },
+  "report": {
+    "button": "Report",
+    "title": "Report {name}",
+    "intro": "Tell us what happened. Our team reviews every report confidentially; the other person isn't told who reported them.",
+    "reasonLabel": "What's the problem?",
+    "reasons": {
+      "harassment": "Harassment, insults or threats",
+      "inappropriate": "Inappropriate or sexual behavior",
+      "contact_sharing": "Asked for or shared personal contact details",
+      "off_platform": "Proposed lessons or payments outside Amerivo",
+      "no_show": "Didn't show up / didn't give the lesson",
+      "other": "Something else"
+    },
+    "detailsLabel": "Details",
+    "detailsPlaceholder": "What happened, and when?",
+    "urgent": "If someone is in immediate danger, contact your local emergency services first.",
+    "submit": "Send the report",
+    "sending": "Sending…",
+    "cancel": "Cancel",
+    "sent": "Thank you. Your report has been sent to the Amerivo team, who will review it.",
+    "close": "Close",
+    "error": "The report couldn't be sent. Please try again."
   }
 }

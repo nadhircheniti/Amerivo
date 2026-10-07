@@ -76,5 +76,28 @@
     "contactHidden": "Une partie de votre message a été masquée : le partage de coordonnées (e-mail, téléphone, liens, réseaux sociaux) n'est pas autorisé sur Amerivo.",
     "termsLink": "Lire les règles",
     "safetyNotice": "Pour la sécurité de tous, les messages sont contrôlés automatiquement. Gardez tous les cours et paiements sur Amerivo."
+  },
+  "report": {
+    "button": "Signaler",
+    "title": "Signaler {name}",
+    "intro": "Dites-nous ce qui s'est passé. Notre équipe examine chaque signalement en toute confidentialité ; la personne concernée ne saura pas qui l'a signalée.",
+    "reasonLabel": "Quel est le problème ?",
+    "reasons": {
+      "harassment": "Harcèlement, insultes ou menaces",
+      "inappropriate": "Comportement inapproprié ou à caractère sexuel",
+      "contact_sharing": "A demandé ou partagé des coordonnées personnelles",
+      "off_platform": "A proposé des cours ou des paiements en dehors d'Amerivo",
+      "no_show": "Absent / n'a pas donné le cours",
+      "other": "Autre chose"
+    },
+    "detailsLabel": "Détails",
+    "detailsPlaceholder": "Que s'est-il passé, et quand ?",
+    "urgent": "Si une personne est en danger immédiat, contactez d'abord les services d'urgence locaux.",
+    "submit": "Envoyer le signalement",
+    "sending": "Envoi…",
+    "cancel": "Annuler",
+    "sent": "Merci. Votre signalement a été transmis à l'équipe Amerivo, qui va l'examiner.",
+    "close": "Fermer",
+    "error": "Le signalement n'a pas pu être envoyé. Veuillez réessayer."
   }
 }

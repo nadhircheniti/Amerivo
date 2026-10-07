@@ -767,14 +767,16 @@
       "review": "评价",
       "profile": "老师主页",
       "material": "文档",
-      "booking": "课程主题"
+      "booking": "课程主题",
+      "report": "用户举报"
     },
     "types": {
       "email": "邮箱",
       "phone": "电话",
       "link": "链接",
       "handle": "社交账号",
-      "app": "即时通讯应用"
+      "app": "即时通讯应用",
+      "report": "举报"
     },
     "repeat": "30 天内 {count} 次报告",
     "accountBlocked": "账户已封禁",
@@ -802,6 +804,16 @@
       "dismiss": "已驳回关于 {name} 的报告。",
       "warn": "已警告 {name}。",
       "block": "{name} 的账户已被封禁。"
+    },
+    "reportedBy": "举报人：<b>{name}</b> · 原因：<b>{reason}</b>",
+    "reportDetails": "举报人填写的内容",
+    "reasons": {
+      "harassment": "骚扰",
+      "inappropriate": "不当行为",
+      "contact_sharing": "联系方式",
+      "off_platform": "站外上课或付款",
+      "no_show": "未到场",
+      "other": "其他"
     }
   },
   "materialsPage": {
