@@ -99,3 +99,52 @@ describe("new-message alerts", async () => {
     assert.equal(conversationHref("teacher", "x&redirect=https://evil.test"), "/teacher/messages");
   });
 });
+
+describe("time zones (QA: 20:00 in Zurich shown at 15:00 for a US teacher)", async () => {
+  const { zoneAbbrev, zoneCity, timeIn, sameClock, isValidTimeZone } = await import("../src/lib/time-zone.ts");
+  // 20:00 in Zurich on three dates around the clock changes (Europe: Oct 25, US: Nov 1, 2026).
+  const oct14 = "2026-10-14T18:00:00Z"; // Zurich UTC+2, Indiana UTC-4
+  const oct29 = "2026-10-29T19:00:00Z"; // Zurich UTC+1, Indiana still UTC-4
+  const nov2 = "2026-11-02T19:00:00Z"; // Zurich UTC+1, Indiana UTC-5
+
+  it("converts with the rules of the lesson's date, not today's", () => {
+    assert.equal(timeIn(oct14, "Europe/Zurich"), "20:00");
+    assert.equal(timeIn(oct14, "America/Indiana/Indianapolis"), "14:00");
+    assert.equal(timeIn(oct29, "Europe/Zurich"), "20:00");
+    assert.equal(timeIn(oct29, "America/Indiana/Indianapolis"), "15:00", "only a 5-hour gap that week");
+    assert.equal(timeIn(nov2, "America/Indiana/Indianapolis"), "14:00");
+  });
+
+  it("names the zone as it is on that date", () => {
+    assert.equal(zoneAbbrev("America/New_York", oct29), "EDT");
+    assert.equal(zoneAbbrev("America/New_York", nov2), "EST");
+    assert.equal(zoneAbbrev("Europe/Zurich", oct14), "GMT+2");
+    assert.equal(zoneAbbrev("Europe/Zurich", oct29), "GMT+1");
+    assert.equal(zoneAbbrev("Not/AZone", oct29), "Not/AZone");
+  });
+
+  it("helpers", () => {
+    assert.equal(zoneCity("America/Indiana/Indianapolis"), "Indianapolis");
+    assert.equal(zoneCity("America/New_York"), "New York");
+    assert.equal(sameClock(oct14, "America/New_York", "America/Indiana/Indianapolis"), true);
+    assert.equal(sameClock(oct14, "America/New_York", "Europe/Zurich"), false);
+    assert.equal(isValidTimeZone("Europe/Zurich"), true);
+    assert.equal(isValidTimeZone("Mars/Base"), false);
+    assert.equal(isValidTimeZone(null), false);
+  });
+});
+
+describe("classroom phases (client: lessons end at minute 50, warning 5 minutes before)", async () => {
+  const { classroomPhase } = await import("../src/app/classroom/[lessonId]/_components/lesson-clock.ts");
+  const s = Date.parse("2026-10-14T16:00:00Z");
+  const min = 60_000;
+  it("before, during, ending soon in the last 5 minutes, closed at minute 50", () => {
+    assert.equal(classroomPhase(s - min, s, 50), "before");
+    assert.equal(classroomPhase(s, s, 50), "during");
+    assert.equal(classroomPhase(s + 44 * min + 59_000, s, 50), "during");
+    assert.equal(classroomPhase(s + 45 * min, s, 50), "endingSoon");
+    assert.equal(classroomPhase(s + 50 * min - 1, s, 50), "endingSoon");
+    assert.equal(classroomPhase(s + 50 * min, s, 50), "closed");
+    assert.equal(classroomPhase(s + 19 * min, s, 20), "endingSoon", "20-minute trial");
+  });
+});

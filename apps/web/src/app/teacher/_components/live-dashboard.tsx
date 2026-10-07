@@ -14,6 +14,8 @@ import { formatUsd } from "@/lib/mock-data";
 import { LoadState, initialsOf, toneOf, useLoad } from "./use-load";
 import { NotificationBell } from "@/components/messaging/notification-bell";
 import { VacationToggle } from "./vacation-toggle";
+import { usePolling } from "@/components/messaging/use-polling";
+import { sameClock, timeIn, zoneAbbrev, zoneCity } from "@/lib/time-zone";
 
 type Person = { id: string; firstName: string; lastName: string; avatarUrl?: string | null };
 export type Overview = {
@@ -29,7 +31,7 @@ export type Overview = {
     type: "trial" | "single" | "package";
     status: "confirmed" | "completed" | "no_show";
     topic: string | null;
-    student: Person & { country: string | null; level: string | null; goal: string | null };
+    student: Person & { country: string | null; level: string | null; goal: string | null; timezone?: string | null };
     history: { lessons: number; hours: number; lastLessonAt: string | null; lastNote: string | null };
   }[];
   upcomingCount: number;
@@ -52,7 +54,9 @@ export function LiveDashboard() {
   const tr = useTranslations("common.rating");
   const locale = useLocale() as Locale;
   const tag = intlTags[locale];
-  const { data, failed, retry } = useLoad<Overview>("/teacher/overview");
+  const { data, failed, retry, reload } = useLoad<Overview>("/teacher/overview");
+  // Refreshed every minute: new bookings, a new day, lessons that start (QA: no "Join" without reloading).
+  usePolling(() => void reload().catch(() => undefined), 60_000, data !== null);
   // Ticks every 15 s so "Start lesson" appears when the classroom opens (the API checks it again).
   const [clock, setClock] = useState(() => Date.now());
   useEffect(() => {
@@ -76,7 +80,8 @@ export function LiveDashboard() {
   }
 
   const tz = data.timezone;
-  const now = new Date(data.now).getTime();
+  // The live clock, not the time the page was loaded: the lesson to start moves on as the day goes.
+  const now = clock;
   const fmt = (iso: string, opts: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat(tag, { timeZone: tz, ...opts }).format(new Date(iso));
   const time = (iso: string) => fmt(iso, { hour: "2-digit", minute: "2-digit", hour12: false });
   const shortDate = (iso: string) => fmt(iso, { month: "short", day: "numeric" });
@@ -150,9 +155,16 @@ export function LiveDashboard() {
                 const title = [name, l.type === "trial" ? t("trialLesson") : l.topic, l.student.level].filter(Boolean).join(" · ");
                 return (
                   <li key={l.bookingId} className={cn("flex flex-col gap-4 rounded-[18px] p-[18px] sm:flex-row", isCurrent ? "border-2 border-teal bg-teal-50" : "bg-beige", done && "opacity-80")}>
-                    <div className="w-[70px] shrink-0">
+                    <div className="w-[88px] shrink-0">
                       <p className="font-display text-xl font-extrabold">{time(l.startsAt)}</p>
-                      <p className="text-[13px] text-muted">{t("minutes", { count: l.durationMin })}</p>
+                      <p className="text-[13px] text-muted">
+                        {zoneAbbrev(tz, l.startsAt)} · {t("minutes", { count: l.durationMin })}
+                      </p>
+                      {l.student.timezone && !sameClock(l.startsAt, tz, l.student.timezone) && (
+                        <p className="mt-1 text-[12px] leading-snug text-navy-soft">
+                          {tl("studentTime", { time: timeIn(l.startsAt, l.student.timezone, tag), name: l.student.firstName, city: zoneCity(l.student.timezone) })}
+                        </p>
+                      )}
                     </div>
                     <div className="flex min-w-0 grow flex-col gap-1.5">
                       <p className="flex flex-wrap items-center gap-2 text-base font-bold">
@@ -196,7 +208,8 @@ export function LiveDashboard() {
                           {t("opensAt", { time: time(l.opensAt) })}
                         </span>
                       )
-                    ) : done && toWrite.has(l.bookingId) ? (
+                    ) : (done && toWrite.has(l.bookingId)) || (l.status === "confirmed" && new Date(l.startsAt).getTime() + l.durationMin * 60_000 <= now) ? (
+                      // Also for a lesson whose time is over but wasn't ended: the report page ends it.
                       <Link href={`/teacher/lessons/${l.bookingId}/report`} className="self-start text-sm font-semibold text-teal-dark hover:text-navy sm:self-center">
                         {t.rich("writeReport", { sr, name })}
                       </Link>

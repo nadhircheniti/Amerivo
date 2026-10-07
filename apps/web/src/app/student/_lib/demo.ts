@@ -36,7 +36,7 @@ function booking(id: string, teacher: TeacherRef, startsAt: number, p: Partial<S
     cancelledBy: null,
     cancelledAt: null,
     opensAt: iso(startsAt - 10 * MIN),
-    closesAt: iso(startsAt + (durationMin + 30) * MIN),
+    closesAt: iso(startsAt + durationMin * MIN),
     teacher,
     hasReport: false,
     myReview: null,

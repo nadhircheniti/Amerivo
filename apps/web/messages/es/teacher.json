@@ -89,7 +89,12 @@
       "unsaved": "Tienes cambios sin guardar.",
       "emptyWarning": "Aún no tienes horarios abiertos: los estudiantes no podrán reservar contigo hasta que abras algunos.",
       "misaligned": "Algunos de tus horarios guardados no empiezan o terminan en punto. Al guardar, solo se conservarán las horas completas que aparecen en la cuadrícula.",
-      "saveError": "No pudimos guardar tu disponibilidad. Inténtalo de nuevo."
+      "saveError": "No pudimos guardar tu disponibilidad. Inténtalo de nuevo.",
+      "saveTimeZone": "Guardar zona horaria",
+      "useDeviceTimeZone": "Usar la zona horaria de este dispositivo ({tz})",
+      "timeZoneHint": "Tu horario semanal está en esta zona horaria. Los alumnos siempre lo ven convertido a la suya.",
+      "timeZoneSaved": "Zona horaria guardada.",
+      "timeZoneError": "No se pudo guardar tu zona horaria. Inténtalo de nuevo."
     },
     "blocked": {
       "title": "Fechas bloqueadas",
@@ -324,7 +329,8 @@
     "noNotifications": "Aún no tienes notificaciones.",
     "noStudents": "Tus estudiantes aparecerán aquí después de su primera reserva.",
     "recentStudents": "Estudiantes recientes",
-    "moreStudents": "{count, plural, one {y # estudiante más} other {y # estudiantes más}}"
+    "moreStudents": "{count, plural, one {y # estudiante más} other {y # estudiantes más}}",
+    "studentTime": "{name}: {time} ({city})"
   },
   "students": {
     "metaTitle": "Estudiantes · Amerivo English",

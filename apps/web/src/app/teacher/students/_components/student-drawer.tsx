@@ -9,6 +9,8 @@ import { Icon } from "@/components/ui/icon";
 import { Avatar, Badge, type BadgeTone } from "@/components/ui/primitives";
 import { intlTags, type Locale } from "@/i18n/config";
 import { API_URL, ApiError } from "@/lib/api";
+import { zoneAbbrev } from "@/lib/time-zone";
+import { useSpaceTimeZone } from "@/lib/use-time-zone";
 import { initialsOf, toneOf } from "../../_components/use-load";
 import type { LessonStatus, StudentDetail, StudentLesson, StudentRow } from "../_data";
 import { useCountryName } from "./students-view";
@@ -20,6 +22,8 @@ export function StudentDrawer({ id, row, loadDetail, onClose }: { id: string | n
   const t = useTranslations("teacher.students");
   const locale = useLocale() as Locale;
   const tag = intlTags[locale];
+  // Lessons are shown in the teacher's own zone (their profile), like on the dashboard.
+  const tz = useSpaceTimeZone();
   const country = useCountryName();
   const ref = useRef<HTMLDialogElement>(null);
   // Keyed by student id so a previous student's data never shows while the next one loads.
@@ -47,7 +51,7 @@ export function StudentDrawer({ id, row, loadDetail, onClose }: { id: string | n
   }, [id, loadDetail, attempt, t]);
 
   const date = (iso: string, opts: Intl.DateTimeFormatOptions = { weekday: "short", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false }) =>
-    new Intl.DateTimeFormat(tag, { ...opts, ...(API_URL ? {} : { timeZone: "UTC" }) }).format(new Date(iso));
+    new Intl.DateTimeFormat(tag, { ...opts, timeZone: API_URL ? tz : "UTC" }).format(new Date(iso)) + (API_URL && opts.hour ? ` ${zoneAbbrev(tz, iso)}` : "");
   const typeLabel = (l: StudentLesson) => (l.type === "trial" ? t("typeTrial") : l.type === "package" ? t("typePackage") : t("typeSingle"));
   const person = detail?.student ?? row;
   const name = person ? `${person.firstName} ${person.lastName}`.trim() : "";
