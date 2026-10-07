@@ -96,8 +96,9 @@ Seuls le professeur et l'élève du cours peuvent entrer (pas l'admin) ; le prof
 2. **Developers** → copier la **API key**.
 3. **Render** : `DAILY_API_KEY` = la clé ; `DAILY_DOMAIN` = `<nom>.daily.co` (facultatif, trouvé automatiquement sinon)
    → **Save, rebuild and deploy**. Rien à faire sur Vercel.
-4. Test : `CLASSROOM_EARLY_MIN=1440` (déjà dans render.yaml) ouvre la salle dès la veille du cours pour tester sans
-   attendre. **En production, supprimer cette variable** (retour à 10 minutes avant le cours).
+4. La salle (lien « Rejoindre » + salle vidéo Daily) s'ouvre **5 minutes avant** le cours (`CLASSROOM_EARLY_MIN`,
+   entre 0 et 15 ; toute valeur plus grande est ramenée à 15). ⚠ Si l'ancienne valeur `1440` est encore réglée
+   dans Render → Environment, la remplacer par `5` (ou la supprimer) : sinon la salle s'ouvre 15 min avant.
 
 Pour tester : réserver un cours avec un compte élève, puis ouvrir la salle depuis deux navigateurs (ou un ordinateur
 et un téléphone) : l'élève via « My booked lessons → Classroom », le professeur via son tableau de bord.
@@ -147,3 +148,15 @@ Pas encore disponible : envoi de fichiers (photo de profil, certificats) — le 
 - Vercel **Pro**, Render plan payant (pas de mise en veille), Neon payant à l'usage.
 - Nouveau service Render + nouvelle base Neon dédiés à la production, `SEED_DEMO=0`.
 - Clés **live** Stripe / Clerk / Daily, nom de domaine (ex. `amerivo.com` + `api.amerivo.com`).
+
+## Mise à jour « QA round 1 — confiance & sécurité » (migration 0006)
+
+Déployer **l'API et le site ensemble** (même merge) : l'API exige désormais l'acceptation des Conditions
+générales (réponse 403 `terms_required`), que le site gère en affichant l'écran « Accepter les conditions ».
+
+1. Render applique automatiquement la migration `0006_trust_safety` au démarrage (`start:prod`).
+2. Render → Environment : `CLASSROOM_EARLY_MIN` = `5` (voir plus haut).
+3. Compléter les valeurs entre crochets dans `apps/web/src/lib/legal.ts` (nom légal de la LLC, État, comté,
+   adresse, agent DMCA) et faire relire les Conditions générales par un avocat américain avant l'ouverture.
+4. Après le déploiement, chaque élève/professeur existant verra une fois l'écran d'acceptation des conditions.
+5. Nouveaux écrans admin : **Signalements** (`/admin/moderation`) et **Documents des professeurs** (`/admin/materials`).

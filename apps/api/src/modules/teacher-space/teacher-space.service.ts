@@ -6,6 +6,7 @@ import { bookings, earnings, lessonPackages, lessonReports, lessons, notificatio
 import { CLOCK, type Clock } from "../../common/clock";
 import { webOrigin } from "../../common/cors";
 import { badRequest, forbidden, notFound } from "../../common/errors";
+import { classroomWindow } from "../../domain/classroom";
 import { MIN_WITHDRAWAL_CENTS, MONTHLY_PAYOUT_DAY, nextMonthlyPayoutDate } from "../../domain/earnings";
 import { StripeService } from "../../integrations/stripe.service";
 import { EarningsService } from "../earnings/earnings.service";
@@ -181,6 +182,8 @@ export class TeacherSpaceService {
           bookingId: b.id,
           startsAt: b.startsAt,
           durationMin: b.durationMin,
+          // When "Start lesson" can be used (same rule as POST /bookings/:id/join).
+          ...classroomWindow(b),
           type: b.type,
           status: b.status,
           topic: b.topic,

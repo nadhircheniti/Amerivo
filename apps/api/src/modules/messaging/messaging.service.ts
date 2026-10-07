@@ -7,6 +7,7 @@ import { badRequest, forbidden, notFound } from "../../common/errors";
 import { DB, type Db } from "../../db/db";
 import { bookings, conversations, messages, notifications, teacherProfiles, users } from "../../db/schema";
 import { NotificationsService } from "../../integrations/notifications.service";
+import { ModerationService } from "../moderation/moderation.service";
 
 type Conversation = typeof conversations.$inferSelect;
 
@@ -14,7 +15,9 @@ const PREVIEW_MAX = 200;
 
 /**
  * Student ↔ teacher messaging (one conversation per pair) and the in-app notification inbox.
- * Admins never see conversations (privacy); every conversation route checks participation.
+ * Admins don't browse conversations; every conversation route checks participation. Texts that
+ * contain contact details are delivered redacted and reported to the moderation queue (Terms §8),
+ * where an admin sees the reported message and the messages just before it.
  */
 @Injectable()
 export class MessagingService {
@@ -22,6 +25,7 @@ export class MessagingService {
     @Inject(DB) private readonly db: Db,
     @Inject(CLOCK) private readonly clock: Clock,
     private readonly notifications: NotificationsService,
+    private readonly moderation: ModerationService,
   ) {}
 
   private assertMessagingRole(user: AuthUser) {
@@ -158,15 +162,18 @@ export class MessagingService {
 
   async send(user: AuthUser, conversationId: string, body: string) {
     const c = await this.participantConversation(user, conversationId);
-    const text = body.trim();
-    if (!text) throw badRequest("Message is empty");
+    const typed = body.trim();
+    if (!typed) throw badRequest("Message is empty");
+    const recipientId = c.studentId === user.id ? c.teacherId : c.studentId;
+    // Contact details are hidden before the message is stored or e-mailed (Terms §8).
+    const screened = await this.moderation.screen(user, typed, { context: "message", recipientId, conversationId: c.id });
+    const text = screened.text;
     const now = this.clock.now();
     const [m] = await this.db.transaction(async (tx) => {
       const inserted = await tx.insert(messages).values({ conversationId: c.id, senderId: user.id, kind: "text", body: text, createdAt: now }).returning();
       await tx.update(conversations).set({ lastMessageAt: now }).where(eq(conversations.id, c.id));
       return inserted;
     });
-    const recipientId = c.studentId === user.id ? c.teacherId : c.studentId;
     // E-mail only for the first unread message notification, so a chat doesn't flood the inbox.
     const [pending] = await this.db
       .select({ id: notifications.id })
@@ -179,7 +186,19 @@ export class MessagingService {
       body: text.length > PREVIEW_MAX ? `${text.slice(0, PREVIEW_MAX)}…` : text,
       channels: pending ? ["in_app"] : ["in_app", "email"],
     });
-    return { id: m.id, conversationId: c.id, senderId: m.senderId, kind: m.kind, body: m.body, attachmentUrl: m.attachmentUrl, attachmentName: m.attachmentName, readAt: m.readAt, createdAt: m.createdAt };
+    return {
+      id: m.id,
+      conversationId: c.id,
+      senderId: m.senderId,
+      kind: m.kind,
+      body: m.body,
+      attachmentUrl: m.attachmentUrl,
+      attachmentName: m.attachmentName,
+      readAt: m.readAt,
+      createdAt: m.createdAt,
+      // Tells the sender that part of the message was hidden (the UI shows a reminder of the rules).
+      moderation: { redacted: screened.redacted, types: screened.types },
+    };
   }
 
   async unreadCount(user: AuthUser) {

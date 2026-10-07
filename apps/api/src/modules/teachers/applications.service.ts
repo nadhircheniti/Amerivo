@@ -6,7 +6,9 @@ import { CLOCK, type Clock } from "../../common/clock";
 import { webOrigin } from "../../common/cors";
 import { badRequest, forbidden, notFound } from "../../common/errors";
 import { assertValidPrice } from "../../domain/pricing";
+import { videoEmbedUrl } from "../../domain/video";
 import { StripeService } from "../../integrations/stripe.service";
+import { ModerationService } from "../moderation/moderation.service";
 
 export interface TeacherProfileInput {
   headline?: string;
@@ -50,6 +52,7 @@ export class ApplicationsService {
     @Inject(DB) private readonly db: Db,
     @Inject(CLOCK) private readonly clock: Clock,
     private readonly stripe: StripeService,
+    private readonly moderation: ModerationService,
   ) {}
 
   /** Everything the teacher sees about their own profile: application, settings, availability. */
@@ -102,9 +105,24 @@ export class ApplicationsService {
         throw badRequest("Invalid time zone");
       }
     }
+    if (profile.introVideoUrl && !videoEmbedUrl(profile.introVideoUrl)) {
+      throw badRequest("The introduction video must be a YouTube, Vimeo, Loom or Google Drive link that anyone with the link can watch");
+    }
     const [current] = await this.db.select({ status: teacherProfiles.status }).from(teacherProfiles).where(eq(teacherProfiles.userId, teacherId));
     if (!current) throw notFound("Teacher profile");
     if (current.status === "suspended") throw forbidden("This teacher account is suspended");
+    // The profile is public: no e-mail, phone, links or handles in it (Terms §8).
+    await this.moderation.rejectContactDetails(
+      { id: teacherId },
+      {
+        headline: profile.headline,
+        bio: profile.bio,
+        city: profile.city,
+        education: profile.education,
+        certifications: profile.certifications?.map((c) => c.name).join("\n"),
+      },
+      "profile",
+    );
     const userPatch = Object.fromEntries(Object.entries({ firstName, lastName, phone, country }).filter(([, v]) => v !== undefined));
     return this.db.transaction(async (tx) => {
       if (Object.keys(userPatch).length) await tx.update(users).set(userPatch).where(eq(users.id, teacherId));

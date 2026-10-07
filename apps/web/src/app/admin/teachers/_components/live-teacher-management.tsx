@@ -10,7 +10,7 @@ import { ApiError } from "@/lib/api";
 import { cn } from "@/lib/cn";
 import { formatUsd } from "@/lib/mock-data";
 import { useApi } from "@/lib/use-api";
-import { videoEmbedUrl } from "../_video";
+import { videoEmbedUrl } from "@/lib/video";
 
 /* ---------- API shapes (GET /admin/teachers) ---------- */
 

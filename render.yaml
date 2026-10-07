@@ -40,8 +40,8 @@ services:
         sync: false
       - key: DAILY_DOMAIN        # optional, e.g. amerivo.daily.co (found automatically when empty)
         sync: false
-      - key: CLASSROOM_EARLY_MIN # staging only: minutes before a lesson when the classroom opens (default 10; 1440 = the day before)
-        value: "1440"
+      - key: CLASSROOM_EARLY_MIN # minutes before a lesson when the classroom opens: default 5, capped at 15 (QA: links must not work earlier)
+        value: "5"
       - key: RESEND_API_KEY
         sync: false
       - key: EMAIL_FROM          # once amerivoenglish.com is verified in Resend: "Amerivo English <contact@amerivoenglish.com>"

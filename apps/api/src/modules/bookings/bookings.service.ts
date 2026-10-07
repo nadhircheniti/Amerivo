@@ -14,6 +14,8 @@ import type { AuthUser } from "../../auth/decorators";
 import { StripeService } from "../../integrations/stripe.service";
 import { NotificationsService } from "../../integrations/notifications.service";
 import { TeachersService } from "../teachers/teachers.service";
+import { classroomWindow } from "../../domain/classroom";
+import { ModerationService } from "../moderation/moderation.service";
 
 export interface CreateBookingInput {
   teacherSlug: string;
@@ -40,12 +42,15 @@ export class BookingsService {
     private readonly teachers: TeachersService,
     private readonly stripe: StripeService,
     private readonly notifications: NotificationsService,
+    private readonly moderation: ModerationService,
   ) {}
 
   /* ------------------------------------------------------------ create */
   async create(student: AuthUser, input: CreateBookingInput) {
     if (student.role !== "student") throw forbidden("Only students can book lessons");
     const teacher = await this.teachers.bySlug(input.teacherSlug);
+    // The lesson topic is shown to the teacher: contact details are hidden (Terms §8).
+    if (input.topic?.trim()) input = { ...input, topic: (await this.moderation.screen(student, input.topic.trim(), { context: "booking", recipientId: teacher.id })).text };
     const [pricing] = await this.db
       .select({ priceCents: teacherProfiles.priceCents, offersTrial: teacherProfiles.offersTrial, offersPack5: teacherProfiles.offersPack5, offersPack10: teacherProfiles.offersPack10 })
       .from(teacherProfiles)
@@ -468,7 +473,7 @@ export class BookingsService {
     const col = user.role === "teacher" ? bookings.teacherId : bookings.studentId;
     const other = user.role === "teacher" ? bookings.studentId : bookings.teacherId;
     const now = this.clock.now();
-    return this.db
+    const rows = await this.db
       .select({ ...getTableColumns(bookings), withFirstName: users.firstName, withLastName: users.lastName })
       .from(bookings)
       .leftJoin(users, eq(users.id, other))
@@ -480,6 +485,8 @@ export class BookingsService {
       )
       .orderBy(bookings.startsAt)
       .limit(100);
+    // opensAt/closesAt: when the classroom link can be used (same rule as POST /bookings/:id/join).
+    return rows.map((b) => ({ ...b, ...classroomWindow(b) }));
   }
 
   private async notifyConfirmed(bookingId: string) {

@@ -8,7 +8,8 @@
     "progress": "学习进度",
     "payments": "付款",
     "settings": "设置",
-    "userSubtitle": "学生 · {level} 级"
+    "userSubtitle": "学生 · {level} 级",
+    "materials": "文档"
   },
   "backToOverview": "返回概览",
   "states": {
@@ -411,7 +412,8 @@
     },
     "timeZoneNote": "时间按你所在的时区显示（{tz}）。",
     "classroom": "进入课堂",
-    "emptyTeacher": "暂无即将开始的课程。新的预约会显示在这里。"
+    "emptyTeacher": "暂无即将开始的课程。新的预约会显示在这里。",
+    "opensAt": "{time} 开放"
   },
   "messages": {
     "metaTitle": "消息",
@@ -444,5 +446,13 @@
     "lastSeen": "最后在线：{day} · {city}",
     "repliesWithinHours": "通常在几小时内回复",
     "supportSubtitle": "预约、付款和账户相关帮助"
+  },
+  "materials": {
+    "title": "文档",
+    "description": "老师分享的练习题和资料，已经过 Amerivo 团队审核。",
+    "emptyTitle": "暂无文档",
+    "emptyText": "当你的老师分享文档时，它会显示在这里。",
+    "open": "打开",
+    "openError": "无法打开该文档，请重试。"
   }
 }

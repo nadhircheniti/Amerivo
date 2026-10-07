@@ -274,7 +274,7 @@
     "urlPattern": "Enter a link starting with https://",
     "preview": "Preview",
     "previewTitle": "Preview of your introduction video",
-    "noPreview": "Preview is available for YouTube and Vimeo links. Make sure anyone with the link can watch your video.",
+    "noPreview": "This link can't be shown on your profile. Use a YouTube, Vimeo, Loom or Google Drive link that anyone with the link can watch.",
     "tipsTitle": "Tips for a great video",
     "tips": {
       "say": {

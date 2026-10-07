@@ -15,6 +15,7 @@ import request from "supertest";
 import { AppModule } from "../src/app.module";
 import { DB } from "../src/db/db";
 import * as schema from "../src/db/schema";
+import { TERMS_VERSION } from "../src/domain/terms";
 import { CLOCK } from "../src/common/clock";
 import { StripeService } from "../src/integrations/stripe.service";
 import { DailyService } from "../src/integrations/daily.service";
@@ -85,8 +86,8 @@ before(async () => {
   http = () => request(app.getHttpServer());
 
   // Seed an admin and an approved teacher (Sarah, Austin) teaching Wednesdays 11:00–13:00 Chicago time.
-  const [admin] = await db.insert(schema.users).values({ clerkId: "clerk_admin", role: "admin", status: "active", email: "admin@amerivo.test", firstName: "Ada", lastName: "Admin" }).returning();
-  const [sarah] = await db.insert(schema.users).values({ clerkId: "clerk_sarah", role: "teacher", status: "active", email: "sarah@amerivo.test", firstName: "Sarah", lastName: "Mitchell", timezone: "America/Chicago" }).returning();
+  const [admin] = await db.insert(schema.users).values({ clerkId: "clerk_admin", role: "admin", status: "active", email: "admin@amerivo.test", firstName: "Ada", lastName: "Admin", termsVersion: TERMS_VERSION }).returning();
+  const [sarah] = await db.insert(schema.users).values({ clerkId: "clerk_sarah", role: "teacher", status: "active", email: "sarah@amerivo.test", firstName: "Sarah", lastName: "Mitchell", timezone: "America/Chicago", termsVersion: TERMS_VERSION }).returning();
   await db.insert(schema.teacherProfiles).values({
     userId: sarah.id, slug: "sarah-mitchell", status: "approved", timezone: "America/Chicago", priceCents: 3500, offersTrial: true, offersPack5: true, offersPack10: true,
     specialties: ["Business English", "Interview Prep"], teaches: ["adults"], yearsExperience: 8, identityStatus: "verified", stripeAccountId: "acct_sarah", bio: "HR manager turned coach",
@@ -109,15 +110,15 @@ describe("Amerivo API", () => {
 
   it("a student registers and saves placement answers", async () => {
     // Students must be 13 or older (clock: 2026-10-01).
-    const young = await http().post("/api/me/register").set(as("clerk_kid")).send({ role: "student", email: "kid@example.com", firstName: "Kid", lastName: "Young", timezone: "Europe/Zurich", birthDate: "2013-10-02" }).expect(400);
+    const young = await http().post("/api/me/register").set(as("clerk_kid")).send({ role: "student", acceptTerms: true, email: "kid@example.com", firstName: "Kid", lastName: "Young", timezone: "Europe/Zurich", birthDate: "2013-10-02" }).expect(400);
     assert.match(young.body.message, /at least 13/);
-    await http().post("/api/me/register").set(as("clerk_kid")).send({ role: "student", email: "kid@example.com", firstName: "Kid", lastName: "Young", timezone: "Europe/Zurich" }).expect(400);
-    await http().post("/api/me/register").set(as("clerk_teen")).send({ role: "student", email: "teen@example.com", firstName: "Teen", lastName: "Ager", timezone: "Europe/Zurich", birthDate: "2013-10-01" }).expect(201);
+    await http().post("/api/me/register").set(as("clerk_kid")).send({ role: "student", acceptTerms: true, email: "kid@example.com", firstName: "Kid", lastName: "Young", timezone: "Europe/Zurich" }).expect(400);
+    await http().post("/api/me/register").set(as("clerk_teen")).send({ role: "student", acceptTerms: true, email: "teen@example.com", firstName: "Teen", lastName: "Ager", timezone: "Europe/Zurich", birthDate: "2013-10-01" }).expect(201);
 
-    const res = await http().post("/api/me/register").set(as("clerk_maria")).send({ role: "student", email: "maria@example.com", firstName: "Maria", lastName: "Silva", country: "Brazil", timezone: "Europe/Zurich", birthDate: "1994-05-12" }).expect(201);
+    const res = await http().post("/api/me/register").set(as("clerk_maria")).send({ role: "student", acceptTerms: true, email: "maria@example.com", firstName: "Maria", lastName: "Silva", country: "Brazil", timezone: "Europe/Zurich", birthDate: "1994-05-12" }).expect(201);
     ids.maria = res.body.id;
     assert.equal(res.body.status, "active");
-    await http().post("/api/me/register").set(as("clerk_maria")).send({ role: "student", email: "maria@example.com", firstName: "Maria", lastName: "Silva", timezone: "Europe/Zurich", birthDate: "1994-05-12" }).expect(409);
+    await http().post("/api/me/register").set(as("clerk_maria")).send({ role: "student", acceptTerms: true, email: "maria@example.com", firstName: "Maria", lastName: "Silva", timezone: "Europe/Zurich", birthDate: "1994-05-12" }).expect(409);
     await http().put("/api/student/placement").set(as("clerk_maria")).send({ goal: "business", selfLevel: "intermediate", preferredTeacherGender: "no_preference", preferredTimes: ["morning"] }).expect(200);
     // The level can no longer be self-reported: it comes from the graded test (see placement.e2e).
     await http().put("/api/student/placement/result").set(as("clerk_maria")).send({ grammar: "C2" }).expect(404);
@@ -152,7 +153,7 @@ describe("Amerivo API", () => {
     assert.equal(slots.body.length, 1);
 
     // A second student can't take it.
-    const [ana] = await db.insert(schema.users).values({ clerkId: "clerk_ana", role: "student", status: "active", email: "ana@example.com", firstName: "Ana", lastName: "Costa" }).returning();
+    const [ana] = await db.insert(schema.users).values({ clerkId: "clerk_ana", role: "student", status: "active", email: "ana@example.com", firstName: "Ana", lastName: "Costa", termsVersion: TERMS_VERSION }).returning();
     ids.ana = ana.id;
     await http().post("/api/bookings").set(as("clerk_ana")).send({ teacherSlug: "sarah-mitchell", offer: "single", startsAt: "2026-10-14T16:00:00.000Z" }).expect(409);
 
@@ -220,16 +221,23 @@ describe("Amerivo API", () => {
     const info = await http().get(`/api/bookings/${singleId}/classroom`).set(as("clerk_maria")).expect(200);
     assert.equal(info.body.role, "student");
     assert.equal(info.body.teacher.firstName, "Sarah");
-    assert.equal(info.body.opensAt, "2026-10-14T15:50:00.000Z");
+    // The classroom opens 5 minutes before the lesson (QA: links were usable a day early).
+    assert.equal(info.body.opensAt, "2026-10-14T15:55:00.000Z");
     await http().get(`/api/bookings/${singleId}/classroom`).set(as("clerk_ana")).expect(403);
-    // Test site: CLASSROOM_EARLY_MIN opens it earlier.
-    process.env.CLASSROOM_EARLY_MIN = "60";
+    // CLASSROOM_EARLY_MIN can open it a little earlier, never more than 15 minutes before.
+    process.env.CLASSROOM_EARLY_MIN = "10";
     const early = await http().get(`/api/bookings/${singleId}/classroom`).set(as("clerk_maria")).expect(200);
-    assert.equal(early.body.opensAt, "2026-10-14T15:00:00.000Z");
+    assert.equal(early.body.opensAt, "2026-10-14T15:50:00.000Z");
+    process.env.CLASSROOM_EARLY_MIN = "1440";
+    const capped = await http().get(`/api/bookings/${singleId}/classroom`).set(as("clerk_maria")).expect(200);
+    assert.equal(capped.body.opensAt, "2026-10-14T15:45:00.000Z");
+    await http().post(`/api/bookings/${singleId}/join`).set(as("clerk_maria")).expect(201); // 15:45 = opening time with the cap
     delete process.env.CLASSROOM_EARLY_MIN;
+    clock.set("2026-10-14T15:54:00Z"); // 6 min before: closed again with the default
+    await http().post(`/api/bookings/${singleId}/join`).set(as("clerk_maria")).expect(400);
     // Lessons are private: an admin can't enter the room.
     await http().post(`/api/bookings/${singleId}/join`).set(as("clerk_admin")).expect(403);
-    clock.set("2026-10-14T15:52:00Z"); // 8 min before: open
+    clock.set("2026-10-14T15:56:00Z"); // 4 min before: open
     const join = await http().post(`/api/bookings/${singleId}/join`).set(as("clerk_sarah")).expect(201);
     assert.equal(join.body.token, "owner-token");
     assert.match(join.body.roomUrl, /amerivo\.daily\.co\/amerivo-/);
@@ -275,7 +283,7 @@ describe("Amerivo API", () => {
   });
 
   it("teacher application: submit requires video + identity; admin decides", async () => {
-    await http().post("/api/me/register").set(as("clerk_james")).send({ role: "teacher", email: "james@example.com", firstName: "James", lastName: "Robinson", timezone: "America/Chicago" }).expect(201);
+    await http().post("/api/me/register").set(as("clerk_james")).send({ role: "teacher", acceptTerms: true, email: "james@example.com", firstName: "James", lastName: "Robinson", timezone: "America/Chicago" }).expect(201);
     await http().put("/api/teacher/profile").set(as("clerk_james")).send({ priceCents: 1500 }).expect(400);
     await http().put("/api/teacher/profile").set(as("clerk_james")).send({ priceCents: 2800, bio: "Conversation coach", specialties: ["Conversation"], offersPack5: true }).expect(200);
     const missing = await http().post("/api/teacher/application/submit").set(as("clerk_james")).expect(400);
@@ -306,7 +314,7 @@ describe("Amerivo API", () => {
 
   it("ADMIN_EMAILS: a listed, verified e-mail registers as admin (no date of birth needed)", async () => {
     process.env.ADMIN_EMAILS = "owner@amerivo.test, other@amerivo.test";
-    const res = await http().post("/api/me/register").set(as("clerk_owner")).send({ role: "student", email: "Owner@amerivo.test", firstName: "Olivia", lastName: "Owner", timezone: "Europe/Zurich" }).expect(201);
+    const res = await http().post("/api/me/register").set(as("clerk_owner")).send({ role: "student", acceptTerms: true, email: "Owner@amerivo.test", firstName: "Olivia", lastName: "Owner", timezone: "Europe/Zurich" }).expect(201);
     assert.equal(res.body.role, "admin");
     await http().get("/api/admin/analytics?days=30").set(as("clerk_owner")).expect(200);
     // An existing verified student whose e-mail is added later becomes admin on the next GET /me.
@@ -314,12 +322,12 @@ describe("Amerivo API", () => {
     const promoted = await http().get("/api/me").set(as("clerk_maria")).expect(200);
     assert.equal(promoted.body.role, "admin");
     delete process.env.ADMIN_EMAILS;
-    await http().post("/api/me/register").set(as("clerk_other")).send({ role: "student", email: "other@amerivo.test", firstName: "O", lastName: "T", timezone: "Europe/Zurich" }).expect(400);
+    await http().post("/api/me/register").set(as("clerk_other")).send({ role: "student", acceptTerms: true, email: "other@amerivo.test", firstName: "O", lastName: "T", timezone: "Europe/Zurich" }).expect(400);
   });
 
   it("Stripe: confirmation without webhook, 30-min payment hold, resume, late payment refunded", async () => {
     clock.set("2026-10-20T00:00:00Z");
-    const [bob] = await db.insert(schema.users).values({ clerkId: "clerk_bob", role: "student", status: "active", email: "bob@example.com", firstName: "Bob", lastName: "Lee" }).returning();
+    const [bob] = await db.insert(schema.users).values({ clerkId: "clerk_bob", role: "student", status: "active", email: "bob@example.com", firstName: "Bob", lastName: "Lee", termsVersion: TERMS_VERSION }).returning();
     const book = (who: string, startsAt: string) => http().post("/api/bookings").set(as(who)).send({ teacherSlug: "sarah-mitchell", offer: "single", startsAt });
 
     // 1. Paid on the checkout page → sync confirms at once; the later webhook is a no-op.
@@ -389,7 +397,7 @@ describe("Amerivo API", () => {
 
   it("teacher onboarding: application saved step by step, Stripe identity, submit, interview, approval", async () => {
     // A teacher account (no date of birth needed) starts as a draft.
-    await http().post("/api/me/register").set(as("clerk_emma")).send({ role: "teacher", email: "emma@example.com", firstName: "Emma", lastName: "Stone", timezone: "America/New_York" }).expect(201);
+    await http().post("/api/me/register").set(as("clerk_emma")).send({ role: "teacher", acceptTerms: true, email: "emma@example.com", firstName: "Emma", lastName: "Stone", timezone: "America/New_York" }).expect(201);
     let me = await http().get("/api/me").set(as("clerk_emma")).expect(200);
     assert.equal(me.body.role, "teacher");
     assert.equal(me.body.teacherStatus, "draft");

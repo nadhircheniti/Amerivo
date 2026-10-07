@@ -1,23 +1,19 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { and, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, eq, gte, inArray, sql } from "drizzle-orm";
 import { DB, type Db } from "../../db/db";
-import { bookings, homework, lessonReports, lessons, reviews, teacherProfiles, users } from "../../db/schema";
+import { bookings, homework, lessonChatMessages, lessonReports, lessons, reviews, teacherProfiles, users } from "../../db/schema";
 import { CLOCK, type Clock } from "../../common/clock";
 import { badRequest, conflict, forbidden, notFound } from "../../common/errors";
 import type { AuthUser } from "../../auth/decorators";
 import { DailyService } from "../../integrations/daily.service";
 import { NotificationsService } from "../../integrations/notifications.service";
 import { BookingsService } from "../bookings/bookings.service";
+import { ModerationService } from "../moderation/moderation.service";
+import { classroomWindow } from "../../domain/classroom";
 
-/**
- * How early the classroom opens before the lesson: 10 minutes by default.
- * CLASSROOM_EARLY_MIN can widen it on the test site (e.g. 1440 = the day before) so testers
- * don't have to wait for the exact time. Capped at 24 hours.
- */
-export const classroomEarlyMin = () => {
-  const v = Number(process.env.CLASSROOM_EARLY_MIN);
-  return Number.isFinite(v) && v >= 0 ? Math.min(v, 1440) : 10;
-};
+/** Live classroom chat: longest message and how many recent messages a poll returns at most. */
+export const LESSON_CHAT_MAX = 2000;
+const LESSON_CHAT_PAGE = 200;
 
 export interface ReportInput {
   topicsCovered: string;
@@ -39,13 +35,11 @@ export class LessonsService {
     private readonly bookings: BookingsService,
     private readonly daily: DailyService,
     private readonly notifications: NotificationsService,
+    private readonly moderation: ModerationService,
   ) {}
 
   private windowFor(b: { startsAt: Date; durationMin: number }) {
-    return {
-      opensAt: new Date(b.startsAt.getTime() - classroomEarlyMin() * 60_000),
-      closesAt: new Date(b.startsAt.getTime() + (b.durationMin + 30) * 60_000),
-    };
+    return classroomWindow(b);
   }
 
   /** Everything the classroom page needs before joining (participants only). */
@@ -101,9 +95,56 @@ export class LessonsService {
     return { roomUrl: await this.daily.roomUrl(lesson.dailyRoomName!), token, lessonId: lesson.id };
   }
 
+  /** The lesson's teacher or student (admins can't write into a lesson). */
+  private async assertLessonParticipant(user: AuthUser, bookingId: string) {
+    const b = await this.bookings.assertParticipant(user, bookingId);
+    if (user.id !== b.studentId && user.id !== b.teacherId) throw forbidden();
+    return b;
+  }
+
+  /** Shared notes: contact details are hidden before they are stored and shown to the other person. */
   async saveNotes(user: AuthUser, bookingId: string, notes: string) {
-    await this.bookings.assertParticipant(user, bookingId);
-    return this.db.update(lessons).set({ sharedNotes: notes }).where(eq(lessons.bookingId, bookingId)).returning({ id: lessons.id });
+    const b = await this.assertLessonParticipant(user, bookingId);
+    const recipientId = user.id === b.teacherId ? b.studentId : b.teacherId;
+    const screened = await this.moderation.screen(user, notes, { context: "lesson_notes", bookingId: b.id, recipientId });
+    const rows = await this.db.update(lessons).set({ sharedNotes: screened.text }).where(eq(lessons.bookingId, bookingId)).returning({ id: lessons.id });
+    return rows.map((r) => ({ ...r, notes: screened.text, moderation: { redacted: screened.redacted, types: screened.types } }));
+  }
+
+  /**
+   * Live classroom chat. Messages go through the API (not peer-to-peer) so they are screened for
+   * contact details and kept with the lesson. Open while the classroom is open.
+   */
+  async sendChat(user: AuthUser, bookingId: string, body: string) {
+    const b = await this.assertLessonParticipant(user, bookingId);
+    if (b.status !== "confirmed" && b.status !== "completed") throw badRequest(`Lesson is ${b.status}`);
+    const now = this.clock.now();
+    const { opensAt, closesAt } = this.windowFor(b);
+    if (now < opensAt || now > closesAt) throw badRequest("The classroom is closed");
+    const typed = body.trim();
+    if (!typed) throw badRequest("Message is empty");
+    if (typed.length > LESSON_CHAT_MAX) throw badRequest(`Message is too long (max ${LESSON_CHAT_MAX} characters)`);
+    const recipientId = user.id === b.teacherId ? b.studentId : b.teacherId;
+    const screened = await this.moderation.screen(user, typed, { context: "lesson_chat", bookingId: b.id, recipientId });
+    const [m] = await this.db.insert(lessonChatMessages).values({ bookingId: b.id, senderId: user.id, body: screened.text, createdAt: now }).returning();
+    return { id: m.id, senderId: m.senderId, body: m.body, createdAt: m.createdAt, moderation: { redacted: screened.redacted, types: screened.types } };
+  }
+
+  /** Chat messages since `after` (inclusive; all of them when omitted, up to 200) and the current shared notes. */
+  async live(user: AuthUser, bookingId: string, after?: Date) {
+    const b = await this.assertLessonParticipant(user, bookingId);
+    // gte, not gt: two messages can share a millisecond; the client drops the ones it already has.
+    const where = after ? and(eq(lessonChatMessages.bookingId, b.id), gte(lessonChatMessages.createdAt, after)) : eq(lessonChatMessages.bookingId, b.id);
+    const [messages, [lesson]] = await Promise.all([
+      this.db
+        .select({ id: lessonChatMessages.id, senderId: lessonChatMessages.senderId, body: lessonChatMessages.body, createdAt: lessonChatMessages.createdAt })
+        .from(lessonChatMessages)
+        .where(where)
+        .orderBy(asc(lessonChatMessages.createdAt), asc(lessonChatMessages.id))
+        .limit(LESSON_CHAT_PAGE),
+      this.db.select({ sharedNotes: lessons.sharedNotes }).from(lessons).where(eq(lessons.bookingId, b.id)),
+    ]);
+    return { messages, notes: lesson?.sharedNotes ?? "" };
   }
 
   /** Teacher's end-of-lesson report (spec §12). Also creates the homework item. */
@@ -116,6 +157,12 @@ export class LessonsService {
     }
     const [lesson] = await this.db.select().from(lessons).where(eq(lessons.bookingId, b.id));
     if (!lesson) throw notFound("Lesson");
+    // Everything the student will read is screened for contact details (Terms §8).
+    const where = { context: "lesson_report" as const, bookingId: b.id, recipientId: b.studentId };
+    for (const key of ["topicsCovered", "strengths", "developmentAreas", "homework", "recommendation"] as const) {
+      const v = input[key];
+      if (v) input = { ...input, [key]: (await this.moderation.screen(teacher, v, where)).text };
+    }
     const now = this.clock.now();
     const report = await this.db.transaction(async (tx) => {
       const [r] = await tx
@@ -151,6 +198,8 @@ export class LessonsService {
     if (b.studentId !== student.id) throw forbidden();
     if (b.status !== "completed") throw badRequest("You can review a lesson once it is completed");
     if (!Number.isInteger(rating) || rating < 1 || rating > 5) throw badRequest("Rating must be 1–5");
+    // Reviews are public: contact details are hidden.
+    if (comment) comment = (await this.moderation.screen(student, comment, { context: "review", bookingId: b.id, recipientId: b.teacherId })).text;
     try {
       return await this.db.transaction(async (tx) => {
         const [r] = await tx.insert(reviews).values({ bookingId, studentId: student.id, teacherId: b.teacherId, rating, comment }).returning();

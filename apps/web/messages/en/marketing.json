@@ -224,7 +224,9 @@
     "reviewPlaceholder": "[Student review text — shown after a completed lesson]",
     "reviewMeta": "Student name · Country · Date",
     "fallbackHeadline": "American English teacher",
-    "fallbackCity": "United States"
+    "fallbackCity": "United States",
+    "photoAlt": "Photo of {name}",
+    "videoTitle": "{name}'s introduction video"
   },
   "booking": {
     "title": "Book a lesson with {name}",
@@ -285,5 +287,13 @@
       "business": "Business / companies",
       "technical": "Technical problem"
     }
+  },
+  "terms": {
+    "metaTitle": "Terms of Service",
+    "metaDescription": "The rules for using Amerivo English as a student or a teacher: bookings, payments, safety, and the ban on sharing contact details.",
+    "title": "Terms of Service",
+    "contents": "Contents",
+    "englishNotice": "The Terms of Service are written in English, which is the legally binding version. If you need help understanding them, contact us.",
+    "keyPoints": "In short: <b>never share your e-mail, phone number, links or social media</b> with another user, and <b>keep all lessons and payments on Amerivo</b>. Messages, classroom chat, notes and documents are checked for your safety. Breaking these rules can lead to account suspension and to the fees described in Section 8."
   }
 }

@@ -224,7 +224,9 @@
     "reviewPlaceholder": "[Texto de la reseña del estudiante — se muestra tras una clase completada]",
     "reviewMeta": "Nombre del estudiante · País · Fecha",
     "fallbackHeadline": "Profesor de inglés americano",
-    "fallbackCity": "Estados Unidos"
+    "fallbackCity": "Estados Unidos",
+    "photoAlt": "Foto de {name}",
+    "videoTitle": "Video de presentación de {name}"
   },
   "booking": {
     "title": "Reserva una clase con {name}",
@@ -285,5 +287,13 @@
       "business": "Empresas",
       "technical": "Problema técnico"
     }
+  },
+  "terms": {
+    "metaTitle": "Términos del servicio",
+    "metaDescription": "Las reglas para usar Amerivo English como estudiante o profesor: reservas, pagos, seguridad y la prohibición de compartir datos de contacto.",
+    "title": "Términos del servicio",
+    "contents": "Contenido",
+    "englishNotice": "Los Términos del servicio están redactados en inglés, que es la versión legalmente vinculante. Si necesitas ayuda para entenderlos, contáctanos.",
+    "keyPoints": "En resumen: <b>nunca compartas tu correo electrónico, número de teléfono, enlaces ni redes sociales</b> con otro usuario, y <b>mantén todas las clases y los pagos en Amerivo</b>. Los mensajes, el chat del aula, las notas y los documentos se revisan por tu seguridad. Incumplir estas reglas puede dar lugar a la suspensión de la cuenta y a las tarifas descritas en la Sección 8."
   }
 }

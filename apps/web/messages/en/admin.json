@@ -8,7 +8,9 @@
     "disputes": "Disputes & refunds",
     "support": "Support inbox",
     "settings": "Settings & audit log",
-    "signedIn2fa": "Signed in with 2FA"
+    "signedIn2fa": "Signed in with 2FA",
+    "moderation": "Safety reports",
+    "materials": "Teacher documents"
   },
   "overview": {
     "metaTitle": "Platform analytics · Amerivo Admin",
@@ -726,5 +728,113 @@
       "business": "Business / companies",
       "technical": "Technical problem"
     }
+  },
+  "moderationPage": {
+    "metaTitle": "Safety reports",
+    "title": "Safety reports",
+    "subtitle": "Contact details (e-mail, phone, links, social media) detected in messages, classroom chat, notes, lesson reports and reviews. They were hidden before the other person saw them.",
+    "statusTabs": "Report status",
+    "tabs": {
+      "open": "To review",
+      "warned": "Warned",
+      "blocked": "Blocked",
+      "dismissed": "Dismissed"
+    },
+    "what": "the reports",
+    "empty": {
+      "open": "No report to review.",
+      "warned": "No warned user.",
+      "blocked": "No blocked user.",
+      "dismissed": "No dismissed report."
+    },
+    "pagination": "Report pages",
+    "roles": {
+      "student": "student",
+      "teacher": "teacher",
+      "admin": "admin"
+    },
+    "status": {
+      "open": "To review",
+      "warned": "Warned",
+      "blocked": "Blocked",
+      "dismissed": "Dismissed"
+    },
+    "contexts": {
+      "message": "Message",
+      "lesson_chat": "Classroom chat",
+      "lesson_notes": "Lesson notes",
+      "lesson_report": "Lesson report",
+      "review": "Review",
+      "profile": "Teacher profile",
+      "material": "Document",
+      "booking": "Lesson topic"
+    },
+    "types": {
+      "email": "E-mail",
+      "phone": "Phone",
+      "link": "Link",
+      "handle": "Social handle",
+      "app": "Messaging app"
+    },
+    "repeat": "{count} reports in 30 days",
+    "accountBlocked": "Account blocked",
+    "original": "What they wrote",
+    "delivered": "What the other person saw",
+    "notDelivered": "Refused (not published)",
+    "reviewNote": "Note: {note}",
+    "showContext": "Show the conversation",
+    "contextTitle": "Conversation around the report (as delivered)",
+    "contextNone": "No conversation for this report.",
+    "actions": {
+      "dismiss": "Dismiss",
+      "warn": "Warn the user",
+      "block": "Block the account"
+    },
+    "confirm": {
+      "dismiss": "Dismiss this report about {name} (false alarm)?",
+      "warn": "Send {name} a warning (in-app and e-mail) about sharing contact details?",
+      "block": "Block {name}'s account? They won't be able to sign in or use Amerivo anymore."
+    },
+    "warnNoteLabel": "Message added to the warning (optional)",
+    "blockNoteLabel": "Internal note (optional)",
+    "notePlaceholder": "Visible in the audit log",
+    "notice": {
+      "dismiss": "Report about {name} dismissed.",
+      "warn": "{name} has been warned.",
+      "block": "{name}'s account is blocked."
+    }
+  },
+  "materialsPage": {
+    "metaTitle": "Teacher documents",
+    "title": "Teacher documents",
+    "subtitle": "Documents teachers want to share with their students. Students only see approved documents. Check the content, the rights to share it and that it contains no contact details.",
+    "statusTabs": "Document status",
+    "tabs": {
+      "pending": "To review",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "what": "the documents",
+    "empty": {
+      "pending": "No document waiting for review.",
+      "approved": "No approved document.",
+      "rejected": "No rejected document."
+    },
+    "pagination": "Document pages",
+    "status": {
+      "pending": "To review",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "reviewNote": "Note: {note}",
+    "open": "Open the document",
+    "approve": "Approve",
+    "reject": "Reject",
+    "confirmApprove": "Approve \"{title}\"? The teacher's students will be able to download it.",
+    "confirmReject": "Reject \"{title}\"? The teacher will see your reason.",
+    "rejectReason": "Reason (sent to the teacher)",
+    "rejectPlaceholder": "e.g. The document contains a phone number.",
+    "noticeApproved": "\"{title}\" approved and shared with the teacher's students.",
+    "noticeRejected": "\"{title}\" rejected. The teacher has been notified."
   }
 }

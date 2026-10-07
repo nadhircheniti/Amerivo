@@ -10,7 +10,10 @@ import { CountrySelect, LanguageSelect } from "@/components/ui/geo-selects";
 import { ageOn, latestBirthDate, MIN_STUDENT_AGE } from "@/lib/age";
 import { ApiError, API_URL } from "@/lib/api";
 import { canOpen, clerkEnabled, homeForRole, spaceOf } from "@/lib/auth-config";
+import { TERMS_VERSION } from "@/lib/legal";
+import { safePath } from "@/lib/safe-path";
 import { useApi } from "@/lib/use-api";
+import Link from "next/link";
 
 type Meta = {
   role?: string;
@@ -20,6 +23,8 @@ type Meta = {
   country?: string;
   nativeLanguage?: string;
   phone?: string;
+  /** Version of the Terms accepted on the sign-up form. */
+  termsVersion?: string;
 };
 type ClerkUserLite = {
   email: string;
@@ -65,7 +70,7 @@ export function WelcomeFlow() {
   const started = useRef(false);
 
   const next = typeof window === "undefined" ? null : new URLSearchParams(window.location.search).get("next");
-  const safeNext = next && next.startsWith("/") && !next.startsWith("//") ? next : null;
+  const safeNext = next ? safePath(next, window.location.origin, "") || null : null;
 
   // Teacher applicants: role chosen at sign-up (unsafeMetadata) or ?as=teacher (Google/Apple from /signup?as=teacher).
   const asTeacher = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("as") === "teacher";
@@ -80,6 +85,8 @@ export function WelcomeFlow() {
         country: p.country || undefined,
         phone: p.phone || undefined,
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC",
+        // Only called after the user ticked "I accept the Terms" (sign-up form or the form below).
+        acceptTerms: true,
       };
       const created = await call<{ role: string }>("/me/register", {
         method: "POST",
@@ -115,7 +122,7 @@ export function WelcomeFlow() {
         }
         const m = user?.meta ?? {};
         // Students need their birth date (13+ rule); teachers don't give one.
-        if (m.firstName && m.lastName && (teacher ? m.country : m.birthDate)) {
+        if (m.firstName && m.lastName && (teacher ? m.country : m.birthDate) && m.termsVersion === TERMS_VERSION) {
           try {
             await register({ ...m, firstName: m.firstName, lastName: m.lastName });
           } catch (err) {
@@ -200,6 +207,23 @@ export function WelcomeFlow() {
             <LanguageSelect name="nativeLanguage" defaultValue="" placeholder={t("fields.selectLanguage")} />
           </Field>
         )}
+        <label className="flex items-start gap-2.5 text-sm leading-normal text-navy-soft sm:col-span-2">
+          <input type="checkbox" name="terms" required className="mt-0.5 size-[18px] shrink-0" />
+          <span>
+            {t.rich("signup.terms", {
+              terms: (c) => (
+                <Link href="/terms" target="_blank" className="font-semibold text-teal-dark underline-offset-2 hover:underline">
+                  {c}
+                </Link>
+              ),
+              privacy: (c) => (
+                <Link href="/privacy" target="_blank" className="font-semibold text-teal-dark underline-offset-2 hover:underline">
+                  {c}
+                </Link>
+              ),
+            })}
+          </span>
+        </label>
         {error && (
           <p role="alert" className="rounded-xl bg-danger-100 px-4 py-3 text-sm font-semibold text-danger-text sm:col-span-2">
             {error}

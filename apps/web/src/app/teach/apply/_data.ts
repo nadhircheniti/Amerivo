@@ -227,30 +227,5 @@ export function firstIncompleteStep(p: TeacherProfile): number {
 /** Statuses that let the applicant edit and (re)submit. */
 export const editableStatus = (s: TeacherStatus) => s === "draft" || s === "rejected";
 
-/** Embeddable player URL for YouTube / Vimeo links (other hosts: no preview). */
-export function videoEmbedUrl(raw: string): string | null {
-  let u: URL;
-  try {
-    u = new URL(raw.trim());
-  } catch {
-    return null;
-  }
-  if (u.protocol !== "https:") return null;
-  const host = u.hostname.replace(/^(www\.|m\.)/, "");
-  const id = /^[\w-]{6,20}$/;
-  if (host === "youtu.be") {
-    const v = u.pathname.slice(1).split("/")[0];
-    return id.test(v) ? `https://www.youtube-nocookie.com/embed/${v}` : null;
-  }
-  if (host === "youtube.com") {
-    const v = u.searchParams.get("v") ?? u.pathname.match(/^\/(?:embed|shorts|live)\/([^/?]+)/)?.[1] ?? "";
-    return id.test(v) ? `https://www.youtube-nocookie.com/embed/${v}` : null;
-  }
-  if (host === "vimeo.com" || host === "player.vimeo.com") {
-    const m = u.pathname.match(/(?:^|\/)(\d{5,12})(?:\/([\da-f]{6,20}))?/);
-    if (!m) return null;
-    const hash = m[2] ?? u.searchParams.get("h");
-    return `https://player.vimeo.com/video/${m[1]}${hash ? `?h=${hash}` : ""}`;
-  }
-  return null;
-}
+/** Embeddable player URL (YouTube, Vimeo, Loom, Google Drive) or null — same rule as the API. */
+export { videoEmbedUrl } from "@/lib/video";

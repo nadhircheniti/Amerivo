@@ -7,13 +7,20 @@ import { badRequest, notFound } from "../../common/errors";
 import { generateSlots } from "../../domain/availability";
 import { holdCutoff } from "../../domain/holds";
 import { LESSON_MINUTES, TRIAL_MINUTES } from "../../domain/pricing";
+import { videoEmbedUrl } from "../../domain/video";
+
+/** Public teacher data: the intro video only when it can be embedded (YouTube, Vimeo, Loom, Google Drive), with its player URL. */
+const withVideo = <T extends { introVideoUrl: string | null }>(t: T) => {
+  const introVideoEmbedUrl = videoEmbedUrl(t.introVideoUrl);
+  return { ...t, introVideoUrl: introVideoEmbedUrl ? t.introVideoUrl : null, introVideoEmbedUrl };
+};
 
 export interface TeacherSearch {
   specialties?: string[];
   teaches?: string[];
   maxPriceCents?: number;
   gender?: "female" | "male";
-  sort?: "best" | "rating" | "price_asc" | "experience";
+  sort?: "best" | "rating" | "price_asc" | "experience" | "featured";
   limit?: number;
   offset?: number;
 }
@@ -51,7 +58,7 @@ export class TeachersService {
   };
 
   /** Public search: only approved, active teachers. */
-  search(q: TeacherSearch) {
+  async search(q: TeacherSearch) {
     const where = [eq(teacherProfiles.status, "approved"), eq(users.status, "active")];
     if (q.specialties?.length) where.push(arrayOverlaps(teacherProfiles.specialties, q.specialties));
     if (q.teaches?.length) where.push(arrayOverlaps(teacherProfiles.teaches, q.teaches));
@@ -62,8 +69,16 @@ export class TeachersService {
       rating: [desc(teacherProfiles.ratingAvg)],
       price_asc: [asc(teacherProfiles.priceCents)],
       experience: [desc(teacherProfiles.yearsExperience)],
+      // Home page: complete profiles first (photo, then intro video), then the best rated, then the newest.
+      featured: [
+        desc(sql`(${users.avatarUrl} is not null)`),
+        desc(sql`(${teacherProfiles.introVideoUrl} is not null)`),
+        desc(teacherProfiles.ratingAvg),
+        desc(teacherProfiles.ratingCount),
+        sql`${teacherProfiles.approvedAt} desc nulls last`,
+      ],
     }[q.sort ?? "best"];
-    return this.db
+    const rows = await this.db
       .select(this.publicColumns)
       .from(teacherProfiles)
       .innerJoin(users, eq(users.id, teacherProfiles.userId))
@@ -71,6 +86,7 @@ export class TeachersService {
       .orderBy(...order)
       .limit(Math.min(q.limit ?? 20, 50))
       .offset(q.offset ?? 0);
+    return rows.map(withVideo);
   }
 
   async bySlug(slug: string) {
@@ -78,10 +94,11 @@ export class TeachersService {
       .select(this.publicColumns)
       .from(teacherProfiles)
       .innerJoin(users, eq(users.id, teacherProfiles.userId))
-      .where(and(eq(teacherProfiles.slug, slug), eq(teacherProfiles.status, "approved")))
+      // Same rule as the search: a blocked or deleted account is not shown, even with a direct link.
+      .where(and(eq(teacherProfiles.slug, slug), eq(teacherProfiles.status, "approved"), eq(users.status, "active")))
       .limit(1);
     if (!t) throw notFound("Teacher");
-    return t;
+    return withVideo(t);
   }
 
   /** Everything the slot generator needs for one teacher. */

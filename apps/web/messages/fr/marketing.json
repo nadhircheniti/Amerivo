@@ -224,7 +224,9 @@
     "reviewPlaceholder": "[Texte de l'avis — affiché après un cours terminé]",
     "reviewMeta": "Nom de l'élève · Pays · Date",
     "fallbackHeadline": "Professeur d'anglais américain",
-    "fallbackCity": "États-Unis"
+    "fallbackCity": "États-Unis",
+    "photoAlt": "Photo de {name}",
+    "videoTitle": "Vidéo de présentation de {name}"
   },
   "booking": {
     "title": "Réserver un cours avec {name}",
@@ -285,5 +287,13 @@
       "business": "Entreprises",
       "technical": "Problème technique"
     }
+  },
+  "terms": {
+    "metaTitle": "Conditions d'utilisation",
+    "metaDescription": "Les règles d'utilisation d'Amerivo English pour les élèves et les professeurs : réservations, paiements, sécurité et interdiction de partager ses coordonnées.",
+    "title": "Conditions d'utilisation",
+    "contents": "Sommaire",
+    "englishNotice": "Les Conditions d'utilisation sont rédigées en anglais, seule version juridiquement contraignante. Si vous avez besoin d'aide pour les comprendre, contactez-nous.",
+    "keyPoints": "En bref : <b>ne partagez jamais votre e-mail, votre numéro de téléphone, des liens ou vos réseaux sociaux</b> avec un autre utilisateur, et <b>gardez tous les cours et paiements sur Amerivo</b>. Les messages, le chat de la classe, les notes et les documents sont contrôlés pour votre sécurité. Le non-respect de ces règles peut entraîner la suspension du compte et les frais décrits à la section 8."
   }
 }

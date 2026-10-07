@@ -4,7 +4,7 @@ import { Icon } from "@/components/ui/icon";
 import { useTranslations } from "next-intl";
 import { AdminSidebar } from "./_components/admin-sidebar";
 
-type NavKey = "analytics" | "teachers" | "students" | "bookings" | "payments" | "disputes" | "support" | "settings";
+type NavKey = "analytics" | "teachers" | "students" | "bookings" | "payments" | "disputes" | "moderation" | "materials" | "support" | "settings";
 const nav: (Omit<SidebarItem, "label"> & { key: NavKey })[] = [
   { key: "analytics", href: "/admin", icon: "chart", exact: true },
   { key: "teachers", href: "/admin/teachers", icon: "user" },
@@ -12,6 +12,8 @@ const nav: (Omit<SidebarItem, "label"> & { key: NavKey })[] = [
   { key: "bookings", href: "/admin/bookings", icon: "calendar" },
   { key: "payments", href: "/admin/payments", icon: "wallet" },
   { key: "disputes", href: "/admin/disputes", icon: "shield" },
+  { key: "moderation", href: "/admin/moderation", icon: "lock" },
+  { key: "materials", href: "/admin/materials", icon: "file" },
   { key: "support", href: "/admin/support", icon: "message" },
   { key: "settings", href: "/admin/settings", icon: "settings" },
 ];

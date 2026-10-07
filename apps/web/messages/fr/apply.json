@@ -274,7 +274,7 @@
     "urlPattern": "Saisissez un lien commençant par https://",
     "preview": "Aperçu",
     "previewTitle": "Aperçu de votre vidéo de présentation",
-    "noPreview": "L'aperçu est disponible pour les liens YouTube et Vimeo. Vérifiez que toute personne disposant du lien peut regarder votre vidéo.",
+    "noPreview": "Ce lien ne peut pas être affiché sur votre profil. Utilisez un lien YouTube, Vimeo, Loom ou Google Drive visible par toute personne disposant du lien.",
     "tipsTitle": "Conseils pour une vidéo réussie",
     "tips": {
       "say": {

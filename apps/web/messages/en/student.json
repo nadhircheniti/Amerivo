@@ -8,7 +8,8 @@
     "progress": "Progress",
     "payments": "Payments",
     "settings": "Settings",
-    "userSubtitle": "Student · Level {level}"
+    "userSubtitle": "Student · Level {level}",
+    "materials": "Documents"
   },
   "backToOverview": "Back to overview",
   "states": {
@@ -411,7 +412,8 @@
     },
     "timeZoneNote": "Times shown in your time zone ({tz}).",
     "classroom": "Classroom",
-    "emptyTeacher": "No upcoming lessons yet. New bookings will appear here."
+    "emptyTeacher": "No upcoming lessons yet. New bookings will appear here.",
+    "opensAt": "Opens at {time}"
   },
   "messages": {
     "metaTitle": "Messages",
@@ -444,5 +446,13 @@
     "lastSeen": "Last seen {day} · {city}",
     "repliesWithinHours": "Usually replies within a few hours",
     "supportSubtitle": "Help with bookings, payments and your account"
+  },
+  "materials": {
+    "title": "Documents",
+    "description": "Worksheets and materials shared by your teachers, checked by the Amerivo team.",
+    "emptyTitle": "No document yet",
+    "emptyText": "When one of your teachers shares a document, it will appear here.",
+    "open": "Open",
+    "openError": "The document couldn't be opened. Try again."
   }
 }

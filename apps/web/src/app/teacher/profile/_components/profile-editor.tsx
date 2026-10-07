@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { TagInput } from "@/app/teach/apply/_components/fields";
-import { videoEmbedUrl } from "@/app/teach/apply/_data";
+import { videoEmbedUrl } from "@/lib/video";
 import { Button } from "@/components/ui/button";
 import { AvatarUpload, CertificateFiles, fileSrc } from "@/components/ui/file-upload";
 import { ChoiceTile, Field, Input, Textarea } from "@/components/ui/form";
@@ -137,7 +137,8 @@ function ProfileEditor({ profile, avatarUrl, avatarKnown, onSave }: { profile: P
   const extra = f.specialties.filter((s) => !SPECIALTIES.includes(s));
   const video = f.introVideoUrl.trim();
   const embed = video ? videoEmbedUrl(video) : null;
-  const videoInvalid = !!video && !/^https:\/\/\S+\.\S+/.test(video);
+  // Same rule as the API: only links that can be embedded on the public profile (YouTube, Vimeo, Loom, Google Drive).
+  const videoInvalid = !!video && !embed;
   const name = `${profile.firstName} ${profile.lastName}`.trim();
   const approved = profile.status === "approved";
 

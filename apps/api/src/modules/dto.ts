@@ -1,5 +1,7 @@
 import { Type } from "class-transformer";
 import {
+  Equals,
+  MinLength,
   ArrayMaxSize,
   IsArray,
   IsBoolean,
@@ -27,6 +29,13 @@ export class RegisterDto {
   @IsString() timezone!: string;
   /** Required for students (13+). yyyy-mm-dd */
   @IsOptional() @IsDateString() birthDate?: string;
+  /** The user ticked "I accept the Terms of Service" (required). */
+  @Equals(true, { message: "You must accept the Terms of Service" }) acceptTerms!: boolean;
+}
+
+export class AcceptTermsDto {
+  /** The version shown to the user; must be the current one. */
+  @IsString() @MaxLength(20) version!: string;
 }
 
 export class CreateBookingDto {
@@ -64,6 +73,10 @@ export class ReviewDto {
 
 export class NotesDto {
   @IsString() @MaxLength(20000) notes!: string;
+}
+
+export class LessonChatDto {
+  @IsString() @MinLength(1) @MaxLength(2000) body!: string;
 }
 
 export class PlacementDto {

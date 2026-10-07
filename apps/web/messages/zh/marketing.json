@@ -224,7 +224,9 @@
     "reviewPlaceholder": "[学生评价内容——完成课程后显示]",
     "reviewMeta": "学生姓名 · 国家 · 日期",
     "fallbackHeadline": "美式英语老师",
-    "fallbackCity": "美国"
+    "fallbackCity": "美国",
+    "photoAlt": "{name} 的照片",
+    "videoTitle": "{name} 的自我介绍视频"
   },
   "booking": {
     "title": "预约 {name} 的课程",
@@ -285,5 +287,13 @@
       "business": "企业合作",
       "technical": "技术问题"
     }
+  },
+  "terms": {
+    "metaTitle": "服务条款",
+    "metaDescription": "以学生或老师身份使用 Amerivo English 的规则：预约、付款、安全，以及禁止分享联系方式的规定。",
+    "title": "服务条款",
+    "contents": "目录",
+    "englishNotice": "服务条款以英文撰写，英文版本为具有法律约束力的版本。如需帮助理解，请联系我们。",
+    "keyPoints": "简而言之：<b>切勿向其他用户分享你的邮箱、电话号码、链接或社交媒体账号</b>，并且<b>所有课程和付款都须在 Amerivo 上进行</b>。为保障你的安全，消息、课堂聊天、笔记和文档都会经过检查。违反这些规则可能导致账户被暂停，并须支付第 8 条所述的费用。"
   }
 }

@@ -31,6 +31,10 @@ export type Teacher = {
   reviewCount?: number;
   lessonsCompleted?: number;
   summary: string;
+  /** Full URL of the profile photo (null: initials are shown). */
+  photoUrl?: string | null;
+  /** YouTube/Vimeo/Loom/Google Drive player URL of the introduction video (null: no video section). */
+  videoEmbedUrl?: string | null;
 };
 
 export const teachers: Teacher[] = [

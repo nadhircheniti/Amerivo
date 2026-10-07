@@ -6,7 +6,8 @@
     "messages": "Mensajes",
     "earnings": "Ganancias",
     "publicProfile": "Mi perfil público",
-    "approvedTeacher": "Profesor aprobado"
+    "approvedTeacher": "Profesor aprobado",
+    "materials": "Documentos"
   },
   "modes": {
     "vacation": "Modo vacaciones",
@@ -53,7 +54,8 @@
     "myStudents": "Mis estudiantes",
     "studentsCount": "{active} activos · {past} anteriores",
     "studentsAvatars": "{first}, {second}, {third} y {count} estudiantes más",
-    "viewStudents": "Ver estudiantes y notas"
+    "viewStudents": "Ver estudiantes y notas",
+    "opensAt": "El aula abre a las {time}"
   },
   "availability": {
     "metaTitle": "Horario y disponibilidad · Amerivo English",
@@ -409,7 +411,7 @@
     "videoTitle": "Video de presentación",
     "videoUrl": "Enlace del video (YouTube o Vimeo)",
     "videoHint": "Una presentación de 2 minutos: tu trayectoria, tu experiencia y tu estilo de enseñanza.",
-    "videoInvalid": "Escribe un enlace completo que empiece por https://",
+    "videoInvalid": "Usa un enlace de YouTube, Vimeo, Loom o Google Drive que cualquier persona con el enlace pueda ver.",
     "videoPreview": "Vista previa de tu video de presentación",
     "saved": "Perfil guardado",
     "savedDemo": "Guardado (demo: no se almacena nada)",
@@ -419,5 +421,40 @@
     "previewTitle": "Vista previa · tu tarjeta en los resultados de búsqueda",
     "noHeadline": "Agrega un titular",
     "noBio": "Agrega una breve presentación."
+  },
+  "materials": {
+    "metaTitle": "Documentos",
+    "title": "Documentos para tus estudiantes",
+    "subtitle": "Comparte hojas de ejercicios y materiales de clase con tus estudiantes. El equipo de Amerivo revisa cada documento antes de que tus estudiantes puedan verlo.",
+    "demo": "Conecta el sitio a la API de Amerivo para subir documentos.",
+    "uploadTitle": "Agregar un documento",
+    "reviewNotice": "Nuestro equipo revisa cada documento. Los documentos deben ser tuyos o debes tener derecho a compartirlos, y no deben contener datos de contacto (correo electrónico, teléfono, enlaces, redes sociales).",
+    "fieldTitle": "Título",
+    "titlePlaceholder": "Por ejemplo: Correos de negocios — frases útiles",
+    "fieldFile": "Archivo",
+    "fileHint": "PDF, JPG o PNG, hasta {max} MB.",
+    "fieldDescription": "Descripción (opcional)",
+    "descriptionPlaceholder": "¿Para qué sirve? ¿Para qué nivel?",
+    "submit": "Enviar a revisión",
+    "uploading": "Subiendo…",
+    "uploaded": "¡Enviado! Te avisaremos cuando se apruebe.",
+    "uploadError": "No se pudo subir el documento. Inténtalo de nuevo.",
+    "wrongType": "Usa un archivo PDF, JPG o PNG.",
+    "tooLarge": "Este archivo es demasiado grande (máx. {max} MB).",
+    "listTitle": "Tus documentos ({count})",
+    "empty": "Aún no hay documentos.",
+    "status": {
+      "pending": "En revisión",
+      "approved": "Compartido con tus estudiantes",
+      "rejected": "No aprobado"
+    },
+    "pendingHint": "Tus estudiantes lo verán cuando se apruebe.",
+    "rejectedBecause": "Motivo: {reason}",
+    "addedOn": "agregado el {date}",
+    "open": "Abrir",
+    "openError": "No se pudo abrir el documento.",
+    "delete": "Eliminar",
+    "deleteConfirm": "¿Eliminar \"{title}\"? Tus estudiantes ya no lo verán.",
+    "deleteError": "No se pudo eliminar el documento."
   }
 }

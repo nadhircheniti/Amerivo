@@ -6,7 +6,10 @@
     "connectionGood": "Connection good"
   },
   "timer": {
-    "label": "Elapsed time {elapsed} of {total}"
+    "label": "Elapsed time {elapsed} of {total}",
+    "startsIn": "Starts in",
+    "startsInLabel": "The lesson starts in {time}",
+    "left": "{time} left"
   },
   "controls": {
     "toolbar": "Call controls",
@@ -88,12 +91,16 @@
       "chat": "Chat",
       "notes": "Notes"
     },
-    "chatEmpty": "Messages are only visible during the lesson.",
+    "chatEmpty": "Say hello! Messages are kept with the lesson.",
     "chatPlaceholder": "Message {name}…",
     "send": "Send",
-    "notesPlaceholder": "Shared notes: new words, corrections, links… You can both write here.",
+    "notesPlaceholder": "Shared notes: new words, corrections, examples… You can both write here.",
     "notesHint": "Saved with the lesson.",
     "notesSaving": "Saving…",
-    "notesSaved": "Saved"
+    "notesSaved": "Saved",
+    "chatError": "Your message couldn't be sent. Try again.",
+    "contactHidden": "Contact details (e-mail, phone, links, social media) were hidden. Sharing them is not allowed on Amerivo.",
+    "termsLink": "Read the rules",
+    "monitored": "Chat and notes are kept with the lesson and checked for safety. Never share personal contact details."
   }
 }

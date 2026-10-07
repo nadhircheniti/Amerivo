@@ -6,7 +6,10 @@
     "connectionGood": "网络良好"
   },
   "timer": {
-    "label": "已用时间 {elapsed} / {total}"
+    "label": "已用时间 {elapsed} / {total}",
+    "startsIn": "距开始还有",
+    "startsInLabel": "课程将在 {time} 后开始",
+    "left": "剩余 {time}"
   },
   "controls": {
     "toolbar": "通话控制",
@@ -88,12 +91,16 @@
       "chat": "聊天",
       "notes": "笔记"
     },
-    "chatEmpty": "消息仅在上课期间可见。",
+    "chatEmpty": "打个招呼吧！消息会随课程保存。",
     "chatPlaceholder": "给 {name} 发消息…",
     "send": "发送",
-    "notesPlaceholder": "共享笔记：新单词、纠错、链接……双方都可以编辑。",
+    "notesPlaceholder": "共享笔记：新单词、纠错、例句……双方都可以在这里编辑。",
     "notesHint": "随课程一起保存。",
     "notesSaving": "正在保存…",
-    "notesSaved": "已保存"
+    "notesSaved": "已保存",
+    "chatError": "消息发送失败，请重试。",
+    "contactHidden": "联系方式（邮箱、电话、链接、社交媒体）已被隐藏。Amerivo 禁止分享联系方式。",
+    "termsLink": "查看规则",
+    "monitored": "聊天和笔记会随课程保存并接受安全检查。切勿分享个人联系方式。"
   }
 }

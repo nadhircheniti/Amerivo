@@ -9,6 +9,7 @@ import { getTeacherBySlug } from "@/lib/teachers";
 import { cn } from "@/lib/cn";
 import { localizeLanguage, toneTile } from "../../_components/tone";
 import { BookingCard } from "./_components/booking-card";
+import { IntroVideo } from "./_components/intro-video";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -71,13 +72,17 @@ export default async function TeacherProfilePage({ params }: Params) {
         <div className="flex min-w-0 flex-1 flex-col gap-6">
           <section className="flex flex-col gap-7 rounded-3xl bg-white p-6 sm:flex-row sm:p-8">
             <div
-              aria-hidden="true"
               className={cn(
-                "flex size-[120px] shrink-0 items-center justify-center rounded-full border-[6px] border-white font-display text-[40px] font-bold shadow-[0_0_0_2px_var(--color-teal)] sm:size-40 sm:text-[52px]",
+                "flex size-[120px] shrink-0 items-center justify-center overflow-hidden rounded-full border-[6px] border-white font-display text-[40px] font-bold shadow-[0_0_0_2px_var(--color-teal)] sm:size-40 sm:text-[52px]",
                 toneTile[t.tone],
               )}
             >
-              {t.initials}
+              {t.photoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element -- photos come from the API origin
+                <img src={t.photoUrl} alt={tr("photoAlt", { name: t.name })} width={160} height={160} decoding="async" className="size-full object-cover" />
+              ) : (
+                <span aria-hidden="true">{t.initials}</span>
+              )}
             </div>
             <div className="flex flex-1 flex-col gap-2.5">
               <div className="flex flex-wrap items-center gap-3">
@@ -105,25 +110,15 @@ export default async function TeacherProfilePage({ params }: Params) {
             </div>
           </section>
 
-          <section aria-label={tr("videoSection")} className="relative flex h-[260px] items-center justify-center overflow-hidden rounded-3xl bg-navy sm:h-[380px]">
-            <div aria-hidden="true" className="absolute -end-20 -top-20 size-[280px] rounded-full bg-teal opacity-25" />
-            <div aria-hidden="true" className="absolute -start-[60px] -bottom-[100px] size-[260px] rounded-full bg-orange opacity-25" />
-            <button
-              type="button"
-              aria-label={tr("playVideo", { name: firstName })}
-              className="relative flex size-[88px] items-center justify-center rounded-full bg-orange text-navy hover:bg-[#ffa64d]"
-            >
-              <Icon name="play" size={34} />
-            </button>
-            <span className="absolute start-7 end-24 bottom-6 text-[15px] font-semibold text-white">{tr("meet", { name: firstName })}</span>
-            <span className="absolute end-7 bottom-6 rounded-full bg-white/15 px-3 py-1.5 text-sm text-white">2:00</span>
-          </section>
+          {t.videoEmbedUrl && (
+            <section aria-label={tr("videoSection")} className="relative flex aspect-video items-center justify-center overflow-hidden rounded-3xl bg-navy">
+              <IntroVideo embedUrl={t.videoEmbedUrl} playLabel={tr("playVideo", { name: firstName })} caption={tr("meet", { name: firstName })} title={tr("videoTitle", { name: t.name })} />
+            </section>
+          )}
 
           <section className="flex flex-col gap-4 rounded-3xl bg-white p-6 sm:p-8">
             <h2 className="text-[22px] font-bold">{tr("aboutMe")}</h2>
-            <p className="text-base leading-[1.7] text-navy-soft">
-              {tr("bioPlaceholder")} {t.summary}
-            </p>
+            <p className="text-base leading-[1.7] whitespace-pre-line text-navy-soft">{t.summary || tr("bioPlaceholder")}</p>
             <div className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-3">
               <div className="flex flex-col gap-2.5">
                 <h3 className={sectionLabel}>{tr("specialties")}</h3>

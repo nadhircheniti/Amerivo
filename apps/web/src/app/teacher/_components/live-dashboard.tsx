@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { LiveLessons } from "@/app/student/_components/live-lessons";
 import { ButtonLink } from "@/components/ui/button";
@@ -24,6 +24,8 @@ export type Overview = {
     bookingId: string;
     startsAt: string;
     durationMin: number;
+    /** When the classroom opens (API rule: a few minutes before the start). Older APIs don't send it. */
+    opensAt?: string;
     type: "trial" | "single" | "package";
     status: "confirmed" | "completed" | "no_show";
     topic: string | null;
@@ -51,6 +53,12 @@ export function LiveDashboard() {
   const locale = useLocale() as Locale;
   const tag = intlTags[locale];
   const { data, failed, retry } = useLoad<Overview>("/teacher/overview");
+  // Ticks every 15 s so "Start lesson" appears when the classroom opens (the API checks it again).
+  const [clock, setClock] = useState(() => Date.now());
+  useEffect(() => {
+    const id = window.setInterval(() => setClock(Date.now()), 15_000);
+    return () => window.clearInterval(id);
+  }, []);
 
   if (!data) {
     return (
@@ -179,9 +187,15 @@ export function LiveDashboard() {
                       {isCurrent && l.history.lastNote && <p className="text-[13px] text-navy-soft">{t("lastNote", { note: l.history.lastNote })}</p>}
                     </div>
                     {isCurrent ? (
-                      <ButtonLink href={`/classroom/${l.bookingId}`} variant="teal" size="sm" className="shrink-0 self-start font-bold sm:self-center">
-                        {t("startLesson")}
-                      </ButtonLink>
+                      !l.opensAt || clock >= new Date(l.opensAt).getTime() ? (
+                        <ButtonLink href={`/classroom/${l.bookingId}`} variant="teal" size="sm" className="shrink-0 self-start font-bold sm:self-center">
+                          {t("startLesson")}
+                        </ButtonLink>
+                      ) : (
+                        <span className="shrink-0 self-start rounded-full bg-white px-3.5 py-2 text-[13px] font-semibold text-navy-soft sm:self-center">
+                          {t("opensAt", { time: time(l.opensAt) })}
+                        </span>
+                      )
                     ) : done && toWrite.has(l.bookingId) ? (
                       <Link href={`/teacher/lessons/${l.bookingId}/report`} className="self-start text-sm font-semibold text-teal-dark hover:text-navy sm:self-center">
                         {t.rich("writeReport", { sr, name })}

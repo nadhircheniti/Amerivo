@@ -15,6 +15,7 @@ const isProtected = createRouteMatcher([
   "/onboarding",
   "/onboarding/(.*)",
   "/welcome",
+  "/accept-terms",
 ]);
 
 const withClerk = clerkMiddleware(async (auth, req) => {

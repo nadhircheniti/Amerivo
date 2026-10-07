@@ -72,6 +72,9 @@
     "roleStudent": "Student",
     "viewProfile": "View profile",
     "bookLesson": "Book a lesson",
-    "demoNotice": "Sample conversations — messages aren't sent in demo mode."
+    "demoNotice": "Sample conversations — messages aren't sent in demo mode.",
+    "contactHidden": "Part of your message was hidden: sharing contact details (e-mail, phone, links, social media) is not allowed on Amerivo.",
+    "termsLink": "Read the rules",
+    "safetyNotice": "For everyone's safety, messages are checked automatically. Keep all lessons and payments on Amerivo."
   }
 }

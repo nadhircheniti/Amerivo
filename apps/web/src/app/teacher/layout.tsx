@@ -10,6 +10,7 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
     { href: "/teacher/availability", label: t("availability"), icon: "calendar" },
     { href: "/teacher/students", label: t("students"), icon: "users" },
     { href: "/teacher/messages", label: t("messages"), icon: "message" },
+    { href: "/teacher/materials", label: t("materials"), icon: "file" },
     { href: "/teacher/earnings", label: t("earnings"), icon: "wallet" },
     { href: "/teacher/profile", label: t("publicProfile"), icon: "user" },
   ];

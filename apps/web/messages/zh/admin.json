@@ -8,7 +8,9 @@
     "disputes": "纠纷与退款",
     "support": "客服收件箱",
     "settings": "设置与审计日志",
-    "signedIn2fa": "已通过双重验证登录"
+    "signedIn2fa": "已通过双重验证登录",
+    "moderation": "安全报告",
+    "materials": "老师文档"
   },
   "overview": {
     "metaTitle": "平台数据分析 · Amerivo Admin",
@@ -726,5 +728,113 @@
       "business": "企业合作",
       "technical": "技术问题"
     }
+  },
+  "moderationPage": {
+    "metaTitle": "安全报告",
+    "title": "安全报告",
+    "subtitle": "在消息、课堂聊天、笔记、课程报告和评价中检测到的联系方式（邮箱、电话、链接、社交媒体）。这些内容在对方看到之前已被隐藏。",
+    "statusTabs": "报告状态",
+    "tabs": {
+      "open": "待审核",
+      "warned": "已警告",
+      "blocked": "已封禁",
+      "dismissed": "已驳回"
+    },
+    "what": "报告",
+    "empty": {
+      "open": "暂无待审核的报告。",
+      "warned": "暂无已警告的用户。",
+      "blocked": "暂无已封禁的用户。",
+      "dismissed": "暂无已驳回的报告。"
+    },
+    "pagination": "报告分页",
+    "roles": {
+      "student": "学生",
+      "teacher": "老师",
+      "admin": "管理员"
+    },
+    "status": {
+      "open": "待审核",
+      "warned": "已警告",
+      "blocked": "已封禁",
+      "dismissed": "已驳回"
+    },
+    "contexts": {
+      "message": "消息",
+      "lesson_chat": "课堂聊天",
+      "lesson_notes": "课程笔记",
+      "lesson_report": "课程报告",
+      "review": "评价",
+      "profile": "老师主页",
+      "material": "文档",
+      "booking": "课程主题"
+    },
+    "types": {
+      "email": "邮箱",
+      "phone": "电话",
+      "link": "链接",
+      "handle": "社交账号",
+      "app": "即时通讯应用"
+    },
+    "repeat": "30 天内 {count} 次报告",
+    "accountBlocked": "账户已封禁",
+    "original": "原始内容",
+    "delivered": "对方看到的内容",
+    "notDelivered": "已拒绝（未发布）",
+    "reviewNote": "备注：{note}",
+    "showContext": "查看对话",
+    "contextTitle": "报告前后的对话（按送达内容显示）",
+    "contextNone": "此报告没有相关对话。",
+    "actions": {
+      "dismiss": "驳回",
+      "warn": "警告该用户",
+      "block": "封禁账户"
+    },
+    "confirm": {
+      "dismiss": "确定驳回关于 {name} 的这条报告（误报）吗？",
+      "warn": "确定就分享联系方式向 {name} 发送警告（站内通知和邮件）吗？",
+      "block": "确定封禁 {name} 的账户吗？对方将无法再登录或使用 Amerivo。"
+    },
+    "warnNoteLabel": "附加到警告中的消息（可选）",
+    "blockNoteLabel": "内部备注（可选）",
+    "notePlaceholder": "将显示在审计日志中",
+    "notice": {
+      "dismiss": "已驳回关于 {name} 的报告。",
+      "warn": "已警告 {name}。",
+      "block": "{name} 的账户已被封禁。"
+    }
+  },
+  "materialsPage": {
+    "metaTitle": "老师文档",
+    "title": "老师文档",
+    "subtitle": "老师希望与学生分享的文档。学生只能看到已批准的文档。请检查内容、分享权利，并确认其中不含联系方式。",
+    "statusTabs": "文档状态",
+    "tabs": {
+      "pending": "待审核",
+      "approved": "已批准",
+      "rejected": "已拒绝"
+    },
+    "what": "文档",
+    "empty": {
+      "pending": "暂无待审核的文档。",
+      "approved": "暂无已批准的文档。",
+      "rejected": "暂无已拒绝的文档。"
+    },
+    "pagination": "文档分页",
+    "status": {
+      "pending": "待审核",
+      "approved": "已批准",
+      "rejected": "已拒绝"
+    },
+    "reviewNote": "备注：{note}",
+    "open": "打开文档",
+    "approve": "批准",
+    "reject": "拒绝",
+    "confirmApprove": "确定批准“{title}”吗？该老师的学生将可以下载它。",
+    "confirmReject": "确定拒绝“{title}”吗？老师将看到你填写的原因。",
+    "rejectReason": "原因（将发送给老师）",
+    "rejectPlaceholder": "例如：文档中包含电话号码。",
+    "noticeApproved": "“{title}”已批准，并已与该老师的学生分享。",
+    "noticeRejected": "“{title}”已拒绝，已通知老师。"
   }
 }

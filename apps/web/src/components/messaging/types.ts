@@ -20,6 +20,8 @@ export type ApiMessage = {
   attachmentName?: string | null;
   readAt: string | null;
   createdAt: string;
+  /** On the sender's own new message: contact details were hidden by the API (Terms §8). */
+  moderation?: { redacted: boolean; types: string[] };
 };
 
 export type ApiConversation = {

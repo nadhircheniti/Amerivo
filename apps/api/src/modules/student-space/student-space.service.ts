@@ -24,7 +24,7 @@ import { badRequest, conflict, forbidden, notFound } from "../../common/errors";
 import type { AuthUser } from "../../auth/decorators";
 import { decideCancellation, FREE_CANCELLATION_HOURS } from "../../domain/cancellation";
 import { BookingsService } from "../bookings/bookings.service";
-import { classroomEarlyMin } from "../lessons/lessons.service";
+import { classroomWindow } from "../../domain/classroom";
 import type { UpdateProfileDto } from "./student-space.dto";
 
 const CEFR = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
@@ -119,8 +119,7 @@ export class StudentSpaceService {
       packageId: b.packageId,
       cancelledBy: b.cancelledBy,
       cancelledAt: b.cancelledAt,
-      opensAt: new Date(b.startsAt.getTime() - classroomEarlyMin() * 60_000),
-      closesAt: new Date(endsAt.getTime() + 30 * 60_000),
+      ...classroomWindow(b),
       teacher: { id: b.teacherId, firstName: r.teacherFirstName, lastName: r.teacherLastName, slug: r.teacherSlug, avatarUrl: r.teacherAvatarUrl },
       hasReport: !!r.reportId,
       myReview: r.reviewRating ? { rating: r.reviewRating } : null,

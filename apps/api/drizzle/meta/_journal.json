@@ -43,6 +43,13 @@
       "when": 1791292019930,
       "tag": "0005_placement_test",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791369896376,
+      "tag": "0006_trust_safety",
+      "breakpoints": true
     }
   ]
 }

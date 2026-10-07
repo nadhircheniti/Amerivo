@@ -332,8 +332,13 @@ function TeacherCard({ t: teacher }: { t: Teacher }) {
   ];
   return (
     <article className="flex flex-col gap-6 rounded-[20px] bg-white p-6 sm:flex-row">
-      <div className={cn("flex size-[132px] shrink-0 items-center justify-center rounded-[20px] font-display text-[40px] font-bold", toneTile[teacher.tone])} aria-hidden="true">
-        {teacher.initials}
+      <div className={cn("flex size-[132px] shrink-0 items-center justify-center overflow-hidden rounded-[20px] font-display text-[40px] font-bold", toneTile[teacher.tone])} aria-hidden="true">
+        {teacher.photoUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element -- photos come from the API origin
+          <img src={teacher.photoUrl} alt="" width={132} height={132} loading="lazy" decoding="async" className="size-full object-cover" />
+        ) : (
+          teacher.initials
+        )}
       </div>
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <div className="flex flex-wrap items-center gap-2.5">

@@ -9,6 +9,7 @@ const items = [
   { href: "/teachers", key: "findTeachers", icon: "search" },
   { href: "/student/messages", key: "messages", icon: "message" },
   { href: "/student/homework", key: "homework", icon: "book" },
+  { href: "/student/materials", key: "materials", icon: "file" },
   { href: "/student/progress", key: "progress", icon: "chart" },
   { href: "/student/payments", key: "payments", icon: "wallet" },
   { href: "/student/settings", key: "settings", icon: "settings" },

@@ -274,7 +274,7 @@
     "urlPattern": "Ingresa un enlace que empiece con https://",
     "preview": "Vista previa",
     "previewTitle": "Vista previa de tu video de presentación",
-    "noPreview": "La vista previa está disponible para enlaces de YouTube y Vimeo. Asegúrate de que cualquier persona con el enlace pueda ver tu video.",
+    "noPreview": "Este enlace no se puede mostrar en tu perfil. Usa un enlace de YouTube, Vimeo, Loom o Google Drive que cualquier persona con el enlace pueda ver.",
     "tipsTitle": "Consejos para un gran video",
     "tips": {
       "say": {

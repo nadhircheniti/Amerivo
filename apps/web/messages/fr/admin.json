@@ -8,7 +8,9 @@
     "disputes": "Litiges et remboursements",
     "support": "Messagerie support",
     "settings": "Paramètres et journal d'audit",
-    "signedIn2fa": "Connecté avec la double authentification"
+    "signedIn2fa": "Connecté avec la double authentification",
+    "moderation": "Signalements de sécurité",
+    "materials": "Documents des professeurs"
   },
   "overview": {
     "metaTitle": "Statistiques de la plateforme · Amerivo Admin",
@@ -726,5 +728,113 @@
       "business": "Entreprises",
       "technical": "Problème technique"
     }
+  },
+  "moderationPage": {
+    "metaTitle": "Signalements de sécurité",
+    "title": "Signalements de sécurité",
+    "subtitle": "Coordonnées (e-mail, téléphone, liens, réseaux sociaux) détectées dans les messages, le chat de la classe, les notes, les comptes rendus de cours et les avis. Elles ont été masquées avant que l'autre personne ne les voie.",
+    "statusTabs": "Statut des signalements",
+    "tabs": {
+      "open": "À examiner",
+      "warned": "Avertis",
+      "blocked": "Bloqués",
+      "dismissed": "Classés"
+    },
+    "what": "les signalements",
+    "empty": {
+      "open": "Aucun signalement à examiner.",
+      "warned": "Aucun utilisateur averti.",
+      "blocked": "Aucun utilisateur bloqué.",
+      "dismissed": "Aucun signalement classé."
+    },
+    "pagination": "Pages des signalements",
+    "roles": {
+      "student": "élève",
+      "teacher": "professeur",
+      "admin": "admin"
+    },
+    "status": {
+      "open": "À examiner",
+      "warned": "Averti",
+      "blocked": "Bloqué",
+      "dismissed": "Classé"
+    },
+    "contexts": {
+      "message": "Message",
+      "lesson_chat": "Chat de la classe",
+      "lesson_notes": "Notes du cours",
+      "lesson_report": "Compte rendu de cours",
+      "review": "Avis",
+      "profile": "Profil du professeur",
+      "material": "Document",
+      "booking": "Sujet du cours"
+    },
+    "types": {
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "link": "Lien",
+      "handle": "Pseudo de réseau social",
+      "app": "Application de messagerie"
+    },
+    "repeat": "{count} signalements en 30 jours",
+    "accountBlocked": "Compte bloqué",
+    "original": "Ce qui a été écrit",
+    "delivered": "Ce que l'autre personne a vu",
+    "notDelivered": "Refusé (non publié)",
+    "reviewNote": "Note : {note}",
+    "showContext": "Afficher la conversation",
+    "contextTitle": "Conversation autour du signalement (telle que distribuée)",
+    "contextNone": "Aucune conversation pour ce signalement.",
+    "actions": {
+      "dismiss": "Classer",
+      "warn": "Avertir l'utilisateur",
+      "block": "Bloquer le compte"
+    },
+    "confirm": {
+      "dismiss": "Classer ce signalement concernant {name} (fausse alerte) ?",
+      "warn": "Envoyer à {name} un avertissement (dans l'application et par e-mail) concernant le partage de coordonnées ?",
+      "block": "Bloquer le compte de {name} ? Cette personne ne pourra plus se connecter ni utiliser Amerivo."
+    },
+    "warnNoteLabel": "Message ajouté à l'avertissement (facultatif)",
+    "blockNoteLabel": "Note interne (facultatif)",
+    "notePlaceholder": "Visible dans le journal d'audit",
+    "notice": {
+      "dismiss": "Signalement concernant {name} classé.",
+      "warn": "{name} a été averti.",
+      "block": "Le compte de {name} est bloqué."
+    }
+  },
+  "materialsPage": {
+    "metaTitle": "Documents des professeurs",
+    "title": "Documents des professeurs",
+    "subtitle": "Documents que les professeurs souhaitent partager avec leurs élèves. Les élèves ne voient que les documents approuvés. Vérifiez le contenu, les droits de partage et l'absence de coordonnées.",
+    "statusTabs": "Statut des documents",
+    "tabs": {
+      "pending": "À examiner",
+      "approved": "Approuvés",
+      "rejected": "Refusés"
+    },
+    "what": "les documents",
+    "empty": {
+      "pending": "Aucun document en attente de vérification.",
+      "approved": "Aucun document approuvé.",
+      "rejected": "Aucun document refusé."
+    },
+    "pagination": "Pages des documents",
+    "status": {
+      "pending": "À examiner",
+      "approved": "Approuvé",
+      "rejected": "Refusé"
+    },
+    "reviewNote": "Note : {note}",
+    "open": "Ouvrir le document",
+    "approve": "Approuver",
+    "reject": "Refuser",
+    "confirmApprove": "Approuver « {title} » ? Les élèves du professeur pourront le télécharger.",
+    "confirmReject": "Refuser « {title} » ? Le professeur verra votre motif.",
+    "rejectReason": "Motif (envoyé au professeur)",
+    "rejectPlaceholder": "ex. Le document contient un numéro de téléphone.",
+    "noticeApproved": "« {title} » approuvé et partagé avec les élèves du professeur.",
+    "noticeRejected": "« {title} » refusé. Le professeur a été prévenu."
   }
 }

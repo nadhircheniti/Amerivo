@@ -12,7 +12,7 @@ export const canJoin = (b: Pick<StudentBooking, "status" | "opensAt" | "closesAt
   now !== null && b.status === "confirmed" && now >= new Date(b.opensAt).getTime() && now <= new Date(b.closesAt).getTime();
 
 /**
- * "Join classroom": enabled from shortly before the lesson (opensAt, 10 min by default) until
+ * "Join classroom": enabled from shortly before the lesson (opensAt, 5 min by default, 15 max) until
  * 30 min after its end; otherwise disabled with a hint saying when it opens.
  */
 export function JoinButton({

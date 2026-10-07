@@ -72,6 +72,9 @@
     "roleStudent": "Élève",
     "viewProfile": "Voir le profil",
     "bookLesson": "Réserver un cours",
-    "demoNotice": "Conversations d'exemple — les messages ne sont pas envoyés en mode démo."
+    "demoNotice": "Conversations d'exemple — les messages ne sont pas envoyés en mode démo.",
+    "contactHidden": "Une partie de votre message a été masquée : le partage de coordonnées (e-mail, téléphone, liens, réseaux sociaux) n'est pas autorisé sur Amerivo.",
+    "termsLink": "Lire les règles",
+    "safetyNotice": "Pour la sécurité de tous, les messages sont contrôlés automatiquement. Gardez tous les cours et paiements sur Amerivo."
   }
 }
