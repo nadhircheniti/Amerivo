@@ -72,6 +72,10 @@ export const users = pgTable(
     avatarUrl: text("avatar_url"),
     /** Students must be 13 or older (checked at registration). */
     birthDate: date("birth_date"),
+    /** Terms of Service the user accepted (version = its effective date), when, and from which IP (evidence). */
+    termsVersion: text("terms_version"),
+    termsAcceptedAt: timestamp("terms_accepted_at", { withTimezone: true }),
+    termsAcceptedIp: text("terms_accepted_ip"),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
   },
@@ -565,4 +569,82 @@ export const processedEvents = pgTable(
     processedAt: createdAt(),
   },
   (t) => [primaryKey({ columns: [t.provider, t.eventId] })],
+);
+
+/* ------------------------------------------------------------ trust & safety */
+export const moderationStatus = pgEnum("moderation_status", ["open", "dismissed", "warned", "blocked"]);
+
+/**
+ * Contact details (e-mail, phone, links, handles) or messaging-app names detected in a text a user
+ * sent to another user (Terms §8). The text was delivered redacted; the original is kept here for
+ * the admins only.
+ */
+export const moderationFlags = pgTable(
+  "moderation_flags",
+  {
+    id: id(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    recipientId: uuid("recipient_id").references(() => users.id, { onDelete: "set null" }),
+    /** message | lesson_chat | lesson_notes | lesson_report | review | profile | material | booking (lesson topic) */
+    context: text("context").notNull(),
+    conversationId: uuid("conversation_id").references(() => conversations.id, { onDelete: "set null" }),
+    bookingId: uuid("booking_id").references(() => bookings.id, { onDelete: "set null" }),
+    originalText: text("original_text").notNull(),
+    deliveredText: text("delivered_text"),
+    /** email | phone | link | handle | app */
+    types: text("types").array().notNull(),
+    status: moderationStatus("status").notNull().default("open"),
+    reviewedBy: uuid("reviewed_by").references(() => users.id, { onDelete: "set null" }),
+    reviewedAt: timestamp("reviewed_at", { withTimezone: true }),
+    reviewNote: text("review_note"),
+    createdAt: createdAt(),
+  },
+  (t) => [index("moderation_status_idx").on(t.status, t.createdAt), index("moderation_user_idx").on(t.userId, t.createdAt)],
+);
+
+/** Chat inside the live classroom: stored (and screened) by the API instead of going peer-to-peer. */
+export const lessonChatMessages = pgTable(
+  "lesson_chat_messages",
+  {
+    id: id(),
+    bookingId: uuid("booking_id")
+      .notNull()
+      .references(() => bookings.id, { onDelete: "cascade" }),
+    senderId: uuid("sender_id")
+      .notNull()
+      .references(() => users.id),
+    body: text("body").notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [index("lesson_chat_booking_idx").on(t.bookingId, t.createdAt)],
+);
+
+export const materialStatus = pgEnum("material_status", ["pending", "approved", "rejected"]);
+
+/**
+ * Documents a teacher shares with their students (worksheets, PDFs…). Every document is checked
+ * by an admin first: students only see approved ones, from teachers they have booked.
+ */
+export const teachingMaterials = pgTable(
+  "teaching_materials",
+  {
+    id: id(),
+    teacherId: uuid("teacher_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    fileId: uuid("file_id")
+      .notNull()
+      .unique()
+      .references(() => files.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+    description: text("description"),
+    status: materialStatus("status").notNull().default("pending"),
+    reviewNote: text("review_note"),
+    reviewedBy: uuid("reviewed_by").references(() => users.id, { onDelete: "set null" }),
+    reviewedAt: timestamp("reviewed_at", { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => [index("materials_teacher_idx").on(t.teacherId, t.createdAt), index("materials_status_idx").on(t.status, t.createdAt)],
 );

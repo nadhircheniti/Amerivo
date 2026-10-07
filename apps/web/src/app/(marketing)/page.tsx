@@ -4,7 +4,7 @@ import { Icon, type IconName } from "@/components/ui/icon";
 import { ButtonLink } from "@/components/ui/button";
 import { Eyebrow, PhotoPlaceholder, Tag } from "@/components/ui/primitives";
 import type { Teacher } from "@/lib/mock-data";
-import { getTeachers } from "@/lib/teachers";
+import { getFeaturedTeachers } from "@/lib/teachers";
 import { cn } from "@/lib/cn";
 import { shortUsd, toneTile } from "./_components/tone";
 
@@ -23,16 +23,13 @@ const perks = ["placementTest", "trialLessons", "usTeachers"] as const;
 
 const br = () => <br />;
 
-const featuredSlugs = ["sarah-mitchell", "james-robinson", "amanda-lee", "david-king"];
-
 /** Two specialties shown on the home cards, as in the design. */
 const cardTags = (t: Teacher) => (t.specialties.includes("Travel") ? ["Conversation", "Travel"] : t.specialties.slice(0, 2));
 
 export default async function HomePage() {
   const [t, tp, ts, locale] = await Promise.all([getTranslations("marketing.home"), getTranslations("marketing.profile"), getTranslations("common.specialties"), getLocale()]);
-  const { teachers } = await getTeachers({ headline: tp("fallbackHeadline"), city: tp("fallbackCity") });
-  const picked = featuredSlugs.map((s) => teachers.find((tc) => tc.slug === s)).filter((tc): tc is Teacher => Boolean(tc));
-  const featured = (picked.length >= 4 ? picked : [...picked, ...teachers.filter((tc) => !picked.includes(tc))]).slice(0, 4);
+  // Chosen by the API (complete profiles first) so newly approved teachers show up here.
+  const featured = await getFeaturedTeachers(4, { headline: tp("fallbackHeadline"), city: tp("fallbackCity") });
   const specialty = (s: string) => (ts.has(s as never) ? ts(s as never) : s);
 
   return (
@@ -154,14 +151,21 @@ export default async function HomePage() {
           {featured.map((tc) => (
             <li key={tc.slug}>
               <Link href={`/teachers/${tc.slug}`} className="flex h-full flex-col overflow-hidden rounded-3xl bg-white text-navy shadow-card transition-shadow hover:shadow-float">
-                <div className={cn("relative flex h-[220px] items-center justify-center", toneTile[tc.tone])}>
-                  <span aria-hidden="true" className="font-display text-[56px] font-bold">
-                    {tc.initials}
-                  </span>
-                  <span className="absolute start-4 bottom-4 flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[13px] font-semibold text-navy">
-                    <Icon name="play" size={14} />
-                    {t("teachers.introVideo")}
-                  </span>
+                <div className={cn("relative flex h-[220px] items-center justify-center overflow-hidden", toneTile[tc.tone])}>
+                  {tc.photoUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element -- photos come from the API origin
+                    <img src={tc.photoUrl} alt="" loading="lazy" decoding="async" className="absolute inset-0 size-full object-cover" />
+                  ) : (
+                    <span aria-hidden="true" className="font-display text-[56px] font-bold">
+                      {tc.initials}
+                    </span>
+                  )}
+                  {tc.videoEmbedUrl && (
+                    <span className="absolute start-4 bottom-4 flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[13px] font-semibold text-navy">
+                      <Icon name="play" size={14} />
+                      {t("teachers.introVideo")}
+                    </span>
+                  )}
                 </div>
                 <div className="flex flex-col gap-2 p-[22px]">
                   <div className="flex justify-between gap-2">

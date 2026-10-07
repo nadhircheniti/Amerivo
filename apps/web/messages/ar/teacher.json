@@ -6,7 +6,8 @@
     "messages": "الرسائل",
     "earnings": "الأرباح",
     "publicProfile": "ملفي العام",
-    "approvedTeacher": "معلم معتمد"
+    "approvedTeacher": "معلم معتمد",
+    "materials": "المستندات"
   },
   "modes": {
     "vacation": "وضع الإجازة",
@@ -53,7 +54,8 @@
     "myStudents": "طلابي",
     "studentsCount": "{active} نشط · {past} سابق",
     "studentsAvatars": "{first}، {second}، {third} و{count, plural, zero {لا أحد غيرهم} one {طالب آخر} two {طالبان آخران} few {{count} طلاب آخرين} many {{count} طالبًا آخر} other {{count} طالب آخر}}",
-    "viewStudents": "عرض الطلاب والملاحظات"
+    "viewStudents": "عرض الطلاب والملاحظات",
+    "opensAt": "يفتح الفصل في {time}"
   },
   "availability": {
     "metaTitle": "الجدول وأوقات التوفر · Amerivo English",
@@ -409,7 +411,7 @@
     "videoTitle": "الفيديو التعريفي",
     "videoUrl": "رابط الفيديو (YouTube أو Vimeo)",
     "videoHint": "تعريف مدته دقيقتان: خلفيتك وخبرتك وأسلوبك في التدريس.",
-    "videoInvalid": "أدخل رابطًا كاملًا يبدأ بـ https://",
+    "videoInvalid": "استخدم رابطًا من YouTube أو Vimeo أو Loom أو Google Drive يمكن لأي شخص لديه الرابط مشاهدته.",
     "videoPreview": "معاينة الفيديو التعريفي",
     "saved": "تم حفظ الملف الشخصي",
     "savedDemo": "تم الحفظ (نسخة تجريبية: لا يُخزَّن شيء)",
@@ -419,5 +421,40 @@
     "previewTitle": "معاينة · بطاقتك في نتائج البحث",
     "noHeadline": "أضف عنوانًا تعريفيًا",
     "noBio": "أضف تعريفًا قصيرًا."
+  },
+  "materials": {
+    "metaTitle": "المستندات",
+    "title": "مستندات لطلابك",
+    "subtitle": "شارك أوراق العمل ومواد الدروس مع طلابك. يفحص فريق Amerivo كل مستند قبل أن يتمكن طلابك من رؤيته.",
+    "demo": "اربط الموقع بواجهة Amerivo البرمجية (API) لرفع المستندات.",
+    "uploadTitle": "إضافة مستند",
+    "reviewNotice": "يفحص فريقنا كل مستند. يجب أن تكون المستندات من إعدادك أو أن يكون لك حق مشاركتها، وألا تحتوي على معلومات اتصال (البريد الإلكتروني، الهاتف، الروابط، وسائل التواصل الاجتماعي).",
+    "fieldTitle": "العنوان",
+    "titlePlaceholder": "مثال: رسائل البريد الإلكتروني المهنية — عبارات مفيدة",
+    "fieldFile": "الملف",
+    "fileHint": "PDF أو JPG أو PNG، بحد أقصى {max} MB.",
+    "fieldDescription": "الوصف (اختياري)",
+    "descriptionPlaceholder": "ما الغرض منه؟ ولأي مستوى؟",
+    "submit": "إرسال للمراجعة",
+    "uploading": "جارٍ الرفع…",
+    "uploaded": "تم الإرسال! ستتلقى إشعارًا عند اعتماده.",
+    "uploadError": "تعذّر رفع المستند. حاول مرة أخرى.",
+    "wrongType": "استخدم ملف PDF أو JPG أو PNG.",
+    "tooLarge": "هذا الملف كبير جدًا (الحد الأقصى {max} MB).",
+    "listTitle": "مستنداتك ({count})",
+    "empty": "لا توجد مستندات بعد.",
+    "status": {
+      "pending": "قيد المراجعة",
+      "approved": "تمت مشاركته مع طلابك",
+      "rejected": "غير معتمد"
+    },
+    "pendingHint": "سيراه طلابك بمجرد اعتماده.",
+    "rejectedBecause": "السبب: {reason}",
+    "addedOn": "أُضيف في {date}",
+    "open": "فتح",
+    "openError": "تعذّر فتح المستند.",
+    "delete": "حذف",
+    "deleteConfirm": "هل تريد حذف \"{title}\"؟ لن يتمكن طلابك من رؤيته بعد الآن.",
+    "deleteError": "تعذّر حذف المستند."
   }
 }

@@ -18,6 +18,9 @@ type ApiBooking = {
   durationMin: number;
   withFirstName: string | null;
   withLastName: string | null;
+  /** When the classroom opens / closes (older API versions don't send them). */
+  opensAt?: string;
+  closesAt?: string;
 };
 
 /**
@@ -29,6 +32,12 @@ export function LiveLessons({ forTeacher = false }: { forTeacher?: boolean } = {
   const booked = useSearchParams().get("booked");
   const [items, setItems] = useState<ApiBooking[] | null>(null);
   const [failed, setFailed] = useState(false);
+  // Ticks every 15 s so the classroom button appears when the classroom opens (the API checks it again).
+  const [clock, setClock] = useState(() => Date.now());
+  useEffect(() => {
+    const id = window.setInterval(() => setClock(Date.now()), 15_000);
+    return () => window.clearInterval(id);
+  }, []);
   const t = useTranslations("student.live");
   const tc = useTranslations("common");
   const locale = useLocale() as Locale;
@@ -90,12 +99,15 @@ export function LiveLessons({ forTeacher = false }: { forTeacher?: boolean } = {
                   <Badge tone={b.status === "confirmed" ? "success" : "warning"} className="ms-auto">
                     {t(`status.${b.status}`)}
                   </Badge>
-                  {b.status === "confirmed" && (
-                    <ButtonLink href={`/classroom/${b.id}`} size="sm" variant="teal">
-                      <Icon name="video" size={16} />
-                      {t("classroom")}
-                    </ButtonLink>
-                  )}
+                  {b.status === "confirmed" &&
+                    (!b.opensAt || clock >= new Date(b.opensAt).getTime() ? (
+                      <ButtonLink href={`/classroom/${b.id}`} size="sm" variant="teal">
+                        <Icon name="video" size={16} />
+                        {t("classroom")}
+                      </ButtonLink>
+                    ) : (
+                      <span className="rounded-full bg-white px-3.5 py-2 text-[13px] font-semibold text-navy-soft">{t("opensAt", { time: fmtTime.format(new Date(b.opensAt)) })}</span>
+                    ))}
                 </li>
               );
             })}

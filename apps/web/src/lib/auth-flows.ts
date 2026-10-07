@@ -12,6 +12,7 @@ import { useSignIn, useSignUp } from "@clerk/nextjs/legacy";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { clerkEnabled } from "./auth-config";
+import { TERMS_VERSION } from "./legal";
 
 /** "student" (default) or "teacher" (applicant: no birth date / native language, lands on /teach/apply). */
 export type SignupRole = "student" | "teacher";
@@ -58,8 +59,9 @@ function useClerkSignUpFlow() {
       await signUp.create({
         emailAddress: p.email,
         password: p.password,
+        // termsVersion: the sign-up form's "I accept the Terms" box (required) — /welcome sends it to the API.
         unsafeMetadata: teacher
-          ? { role: "teacher", firstName: p.firstName, lastName: p.lastName, country: p.country, phone: p.phone }
+          ? { role: "teacher", firstName: p.firstName, lastName: p.lastName, country: p.country, phone: p.phone, termsVersion: TERMS_VERSION }
           : {
               role: "student",
               firstName: p.firstName,
@@ -68,6 +70,7 @@ function useClerkSignUpFlow() {
               country: p.country,
               nativeLanguage: p.nativeLanguage,
               phone: p.phone,
+              termsVersion: TERMS_VERSION,
             },
       });
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });

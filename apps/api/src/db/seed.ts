@@ -5,6 +5,8 @@
 import "dotenv/config";
 import { createDb } from "./db";
 import * as s from "./schema";
+// Demo accounts (never used by real people) start with the current Terms accepted so they can be used right away.
+import { TERMS_VERSION } from "../domain/terms";
 
 const teachers = [
   { first: "Sarah", last: "Mitchell", slug: "sarah-mitchell", tz: "America/Chicago", city: "Austin, TX", price: 3500, years: 8, specialties: ["Business English", "Interview Prep", "Conversation"], teaches: ["adults", "teens"], gender: "female" as const, p5: true, p10: true },
@@ -16,12 +18,12 @@ const teachers = [
 
 async function main() {
   const { db, close } = createDb(process.env.DATABASE_URL!);
-  await db.insert(s.users).values({ clerkId: "dev_admin", role: "admin", status: "active", email: "admin@amerivo.dev", firstName: "Ada", lastName: "Admin" }).onConflictDoNothing();
-  await db.insert(s.users).values({ clerkId: "dev_maria", role: "student", status: "active", email: "maria@amerivo.dev", firstName: "Maria", lastName: "Silva", country: "Brazil", timezone: "Europe/Zurich" }).onConflictDoNothing();
+  await db.insert(s.users).values({ clerkId: "dev_admin", role: "admin", status: "active", email: "admin@amerivo.dev", firstName: "Ada", lastName: "Admin", termsVersion: TERMS_VERSION }).onConflictDoNothing();
+  await db.insert(s.users).values({ clerkId: "dev_maria", role: "student", status: "active", email: "maria@amerivo.dev", firstName: "Maria", lastName: "Silva", country: "Brazil", timezone: "Europe/Zurich", termsVersion: TERMS_VERSION }).onConflictDoNothing();
   for (const t of teachers) {
     const [u] = await db
       .insert(s.users)
-      .values({ clerkId: `dev_${t.slug}`, role: "teacher", status: "active", email: `${t.slug}@amerivo.dev`, firstName: t.first, lastName: t.last, timezone: t.tz })
+      .values({ clerkId: `dev_${t.slug}`, role: "teacher", status: "active", email: `${t.slug}@amerivo.dev`, firstName: t.first, lastName: t.last, timezone: t.tz, termsVersion: TERMS_VERSION })
       .onConflictDoNothing()
       .returning();
     if (!u) continue;

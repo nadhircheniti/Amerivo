@@ -274,7 +274,7 @@
     "urlPattern": "请输入以 https:// 开头的链接",
     "preview": "预览",
     "previewTitle": "自我介绍视频预览",
-    "noPreview": "YouTube 和 Vimeo 链接支持预览。请确保任何拥有链接的人都能观看您的视频。",
+    "noPreview": "此链接无法在你的个人主页上显示。请使用任何拥有链接的人都能观看的 YouTube、Vimeo、Loom 或 Google Drive 链接。",
     "tipsTitle": "拍出好视频的小贴士",
     "tips": {
       "say": {

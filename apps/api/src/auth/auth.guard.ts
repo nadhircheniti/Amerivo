@@ -1,15 +1,20 @@
-import { CanActivate, ExecutionContext, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
+import { CanActivate, ExecutionContext, ForbiddenException, Inject, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { verifyToken } from "@clerk/backend";
 import { eq } from "drizzle-orm";
 import { DB, type Db } from "../db/db";
 import { users } from "../db/schema";
 import { forbidden } from "../common/errors";
-import { ALLOW_UNREGISTERED, IS_PUBLIC, ROLES, type AuthUser, type Role } from "./decorators";
+import { TERMS_VERSION } from "../domain/terms";
+import { ALLOW_UNREGISTERED, ALLOW_WITHOUT_TERMS, IS_PUBLIC, ROLES, type AuthUser, type Role } from "./decorators";
+
+/** Error code the web app recognises to show the Terms of Service acceptance screen. */
+export const TERMS_REQUIRED = "terms_required";
 
 /**
  * Global guard: verifies the Clerk session token (Authorization: Bearer <jwt>),
- * loads the Amerivo user and enforces @Roles(). Blocked users are rejected.
+ * loads the Amerivo user and enforces @Roles(). Blocked users are rejected. Students and teachers
+ * must have accepted the current Terms of Service (403 "terms_required" otherwise).
  * Local development can set DEV_AUTH=1 and send `x-dev-user: <clerkId>` instead.
  */
 @Injectable()
@@ -33,6 +38,10 @@ export class AuthGuard implements CanActivate {
 
     const user: AuthUser = { id: row.id, clerkId: row.clerkId, role: row.role, status: row.status, timezone: row.timezone, firstName: row.firstName };
     req.user = user;
+
+    if (row.role !== "admin" && row.termsVersion !== TERMS_VERSION && !this.reflector.getAllAndOverride<boolean>(ALLOW_WITHOUT_TERMS, targets)) {
+      throw new ForbiddenException({ statusCode: 403, error: TERMS_REQUIRED, message: "Please accept the Amerivo Terms of Service to continue" });
+    }
 
     const roles = this.reflector.getAllAndOverride<Role[] | undefined>(ROLES, targets);
     if (roles?.length && !roles.includes(user.role)) throw forbidden();

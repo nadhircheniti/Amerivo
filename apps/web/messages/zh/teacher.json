@@ -6,7 +6,8 @@
     "messages": "消息",
     "earnings": "收入",
     "publicProfile": "我的公开主页",
-    "approvedTeacher": "认证老师"
+    "approvedTeacher": "认证老师",
+    "materials": "文档"
   },
   "modes": {
     "vacation": "休假模式",
@@ -53,7 +54,8 @@
     "myStudents": "我的学生",
     "studentsCount": "在读 {active} 位 · 过往 {past} 位",
     "studentsAvatars": "{first}、{second}、{third} 及其他 {count} 位学生",
-    "viewStudents": "查看学生与备注"
+    "viewStudents": "查看学生与备注",
+    "opensAt": "教室将于 {time} 开放"
   },
   "availability": {
     "metaTitle": "课表与可预约时间 · Amerivo English",
@@ -409,7 +411,7 @@
     "videoTitle": "视频自我介绍",
     "videoUrl": "视频链接（YouTube 或 Vimeo）",
     "videoHint": "2 分钟的自我介绍：你的背景、经验和教学风格。",
-    "videoInvalid": "请输入以 https:// 开头的完整链接",
+    "videoInvalid": "请使用任何拥有链接的人都能观看的 YouTube、Vimeo、Loom 或 Google Drive 链接。",
     "videoPreview": "自我介绍视频预览",
     "saved": "资料已保存",
     "savedDemo": "已保存（演示模式：不会存储任何内容）",
@@ -419,5 +421,40 @@
     "previewTitle": "预览 · 你在搜索结果中的卡片",
     "noHeadline": "添加一句话介绍",
     "noBio": "添加简短的自我介绍。"
+  },
+  "materials": {
+    "metaTitle": "文档",
+    "title": "给学生的文档",
+    "subtitle": "与你的学生分享练习题和课程资料。每份文档都须经 Amerivo 团队审核后，学生才能看到。",
+    "demo": "请将网站连接到 Amerivo API 以上传文档。",
+    "uploadTitle": "添加文档",
+    "reviewNotice": "我们的团队会审核每份文档。文档必须为你本人所有或你有权分享，且不得包含联系方式（邮箱、电话、链接、社交媒体）。",
+    "fieldTitle": "标题",
+    "titlePlaceholder": "例如：商务邮件——实用表达",
+    "fieldFile": "文件",
+    "fileHint": "PDF、JPG 或 PNG，最大 {max} MB。",
+    "fieldDescription": "描述（可选）",
+    "descriptionPlaceholder": "用途是什么？适合什么水平？",
+    "submit": "提交审核",
+    "uploading": "正在上传…",
+    "uploaded": "已提交！审核通过后你会收到通知。",
+    "uploadError": "文档上传失败，请重试。",
+    "wrongType": "请使用 PDF、JPG 或 PNG 文件。",
+    "tooLarge": "文件过大（最大 {max} MB）。",
+    "listTitle": "你的文档（{count}）",
+    "empty": "暂无文档。",
+    "status": {
+      "pending": "审核中",
+      "approved": "已与学生分享",
+      "rejected": "未通过"
+    },
+    "pendingHint": "审核通过后，你的学生即可看到。",
+    "rejectedBecause": "原因：{reason}",
+    "addedOn": "添加于 {date}",
+    "open": "打开",
+    "openError": "无法打开该文档。",
+    "delete": "删除",
+    "deleteConfirm": "确定删除“{title}”吗？你的学生将无法再看到它。",
+    "deleteError": "无法删除该文档。"
   }
 }

@@ -1,7 +1,8 @@
 import { Body, Controller, Delete, Get, Headers, HttpCode, Param, ParseUUIDPipe, Post, Put, Query, Req, type RawBodyRequest } from "@nestjs/common";
+import { SkipThrottle, Throttle } from "@nestjs/throttler";
 import type { Request } from "express";
 import { clerkClient } from "./clerk";
-import { AllowUnregistered, ClerkId, CurrentUser, Public, Roles, type AuthUser } from "../auth/decorators";
+import { AllowUnregistered, AllowWithoutTerms, ClerkId, CurrentUser, Public, Roles, type AuthUser } from "../auth/decorators";
 import { badRequest } from "../common/errors";
 import { StripeService } from "../integrations/stripe.service";
 import { AccountsService } from "./accounts/accounts.service";
@@ -13,12 +14,14 @@ import { StudentsService } from "./students/students.service";
 import { ApplicationsService } from "./teachers/applications.service";
 import { TeachersService } from "./teachers/teachers.service";
 import {
+  AcceptTermsDto,
   BlockedDateDto,
   CancelDto,
   CompleteDto,
   CreateBookingDto,
   DecisionDto,
   InterviewDto,
+  LessonChatDto,
   NotesDto,
   PlacementDto,
   RefundDto,
@@ -50,15 +53,27 @@ export class AccountsController {
   constructor(private readonly accounts: AccountsService) {}
 
   @AllowUnregistered() @Post("register")
-  async register(@ClerkId() clerkId: string, @Body() dto: RegisterDto) {
+  async register(@ClerkId() clerkId: string, @Body() dto: RegisterDto, @Req() req: Request) {
     const verified = await clerkClient.isEmailVerified(clerkId, dto.email);
-    return this.accounts.register(clerkId, dto, verified);
+    return this.accounts.register(clerkId, dto, verified, { ip: clientIp(req) });
   }
 
-  @Get() me(@CurrentUser() user: AuthUser) {
+  @AllowWithoutTerms() @Get() me(@CurrentUser() user: AuthUser) {
     return this.accounts.me(user.id);
   }
+
+  /** POST /me/terms {version} — accept the current Terms of Service. */
+  @AllowWithoutTerms() @Post("terms") @HttpCode(200)
+  acceptTerms(@CurrentUser() user: AuthUser, @Body() dto: AcceptTermsDto, @Req() req: Request) {
+    return this.accounts.acceptTerms(user.id, dto.version, { ip: clientIp(req) });
+  }
 }
+
+/** Address the request came from, kept as evidence of acceptance (proxy chain included). */
+const clientIp = (req: Request) => {
+  const fwd = req.headers["x-forwarded-for"];
+  return ((Array.isArray(fwd) ? fwd.join(",") : fwd) || req.ip || req.socket?.remoteAddress || "").slice(0, 200) || null;
+};
 
 @Controller("teachers")
 export class TeachersController {
@@ -74,7 +89,7 @@ export class TeachersController {
       teaches: splitList(q.teaches),
       maxPriceCents: q.maxPrice ? Math.round(Number(q.maxPrice) * 100) : undefined,
       gender: q.gender === "female" || q.gender === "male" ? q.gender : undefined,
-      sort: (["best", "rating", "price_asc", "experience"] as const).find((s) => s === q.sort),
+      sort: (["best", "rating", "price_asc", "experience", "featured"] as const).find((s) => s === q.sort),
       limit: q.limit ? Number(q.limit) : undefined,
       offset: q.offset ? Number(q.offset) : undefined,
     });
@@ -193,6 +208,15 @@ export class BookingsController {
   }
   @Put(":id/notes") notes(@CurrentUser() u: AuthUser, @Param("id", ParseUUIDPipe) id: string, @Body() dto: NotesDto) {
     return this.lessons.saveNotes(u, id, dto.notes);
+  }
+  /** GET /bookings/:id/live?after=<ISO> — classroom chat messages after `after` + the shared notes (polled). */
+  @Get(":id/live") @SkipThrottle()
+  live(@CurrentUser() u: AuthUser, @Param("id", ParseUUIDPipe) id: string, @Query("after") after?: string) {
+    return this.lessons.live(u, id, after ? parseDate(after, "after") : undefined);
+  }
+  @Post(":id/chat") @Throttle({ default: { limit: 40, ttl: 60_000 } })
+  chat(@CurrentUser() u: AuthUser, @Param("id", ParseUUIDPipe) id: string, @Body() dto: LessonChatDto) {
+    return this.lessons.sendChat(u, id, dto.body);
   }
   @Roles("teacher") @Post(":id/complete")
   complete(@CurrentUser() u: AuthUser, @Param("id", ParseUUIDPipe) id: string, @Body() dto: CompleteDto) {

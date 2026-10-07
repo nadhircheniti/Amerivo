@@ -5,6 +5,7 @@ import { studentProfiles, teacherProfiles, users } from "../../db/schema";
 import { badRequest, conflict } from "../../common/errors";
 import { CLOCK, type Clock } from "../../common/clock";
 import { isOldEnough, MIN_STUDENT_AGE } from "../../domain/age";
+import { TERMS_VERSION } from "../../domain/terms";
 import { clerkClient } from "../clerk";
 
 export interface RegisterInput {
@@ -17,6 +18,12 @@ export interface RegisterInput {
   phone?: string;
   timezone: string;
   birthDate?: string;
+  acceptTerms: boolean;
+}
+
+/** Evidence of acceptance kept on the account: version, time and IP address. */
+export interface TermsAcceptance {
+  ip?: string | null;
 }
 
 const slugify = (s: string) =>
@@ -45,7 +52,10 @@ export class AccountsService {
   ) {}
 
   /** Creates the Amerivo account for a signed-in Clerk user (student sign-up or teacher application start). */
-  async register(clerkId: string, input: RegisterInput, emailVerified: boolean) {
+  async register(clerkId: string, registration: RegisterInput, emailVerified: boolean, acceptance: TermsAcceptance = {}) {
+    const { acceptTerms, ...input } = registration;
+    if (acceptTerms !== true) throw badRequest("You must accept the Terms of Service");
+    const terms = { termsVersion: TERMS_VERSION, termsAcceptedAt: this.clock.now(), termsAcceptedIp: acceptance.ip ?? null };
     try {
       Intl.DateTimeFormat(undefined, { timeZone: input.timezone });
     } catch {
@@ -56,7 +66,7 @@ export class AccountsService {
     if (emailVerified && isAdminEmail(input.email)) {
       const [admin] = await this.db
         .insert(users)
-        .values({ clerkId, ...input, birthDate: input.birthDate ?? null, role: "admin", status: "active" })
+        .values({ clerkId, ...input, ...terms, birthDate: input.birthDate ?? null, role: "admin", status: "active" })
         .returning();
       return admin;
     }
@@ -67,7 +77,7 @@ export class AccountsService {
     return this.db.transaction(async (tx) => {
       const [u] = await tx
         .insert(users)
-        .values({ clerkId, ...input, status: input.role === "teacher" ? "pending_verification" : emailVerified ? "active" : "pending_verification" })
+        .values({ clerkId, ...input, ...terms, status: input.role === "teacher" ? "pending_verification" : emailVerified ? "active" : "pending_verification" })
         .returning();
       if (input.role === "student") {
         await tx.insert(studentProfiles).values({ userId: u.id });
@@ -97,6 +107,13 @@ export class AccountsService {
       .from(users)
       .leftJoin(teacherProfiles, eq(teacherProfiles.userId, users.id))
       .where(eq(users.id, userId));
+  }
+
+  /** The user accepts the current Terms of Service (sign-up via Google/Apple, or after the Terms changed). */
+  async acceptTerms(userId: string, version: string, acceptance: TermsAcceptance = {}) {
+    if (version !== TERMS_VERSION) throw badRequest("These Terms of Service are out of date. Reload the page to read the current version.");
+    await this.db.update(users).set({ termsVersion: TERMS_VERSION, termsAcceptedAt: this.clock.now(), termsAcceptedIp: acceptance.ip ?? null }).where(eq(users.id, userId));
+    return { termsVersion: TERMS_VERSION };
   }
 
   /** Clerk confirms the email → the student becomes Active (spec §3 step 2). */

@@ -72,6 +72,9 @@
     "roleStudent": "学生",
     "viewProfile": "查看主页",
     "bookLesson": "预约课程",
-    "demoNotice": "示例对话——演示模式下不会发送消息。"
+    "demoNotice": "示例对话——演示模式下不会发送消息。",
+    "contactHidden": "你的部分消息已被隐藏：Amerivo 禁止分享联系方式（邮箱、电话、链接、社交媒体）。",
+    "termsLink": "查看规则",
+    "safetyNotice": "为保障所有人的安全，消息会经过自动检查。所有课程和付款都须在 Amerivo 上进行。"
   }
 }

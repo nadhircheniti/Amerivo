@@ -163,6 +163,8 @@ export function ConversationsView({
   const [threads, setThreads] = useState<Record<string, Thread>>({});
   const [query, setQuery] = useState("");
   const [draft, setDraft] = useState("");
+  /** Shown after a message in which the API hid contact details. */
+  const [contactHidden, setContactHidden] = useState(false);
   const [mobilePane, setMobilePane] = useState<"list" | "thread">(deepLink ? "thread" : "list");
   const scrollRef = useRef<HTMLDivElement>(null);
   const keepScroll = useRef<number | null>(null);
@@ -283,6 +285,7 @@ export function ConversationsView({
   const deliver = async (conversationId: string, localId: string, body: string) => {
     try {
       const saved = await source.send(conversationId, body);
+      setContactHidden(!!saved.moderation?.redacted);
       setThreads((all) => {
         const cur = all[conversationId];
         return { ...all, [conversationId]: { ...cur, items: merge(cur.items.filter((m) => m.id !== localId), [saved]) } };
@@ -502,8 +505,17 @@ export function ConversationsView({
             })}
           </div>
 
+          {contactHidden && (
+            <p role="alert" className="mx-4 mt-3 rounded-xl bg-orange-100 px-4 py-2.5 text-sm text-orange-text sm:mx-7">
+              {t("contactHidden")}{" "}
+              <a href="/terms#non-circumvention" target="_blank" rel="noopener" className="font-semibold underline">
+                {t("termsLink")}
+              </a>
+            </p>
+          )}
+          <p className="px-4 pt-3 text-xs text-muted sm:px-7">{t("safetyNotice")}</p>
           <form
-            className="flex items-center gap-3 px-4 pt-[18px] pb-6 sm:px-7"
+            className="flex items-center gap-3 px-4 pt-2 pb-6 sm:px-7"
             onSubmit={(e) => {
               e.preventDefault();
               const text = draft.trim();

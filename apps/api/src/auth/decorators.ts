@@ -13,11 +13,14 @@ export interface AuthUser {
 export const IS_PUBLIC = "isPublic";
 export const ROLES = "roles";
 export const ALLOW_UNREGISTERED = "allowUnregistered";
+export const ALLOW_WITHOUT_TERMS = "allowWithoutTerms";
 
 /** Route is reachable without a session. */
 export const Public = () => SetMetadata(IS_PUBLIC, true);
 /** Valid Clerk session required, but no Amerivo account yet (sign-up completion). */
 export const AllowUnregistered = () => SetMetadata(ALLOW_UNREGISTERED, true);
+/** Reachable by a signed-in user who hasn't accepted the current Terms of Service yet (GET /me, POST /me/terms). */
+export const AllowWithoutTerms = () => SetMetadata(ALLOW_WITHOUT_TERMS, true);
 /** Restrict a route to some roles. */
 export const Roles = (...roles: Role[]) => SetMetadata(ROLES, roles);
 /** Inject the signed-in user. */

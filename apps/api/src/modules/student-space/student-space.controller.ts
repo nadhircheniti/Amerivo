@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, Query } from "@nestjs/common";
-import { CurrentUser, Roles, type AuthUser } from "../../auth/decorators";
+import { AllowWithoutTerms, CurrentUser, Roles, type AuthUser } from "../../auth/decorators";
 import { UpdateProfileDto } from "./student-space.dto";
 import { StudentSpaceService } from "./student-space.service";
 
@@ -50,7 +50,8 @@ export class StudentAccountController {
   @Put("profile") update(@CurrentUser() u: AuthUser, @Body() dto: UpdateProfileDto) {
     return this.space.updateProfile(u.id, dto);
   }
-  @Delete() remove(@CurrentUser() u: AuthUser) {
+  /** Reachable without accepting new Terms: someone who refuses them must be able to close their account. */
+  @AllowWithoutTerms() @Delete() remove(@CurrentUser() u: AuthUser) {
     return this.space.deleteAccount(u);
   }
 }

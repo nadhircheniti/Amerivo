@@ -6,7 +6,10 @@
     "connectionGood": "Buena conexión"
   },
   "timer": {
-    "label": "Tiempo transcurrido: {elapsed} de {total}"
+    "label": "Tiempo transcurrido: {elapsed} de {total}",
+    "startsIn": "Empieza en",
+    "startsInLabel": "La clase empieza en {time}",
+    "left": "Quedan {time}"
   },
   "controls": {
     "toolbar": "Controles de la llamada",
@@ -88,12 +91,16 @@
       "chat": "Chat",
       "notes": "Notas"
     },
-    "chatEmpty": "Los mensajes solo se ven durante la clase.",
+    "chatEmpty": "¡Saluda! Los mensajes se guardan con la clase.",
     "chatPlaceholder": "Mensaje para {name}…",
     "send": "Enviar",
-    "notesPlaceholder": "Notas compartidas: palabras nuevas, correcciones, enlaces… Ambos pueden escribir aquí.",
+    "notesPlaceholder": "Notas compartidas: palabras nuevas, correcciones, ejemplos… Ambos pueden escribir aquí.",
     "notesHint": "Se guardan con la clase.",
     "notesSaving": "Guardando…",
-    "notesSaved": "Guardado"
+    "notesSaved": "Guardado",
+    "chatError": "No se pudo enviar tu mensaje. Inténtalo de nuevo.",
+    "contactHidden": "Se ocultaron datos de contacto (correo electrónico, teléfono, enlaces, redes sociales). No está permitido compartirlos en Amerivo.",
+    "termsLink": "Leer las reglas",
+    "monitored": "El chat y las notas se guardan con la clase y se revisan por seguridad. Nunca compartas datos de contacto personales."
   }
 }

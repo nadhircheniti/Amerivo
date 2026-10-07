@@ -8,7 +8,8 @@
     "progress": "Progression",
     "payments": "Paiements",
     "settings": "Paramètres",
-    "userSubtitle": "Élève · Niveau {level}"
+    "userSubtitle": "Élève · Niveau {level}",
+    "materials": "Documents"
   },
   "backToOverview": "Retour à la vue d'ensemble",
   "states": {
@@ -411,7 +412,8 @@
     },
     "timeZoneNote": "Heures affichées dans votre fuseau horaire ({tz}).",
     "classroom": "Salle de classe",
-    "emptyTeacher": "Aucun cours à venir pour l'instant. Les nouvelles réservations apparaîtront ici."
+    "emptyTeacher": "Aucun cours à venir pour l'instant. Les nouvelles réservations apparaîtront ici.",
+    "opensAt": "Ouvre à {time}"
   },
   "messages": {
     "metaTitle": "Messages",
@@ -444,5 +446,13 @@
     "lastSeen": "Dernière connexion : {day} · {city}",
     "repliesWithinHours": "Répond généralement en quelques heures",
     "supportSubtitle": "Aide pour vos réservations, paiements et votre compte"
+  },
+  "materials": {
+    "title": "Documents",
+    "description": "Fiches et supports partagés par vos professeurs, vérifiés par l'équipe Amerivo.",
+    "emptyTitle": "Aucun document pour le moment",
+    "emptyText": "Lorsqu'un de vos professeurs partagera un document, il apparaîtra ici.",
+    "open": "Ouvrir",
+    "openError": "Le document n'a pas pu être ouvert. Réessayez."
   }
 }

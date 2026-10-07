@@ -15,10 +15,15 @@ export class ApiError extends Error {
   constructor(
     public status: number,
     message: string,
+    /** Machine-readable reason sent by the API in `error` (e.g. "terms_required"). */
+    public code?: string,
   ) {
     super(message);
   }
 }
+
+/** The API refuses students and teachers who haven't accepted the current Terms of Service. */
+export const TERMS_REQUIRED = "terms_required";
 
 /** Server-side GET with a timeout; returns null instead of throwing. Cached for `revalidate` seconds. */
 export async function apiGet<T>(path: string, { revalidate = 60, timeoutMs = 8000 }: { revalidate?: number | false; timeoutMs?: number } = {}): Promise<T | null> {
@@ -50,13 +55,15 @@ export async function apiFetch<T>(path: string, init: RequestInit & { token?: st
   });
   if (!res.ok) {
     let message = `Request failed (${res.status})`;
+    let code: string | undefined;
     try {
       const body = await res.json();
       message = Array.isArray(body.message) ? body.message.join(", ") : body.message || message;
+      code = typeof body.error === "string" && body.error === TERMS_REQUIRED ? TERMS_REQUIRED : undefined;
     } catch {
       /* not JSON */
     }
-    throw new ApiError(res.status, message);
+    throw new ApiError(res.status, message, code);
   }
   return res.status === 204 ? (undefined as T) : ((await res.json()) as T);
 }

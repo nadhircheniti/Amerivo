@@ -19,16 +19,9 @@ import { API_URL, ApiError, DEV_USER } from "@/lib/api";
 import { clerkEnabled } from "@/lib/auth-config";
 import { cn } from "@/lib/cn";
 
-/** Origin of the API (NEXT_PUBLIC_API_URL minus "/api"). */
-export const API_ORIGIN = API_URL ? API_URL.replace(/\/api$/, "") : null;
-
-/** Full address of a stored file: "/api/files/<id>" → "https://api…/api/files/<id>". Other URLs are kept. */
-export function fileSrc(url: string | null | undefined): string | null {
-  if (!url) return null;
-  if (/^https?:\/\//.test(url)) return url;
-  if (url.startsWith("/") && API_ORIGIN) return `${API_ORIGIN}${url}`;
-  return null;
-}
+// Re-exported for existing imports; the helpers live in lib/files.ts so server components can use them.
+export { API_ORIGIN, fileSrc } from "@/lib/files";
+import { fileSrc } from "@/lib/files";
 
 export type FilePurpose = "avatar" | "certificate";
 export type StoredFile = { id: string; url: string; fileName: string; contentType: string; sizeBytes: number; purpose?: string; createdAt?: string };
@@ -102,7 +95,9 @@ export function useFiles() {
     },
     [request],
   );
-  return { upload, list, remove, open };
+  /** Multipart POST to any API path (e.g. teaching documents: file + title + description). */
+  const postForm = useCallback(async <T,>(path: string, form: FormData) => (await (await request(path, { method: "POST", body: form })).json()) as T, [request]);
+  return { upload, list, remove, open, postForm };
 }
 
 /** Client-side check with the same rules as the API; returns an error message or null. */

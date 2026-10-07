@@ -8,7 +8,8 @@
     "progress": "التقدم",
     "payments": "المدفوعات",
     "settings": "الإعدادات",
-    "userSubtitle": "طالب · المستوى {level}"
+    "userSubtitle": "طالب · المستوى {level}",
+    "materials": "المستندات"
   },
   "backToOverview": "العودة إلى النظرة العامة",
   "states": {
@@ -411,7 +412,8 @@
     },
     "timeZoneNote": "الأوقات معروضة حسب منطقتك الزمنية ({tz}).",
     "classroom": "الفصل الافتراضي",
-    "emptyTeacher": "لا توجد دروس قادمة بعد. ستظهر الحجوزات الجديدة هنا."
+    "emptyTeacher": "لا توجد دروس قادمة بعد. ستظهر الحجوزات الجديدة هنا.",
+    "opensAt": "يفتح في {time}"
   },
   "messages": {
     "metaTitle": "الرسائل",
@@ -444,5 +446,13 @@
     "lastSeen": "آخر ظهور {day} · {city}",
     "repliesWithinHours": "يرد عادةً خلال بضع ساعات",
     "supportSubtitle": "مساعدة في الحجوزات والمدفوعات وحسابك"
+  },
+  "materials": {
+    "title": "المستندات",
+    "description": "أوراق عمل ومواد يشاركها معلموك، بعد فحصها من فريق Amerivo.",
+    "emptyTitle": "لا توجد مستندات بعد",
+    "emptyText": "عندما يشارك أحد معلميك مستندًا، سيظهر هنا.",
+    "open": "فتح",
+    "openError": "تعذّر فتح المستند. حاول مرة أخرى."
   }
 }

@@ -6,7 +6,8 @@
     "messages": "Messages",
     "earnings": "Earnings",
     "publicProfile": "My public profile",
-    "approvedTeacher": "Approved teacher"
+    "approvedTeacher": "Approved teacher",
+    "materials": "Documents"
   },
   "modes": {
     "vacation": "Vacation mode",
@@ -53,7 +54,8 @@
     "myStudents": "My students",
     "studentsCount": "{active} active · {past} past",
     "studentsAvatars": "{first}, {second}, {third} and {count} more students",
-    "viewStudents": "View students & notes"
+    "viewStudents": "View students & notes",
+    "opensAt": "Classroom opens at {time}"
   },
   "availability": {
     "metaTitle": "Schedule & availability · Amerivo English",
@@ -409,7 +411,7 @@
     "videoTitle": "Video introduction",
     "videoUrl": "Video link (YouTube or Vimeo)",
     "videoHint": "A 2-minute introduction: your background, experience and teaching style.",
-    "videoInvalid": "Enter a full link starting with https://",
+    "videoInvalid": "Use a YouTube, Vimeo, Loom or Google Drive link that anyone with the link can watch.",
     "videoPreview": "Preview of your introduction video",
     "saved": "Profile saved",
     "savedDemo": "Saved (demo: nothing is stored)",
@@ -419,5 +421,40 @@
     "previewTitle": "Preview · your card in search results",
     "noHeadline": "Add a headline",
     "noBio": "Add a short introduction."
+  },
+  "materials": {
+    "metaTitle": "Documents",
+    "title": "Documents for your students",
+    "subtitle": "Share worksheets and lesson materials with your students. Every document is checked by the Amerivo team before your students can see it.",
+    "demo": "Connect the site to the Amerivo API to upload documents.",
+    "uploadTitle": "Add a document",
+    "reviewNotice": "Our team checks each document. Documents must be your own or ones you have the right to share, and must not contain contact details (e-mail, phone, links, social media).",
+    "fieldTitle": "Title",
+    "titlePlaceholder": "e.g. Business e-mails — useful phrases",
+    "fieldFile": "File",
+    "fileHint": "PDF, JPG or PNG, up to {max} MB.",
+    "fieldDescription": "Description (optional)",
+    "descriptionPlaceholder": "What is it for? Which level?",
+    "submit": "Send for review",
+    "uploading": "Uploading…",
+    "uploaded": "Sent! You'll be notified when it's approved.",
+    "uploadError": "The document couldn't be uploaded. Try again.",
+    "wrongType": "Use a PDF, JPG or PNG file.",
+    "tooLarge": "This file is too large (max {max} MB).",
+    "listTitle": "Your documents ({count})",
+    "empty": "No document yet.",
+    "status": {
+      "pending": "Under review",
+      "approved": "Shared with your students",
+      "rejected": "Not approved"
+    },
+    "pendingHint": "Your students will see it once it's approved.",
+    "rejectedBecause": "Reason: {reason}",
+    "addedOn": "added {date}",
+    "open": "Open",
+    "openError": "The document couldn't be opened.",
+    "delete": "Delete",
+    "deleteConfirm": "Delete \"{title}\"? Your students won't see it anymore.",
+    "deleteError": "The document couldn't be deleted."
   }
 }

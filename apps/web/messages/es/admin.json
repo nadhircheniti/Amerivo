@@ -8,7 +8,9 @@
     "disputes": "Disputas y reembolsos",
     "support": "Bandeja de soporte",
     "settings": "Configuración y registro de auditoría",
-    "signedIn2fa": "Sesión iniciada con 2FA"
+    "signedIn2fa": "Sesión iniciada con 2FA",
+    "moderation": "Reportes de seguridad",
+    "materials": "Documentos de profesores"
   },
   "overview": {
     "metaTitle": "Analíticas de la plataforma · Amerivo Admin",
@@ -726,5 +728,113 @@
       "business": "Empresas",
       "technical": "Problema técnico"
     }
+  },
+  "moderationPage": {
+    "metaTitle": "Reportes de seguridad",
+    "title": "Reportes de seguridad",
+    "subtitle": "Datos de contacto (correo electrónico, teléfono, enlaces, redes sociales) detectados en mensajes, chat del aula, notas, informes de clase y reseñas. Se ocultaron antes de que la otra persona los viera.",
+    "statusTabs": "Estado del reporte",
+    "tabs": {
+      "open": "Por revisar",
+      "warned": "Advertidos",
+      "blocked": "Bloqueados",
+      "dismissed": "Descartados"
+    },
+    "what": "los reportes",
+    "empty": {
+      "open": "No hay reportes por revisar.",
+      "warned": "No hay usuarios advertidos.",
+      "blocked": "No hay usuarios bloqueados.",
+      "dismissed": "No hay reportes descartados."
+    },
+    "pagination": "Páginas de reportes",
+    "roles": {
+      "student": "estudiante",
+      "teacher": "profesor",
+      "admin": "administrador"
+    },
+    "status": {
+      "open": "Por revisar",
+      "warned": "Advertido",
+      "blocked": "Bloqueado",
+      "dismissed": "Descartado"
+    },
+    "contexts": {
+      "message": "Mensaje",
+      "lesson_chat": "Chat del aula",
+      "lesson_notes": "Notas de la clase",
+      "lesson_report": "Informe de la clase",
+      "review": "Reseña",
+      "profile": "Perfil del profesor",
+      "material": "Documento",
+      "booking": "Tema de la clase"
+    },
+    "types": {
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "link": "Enlace",
+      "handle": "Usuario de red social",
+      "app": "Aplicación de mensajería"
+    },
+    "repeat": "{count} reportes en 30 días",
+    "accountBlocked": "Cuenta bloqueada",
+    "original": "Lo que escribió",
+    "delivered": "Lo que vio la otra persona",
+    "notDelivered": "Rechazado (no publicado)",
+    "reviewNote": "Nota: {note}",
+    "showContext": "Mostrar la conversación",
+    "contextTitle": "Conversación en torno al reporte (tal como se entregó)",
+    "contextNone": "No hay conversación para este reporte.",
+    "actions": {
+      "dismiss": "Descartar",
+      "warn": "Advertir al usuario",
+      "block": "Bloquear la cuenta"
+    },
+    "confirm": {
+      "dismiss": "¿Descartar este reporte sobre {name} (falsa alarma)?",
+      "warn": "¿Enviar a {name} una advertencia (en la app y por correo electrónico) por compartir datos de contacto?",
+      "block": "¿Bloquear la cuenta de {name}? Ya no podrá iniciar sesión ni usar Amerivo."
+    },
+    "warnNoteLabel": "Mensaje agregado a la advertencia (opcional)",
+    "blockNoteLabel": "Nota interna (opcional)",
+    "notePlaceholder": "Visible en el registro de auditoría",
+    "notice": {
+      "dismiss": "Se descartó el reporte sobre {name}.",
+      "warn": "Se advirtió a {name}.",
+      "block": "La cuenta de {name} está bloqueada."
+    }
+  },
+  "materialsPage": {
+    "metaTitle": "Documentos de profesores",
+    "title": "Documentos de profesores",
+    "subtitle": "Documentos que los profesores quieren compartir con sus estudiantes. Los estudiantes solo ven los documentos aprobados. Revisa el contenido, el derecho a compartirlo y que no contenga datos de contacto.",
+    "statusTabs": "Estado del documento",
+    "tabs": {
+      "pending": "Por revisar",
+      "approved": "Aprobados",
+      "rejected": "Rechazados"
+    },
+    "what": "los documentos",
+    "empty": {
+      "pending": "No hay documentos pendientes de revisión.",
+      "approved": "No hay documentos aprobados.",
+      "rejected": "No hay documentos rechazados."
+    },
+    "pagination": "Páginas de documentos",
+    "status": {
+      "pending": "Por revisar",
+      "approved": "Aprobado",
+      "rejected": "Rechazado"
+    },
+    "reviewNote": "Nota: {note}",
+    "open": "Abrir el documento",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "confirmApprove": "¿Aprobar \"{title}\"? Los estudiantes del profesor podrán descargarlo.",
+    "confirmReject": "¿Rechazar \"{title}\"? El profesor verá tu motivo.",
+    "rejectReason": "Motivo (se envía al profesor)",
+    "rejectPlaceholder": "Por ejemplo: el documento contiene un número de teléfono.",
+    "noticeApproved": "\"{title}\" se aprobó y se compartió con los estudiantes del profesor.",
+    "noticeRejected": "\"{title}\" se rechazó. Se notificó al profesor."
   }
 }

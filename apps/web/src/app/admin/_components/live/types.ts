@@ -171,7 +171,30 @@ export type PlatformSettings = {
   nextPayoutDate: string;
 };
 
-export type Badges = { pendingApplications: number; openDisputes: number; openSupport?: number };
+export type Badges = { pendingApplications: number; openDisputes: number; openSupport?: number; openModeration?: number; pendingMaterials?: number };
+
+/* ---------- Trust & safety (contact details detected in user-to-user texts) ---------- */
+export type ModerationStatus = "open" | "dismissed" | "warned" | "blocked";
+export type ModerationContext = "message" | "lesson_chat" | "lesson_notes" | "lesson_report" | "review" | "profile" | "material" | "booking";
+export type ModerationPerson = { id: string; firstName: string; lastName: string; role: "student" | "teacher" | "admin"; email?: string; status?: string };
+export type ModerationFlag = {
+  id: string;
+  context: ModerationContext;
+  types: string[];
+  originalText: string;
+  deliveredText: string | null;
+  status: ModerationStatus;
+  reviewNote: string | null;
+  reviewedAt: string | null;
+  bookingId: string | null;
+  conversationId: string | null;
+  createdAt: string;
+  sender: ModerationPerson;
+  recipient: ModerationPerson | null;
+  senderFlags30d: number;
+};
+export type ModerationList = { items: ModerationFlag[]; total: number; page: number; pageSize: number };
+export type ModerationContextView = { kind: "conversation" | "lesson_chat" | "none"; messages: { id: string; senderId: string; body: string | null; createdAt: string }[] };
 
 /* ---------- Support inbox (contact form) ---------- */
 export type SupportStatus = "open" | "answered" | "closed";

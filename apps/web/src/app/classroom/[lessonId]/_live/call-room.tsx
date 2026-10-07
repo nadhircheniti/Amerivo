@@ -5,7 +5,6 @@ import {
   DailyAudio,
   DailyProvider,
   DailyVideo,
-  useAppMessage,
   useAudioTrack,
   useDaily,
   useDailyEvent,
@@ -25,7 +24,8 @@ import { cn } from "@/lib/cn";
 import { useApi } from "@/lib/use-api";
 import { ElapsedTimer } from "../_components/elapsed-timer";
 import { LocalIcon } from "../_components/local-icons";
-import type { ClassroomInfo, LiveMessage } from "./types";
+import { usePolling } from "@/components/messaging/use-polling";
+import type { ClassroomInfo } from "./types";
 
 /** Creates the Daily call object, joins the private room and cleans up when leaving the page. */
 export function CallRoom({ info, roomUrl, token }: { info: ClassroomInfo; roomUrl: string; token: string }) {
@@ -79,7 +79,6 @@ function Room({ info }: { info: ClassroomInfo }) {
   const everJoined = useRef(false);
 
   const isTeacher = info.role === "teacher";
-  const me = isTeacher ? info.teacher : info.student;
   const other = isTeacher ? info.student : info.teacher;
   const remoteId = remoteIds[0];
   useEffect(() => {
@@ -199,7 +198,7 @@ function Room({ info }: { info: ClassroomInfo }) {
           </div>
         </div>
 
-        <LivePanel info={info} meName={me.firstName} otherName={other.firstName} />
+        <LivePanel info={info} otherName={other.firstName} />
       </div>
     </div>
   );
@@ -271,51 +270,107 @@ function Toggle({ label, pressed, onClick, tone = "danger", children }: { label:
   );
 }
 
-/** Chat (live, not stored) and shared notes (saved with the lesson, synced live). */
-function LivePanel({ info, meName, otherName }: { info: ClassroomInfo; meName: string; otherName: string }) {
+type ChatMessage = { id: string; senderId: string; body: string; createdAt: string };
+type Live = { messages: ChatMessage[]; notes: string };
+type Screened = { moderation?: { redacted: boolean; types: string[] } };
+
+/** How often the panel asks the API for new chat messages and the latest shared notes. */
+const LIVE_POLL_MS = 2500;
+
+/**
+ * Chat and shared notes. Both go through the API (not peer-to-peer): they are kept with the lesson,
+ * and contact details are hidden before the other person sees them (Terms §8).
+ */
+function LivePanel({ info, otherName }: { info: ClassroomInfo; otherName: string }) {
   const t = useTranslations("classroom.live");
   const { call } = useApi();
+  const myId = info.role === "teacher" ? info.teacher.id : info.student.id;
   const [tab, setTab] = useState<"chat" | "notes">("chat");
-  const [messages, setMessages] = useState<{ id: string; text: string; mine: boolean; from: string }[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState("");
+  const [sending, setSending] = useState(false);
+  const [chatError, setChatError] = useState<string | null>(null);
+  const [warning, setWarning] = useState(false);
   const [notes, setNotes] = useState(info.notes);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
   const lastTyped = useRef(0);
+  const saving = useRef(false);
   const saveTimer = useRef<number | undefined>(undefined);
   const listRef = useRef<HTMLDivElement>(null);
+  const lastAt = useRef<string | null>(null);
 
-  const send = useAppMessage<LiveMessage>({
-    onAppMessage: useCallback((ev: { data: LiveMessage }) => {
-      const m = ev.data;
-      if (m.kind === "chat") setMessages((prev) => [...prev, { id: m.id, text: m.text, mine: false, from: m.from }]);
-      // Notes typed by the other person replace ours unless we are typing right now.
-      if (m.kind === "notes" && Date.now() - lastTyped.current > 2000) setNotes(m.text);
-    }, []),
-  });
+  const addMessages = useCallback((incoming: ChatMessage[]) => {
+    if (!incoming.length) return;
+    setMessages((prev) => {
+      const known = new Set(prev.map((m) => m.id));
+      const merged = [...prev, ...incoming.filter((m) => !known.has(m.id))];
+      return merged.sort((a, b) => a.createdAt.localeCompare(b.createdAt) || a.id.localeCompare(b.id));
+    });
+  }, []);
+
+  const poll = useCallback(() => {
+    // The cursor only moves with what a poll returned (never with our own sent message), so a message
+    // the other person sent just before ours is never skipped. The API includes `after` itself.
+    const q = lastAt.current ? `?${new URLSearchParams({ after: lastAt.current })}` : "";
+    call<Live>(`/bookings/${info.bookingId}/live${q}`)
+      .then((live) => {
+        addMessages(live.messages);
+        const newest = live.messages.reduce((a, m) => (m.createdAt > a ? m.createdAt : a), lastAt.current ?? "");
+        if (newest) lastAt.current = newest;
+        // The other person's notes replace ours unless we are typing or saving right now.
+        if (!saving.current && Date.now() - lastTyped.current > 3000) setNotes(live.notes);
+      })
+      .catch(() => undefined); // next poll will retry
+  }, [call, info.bookingId, addMessages]);
+
+  useEffect(() => {
+    poll();
+  }, [poll]);
+  usePolling(poll, LIVE_POLL_MS);
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight });
   }, [messages]);
 
-  function sendChat() {
+  async function sendChat() {
     const text = draft.trim();
-    if (!text) return;
-    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
-    send({ kind: "chat", id, text, from: meName }, "*");
-    setMessages((prev) => [...prev, { id, text, mine: true, from: meName }]);
-    setDraft("");
+    if (!text || sending) return;
+    setSending(true);
+    setChatError(null);
+    try {
+      const m = await call<ChatMessage & Screened>(`/bookings/${info.bookingId}/chat`, { method: "POST", body: JSON.stringify({ body: text }) });
+      addMessages([m]);
+      setWarning(!!m.moderation?.redacted);
+      setDraft("");
+    } catch (e) {
+      setChatError((e as Error).message || t("chatError"));
+    } finally {
+      setSending(false);
+    }
   }
 
   function editNotes(text: string) {
     setNotes(text);
     lastTyped.current = Date.now();
-    send({ kind: "notes", text }, "*");
     setSaveState("saving");
     window.clearTimeout(saveTimer.current);
     saveTimer.current = window.setTimeout(() => {
-      call(`/bookings/${info.bookingId}/notes`, { method: "PUT", body: JSON.stringify({ notes: text }) })
-        .then(() => setSaveState("saved"))
-        .catch(() => setSaveState("idle"));
+      const typedAt = lastTyped.current;
+      saving.current = true;
+      call<({ notes: string } & Screened)[]>(`/bookings/${info.bookingId}/notes`, { method: "PUT", body: JSON.stringify({ notes: text }) })
+        .then((rows) => {
+          setSaveState("saved");
+          const saved = rows[0];
+          if (saved?.moderation?.redacted) {
+            setWarning(true);
+            // Show what the other person sees, unless more was typed meanwhile.
+            if (lastTyped.current === typedAt) setNotes(saved.notes);
+          }
+        })
+        .catch(() => setSaveState("idle"))
+        .finally(() => {
+          saving.current = false;
+        });
     }, 1200);
   }
 
@@ -336,30 +391,48 @@ function LivePanel({ info, meName, otherName }: { info: ClassroomInfo; meName: s
         ))}
       </div>
 
+      {warning && (
+        <p role="alert" className="mx-3 mb-2 rounded-xl bg-orange-100 px-3 py-2 text-xs leading-normal text-orange-text">
+          {t("contactHidden")}{" "}
+          <a href="/terms#non-circumvention" target="_blank" rel="noopener" className="font-semibold underline">
+            {t("termsLink")}
+          </a>
+        </p>
+      )}
+
       {tab === "chat" ? (
         <>
           <div ref={listRef} className="flex min-h-[220px] flex-1 flex-col gap-2.5 overflow-y-auto px-4 pb-3" aria-live="polite">
             {messages.length === 0 && <p className="m-auto max-w-[240px] text-center text-sm text-muted">{t("chatEmpty")}</p>}
-            {messages.map((m) => (
-              <div
-                key={m.id}
-                className={cn(
-                  "max-w-[280px] rounded-[14px] px-3.5 py-2.5 text-sm leading-normal",
-                  m.mine ? "self-end rounded-ee-[4px] bg-navy text-white" : "self-start rounded-es-[4px] bg-beige",
-                )}
-              >
-                {!m.mine && <strong className="block text-xs text-teal-dark">{m.from}</strong>}
-                <span dir="auto" className="block whitespace-pre-wrap">
-                  {m.text}
-                </span>
-              </div>
-            ))}
+            {messages.map((m) => {
+              const mine = m.senderId === myId;
+              return (
+                <div
+                  key={m.id}
+                  className={cn(
+                    "max-w-[280px] rounded-[14px] px-3.5 py-2.5 text-sm leading-normal",
+                    mine ? "self-end rounded-ee-[4px] bg-navy text-white" : "self-start rounded-es-[4px] bg-beige",
+                  )}
+                >
+                  {!mine && <strong className="block text-xs text-teal-dark">{otherName}</strong>}
+                  <span dir="auto" className="block whitespace-pre-wrap">
+                    {m.body}
+                  </span>
+                </div>
+              );
+            })}
           </div>
+          {chatError && (
+            <p role="alert" className="mx-3 mb-2 text-xs text-danger-text">
+              {chatError}
+            </p>
+          )}
+          <p className="mx-4 mb-1.5 text-[11px] leading-snug text-muted">{t("monitored")}</p>
           <form
             className="m-3 mt-0 flex items-center gap-2 rounded-xl border border-line px-3 py-2"
             onSubmit={(e) => {
               e.preventDefault();
-              sendChat();
+              void sendChat();
             }}
           >
             <input
@@ -367,10 +440,11 @@ function LivePanel({ info, meName, otherName }: { info: ClassroomInfo; meName: s
               onChange={(e) => setDraft(e.target.value)}
               placeholder={t("chatPlaceholder", { name: otherName })}
               aria-label={t("chatPlaceholder", { name: otherName })}
+              maxLength={2000}
               className="min-w-0 flex-1 bg-transparent text-sm placeholder:text-muted focus:outline-none"
               dir="auto"
             />
-            <button type="submit" aria-label={t("send")} className="flex size-9 items-center justify-center rounded-full bg-teal-dark text-white">
+            <button type="submit" disabled={sending} aria-label={t("send")} className="flex size-9 items-center justify-center rounded-full bg-teal-dark text-white disabled:opacity-60">
               <LocalIcon name="send" size={16} />
             </button>
           </form>
@@ -382,6 +456,7 @@ function LivePanel({ info, meName, otherName }: { info: ClassroomInfo; meName: s
             onChange={(e) => editNotes(e.target.value)}
             placeholder={t("notesPlaceholder")}
             aria-label={t("tabs.notes")}
+            maxLength={20000}
             dir="auto"
             className="min-h-[240px] flex-1 resize-none rounded-xl border border-line p-3 text-sm leading-relaxed focus:border-teal-dark focus:outline-none"
           />

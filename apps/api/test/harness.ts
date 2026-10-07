@@ -17,6 +17,7 @@ import request from "supertest";
 import { AppModule } from "../src/app.module";
 import { DB } from "../src/db/db";
 import * as schema from "../src/db/schema";
+import { TERMS_VERSION } from "../src/domain/terms";
 import { CLOCK } from "../src/common/clock";
 import { StripeService } from "../src/integrations/stripe.service";
 import { DailyService } from "../src/integrations/daily.service";
@@ -80,14 +81,14 @@ export async function createTestApp(opts: { stripe?: Record<string, unknown>; da
 
   /** Active admin. */
   async function seedAdmin(clerkId = "clerk_admin") {
-    const [u] = await db.insert(schema.users).values({ clerkId, role: "admin", status: "active", email: `${clerkId}@amerivo.test`, firstName: "Ada", lastName: "Admin" }).returning();
+    const [u] = await db.insert(schema.users).values({ clerkId, role: "admin", status: "active", email: `${clerkId}@amerivo.test`, firstName: "Ada", lastName: "Admin", termsVersion: TERMS_VERSION }).returning();
     return u;
   }
   /** Active student with a student profile. */
   async function seedStudent(clerkId: string, p: Partial<typeof schema.users.$inferInsert> = {}) {
     const [u] = await db
       .insert(schema.users)
-      .values({ clerkId, role: "student", status: "active", email: `${clerkId}@example.com`, firstName: "Stu", lastName: "Dent", timezone: "Europe/Zurich", ...p })
+      .values({ clerkId, role: "student", status: "active", email: `${clerkId}@example.com`, firstName: "Stu", lastName: "Dent", timezone: "Europe/Zurich", termsVersion: TERMS_VERSION, ...p })
       .returning();
     await db.insert(schema.studentProfiles).values({ userId: u.id });
     return u;
@@ -97,7 +98,7 @@ export async function createTestApp(opts: { stripe?: Record<string, unknown>; da
     const { firstName = "Tea", ...profile } = p;
     const [u] = await db
       .insert(schema.users)
-      .values({ clerkId, role: "teacher", status: "active", email: `${clerkId}@amerivo.test`, firstName, lastName: "Cher", timezone: "America/Chicago" })
+      .values({ clerkId, role: "teacher", status: "active", email: `${clerkId}@amerivo.test`, firstName, lastName: "Cher", timezone: "America/Chicago", termsVersion: TERMS_VERSION })
       .returning();
     await db.insert(schema.teacherProfiles).values({
       userId: u.id,
