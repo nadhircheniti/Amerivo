@@ -89,7 +89,12 @@
       "unsaved": "You have unsaved changes.",
       "emptyWarning": "No open slots yet: students can't book you until you open some.",
       "misaligned": "Some of your saved times don't start or end on the hour. When you save, only the whole hours shown in the grid are kept.",
-      "saveError": "Couldn't save your availability. Please try again."
+      "saveError": "Couldn't save your availability. Please try again.",
+      "saveTimeZone": "Save time zone",
+      "useDeviceTimeZone": "Use this device's time zone ({tz})",
+      "timeZoneHint": "Your weekly hours are in this time zone. Students always see them converted to their own.",
+      "timeZoneSaved": "Time zone saved.",
+      "timeZoneError": "Couldn't save your time zone. Please try again."
     },
     "blocked": {
       "title": "Blocked dates",
@@ -324,7 +329,8 @@
     "noNotifications": "No notifications yet.",
     "noStudents": "Your students will appear here after their first booking.",
     "recentStudents": "Recent students",
-    "moreStudents": "{count, plural, one {and # more student} other {and # more students}}"
+    "moreStudents": "{count, plural, one {and # more student} other {and # more students}}",
+    "studentTime": "{name}: {time} ({city})"
   },
   "students": {
     "metaTitle": "Students · Amerivo English",

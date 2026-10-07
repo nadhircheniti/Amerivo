@@ -413,7 +413,8 @@
     "timeZoneNote": "时间按你所在的时区显示（{tz}）。",
     "classroom": "进入课堂",
     "emptyTeacher": "暂无即将开始的课程。新的预约会显示在这里。",
-    "opensAt": "{time} 开放"
+    "opensAt": "{time} 开放",
+    "otherTime": "{name}：{time} {zone}"
   },
   "messages": {
     "metaTitle": "消息",

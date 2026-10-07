@@ -89,7 +89,12 @@
       "unsaved": "Vous avez des modifications non enregistrées.",
       "emptyWarning": "Aucun créneau ouvert : les élèves ne peuvent pas vous réserver tant que vous n'en ouvrez pas.",
       "misaligned": "Certains de vos horaires enregistrés ne commencent ou ne finissent pas à l'heure pile. À l'enregistrement, seules les heures entières affichées dans la grille sont conservées.",
-      "saveError": "Impossible d'enregistrer vos disponibilités. Veuillez réessayer."
+      "saveError": "Impossible d'enregistrer vos disponibilités. Veuillez réessayer.",
+      "saveTimeZone": "Enregistrer le fuseau horaire",
+      "useDeviceTimeZone": "Utiliser le fuseau de cet appareil ({tz})",
+      "timeZoneHint": "Vos horaires hebdomadaires sont dans ce fuseau. Les élèves les voient toujours convertis dans le leur.",
+      "timeZoneSaved": "Fuseau horaire enregistré.",
+      "timeZoneError": "Impossible d’enregistrer votre fuseau horaire. Veuillez réessayer."
     },
     "blocked": {
       "title": "Dates bloquées",
@@ -324,7 +329,8 @@
     "noNotifications": "Aucune notification pour l'instant.",
     "noStudents": "Vos élèves apparaîtront ici après leur première réservation.",
     "recentStudents": "Élèves récents",
-    "moreStudents": "{count, plural, one {et # autre élève} other {et # autres élèves}}"
+    "moreStudents": "{count, plural, one {et # autre élève} other {et # autres élèves}}",
+    "studentTime": "{name} : {time} ({city})"
   },
   "students": {
     "metaTitle": "Élèves · Amerivo English",

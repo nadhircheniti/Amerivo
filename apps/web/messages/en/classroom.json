@@ -101,6 +101,9 @@
     "chatError": "Your message couldn't be sent. Try again.",
     "contactHidden": "Contact details (e-mail, phone, links, social media) were hidden. Sharing them is not allowed on Amerivo.",
     "termsLink": "Read the rules",
-    "monitored": "Chat and notes are kept with the lesson and checked for safety. Never share personal contact details."
+    "monitored": "Chat and notes are kept with the lesson and checked for safety. Never share personal contact details.",
+    "endingSoon": "{count, plural, one {The lesson ends in # minute} other {The lesson ends in # minutes}} ({time}).",
+    "endingSoonTeacher": "{count, plural, one {The lesson ends in # minute} other {The lesson ends in # minutes}} ({time}). You'll write the report right after.",
+    "cancel": "Cancel"
   }
 }

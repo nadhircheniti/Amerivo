@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/form";
 import { Avatar, Badge } from "@/components/ui/primitives";
 import { intlTags, type Locale } from "@/i18n/config";
 import { API_URL } from "@/lib/api";
+import { zoneAbbrev } from "@/lib/time-zone";
+import { useSpaceTimeZone } from "@/lib/use-time-zone";
 import { cn } from "@/lib/cn";
 import { countryCodeOf } from "@/lib/countries";
 import { useApi } from "@/lib/use-api";
@@ -63,6 +65,8 @@ function StudentsView({ rows, loadDetail }: { rows: StudentRow[]; loadDetail: (i
   const t = useTranslations("teacher.students");
   const locale = useLocale() as Locale;
   const tag = intlTags[locale];
+  // Lessons are shown in the teacher's own zone (their profile), like on the dashboard.
+  const tz = useSpaceTimeZone();
   const country = useCountryName();
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
@@ -70,7 +74,10 @@ function StudentsView({ rows, loadDetail }: { rows: StudentRow[]; loadDetail: (i
   const opener = useRef<HTMLElement | null>(null);
 
   const date = (iso: string | null, withTime = false) =>
-    iso ? new Intl.DateTimeFormat(tag, { month: "short", day: "numeric", ...(withTime ? { hour: "2-digit", minute: "2-digit", hour12: false } : {}), ...(API_URL ? {} : { timeZone: "UTC" }) }).format(new Date(iso)) : "—";
+    iso
+      ? new Intl.DateTimeFormat(tag, { month: "short", day: "numeric", ...(withTime ? { hour: "2-digit", minute: "2-digit", hour12: false } : {}), timeZone: API_URL ? tz : "UTC" }).format(new Date(iso)) +
+        (withTime && API_URL ? ` ${zoneAbbrev(tz, iso)}` : "")
+      : "—";
 
   const active = rows.filter((r) => r.upcoming > 0).length;
   const q = query.trim().toLowerCase();

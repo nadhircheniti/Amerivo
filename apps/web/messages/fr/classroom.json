@@ -101,6 +101,9 @@
     "chatError": "Votre message n'a pas pu être envoyé. Réessayez.",
     "contactHidden": "Des coordonnées (e-mail, téléphone, liens, réseaux sociaux) ont été masquées. Leur partage n'est pas autorisé sur Amerivo.",
     "termsLink": "Lire les règles",
-    "monitored": "Le chat et les notes sont conservés avec le cours et contrôlés pour la sécurité de tous. Ne partagez jamais vos coordonnées personnelles."
+    "monitored": "Le chat et les notes sont conservés avec le cours et contrôlés pour la sécurité de tous. Ne partagez jamais vos coordonnées personnelles.",
+    "endingSoon": "{count, plural, one {Le cours se termine dans # minute} other {Le cours se termine dans # minutes}} ({time}).",
+    "endingSoonTeacher": "{count, plural, one {Le cours se termine dans # minute} other {Le cours se termine dans # minutes}} ({time}). Vous rédigerez le rapport juste après.",
+    "cancel": "Annuler"
   }
 }

@@ -413,7 +413,8 @@
     "timeZoneNote": "الأوقات معروضة حسب منطقتك الزمنية ({tz}).",
     "classroom": "الفصل الافتراضي",
     "emptyTeacher": "لا توجد دروس قادمة بعد. ستظهر الحجوزات الجديدة هنا.",
-    "opensAt": "يفتح في {time}"
+    "opensAt": "يفتح في {time}",
+    "otherTime": "{name}: {time} {zone}"
   },
   "messages": {
     "metaTitle": "الرسائل",
