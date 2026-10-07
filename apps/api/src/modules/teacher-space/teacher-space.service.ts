@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { and, asc, desc, eq, gte, inArray, isNull, lt, notInArray, sql } from "drizzle-orm";
+import { and, or, asc, desc, eq, gte, inArray, isNull, lt, notInArray, sql } from "drizzle-orm";
 import { DateTime } from "luxon";
 import { DB, type Db } from "../../db/db";
 import { bookings, earnings, lessonPackages, lessonReports, lessons, notifications, payouts, studentProfiles, teacherProfiles, users } from "../../db/schema";
@@ -25,9 +25,14 @@ const studentColumns = {
   lastName: users.lastName,
   country: users.country,
   avatarUrl: users.avatarUrl,
+  /** The student's own time zone: the teacher sees the lesson time on both sides. */
+  timezone: users.timezone,
   level: studentProfiles.cefrLevel,
   goal: studentProfiles.goal,
 };
+
+/** A lesson is "upcoming" until its planned end (start + duration), so one in progress stays listed. */
+const notOverSql = (nowIso: string) => sql`(${bookings.startsAt} + ${bookings.durationMin} * interval '1 minute') > ${nowIso}::timestamptz`;
 
 @Injectable()
 export class TeacherSpaceService {
@@ -111,8 +116,8 @@ export class TeacherSpaceService {
 
     const [counts] = await this.db
       .select({
-        upcoming: sql<number>`count(*) filter (where ${bookings.status} = 'confirmed' and ${bookings.startsAt} >= ${nowIso}::timestamptz)::int`,
-        nextAt: sql<unknown>`min(${bookings.startsAt}) filter (where ${bookings.status} = 'confirmed' and ${bookings.startsAt} >= ${nowIso}::timestamptz)`,
+        upcoming: sql<number>`count(*) filter (where ${bookings.status} = 'confirmed' and ${notOverSql(nowIso)})::int`,
+        nextAt: sql<unknown>`min(${bookings.startsAt}) filter (where ${bookings.status} = 'confirmed' and ${notOverSql(nowIso)})`,
         active: sql<number>`count(distinct ${bookings.studentId}) filter (where ${bookings.status} in ('confirmed','completed','no_show') and ${bookings.startsAt} >= ${new Date(now.getTime() - 30 * 86_400_000).toISOString()}::timestamptz)::int`,
         total: sql<number>`count(distinct ${bookings.studentId}) filter (where ${bookings.status} in ('confirmed','completed','no_show'))::int`,
         monthLessons: sql<number>`count(*) filter (where ${bookings.startsAt} >= ${monthStart.toISOString()}::timestamptz and ${bookings.startsAt} < ${monthEnd.toISOString()}::timestamptz and ${bookings.status} <> 'pending_payment')::int`,
@@ -146,10 +151,17 @@ export class TeacherSpaceService {
     const reportRows = await this.db
       .select({ bookingId: bookings.id, startsAt: bookings.startsAt, status: bookings.status, student: { id: users.id, firstName: users.firstName, lastName: users.lastName } })
       .from(bookings)
-      .innerJoin(lessons, eq(lessons.bookingId, bookings.id))
+      .leftJoin(lessons, eq(lessons.bookingId, bookings.id))
       .leftJoin(lessonReports, eq(lessonReports.lessonId, lessons.id))
       .innerJoin(users, eq(users.id, bookings.studentId))
-      .where(and(eq(bookings.teacherId, teacherId), inArray(bookings.status, [...DONE]), isNull(lessonReports.id)))
+      .where(
+        and(
+          eq(bookings.teacherId, teacherId),
+          isNull(lessonReports.id),
+          // Ended lessons, and lessons whose time is over but that weren't ended (the report page ends them).
+          or(inArray(bookings.status, [...DONE]), and(eq(bookings.status, "confirmed"), sql`not ${notOverSql(nowIso)}`)),
+        ),
+      )
       .orderBy(desc(bookings.startsAt))
       .limit(20);
 
@@ -212,8 +224,8 @@ export class TeacherSpaceService {
         ...studentColumns,
         lessonsCompleted: sql<number>`count(*) filter (where ${bookings.status} = 'completed')::int`,
         minutes: sql<number>`coalesce(sum(${bookings.durationMin}) filter (where ${bookings.status} = 'completed'),0)::int`,
-        upcoming: sql<number>`count(*) filter (where ${bookings.status} = 'confirmed' and ${bookings.startsAt} >= ${nowIso}::timestamptz)::int`,
-        nextLessonAt: sql<unknown>`min(${bookings.startsAt}) filter (where ${bookings.status} = 'confirmed' and ${bookings.startsAt} >= ${nowIso}::timestamptz)`,
+        upcoming: sql<number>`count(*) filter (where ${bookings.status} = 'confirmed' and ${notOverSql(nowIso)})::int`,
+        nextLessonAt: sql<unknown>`min(${bookings.startsAt}) filter (where ${bookings.status} = 'confirmed' and ${notOverSql(nowIso)})`,
         lastLessonAt: sql<unknown>`max(${bookings.startsAt}) filter (where ${bookings.status} in ('completed','no_show'))`,
         firstBookedAt: sql<unknown>`min(${bookings.createdAt})`,
         hadTrial: sql<boolean>`bool_or(${bookings.type} = 'trial')`,
@@ -222,7 +234,7 @@ export class TeacherSpaceService {
       .innerJoin(users, eq(users.id, bookings.studentId))
       .leftJoin(studentProfiles, eq(studentProfiles.userId, bookings.studentId))
       .where(and(eq(bookings.teacherId, teacherId), inArray(bookings.status, [...TAUGHT])))
-      .groupBy(users.id, users.firstName, users.lastName, users.country, users.avatarUrl, studentProfiles.cefrLevel, studentProfiles.goal);
+      .groupBy(users.id, users.firstName, users.lastName, users.country, users.avatarUrl, users.timezone, studentProfiles.cefrLevel, studentProfiles.goal);
     const packs = await this.packagesLeft(teacherId);
     return rows
       .map(({ minutes, ...r }) => ({
@@ -281,13 +293,14 @@ export class TeacherSpaceService {
       .limit(200);
     if (!list.some((l) => (TAUGHT as readonly string[]).includes(l.status))) throw notFound("Student");
     const [student] = await this.db
-      .select({ ...studentColumns, nativeLanguage: users.nativeLanguage, timezone: users.timezone, placementScores: studentProfiles.placementScores })
+      .select({ ...studentColumns, nativeLanguage: users.nativeLanguage, placementScores: studentProfiles.placementScores })
       .from(users)
       .leftJoin(studentProfiles, eq(studentProfiles.userId, users.id))
       .where(eq(users.id, studentId));
     const now = this.clock.now().getTime();
     const completed = list.filter((l) => l.status === "completed");
-    const upcoming = list.filter((l) => l.status === "confirmed" && l.startsAt.getTime() >= now);
+    // A lesson in progress still counts as upcoming until its planned end.
+    const upcoming = list.filter((l) => l.status === "confirmed" && l.startsAt.getTime() + l.durationMin * 60_000 > now);
     return {
       student,
       lessonsCompleted: completed.length,

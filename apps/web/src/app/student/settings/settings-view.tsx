@@ -3,12 +3,13 @@
 import { useClerk } from "@clerk/nextjs";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
+import { useCallback, useState } from "react";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { Button } from "@/components/ui/button";
-import { Field, Input, Select } from "@/components/ui/form";
+import { Field, Input } from "@/components/ui/form";
 import { CountrySelect, LanguageSelect } from "@/components/ui/geo-selects";
 import { Icon } from "@/components/ui/icon";
+import { TimeZoneSelect } from "@/components/ui/time-zone-select";
 import { ApiError, API_URL } from "@/lib/api";
 import { clerkEnabled } from "@/lib/auth-config";
 import { useApi } from "@/lib/use-api";
@@ -18,8 +19,6 @@ import { demoProfile } from "../_lib/demo";
 import type { Profile } from "../_lib/types";
 import { useStudentData } from "../_lib/use-student-data";
 
-const noop = () => () => {};
-const useIsBrowser = () => useSyncExternalStore(noop, () => true, () => false);
 
 /** Signs out after the account is deleted (Clerk when enabled; otherwise just leaves the space). */
 const useSignOutHome = clerkEnabled
@@ -55,29 +54,6 @@ export function SettingsView() {
         )}
       </Loadable>
     </div>
-  );
-}
-
-function TimeZoneSelect({ value, onChange, id }: { value: string; onChange: (v: string) => void; id?: string }) {
-  const browser = useIsBrowser();
-  const zones = useMemo(() => {
-    if (!browser) return [value];
-    let list: string[] = [];
-    try {
-      list = Intl.supportedValuesOf("timeZone");
-    } catch {
-      list = [];
-    }
-    return list.includes(value) ? list : [value, ...list];
-  }, [browser, value]);
-  return (
-    <Select id={id} value={value} onChange={(e) => onChange(e.target.value)}>
-      {zones.map((z) => (
-        <option key={z} value={z}>
-          {z.replace(/_/g, " ")}
-        </option>
-      ))}
-    </Select>
   );
 }
 

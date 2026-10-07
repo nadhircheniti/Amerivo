@@ -1,8 +1,12 @@
 /** Default and maximum number of minutes the classroom opens before the lesson starts. */
 export const CLASSROOM_EARLY_DEFAULT_MIN = 5;
 export const CLASSROOM_EARLY_MAX_MIN = 15;
-/** The classroom stays open this long after the planned end (overrun, report, reconnection). */
-export const CLASSROOM_LATE_MIN = 30;
+/**
+ * Minutes the classroom stays open after the planned end: none. A 50-minute lesson ends at minute
+ * 50 for both people (Amerivo's rule); the classroom warns 5 minutes before (web). The teacher
+ * writes the report afterwards from their dashboard.
+ */
+export const CLASSROOM_LATE_MIN = 0;
 
 /**
  * How early the classroom (join link + video room) opens before the lesson: 5 minutes by default,

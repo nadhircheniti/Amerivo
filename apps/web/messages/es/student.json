@@ -413,7 +413,8 @@
     "timeZoneNote": "Horarios mostrados en tu zona horaria ({tz}).",
     "classroom": "Aula",
     "emptyTeacher": "Aún no hay clases próximas. Las nuevas reservas aparecerán aquí.",
-    "opensAt": "Abre a las {time}"
+    "opensAt": "Abre a las {time}",
+    "otherTime": "{name}: {time} {zone}"
   },
   "messages": {
     "metaTitle": "Mensajes",

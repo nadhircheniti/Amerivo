@@ -32,6 +32,11 @@ const isUniqueViolation = (e: unknown) => {
   return err?.code === PG_UNIQUE_VIOLATION || err?.cause?.code === PG_UNIQUE_VIOLATION;
 };
 
+/** End of the lesson (start + duration), in SQL. */
+const endsAtSql = sql`(${bookings.startsAt} + ${bookings.durationMin} * interval '1 minute')`;
+/** Booked or being paid, and not over yet (same rule as the student space). */
+const isUpcoming = (now: Date) => and(inArray(bookings.status, ["pending_payment", "confirmed"]), sql`${endsAtSql} > ${now}`)!;
+
 @Injectable()
 export class BookingsService {
   private readonly log = new Logger(BookingsService.name);
@@ -474,13 +479,23 @@ export class BookingsService {
     const other = user.role === "teacher" ? bookings.studentId : bookings.teacherId;
     const now = this.clock.now();
     const rows = await this.db
-      .select({ ...getTableColumns(bookings), withFirstName: users.firstName, withLastName: users.lastName })
+      .select({
+        ...getTableColumns(bookings),
+        withFirstName: users.firstName,
+        withLastName: users.lastName,
+        // The other person's time zone (the student's account / the teacher's teaching profile), so
+        // each side can see the lesson time for both.
+        withTimezone: user.role === "teacher" ? users.timezone : teacherProfiles.timezone,
+      })
       .from(bookings)
       .leftJoin(users, eq(users.id, other))
+      .leftJoin(teacherProfiles, eq(teacherProfiles.userId, bookings.teacherId))
       .where(
         and(
           eq(col, user.id),
-          scope === "upcoming" ? and(gte(bookings.startsAt, now), inArray(bookings.status, ["pending_payment", "confirmed"])) : sql`${bookings.startsAt} < ${now}`,
+          // A lesson stays "upcoming" until its planned end, so the classroom button is still there
+          // for someone who arrives after the start (QA: the teacher couldn't find "Join").
+          scope === "upcoming" ? isUpcoming(now) : sql`not (${isUpcoming(now)}) and ${bookings.startsAt} < ${now}`,
         ),
       )
       .orderBy(bookings.startsAt)

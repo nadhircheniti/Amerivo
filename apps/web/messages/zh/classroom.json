@@ -101,6 +101,9 @@
     "chatError": "消息发送失败，请重试。",
     "contactHidden": "联系方式（邮箱、电话、链接、社交媒体）已被隐藏。Amerivo 禁止分享联系方式。",
     "termsLink": "查看规则",
-    "monitored": "聊天和笔记会随课程保存并接受安全检查。切勿分享个人联系方式。"
+    "monitored": "聊天和笔记会随课程保存并接受安全检查。切勿分享个人联系方式。",
+    "endingSoon": "课程将在 {count} 分钟后结束（{time}）。",
+    "endingSoonTeacher": "课程将在 {count} 分钟后结束（{time}）。结束后请立即填写课程报告。",
+    "cancel": "取消"
   }
 }

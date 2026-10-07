@@ -15,7 +15,7 @@ import {
   useScreenShare,
   useVideoTrack,
 } from "@daily-co/daily-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Icon } from "@/components/ui/icon";
@@ -23,6 +23,8 @@ import { LogoMark } from "@/components/ui/logo";
 import { cn } from "@/lib/cn";
 import { useApi } from "@/lib/use-api";
 import { ElapsedTimer } from "../_components/elapsed-timer";
+import { classroomPhase } from "../_components/lesson-clock";
+import { intlTags, type Locale } from "@/i18n/config";
 import { LocalIcon } from "../_components/local-icons";
 import { usePolling } from "@/components/messaging/use-polling";
 import { ReportButton } from "@/components/safety/report-button";
@@ -77,7 +79,12 @@ function Room({ info }: { info: ClassroomInfo }) {
   const [deviceError, setDeviceError] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const [ending, setEnding] = useState(false);
+  /** "End lesson" asks for confirmation in the page (window.confirm can be blocked by the browser). */
+  const [confirming, setConfirming] = useState(false);
   const everJoined = useRef(false);
+  /** Set when this page leaves the call itself, so "left-meeting" isn't treated as being removed. */
+  const leaving = useRef(false);
+  const tag = intlTags[useLocale() as Locale];
 
   const isTeacher = info.role === "teacher";
   const other = isTeacher ? info.student : info.teacher;
@@ -108,23 +115,65 @@ function Room({ info }: { info: ClassroomInfo }) {
   );
 
   const started = now >= new Date(info.startsAt).getTime();
+  const startMs = new Date(info.startsAt).getTime();
+  const endMs = startMs + info.durationMin * 60_000;
+  const phase = classroomPhase(now, startMs, info.durationMin);
+  const endLabel = new Intl.DateTimeFormat(tag, { hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(endMs);
+  const minutesLeft = Math.max(1, Math.ceil((endMs - now) / 60_000));
+  const reportHref = `/teacher/lessons/${info.bookingId}/report`;
+  const afterHref = isTeacher ? "/teacher" : `/student/lessons/${info.bookingId}`;
+
+  /** Leaves the video call without ever blocking the page (Daily may not answer on a bad network). */
+  const leaveCall = useCallback(async () => {
+    leaving.current = true;
+    if (!daily) return;
+    await Promise.race([daily.leave().catch(() => undefined), new Promise((resolve) => window.setTimeout(resolve, 4_000))]);
+  }, [daily]);
+
+  /** Teacher: records the lesson as given (or the student absent), closes the call for both, then the report. */
+  async function endLesson() {
+    setConfirming(false);
+    setEnding(true);
+    try {
+      await call(`/bookings/${info.bookingId}/complete`, { method: "POST", body: JSON.stringify({ attendance: everJoined.current ? "attended" : "no_show" }) });
+    } catch {
+      // Already completed or not allowed: the report page shows the right state (and ends it if needed).
+    }
+    try {
+      // The teacher owns the room: the student is taken out of the call too.
+      daily?.updateParticipants({ "*": { eject: true } });
+    } catch {
+      /* not in the call any more */
+    }
+    await leaveCall();
+    router.push(reportHref);
+  }
 
   async function leave() {
-    setEnding(true);
-    if (isTeacher && Date.now() >= new Date(info.startsAt).getTime()) {
-      if (!window.confirm(t("endConfirm"))) return setEnding(false);
-      try {
-        await call(`/bookings/${info.bookingId}/complete`, { method: "POST", body: JSON.stringify({ attendance: everJoined.current ? "attended" : "no_show" }) });
-      } catch {
-        // Already completed or not allowed: the report page shows the right state.
-      }
-      await daily?.leave();
-      router.push(`/teacher/lessons/${info.bookingId}/report`);
+    if (isTeacher && started) {
+      setConfirming(true);
       return;
     }
-    await daily?.leave();
-    router.push(isTeacher ? "/teacher" : "/student");
+    setEnding(true);
+    await leaveCall();
+    router.push(afterHref);
   }
+
+  // Removed from the call (the teacher ended the lesson, or the room expired): go on without waiting.
+  useDailyEvent(
+    "left-meeting",
+    useCallback(() => {
+      if (leaving.current) return;
+      leaving.current = true;
+      router.push(isTeacher ? reportHref : afterHref);
+    }, [router, isTeacher, reportHref, afterHref]),
+  );
+
+  // The lesson ends at its planned end (minute 50): both leave, the teacher goes to the report.
+  useEffect(() => {
+    if (phase !== "closed" || leaving.current) return;
+    void leaveCall().then(() => router.push(isTeacher ? reportHref : afterHref));
+  }, [phase, leaveCall, router, isTeacher, reportHref, afterHref]);
 
   const status = meeting === "joined-meeting" ? (threshold === "good" ? "good" : "poor") : meeting === "error" ? "error" : "connecting";
 
@@ -146,6 +195,12 @@ function Room({ info }: { info: ClassroomInfo }) {
 
       <div className="flex flex-1 flex-col gap-4 px-3 pt-4 sm:px-4 lg:min-h-0 lg:flex-row">
         <div className="flex min-w-0 flex-1 flex-col gap-3 lg:min-h-0">
+          {phase === "endingSoon" && (
+            <p role="alert" className="flex items-center gap-3 rounded-2xl bg-yellow/15 px-5 py-3 text-sm font-semibold text-yellow">
+              <Icon name="clock" size={18} className="shrink-0" />
+              {t(isTeacher ? "endingSoonTeacher" : "endingSoon", { count: minutesLeft, time: endLabel })}
+            </p>
+          )}
           {(deviceError || notice) && (
             <p role="alert" className="rounded-2xl bg-orange/15 px-5 py-3 text-sm text-orange">
               {deviceError ? t("deviceError") : notice}
@@ -169,6 +224,20 @@ function Room({ info }: { info: ClassroomInfo }) {
               {localId && <SmallTile sessionId={localId} name={t("you")} local />}
             </div>
           </section>
+
+          {confirming && (
+            <div role="alertdialog" aria-labelledby="end-confirm-text" className="flex flex-wrap items-center justify-center gap-3 rounded-2xl bg-white/8 px-5 py-4">
+              <p id="end-confirm-text" className="min-w-0 flex-1 text-[15px]">
+                {t("endConfirm")}
+              </p>
+              <button type="button" autoFocus onClick={() => void endLesson()} className="rounded-full bg-danger px-5 py-2.5 font-semibold text-white hover:bg-[#a93226]">
+                {tc("endLesson")}
+              </button>
+              <button type="button" onClick={() => setConfirming(false)} className="rounded-full px-4 py-2.5 font-semibold text-ink-soft hover:bg-white/8 hover:text-white">
+                {t("cancel")}
+              </button>
+            </div>
+          )}
 
           <div role="toolbar" aria-label={tc("toolbar")} className="flex min-h-[92px] shrink-0 flex-wrap items-center justify-center gap-3 py-3">
             <Toggle label={micOff ? t("micOn") : t("micOff")} pressed={micOff} onClick={() => daily?.setLocalAudio(micOff)}>

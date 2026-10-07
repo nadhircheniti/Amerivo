@@ -2,13 +2,16 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { usePolling } from "@/components/messaging/use-polling";
 import { Icon } from "@/components/ui/icon";
 import { ButtonLink } from "@/components/ui/button";
 import { Badge } from "@/components/ui/primitives";
 import { intlTags, type Locale } from "@/i18n/config";
 import { API_URL } from "@/lib/api";
 import { useApi } from "@/lib/use-api";
+import { sameClock, timeIn, zoneAbbrev, zoneCity } from "@/lib/time-zone";
+import { useSpaceTimeZone } from "@/lib/use-time-zone";
 
 type ApiBooking = {
   id: string;
@@ -18,6 +21,8 @@ type ApiBooking = {
   durationMin: number;
   withFirstName: string | null;
   withLastName: string | null;
+  /** The other person's time zone (older API versions don't send it). */
+  withTimezone?: string | null;
   /** When the classroom opens / closes (older API versions don't send them). */
   opensAt?: string;
   closesAt?: string;
@@ -42,19 +47,30 @@ export function LiveLessons({ forTeacher = false }: { forTeacher?: boolean } = {
   const tc = useTranslations("common");
   const locale = useLocale() as Locale;
 
+  const ready = !!API_URL && isLoaded && !!isSignedIn;
+  const loaded = useRef(false);
+  const load = useCallback(
+    () =>
+      call<ApiBooking[]>("/bookings").then(
+        (rows) => {
+          loaded.current = true;
+          setItems(rows);
+          setFailed(false);
+        },
+        // A failed refresh keeps the list already shown (the server may be waking up).
+        () => !loaded.current && setFailed(true),
+      ),
+    [call],
+  );
   useEffect(() => {
-    if (!API_URL || !isLoaded || !isSignedIn) return;
-    let cancelled = false;
-    call<ApiBooking[]>("/bookings")
-      .then((rows) => !cancelled && (setItems(rows), setFailed(false)))
-      .catch(() => !cancelled && setFailed(true));
-    return () => {
-      cancelled = true;
-    };
-  }, [call, isLoaded, isSignedIn]);
+    if (ready) void load();
+  }, [ready, load]);
+  // New bookings and lessons that start appear without reloading the page.
+  usePolling(() => void load(), 60_000, ready);
 
+  // Same zone as the rest of the space: the teacher's profile zone / the student's account zone.
+  const tz = useSpaceTimeZone();
   if (!API_URL) return null;
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const fmtDay = new Intl.DateTimeFormat(intlTags[locale], {
     weekday: "short",
     month: "short",
@@ -93,8 +109,15 @@ export function LiveLessons({ forTeacher = false }: { forTeacher?: boolean } = {
                   <span className="text-[15px]">
                     <bdi dir="ltr">
                       {fmtTime.format(new Date(b.startsAt))}–{fmtTime.format(new Date(new Date(b.startsAt).getTime() + b.durationMin * 60_000))}
-                    </bdi>
+                    </bdi>{" "}
+                    {/* Zone name as on the lesson's date: EDT/EST, GMT+2/GMT+1… */}
+                    <span className="text-[13px] text-muted">{zoneAbbrev(tz, b.startsAt)}</span>
                   </span>
+                  {b.withTimezone && b.withFirstName && !sameClock(b.startsAt, tz, b.withTimezone) && (
+                    <span className="text-[13px] text-muted">
+                      {t("otherTime", { time: timeIn(b.startsAt, b.withTimezone, intlTags[locale]), zone: zoneAbbrev(b.withTimezone, b.startsAt), name: b.withFirstName, city: zoneCity(b.withTimezone) })}
+                    </span>
+                  )}
                   <span className="text-[15px] text-navy-soft">{name ? t(`withName.${b.type}`, { name }) : t(`withYourTeacher.${b.type}`)}</span>
                   <Badge tone={b.status === "confirmed" ? "success" : "warning"} className="ms-auto">
                     {t(`status.${b.status}`)}
@@ -113,7 +136,7 @@ export function LiveLessons({ forTeacher = false }: { forTeacher?: boolean } = {
             })}
           </ul>
         )}
-        <p className="text-xs text-muted">{t("timeZoneNote", { tz })}</p>
+        <p className="text-xs text-muted">{t("timeZoneNote", { tz: `${zoneCity(tz)} (${zoneAbbrev(tz)})` })}</p>
       </section>
     </>
   );

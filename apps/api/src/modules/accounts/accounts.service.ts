@@ -100,10 +100,13 @@ export class AccountsService {
     return u;
   }
 
-  /** The account, plus the teacher's application status (draft, pending, approved…) for teachers. */
+  /**
+   * The account, plus for teachers their application status (draft, pending, approved…) and the
+   * time zone of their teaching profile — the one their availability and lessons are shown in.
+   */
   private withTeacherStatus(userId: string) {
     return this.db
-      .select({ ...getTableColumns(users), teacherStatus: teacherProfiles.status })
+      .select({ ...getTableColumns(users), teacherStatus: teacherProfiles.status, teacherTimezone: teacherProfiles.timezone })
       .from(users)
       .leftJoin(teacherProfiles, eq(teacherProfiles.userId, users.id))
       .where(eq(users.id, userId));

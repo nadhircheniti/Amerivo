@@ -65,9 +65,19 @@ describe("teacher space", () => {
     await h.http().get("/api/teacher/students").expect(401);
   });
 
+  it("GET /me gives a teacher the time zone of their teaching profile", async () => {
+    const { body } = await h.http().get("/api/me").set(h.as("clerk_ts_t")).expect(200);
+    assert.equal(body.teacherTimezone, "America/Chicago");
+    const student = await h.http().get("/api/me").set(h.as("clerk_ts_alice")).expect(200);
+    assert.equal(student.body.teacherTimezone, null);
+  });
+
   it("overview: today in the teacher's time zone, key figures, reports to write", async () => {
+    await h.db.update(h.schema.users).set({ timezone: "Europe/Zurich" }).where(eq(h.schema.users.id, alice.id));
     const { body } = await h.http().get("/api/teacher/overview").set(h.as("clerk_ts_t")).expect(200);
     assert.equal(body.timezone, "America/Chicago");
+    // The student's own time zone, so the teacher sees the lesson time on both sides.
+    assert.equal(body.today[0].student.timezone, "Europe/Zurich");
     assert.equal(body.today.length, 1);
     const l = body.today[0];
     assert.equal(l.bookingId, ids.today);
@@ -106,6 +116,7 @@ describe("teacher space", () => {
     assert.equal(a.upcoming, 1);
     assert.equal(a.country, "France");
     assert.equal(a.level, "B1");
+    assert.equal(a.timezone, "Europe/Zurich");
     assert.equal(new Date(a.lastLessonAt).toISOString(), "2026-10-07T16:00:00.000Z");
     assert.equal(body[1].packageRemaining, 4);
     assert.equal(body[1].hadTrial, true);
@@ -215,5 +226,39 @@ describe("teacher space", () => {
     assert.deepEqual(s1.body, { connected: true, detailsSubmitted: true, payoutsEnabled: true, requirementsDue: 0, destination: { name: "CHASE", last4: "4821" } });
     const dash = await h.http().post("/api/teacher/payouts/dashboard").set(N).expect(201);
     assert.equal(dash.body.url, "https://connect.stripe.test/dashboard");
+  });
+
+  it("a lesson that has started stays in the upcoming list (with its classroom button) until its planned end", async () => {
+    const T = h.as("clerk_ts_t");
+    const A = h.as("clerk_ts_alice");
+    const id = (await h.seedBooking(alice.id, teacher.id, { startsAt: new Date("2026-10-15T16:00:00Z") })).id;
+    try {
+      // Lesson 16:00–16:50 UTC. The teacher arrives 10 minutes late.
+      h.clock.set("2026-10-15T16:10:00Z");
+      const up = await h.http().get("/api/bookings").set(T).expect(200);
+      const l = up.body.find((b: { id: string }) => b.id === id);
+      assert.ok(l, "QA: the teacher couldn't find the lesson once it had started");
+      assert.equal(l.withTimezone, "Europe/Zurich", "the student's time zone, for the teacher");
+      const mine = (await h.http().get("/api/bookings").set(A).expect(200)).body.find((b: { id: string }) => b.id === id);
+      assert.equal(mine.withTimezone, "America/Chicago", "the teacher's time zone, for the student");
+      assert.ok(new Date(l.opensAt).getTime() <= Date.parse("2026-10-15T16:10:00Z"));
+      assert.ok((await h.http().get("/api/bookings").set(A).expect(200)).body.some((b: { id: string }) => b.id === id), "same for the student");
+      const past = await h.http().get("/api/bookings?scope=past").set(T).expect(200);
+      assert.ok(!past.body.some((b: { id: string }) => b.id === id), "not listed twice");
+      const o = await h.http().get("/api/teacher/overview").set(T).expect(200);
+      assert.equal(new Date(o.body.nextLessonAt).toISOString(), "2026-10-15T16:00:00.000Z");
+      const st = await h.http().get("/api/teacher/students").set(T).expect(200);
+      assert.equal(new Date(st.body.find((s: { id: string }) => s.id === alice.id).nextLessonAt).toISOString(), "2026-10-15T16:00:00.000Z");
+
+      // After its planned end it moves to the past.
+      h.clock.set("2026-10-15T16:51:00Z");
+      assert.ok(!(await h.http().get("/api/bookings").set(T).expect(200)).body.some((b: { id: string }) => b.id === id));
+      assert.ok((await h.http().get("/api/bookings?scope=past").set(T).expect(200)).body.some((b: { id: string }) => b.id === id));
+      // Not ended with "End lesson": it still asks for its report (the report page ends it).
+      const after = await h.http().get("/api/teacher/overview").set(T).expect(200);
+      assert.ok(after.body.reportsToWrite.some((r: { bookingId: string }) => r.bookingId === id));
+    } finally {
+      h.clock.set("2026-10-14T15:00:00Z");
+    }
   });
 });
