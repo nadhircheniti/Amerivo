@@ -148,3 +148,54 @@ describe("classroom phases (client: lessons end at minute 50, warning 5 minutes 
     assert.equal(classroomPhase(s + 19 * min, s, 20), "endingSoon", "20-minute trial");
   });
 });
+
+describe("sign-in from a new device (QA: Firefox stuck on 'Additional verification is required')", async () => {
+  const { passwordSignIn, verifySecondFactor, SignInIncompleteError } = await import("../src/lib/sign-in-steps.ts");
+  type Res = { status: string | null; createdSessionId: string | null; supportedSecondFactors: { strategy: string; emailAddressId?: string; safeIdentifier?: string }[] | null };
+  const fake = (first: Res, after?: Res) => {
+    const calls: { prepare: unknown[]; attempt: unknown[] } = { prepare: [], attempt: [] };
+    const signIn = {
+      ...first,
+      calls,
+      async create() {
+        return { ...signIn, ...first };
+      },
+      async prepareSecondFactor(p: unknown) {
+        calls.prepare.push(p);
+        return signIn;
+      },
+      async attemptSecondFactor(p: unknown) {
+        calls.attempt.push(p);
+        return { ...signIn, ...(after ?? first) };
+      },
+    };
+    return signIn;
+  };
+  const trusted: Res = { status: "complete", createdSessionId: "sess_1", supportedSecondFactors: null };
+  const newDevice: Res = { status: "needs_client_trust", createdSessionId: null, supportedSecondFactors: [{ strategy: "email_code", emailAddressId: "idn_1", safeIdentifier: "m***@gmail.com" }] };
+
+  it("known browser: signed in at once, nothing sent", async () => {
+    const s = fake(trusted);
+    assert.deepEqual(await passwordSignIn(s, "maria@gmail.com", "pw"), { sessionId: "sess_1" });
+    assert.equal(s.calls.prepare.length, 0);
+  });
+
+  it("new browser: the e-mail code is actually sent, then the code completes the sign-in", async () => {
+    const s = fake(newDevice, trusted);
+    assert.deepEqual(await passwordSignIn(s, "maria@gmail.com", "pw"), { step: { strategy: "email_code", destination: "m***@gmail.com" } });
+    assert.deepEqual(s.calls.prepare, [{ strategy: "email_code", emailAddressId: "idn_1" }]);
+    assert.equal(await verifySecondFactor(s, { strategy: "email_code", destination: null }, "123456"), "sess_1");
+    assert.deepEqual(s.calls.attempt, [{ strategy: "email_code", code: "123456" }]);
+  });
+
+  it("two-step verification with an app: nothing to send; a wrong code doesn't sign in", async () => {
+    const s = fake({ status: "needs_second_factor", createdSessionId: null, supportedSecondFactors: [{ strategy: "totp" }] });
+    assert.deepEqual(await passwordSignIn(s, "a@b.c", "pw"), { step: { strategy: "totp", destination: null } });
+    assert.equal(s.calls.prepare.length, 0);
+    await assert.rejects(verifySecondFactor(s, { strategy: "totp", destination: null }, "000000"), SignInIncompleteError);
+  });
+
+  it("any other status is reported, never treated as signed in", async () => {
+    await assert.rejects(passwordSignIn(fake({ status: "needs_protect_check", createdSessionId: null, supportedSecondFactors: null }), "a@b.c", "pw"), SignInIncompleteError);
+  });
+});
