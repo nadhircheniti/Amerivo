@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { clerkEnabled } from "./auth-config";
 import { TERMS_VERSION } from "./legal";
+import { passwordSignIn, pickSecondFactor, sendSecondFactorCode, SignInIncompleteError, verifySecondFactor, type SignInCodeStep, type SignInLike } from "./sign-in-steps";
 
 /** "student" (default) or "teacher" (applicant: no birth date / native language, lands on /teach/apply). */
 export type SignupRole = "student" | "teacher";
@@ -120,20 +121,43 @@ function useDemoSignUpFlow() {
 export const useSignUpFlow = clerkEnabled ? useClerkSignUpFlow : useDemoSignUpFlow;
 
 /* ------------------------------------------------------------------ sign-in */
+export type { SignInCodeStep };
+
 function useClerkSignInFlow() {
   const { isLoaded, signIn, setActive } = useSignIn();
   const router = useRouter();
   const t = useTranslations("auth.errors");
+  // Clerk's resource has richer types than the few members used by the pure steps.
+  const resource = () => signIn as unknown as SignInLike;
+  const incomplete = (e: unknown) => {
+    throw e instanceof SignInIncompleteError ? new Error(t("extraVerification")) : e;
+  };
+
   return {
     ready: isLoaded,
-    async signIn(email: string, password: string, next?: string | null) {
-      if (!isLoaded) return;
-      const res = await signIn.create({ identifier: email, password });
-      if (res.status !== "complete" || !res.createdSessionId) {
-        throw new Error(t("extraVerification"));
-      }
-      await setActive({ session: res.createdSessionId });
+    /**
+     * E-mail + password. Usually signs in at once. From a new device or browser Clerk can ask for
+     * a code first (client trust / two-step verification): it is sent and the step returned, to
+     * be completed with `verifyCode`.
+     */
+    async signIn(email: string, password: string, next?: string | null): Promise<SignInCodeStep | null> {
+      if (!isLoaded) return null;
+      const out = await passwordSignIn(resource(), email, password).catch(incomplete);
+      if ("step" in out) return out.step;
+      await setActive({ session: out.sessionId });
       router.push(welcome(next));
+      return null;
+    },
+    async verifyCode(step: SignInCodeStep, code: string, next?: string | null) {
+      if (!isLoaded) return;
+      const sessionId = await verifySecondFactor(resource(), step, code).catch(incomplete);
+      await setActive({ session: sessionId });
+      router.push(welcome(next));
+    },
+    async resendCode() {
+      if (!isLoaded) return;
+      const f = pickSecondFactor(resource().supportedSecondFactors);
+      if (f) await sendSecondFactorCode(resource(), f);
     },
     async oauth(strategy: OAuthProvider, next?: string | null) {
       if (!isLoaded) return;
@@ -150,9 +174,14 @@ function useDemoSignInFlow() {
   const router = useRouter();
   return {
     ready: true,
-    async signIn(_email: string, _password: string, next?: string | null) {
+    async signIn(_email: string, _password: string, next?: string | null): Promise<SignInCodeStep | null> {
+      router.push(next || "/student");
+      return null;
+    },
+    async verifyCode(_step: SignInCodeStep, _code: string, next?: string | null) {
       router.push(next || "/student");
     },
+    async resendCode() {},
     async oauth(_strategy: OAuthProvider, next?: string | null) {
       router.push(next || "/student");
     },
