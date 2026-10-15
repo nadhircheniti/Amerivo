@@ -41,6 +41,7 @@ export function AdminSidebar({ items, footer }: { items: (SidebarItem & { key: s
       support: badges?.openSupport,
       moderation: badges?.openModeration,
       materials: badges?.pendingMaterials,
+      liveLessons: badges?.liveLessons,
     };
     const text = count(n[key]);
     return text ? { ...item, badge: { text, tone: key === "disputes" || key === "moderation" ? "danger" : "orange" } } : item;

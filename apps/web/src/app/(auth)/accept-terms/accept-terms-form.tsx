@@ -38,6 +38,7 @@ export function AcceptTermsForm() {
       <ul className="flex list-disc flex-col gap-2 rounded-2xl bg-cream py-4 ps-10 pe-5 text-sm leading-relaxed text-navy">
         <li>{t("points.contact")}</li>
         <li>{t("points.monitoring")}</li>
+        <li>{t("points.observation")}</li>
         <li>{t("points.fees")}</li>
         <li>{t("points.conduct")}</li>
       </ul>

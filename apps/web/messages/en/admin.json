@@ -11,7 +11,8 @@
     "signedIn2fa": "Signed in with 2FA",
     "moderation": "Safety reports",
     "materials": "Teacher documents",
-    "discounts": "Discount codes"
+    "discounts": "Discount codes",
+    "liveLessons": "Live lessons"
   },
   "overview": {
     "metaTitle": "Platform analytics · Amerivo Admin",
@@ -893,5 +894,22 @@
     "disabled": "Code {code} disabled.",
     "copy": "Copy",
     "copied": "Copied"
+  },
+  "liveLessonsPage": {
+    "metaTitle": "Live lessons",
+    "title": "Live lessons",
+    "subtitle": "Lessons whose classroom is open right now. Join one to check its quality.",
+    "rules": "You join as \"Amerivo quality team\", camera and microphone off. The teacher and the student see you are observing (Terms §7). Nothing is recorded, and each visit is logged.",
+    "what": "the live lessons",
+    "listTitle": "{count, plural, =0 {No lesson right now} one {# lesson right now} other {# lessons right now}}",
+    "timesIn": "Times in {tz}",
+    "empty": "No classroom is open at the moment. This list updates every 30 seconds.",
+    "pair": "{teacher} with {student}",
+    "inProgress": "{minutes, plural, =0 {Just started} one {In progress · # min} other {In progress · # min}}",
+    "starting": "Starting soon",
+    "trial": "Trial",
+    "teacherIn": "Teacher in the classroom since {time}",
+    "teacherNotYet": "The teacher hasn't joined yet",
+    "observe": "Observe"
   }
 }

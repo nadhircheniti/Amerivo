@@ -57,7 +57,8 @@ const fakeStripe = {
 const fakeDaily = {
   createRoom: async (p: { name: string }) => ({ name: p.name, url: `https://amerivo.daily.co/${p.name}` }),
   roomUrl: async (name: string) => `https://amerivo.daily.co/${name}`,
-  meetingToken: async (p: { isOwner: boolean }) => ({ token: p.isOwner ? "owner-token" : "guest-token" }),
+  meetingToken: async (p: { isOwner: boolean; userId?: string; startOff?: boolean }) => ({ token: p.userId?.startsWith("observer:") ? `observer-token${p.startOff ? "-muted" : ""}` : p.isOwner ? "owner-token" : "guest-token" }),
+  allowObserver: async () => undefined,
 };
 
 let app: INestApplication;
@@ -235,13 +236,30 @@ describe("Amerivo API", () => {
     delete process.env.CLASSROOM_EARLY_MIN;
     clock.set("2026-10-14T15:54:00Z"); // 6 min before: closed again with the default
     await http().post(`/api/bookings/${singleId}/join`).set(as("clerk_maria")).expect(400);
-    // Lessons are private: an admin can't enter the room.
-    await http().post(`/api/bookings/${singleId}/join`).set(as("clerk_admin")).expect(403);
+    // An admin observing for quality control follows the same opening hours.
+    await http().post(`/api/bookings/${singleId}/join`).set(as("clerk_admin")).expect(400);
     clock.set("2026-10-14T15:56:00Z"); // 4 min before: open
     const join = await http().post(`/api/bookings/${singleId}/join`).set(as("clerk_sarah")).expect(201);
     assert.equal(join.body.token, "owner-token");
     assert.match(join.body.roomUrl, /amerivo\.daily\.co\/amerivo-/);
     await http().post(`/api/bookings/${singleId}/join`).set(as("clerk_ana")).expect(403);
+
+    // Quality control (Terms §7): the admin sees the open classroom and joins as a visible observer,
+    // camera and microphone off; each observation is in the audit log. Nobody else can list them.
+    const live = await http().get("/api/admin/live-lessons").set(as("clerk_admin")).expect(200);
+    const row = live.body.find((l: { bookingId: string }) => l.bookingId === singleId);
+    assert.ok(row);
+    assert.equal(row.teacher.firstName, "Sarah");
+    assert.ok(row.teacherJoinedAt, "the teacher is already in");
+    assert.equal((await http().get("/api/admin/badges").set(as("clerk_admin")).expect(200)).body.liveLessons, live.body.length);
+    await http().get("/api/admin/live-lessons").set(as("clerk_maria")).expect(403);
+    await http().get("/api/admin/live-lessons").set(as("clerk_sarah")).expect(403);
+    const obs = await http().post(`/api/bookings/${singleId}/join`).set(as("clerk_admin")).expect(201);
+    assert.equal(obs.body.token, "observer-token-muted");
+    const audit = await db.select().from(schema.auditLogs).where(eq(schema.auditLogs.action, "lesson.observe"));
+    assert.equal(audit.length, 1);
+    assert.equal(audit[0].entityId, singleId);
+    assert.equal((await http().get(`/api/bookings/${singleId}/classroom`).set(as("clerk_admin")).expect(200)).body.role, "admin");
 
     clock.set("2026-10-14T16:50:00Z");
     const done = await http().post(`/api/bookings/${singleId}/complete`).set(as("clerk_sarah")).send({ attendance: "attended" }).expect(201);

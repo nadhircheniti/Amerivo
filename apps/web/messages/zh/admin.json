@@ -11,7 +11,8 @@
     "signedIn2fa": "已通过双重验证登录",
     "moderation": "安全报告",
     "materials": "老师文档",
-    "discounts": "优惠码"
+    "discounts": "优惠码",
+    "liveLessons": "进行中的课程"
   },
   "overview": {
     "metaTitle": "平台数据分析 · Amerivo Admin",
@@ -893,5 +894,22 @@
     "disabled": "优惠码 {code} 已停用。",
     "copy": "复制",
     "copied": "已复制"
+  },
+  "liveLessonsPage": {
+    "metaTitle": "进行中的课程",
+    "title": "进行中的课程",
+    "subtitle": "课堂当前已开放的课程。加入其中一节以检查其质量。",
+    "rules": "你将以“Amerivo quality team”身份加入，摄像头和麦克风处于关闭状态。老师和学生会看到你正在旁听（服务条款 §7）。不会进行任何录制，每次访问都会被记录在日志中。",
+    "what": "进行中的课程",
+    "listTitle": "{count, plural, =0 {当前没有课程} other {当前有 # 节课}}",
+    "timesIn": "时间以 {tz} 显示",
+    "empty": "当前没有开放的课堂。此列表每 30 秒更新一次。",
+    "pair": "{teacher} 与 {student}",
+    "inProgress": "{minutes, plural, =0 {刚刚开始} other {进行中 · # 分钟}}",
+    "starting": "即将开始",
+    "trial": "试听",
+    "teacherIn": "老师自 {time} 起在课堂中",
+    "teacherNotYet": "老师尚未加入",
+    "observe": "旁听"
   }
 }

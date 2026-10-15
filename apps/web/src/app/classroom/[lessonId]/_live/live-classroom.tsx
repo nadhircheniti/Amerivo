@@ -56,7 +56,8 @@ export function LiveClassroom({ bookingId }: { bookingId: string }) {
     return <CallRoom info={phase.info} roomUrl={phase.roomUrl} token={phase.token} />;
   }
 
-  const home = phase.kind === "lobby" && phase.info.role === "teacher" ? "/teacher" : "/student";
+  const role = phase.kind === "lobby" ? phase.info.role : null;
+  const home = role === "teacher" ? "/teacher" : role === "admin" ? "/admin/live-lessons" : "/student";
 
   async function join(info: ClassroomInfo) {
     setJoining(true);
@@ -92,22 +93,23 @@ export function LiveClassroom({ bookingId }: { bookingId: string }) {
     body = (
       <>
         <div className="flex flex-col gap-2">
-          <h1 className="text-[26px] font-extrabold text-white sm:text-[30px]">{t("lessonTitle", { type: info.type, name: other.firstName || "—" })}</h1>
+          <h1 className="text-[26px] font-extrabold text-white sm:text-[30px]">
+            {info.role === "admin" ? t("observeTitle", { teacher: info.teacher.firstName || "—", student: info.student.firstName || "—" }) : t("lessonTitle", { type: info.type, name: other.firstName || "—" })}
+          </h1>
           <p className="text-ink-soft">{t("when", { date: fmtDay.format(start), start: fmtTime.format(start), end: fmtTime.format(end) })}</p>
           {info.topic && <p className="text-ink-soft">{t("topic", { topic: info.topic })}</p>}
         </div>
         {state === "open" && (
           <>
-            <p className="rounded-2xl bg-white/8 px-5 py-4 text-sm leading-relaxed text-ink-soft">{t("tip")}</p>
+            <p className="rounded-2xl bg-white/8 px-5 py-4 text-sm leading-relaxed text-ink-soft">{info.role === "admin" ? t("observeNote") : t("tip")}</p>
             {joinError && (
               <p role="alert" className="rounded-2xl bg-danger-100 px-5 py-4 text-sm font-semibold text-danger-text">
                 {joinError}
               </p>
             )}
-            <Button size="lg" onClick={() => void join(info)} disabled={joining || info.role === "admin"} className="self-start px-8">
-              {joining ? t("joining") : t("join")}
+            <Button size="lg" onClick={() => void join(info)} disabled={joining} className="self-start px-8">
+              {joining ? t("joining") : info.role === "admin" ? t("observe") : t("join")}
             </Button>
-            {info.role === "admin" && <p className="text-sm text-ink-soft">{t("notParticipant")}</p>}
           </>
         )}
         {state === "early" && (

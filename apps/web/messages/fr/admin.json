@@ -11,7 +11,8 @@
     "signedIn2fa": "Connecté avec la double authentification",
     "moderation": "Signalements de sécurité",
     "materials": "Documents des professeurs",
-    "discounts": "Codes promo"
+    "discounts": "Codes promo",
+    "liveLessons": "Cours en direct"
   },
   "overview": {
     "metaTitle": "Statistiques de la plateforme · Amerivo Admin",
@@ -893,5 +894,22 @@
     "disabled": "Code {code} désactivé.",
     "copy": "Copier",
     "copied": "Copié"
+  },
+  "liveLessonsPage": {
+    "metaTitle": "Cours en direct",
+    "title": "Cours en direct",
+    "subtitle": "Cours dont la salle de classe est ouverte en ce moment. Rejoignez-en un pour vérifier sa qualité.",
+    "rules": "Vous rejoignez le cours en tant que « Amerivo quality team », caméra et micro coupés. Le professeur et l’élève voient que vous observez (Conditions d’utilisation §7). Rien n’est enregistré, et chaque visite est consignée dans le journal.",
+    "what": "les cours en direct",
+    "listTitle": "{count, plural, =0 {Aucun cours en ce moment} one {# cours en ce moment} other {# cours en ce moment}}",
+    "timesIn": "Heures en {tz}",
+    "empty": "Aucune salle de classe n’est ouverte pour le moment. Cette liste est mise à jour toutes les 30 secondes.",
+    "pair": "{teacher} avec {student}",
+    "inProgress": "{minutes, plural, =0 {Vient de commencer} one {En cours · # min} other {En cours · # min}}",
+    "starting": "Commence bientôt",
+    "trial": "Essai",
+    "teacherIn": "Professeur dans la salle de classe depuis {time}",
+    "teacherNotYet": "Le professeur n’a pas encore rejoint le cours",
+    "observe": "Observer"
   }
 }

@@ -8,9 +8,9 @@
  * ⚠ Values in [BRACKETS] are not known yet and must be completed (and the whole text reviewed by a
  * US-licensed attorney) before the platform opens to the public.
  */
-export const TERMS_VERSION = "2026-10-07";
+export const TERMS_VERSION = "2026-10-15";
 /** Shown as "Effective date" (same day as the version). */
-export const TERMS_EFFECTIVE = "October 7, 2026";
+export const TERMS_EFFECTIVE = "October 15, 2026";
 
 export const COMPANY = {
   /** Registered name of the LLC (confirmed by the client). */
@@ -30,7 +30,7 @@ export const COMPANY = {
 } as const;
 
 /** Privacy Policy version (shown as "Last updated"). */
-export const PRIVACY_UPDATED = "October 8, 2026";
+export const PRIVACY_UPDATED = "October 15, 2026";
 
 /**
  * Non-circumvention (Terms §8). Contractual fees, not public "fines": they compensate Amerivo for

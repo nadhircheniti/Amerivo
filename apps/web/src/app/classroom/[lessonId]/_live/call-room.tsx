@@ -12,6 +12,7 @@ import {
   useMeetingState,
   useNetwork,
   useParticipantIds,
+  useParticipantProperty,
   useScreenShare,
   useVideoTrack,
 } from "@daily-co/daily-react";
@@ -24,6 +25,7 @@ import { cn } from "@/lib/cn";
 import { useApi } from "@/lib/use-api";
 import { ElapsedTimer } from "../_components/elapsed-timer";
 import { classroomPhase } from "../_components/lesson-clock";
+import { isObserverId, isRemoteObserver, isRemotePerson } from "../_components/participants";
 import { intlTags, type Locale } from "@/i18n/config";
 import { LocalIcon } from "../_components/local-icons";
 import { usePolling } from "@/components/messaging/use-polling";
@@ -72,7 +74,9 @@ function Room({ info }: { info: ClassroomInfo }) {
   const meeting = useMeetingState();
   const { threshold } = useNetwork();
   const localId = useLocalSessionId();
-  const remoteIds = useParticipantIds({ filter: "remote" });
+  // The teacher and the student; an Amerivo observer is listed apart (Terms §7).
+  const remoteIds = useParticipantIds({ filter: isRemotePerson });
+  const observerIds = useParticipantIds({ filter: isRemoteObserver });
   const { screens, isSharingScreen, startScreenShare, stopScreenShare } = useScreenShare();
   const micOff = useAudioTrack(localId).isOff;
   const camOff = useVideoTrack(localId).isOff;
@@ -87,6 +91,8 @@ function Room({ info }: { info: ClassroomInfo }) {
   const tag = intlTags[useLocale() as Locale];
 
   const isTeacher = info.role === "teacher";
+  /** An admin observing the lesson for quality control: watches both, takes no part in it. */
+  const isObserver = info.role === "admin";
   const other = isTeacher ? info.student : info.teacher;
   const remoteId = remoteIds[0];
   useEffect(() => {
@@ -107,7 +113,13 @@ function Room({ info }: { info: ClassroomInfo }) {
   );
   useDailyEvent(
     "participant-left",
-    useCallback(() => setNotice(t("left", { name: other.firstName })), [t, other.firstName]),
+    useCallback(
+      (ev: { participant?: { user_id?: string; user_name?: string } }) => {
+        if (isObserverId(ev.participant?.user_id)) return; // the observer leaving isn't news for the lesson
+        setNotice(t("left", { name: ev.participant?.user_name || other.firstName }));
+      },
+      [t, other.firstName],
+    ),
   );
   useDailyEvent(
     "participant-joined",
@@ -121,7 +133,7 @@ function Room({ info }: { info: ClassroomInfo }) {
   const endLabel = new Intl.DateTimeFormat(tag, { hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(endMs);
   const minutesLeft = Math.max(1, Math.ceil((endMs - now) / 60_000));
   const reportHref = `/teacher/lessons/${info.bookingId}/report`;
-  const afterHref = isTeacher ? "/teacher" : `/student/lessons/${info.bookingId}`;
+  const afterHref = isObserver ? "/admin/live-lessons" : isTeacher ? "/teacher" : `/student/lessons/${info.bookingId}`;
 
   /** Leaves the video call without ever blocking the page (Daily may not answer on a bad network). */
   const leaveCall = useCallback(async () => {
@@ -182,7 +194,9 @@ function Room({ info }: { info: ClassroomInfo }) {
       <header className="flex min-h-[72px] shrink-0 flex-wrap items-center gap-x-5 gap-y-2 border-b border-white/8 px-4 py-3 sm:px-7">
         <LogoMark size={34} onDark />
         <div className="min-w-0 flex-1">
-          <h1 className="truncate text-[17px] font-bold">{t("lessonTitle", { type: info.type, name: other.firstName || "—" })}</h1>
+          <h1 className="truncate text-[17px] font-bold">
+            {isObserver ? t("observeTitle", { teacher: info.teacher.firstName || "—", student: info.student.firstName || "—" }) : t("lessonTitle", { type: info.type, name: other.firstName || "—" })}
+          </h1>
           <p className="truncate text-[13px] text-ink-soft">{info.topic ?? t("participants", { teacher: info.teacher.firstName, student: info.student.firstName })}</p>
         </div>
         <span className="flex items-center gap-2 rounded-full bg-white/8 px-3.5 py-2 text-sm" role="status">
@@ -190,7 +204,7 @@ function Room({ info }: { info: ClassroomInfo }) {
           {t(`status.${status}`)}
         </span>
         <ElapsedTimer durationMin={info.durationMin} startsAt={info.startsAt} />
-        <ReportButton reportedUserId={other.id} name={other.firstName} bookingId={info.bookingId} tone="dark" />
+        {!isObserver && <ReportButton reportedUserId={other.id} name={other.firstName} bookingId={info.bookingId} tone="dark" />}
       </header>
 
       <div className="flex flex-1 flex-col gap-4 px-3 pt-4 sm:px-4 lg:min-h-0 lg:flex-row">
@@ -200,6 +214,19 @@ function Room({ info }: { info: ClassroomInfo }) {
               <Icon name="clock" size={18} className="shrink-0" />
               {t(isTeacher ? "endingSoonTeacher" : "endingSoon", { count: minutesLeft, time: endLabel })}
             </p>
+          )}
+          {isObserver ? (
+            <p role="status" className="flex items-center gap-3 rounded-2xl bg-teal/15 px-5 py-3 text-sm text-teal">
+              <Icon name="shieldCheck" size={18} className="shrink-0" />
+              {t("observingBanner")}
+            </p>
+          ) : (
+            observerIds.length > 0 && (
+              <p role="status" className="flex items-center gap-3 rounded-2xl bg-white/10 px-5 py-3 text-sm text-white">
+                <Icon name="shieldCheck" size={18} className="shrink-0 text-teal" />
+                {t("observerPresent")}
+              </p>
+            )
           )}
           {(deviceError || notice) && (
             <p role="alert" className="rounded-2xl bg-orange/15 px-5 py-3 text-sm text-orange">
@@ -211,6 +238,8 @@ function Room({ info }: { info: ClassroomInfo }) {
           <section aria-label={t("stage")} className="relative flex min-h-[380px] flex-1 overflow-hidden rounded-[20px] bg-[#16384f] lg:min-h-0">
             {screen ? (
               <DailyVideo sessionId={screen.session_id} type="screenVideo" fit="contain" className="size-full bg-black" />
+            ) : isObserver ? (
+              <ObserverStage ids={remoteIds} waiting={t("observeWaiting")} />
             ) : remoteId ? (
               <RemoteTile sessionId={remoteId} name={other.firstName} />
             ) : (
@@ -220,7 +249,7 @@ function Room({ info }: { info: ClassroomInfo }) {
               </div>
             )}
             <div className="absolute end-4 bottom-4 flex flex-col gap-2">
-              {screen && remoteId && <SmallTile sessionId={remoteId} name={other.firstName} />}
+              {screen && remoteId && !isObserver && <SmallTile sessionId={remoteId} name={other.firstName} />}
               {localId && <SmallTile sessionId={localId} name={t("you")} local />}
             </div>
           </section>
@@ -246,7 +275,7 @@ function Room({ info }: { info: ClassroomInfo }) {
             <Toggle label={camOff ? t("camOn") : t("camOff")} pressed={camOff} onClick={() => daily?.setLocalVideo(camOff)}>
               {camOff ? <LocalIcon name="videoOff" /> : <Icon name="video" size={22} />}
             </Toggle>
-            {canShare && (
+            {canShare && !isObserver && (
               <Toggle
                 label={isSharingScreen ? t("stopShare") : tc("shareScreen")}
                 pressed={isSharingScreen}
@@ -269,8 +298,30 @@ function Room({ info }: { info: ClassroomInfo }) {
           </div>
         </div>
 
-        <LivePanel info={info} otherName={other.firstName} />
+        {!isObserver && <LivePanel info={info} otherName={other.firstName} />}
       </div>
+    </div>
+  );
+}
+
+/** Observer's view: the teacher and the student side by side, each with their name. */
+function ObserverStage({ ids, waiting }: { ids: string[]; waiting: string }) {
+  if (ids.length === 0) return <p className="m-auto p-6 text-center text-ink-soft">{waiting}</p>;
+  return (
+    <div className="grid size-full gap-2 p-2 sm:grid-cols-2">
+      {ids.map((id) => (
+        <NamedTile key={id} sessionId={id} />
+      ))}
+    </div>
+  );
+}
+
+function NamedTile({ sessionId }: { sessionId: string }) {
+  const name = String(useParticipantProperty(sessionId, "user_name") ?? "");
+  return (
+    <div className="relative min-h-[200px] overflow-hidden rounded-2xl bg-[#2e5872]">
+      <RemoteTile sessionId={sessionId} name={name} />
+      <span className="absolute start-3 bottom-3 rounded-md bg-navy/70 px-2 py-0.5 text-sm">{name}</span>
     </div>
   );
 }
