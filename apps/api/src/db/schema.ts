@@ -214,6 +214,36 @@ export const blockedDates = pgTable("blocked_dates", {
 
 /* --------------------------------------------------------------- commerce */
 /** A purchased bundle of lessons with one teacher (1, 5 or 10 lessons). */
+/* ---------------------------------------------------------------- teacher agreement */
+/**
+ * Electronic signatures of the Independent Teacher Agreement (U.S. E-SIGN Act / Indiana UETA):
+ * who signed (account + typed full name), which exact text (version + SHA-256), when, from where
+ * (IP, browser), and when the signed copy was e-mailed to the teacher and to Amerivo.
+ */
+export const teacherAgreements = pgTable(
+  "teacher_agreements",
+  {
+    id: id(),
+    teacherId: uuid("teacher_id")
+      .notNull()
+      .references(() => users.id),
+    version: text("version").notNull(),
+    textSha256: text("text_sha256").notNull(),
+    fullName: text("full_name").notNull(),
+    email: text("email").notNull(),
+    signedAt: timestamp("signed_at", { withTimezone: true }).notNull(),
+    ip: text("ip"),
+    userAgent: text("user_agent"),
+    /** Identity check at signing time: Stripe Identity status and session (holds the verified ID + selfie). */
+    identityStatus: text("identity_status").notNull(),
+    identitySessionId: text("identity_session_id"),
+    /** SHA-256 of all the fields above: printed in the e-mailed copy, so any later change would show. */
+    recordSha256: text("record_sha256").notNull(),
+    emailedAt: timestamp("emailed_at", { withTimezone: true }),
+  },
+  (t) => [uniqueIndex("teacher_agreements_teacher_version_uq").on(t.teacherId, t.version)],
+);
+
 /* ---------------------------------------------------------------- discount codes */
 /**
  * One-time discount codes created by an admin (a percentage, 1–100 %, usable once in total).

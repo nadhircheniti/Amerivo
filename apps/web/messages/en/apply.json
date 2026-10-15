@@ -55,6 +55,11 @@
       "title": "Approval",
       "heading": "Application status",
       "continue": "Continue to approval"
+    },
+    "agreement": {
+      "title": "Agreement",
+      "heading": "Sign your teacher agreement",
+      "continue": "Continue to the agreement"
     }
   },
   "wizard": {
@@ -71,7 +76,8 @@
     "saved": "Saved",
     "saveError": "We couldn't save your application. Please try again.",
     "pickSubject": "Choose at least one thing you can teach.",
-    "identityRequired": "Verify your identity with Stripe to continue."
+    "identityRequired": "Verify your identity with Stripe to continue.",
+    "agreementRequired": "Sign the Independent Teacher Agreement to continue."
   },
   "options": {
     "subjects": {

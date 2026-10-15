@@ -1,7 +1,7 @@
 /** Options and sample defaults for the teacher application wizard. */
 
 /** Labels live in messages/<locale>/apply.json ("steps.<id>", "options.<group>.<id>"). */
-export const steps = [{ id: "personal" }, { id: "professional" }, { id: "identity" }, { id: "video" }, { id: "review" }, { id: "approval" }] as const;
+export const steps = [{ id: "personal" }, { id: "professional" }, { id: "identity" }, { id: "video" }, { id: "agreement" }, { id: "review" }, { id: "approval" }] as const;
 export type StepId = (typeof steps)[number]["id"];
 
 export const subjects = ["businessEnglish", "conversation", "reading", "generalEnglish", "interviewPrep", "examPrep"] as const;
@@ -116,6 +116,8 @@ export type TeacherProfile = {
   introVideoUrl: string | null;
   interviewPreference: (typeof interviewSlots)[number] | null;
   identityStatus: IdentityStatus;
+  /** When the Independent Teacher Agreement in force was signed (null: not yet). */
+  agreementSignedAt?: string | null;
   review: null | {
     decision: string | null;
     adminNotes: string | null;
@@ -221,7 +223,8 @@ export function firstIncompleteStep(p: TeacherProfile): number {
   if (!p.headline || !p.bio || !(p.specialties ?? []).length) return 1;
   if (p.identityStatus !== "pending" && p.identityStatus !== "verified") return 2;
   if (!p.introVideoUrl) return 3;
-  return 4;
+  if (!p.agreementSignedAt) return 4;
+  return 5;
 }
 
 /** Statuses that let the applicant edit and (re)submit. */

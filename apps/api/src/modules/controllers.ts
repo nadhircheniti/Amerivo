@@ -70,7 +70,7 @@ export class AccountsController {
 }
 
 /** Address the request came from, kept as evidence of acceptance (proxy chain included). */
-const clientIp = (req: Request) => {
+export const clientIp = (req: Request) => {
   const fwd = req.headers["x-forwarded-for"];
   return ((Array.isArray(fwd) ? fwd.join(",") : fwd) || req.ip || req.socket?.remoteAddress || "").slice(0, 200) || null;
 };

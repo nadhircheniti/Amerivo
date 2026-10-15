@@ -55,6 +55,11 @@
       "title": "Aprobación",
       "heading": "Estado de la solicitud",
       "continue": "Continuar a aprobación"
+    },
+    "agreement": {
+      "title": "Acuerdo",
+      "heading": "Firma tu acuerdo de docente",
+      "continue": "Continuar al acuerdo"
     }
   },
   "wizard": {
@@ -71,7 +76,8 @@
     "saved": "Guardado",
     "saveError": "No pudimos guardar tu solicitud. Inténtalo de nuevo.",
     "pickSubject": "Elige al menos una cosa que puedas enseñar.",
-    "identityRequired": "Verifica tu identidad con Stripe para continuar."
+    "identityRequired": "Verifica tu identidad con Stripe para continuar.",
+    "agreementRequired": "Firma el Acuerdo de Docente Independiente para continuar."
   },
   "options": {
     "subjects": {

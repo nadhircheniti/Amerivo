@@ -15,6 +15,7 @@ import request from "supertest";
 import { AppModule } from "../src/app.module";
 import { DB } from "../src/db/db";
 import * as schema from "../src/db/schema";
+import { recordHash } from "../src/modules/agreements/agreements.service";
 import { TERMS_VERSION } from "../src/domain/terms";
 import { CLOCK } from "../src/common/clock";
 import { StripeService } from "../src/integrations/stripe.service";
@@ -439,6 +440,75 @@ describe("Amerivo API", () => {
     const synced = await http().post("/api/teacher/identity/sync").set(as("clerk_emma")).expect(201);
     assert.equal(synced.body.identityStatus, "verified");
     await http().post("/api/teacher/identity/session").set(as("clerk_emma")).expect(400);
+
+    // Independent Teacher Agreement: public text, signature required before submitting.
+    const notSigned = await http().post("/api/teacher/application/submit").set(as("clerk_emma")).expect(400);
+    assert.match(notSigned.body.message, /signature of the Independent Teacher Agreement/);
+    const text = await http().get("/api/legal/teacher-agreement").expect(200);
+    assert.match(text.body.html, /<h1>Independent Teacher Agreement/);
+    assert.match(text.body.sha256, /^[a-f0-9]{64}$/);
+    assert.doesNotMatch(text.body.html, /<script|Draft for attorney review/);
+    assert.equal((await http().get("/api/teacher/agreement").set(as("clerk_emma")).expect(200)).body.signature, null);
+    const sign = (body: Record<string, unknown>, who = "clerk_emma") =>
+      http()
+        .post("/api/teacher/agreement/sign")
+        .set({ ...as(who), "x-forwarded-for": "203.0.113.7", "user-agent": "Mozilla/5.0 Firefox/131" })
+        .send({ fullName: "Emma Stone", version: text.body.version, sha256: text.body.sha256, agree: true, ...body });
+    await sign({}, "clerk_maria").expect(403);
+    await sign({ agree: false }).expect(400);
+    await sign({ sha256: "0".repeat(64) }).expect(409); // the text changed while the page was open
+    const wrongName = await sign({ fullName: "John Doe" }).expect(400);
+    assert.match(wrongName.body.message, /Emma Stone/);
+    // No identity check started: can't sign (the signature must be tied to a verified person).
+    const emmaId = (await db.select().from(schema.users).where(eq(schema.users.clerkId, "clerk_emma")))[0].id;
+    await db.update(schema.teacherProfiles).set({ identityStatus: "not_started" }).where(eq(schema.teacherProfiles.userId, emmaId));
+    assert.match((await sign({}).expect(400)).body.message, /Verify your identity first/);
+    await db.update(schema.teacherProfiles).set({ identityStatus: "verified" }).where(eq(schema.teacherProfiles.userId, emmaId));
+    // E-mails go through Resend: captured here instead of being sent.
+    const sent: { to: string; subject: string; html: string }[] = [];
+    const realFetch = globalThis.fetch;
+    process.env.RESEND_API_KEY = "re_test";
+    globalThis.fetch = (async (url: string | URL, init?: RequestInit) => {
+      if (String(url).startsWith("https://api.resend.com/")) {
+        sent.push(JSON.parse(String(init?.body)));
+        return new Response("{}", { status: 200 });
+      }
+      return realFetch(url, init);
+    }) as typeof fetch;
+    let signed;
+    try {
+      signed = await sign({ fullName: "  emma   STONE " }).expect(200);
+    } finally {
+      globalThis.fetch = realFetch;
+      delete process.env.RESEND_API_KEY;
+    }
+    assert.equal(signed.body.alreadySigned, false);
+    assert.equal(signed.body.signature.fullName, "emma STONE");
+    assert.ok(signed.body.signature.emailedAt, "copies e-mailed");
+    assert.deepEqual(sent.map((m) => m.to).sort(), ["contact@amerivoenglish.com", "emma@example.com"]);
+    for (const m of sent) {
+      assert.match(m.html, /Independent Teacher Agreement/);
+      assert.match(m.html, /Signed electronically by/);
+      assert.match(m.html, /203\.0\.113\.7/);
+      assert.match(m.html, new RegExp(text.body.sha256));
+    }
+    const [row] = await db.select().from(schema.teacherAgreements);
+    assert.equal(row.ip, "203.0.113.7");
+    assert.equal(row.userAgent, "Mozilla/5.0 Firefox/131");
+    assert.equal(row.textSha256, text.body.sha256);
+    assert.equal(row.identityStatus, "verified");
+    assert.equal(row.identitySessionId, "vs_test_1", "linked to the Stripe Identity check");
+    assert.equal(row.recordSha256, recordHash(row), "the record matches its fingerprint");
+    assert.match(sent[0].html, new RegExp(row.recordSha256), "…which both parties received by e-mail");
+    // Evidence can't be altered or deleted, even directly in the database.
+    await assert.rejects(db.update(schema.teacherAgreements).set({ fullName: "Someone Else" }).where(eq(schema.teacherAgreements.id, row.id)));
+    await assert.rejects(db.delete(schema.teacherAgreements).where(eq(schema.teacherAgreements.id, row.id)));
+    await assert.rejects(db.update(schema.teacherAgreements).set({ emailedAt: new Date() }).where(eq(schema.teacherAgreements.id, row.id)), "the e-mail date is set once");
+    assert.equal((await sign({}).expect(200)).body.alreadySigned, true, "a signature can't be replaced");
+    const copy = await http().get("/api/teacher/agreement/copy").set(as("clerk_emma")).expect(200);
+    assert.match(copy.body.html, /E-SIGN Act/);
+    assert.equal((await db.select().from(schema.auditLogs).where(eq(schema.auditLogs.action, "teacher.agreement.sign"))).length, 1);
+    assert.ok((await http().get("/api/teacher/profile").set(as("clerk_emma")).expect(200)).body.agreementSignedAt);
 
     // Submit → pending, visible to the admin with all details; not public yet.
     await http().post("/api/teacher/application/submit").set(as("clerk_emma")).expect(201);

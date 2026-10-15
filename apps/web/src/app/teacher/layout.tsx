@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import { RoleGate } from "@/components/layout/role-gate";
 import { AppSidebar, type SidebarItem } from "@/components/layout/app-sidebar";
 import { MessageAlerts } from "@/components/messaging/message-alerts";
+import { AgreementGate } from "@/components/legal/agreement-gate";
 import { currentTeacher } from "@/lib/mock-data";
 
 export default function TeacherLayout({ children }: { children: React.ReactNode }) {
@@ -14,20 +15,23 @@ export default function TeacherLayout({ children }: { children: React.ReactNode 
     { href: "/teacher/materials", label: t("materials"), icon: "file" },
     { href: "/teacher/earnings", label: t("earnings"), icon: "wallet" },
     { href: "/teacher/profile", label: t("publicProfile"), icon: "user" },
+    { href: "/teacher/agreement", label: t("agreement"), icon: "file" },
   ];
 
   return (
     <RoleGate space="teacher">
-      <MessageAlerts space="teacher">
-        <div className="flex min-h-screen bg-beige">
-          <AppSidebar
-            variant="teacher"
-            items={items}
-            user={{ name: currentTeacher.name, subtitle: t("approvedTeacher"), initials: currentTeacher.initials, tone: currentTeacher.tone }}
-          />
-          <main className="min-w-0 flex-1">{children}</main>
-        </div>
-      </MessageAlerts>
+      <AgreementGate>
+        <MessageAlerts space="teacher">
+          <div className="flex min-h-screen bg-beige">
+            <AppSidebar
+              variant="teacher"
+              items={items}
+              user={{ name: currentTeacher.name, subtitle: t("approvedTeacher"), initials: currentTeacher.initials, tone: currentTeacher.tone }}
+            />
+            <main className="min-w-0 flex-1">{children}</main>
+          </div>
+        </MessageAlerts>
+      </AgreementGate>
     </RoleGate>
   );
 }

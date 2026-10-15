@@ -55,6 +55,11 @@
       "title": "Validation",
       "heading": "Statut de la candidature",
       "continue": "Continuer vers la validation"
+    },
+    "agreement": {
+      "title": "Contrat",
+      "heading": "Signez votre contrat d’enseignant",
+      "continue": "Continuer vers le contrat"
     }
   },
   "wizard": {
@@ -71,7 +76,8 @@
     "saved": "Enregistré",
     "saveError": "Nous n'avons pas pu enregistrer votre candidature. Veuillez réessayer.",
     "pickSubject": "Choisissez au moins une matière que vous pouvez enseigner.",
-    "identityRequired": "Vérifiez votre identité avec Stripe pour continuer."
+    "identityRequired": "Vérifiez votre identité avec Stripe pour continuer.",
+    "agreementRequired": "Signez le Contrat d’enseignant indépendant pour continuer."
   },
   "options": {
     "subjects": {
