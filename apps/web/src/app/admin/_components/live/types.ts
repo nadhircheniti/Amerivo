@@ -171,7 +171,7 @@ export type PlatformSettings = {
   nextPayoutDate: string;
 };
 
-export type Badges = { pendingApplications: number; openDisputes: number; openSupport?: number; openModeration?: number; pendingMaterials?: number };
+export type Badges = { pendingApplications: number; openDisputes: number; openSupport?: number; openModeration?: number; pendingMaterials?: number; liveLessons?: number };
 
 /* ---------- Trust & safety (contact details detected in user-to-user texts) ---------- */
 export type ModerationStatus = "open" | "dismissed" | "warned" | "blocked";

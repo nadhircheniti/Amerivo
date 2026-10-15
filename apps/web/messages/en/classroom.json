@@ -104,6 +104,12 @@
     "monitored": "Chat and notes are kept with the lesson and checked for safety. Never share personal contact details.",
     "endingSoon": "{count, plural, one {The lesson ends in # minute} other {The lesson ends in # minutes}} ({time}).",
     "endingSoonTeacher": "{count, plural, one {The lesson ends in # minute} other {The lesson ends in # minutes}} ({time}). You'll write the report right after.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "observeTitle": "Quality observation · {teacher} and {student}",
+    "observeNote": "You'll join as \"Amerivo quality team\", camera and microphone off. The teacher and the student will see that you are observing. Your visit is logged.",
+    "observe": "Join as observer",
+    "observingBanner": "You're observing as Amerivo quality team. The teacher and the student can see you're here.",
+    "observerPresent": "An Amerivo quality team member is observing this lesson (camera and microphone off).",
+    "observeWaiting": "Nobody is in the classroom yet."
   }
 }

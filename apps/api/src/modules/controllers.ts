@@ -241,7 +241,13 @@ export class AdminController {
   constructor(
     private readonly admin: AdminService,
     private readonly earnings: EarningsService,
+    private readonly lessons: LessonsService,
   ) {}
+
+  /** Lessons whose classroom is open now: an admin can join one as a visible observer (POST /bookings/:id/join). */
+  @Get("live-lessons") liveLessons() {
+    return this.lessons.liveLessons();
+  }
 
   @Get("analytics") analytics(@Query("days") days?: string) {
     return this.admin.analytics(days ? Math.min(Number(days), 365) : 30);

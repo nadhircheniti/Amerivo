@@ -4,9 +4,10 @@ import { Icon } from "@/components/ui/icon";
 import { useTranslations } from "next-intl";
 import { AdminSidebar } from "./_components/admin-sidebar";
 
-type NavKey = "analytics" | "teachers" | "students" | "bookings" | "payments" | "discounts" | "disputes" | "moderation" | "materials" | "support" | "settings";
+type NavKey = "analytics" | "liveLessons" | "teachers" | "students" | "bookings" | "payments" | "discounts" | "disputes" | "moderation" | "materials" | "support" | "settings";
 const nav: (Omit<SidebarItem, "label"> & { key: NavKey })[] = [
   { key: "analytics", href: "/admin", icon: "chart", exact: true },
+  { key: "liveLessons", href: "/admin/live-lessons", icon: "video" },
   { key: "teachers", href: "/admin/teachers", icon: "user" },
   { key: "students", href: "/admin/students", icon: "users" },
   { key: "bookings", href: "/admin/bookings", icon: "calendar" },

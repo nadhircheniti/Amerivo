@@ -104,6 +104,12 @@
     "monitored": "聊天和笔记会随课程保存并接受安全检查。切勿分享个人联系方式。",
     "endingSoon": "课程将在 {count} 分钟后结束（{time}）。",
     "endingSoonTeacher": "课程将在 {count} 分钟后结束（{time}）。结束后请立即填写课程报告。",
-    "cancel": "取消"
+    "cancel": "取消",
+    "observeTitle": "质量旁听 · {teacher} 和 {student}",
+    "observeNote": "你将以“Amerivo quality team”身份加入，摄像头和麦克风处于关闭状态。老师和学生会看到你正在旁听。你的访问会被记录在日志中。",
+    "observe": "以旁听者身份加入",
+    "observingBanner": "你正在以“Amerivo quality team”身份旁听。老师和学生可以看到你在这里。",
+    "observerPresent": "一名“Amerivo quality team”成员正在旁听本节课（摄像头和麦克风已关闭）。",
+    "observeWaiting": "课堂里还没有人。"
   }
 }

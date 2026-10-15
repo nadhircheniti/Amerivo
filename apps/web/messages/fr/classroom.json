@@ -104,6 +104,12 @@
     "monitored": "Le chat et les notes sont conservés avec le cours et contrôlés pour la sécurité de tous. Ne partagez jamais vos coordonnées personnelles.",
     "endingSoon": "{count, plural, one {Le cours se termine dans # minute} other {Le cours se termine dans # minutes}} ({time}).",
     "endingSoonTeacher": "{count, plural, one {Le cours se termine dans # minute} other {Le cours se termine dans # minutes}} ({time}). Vous rédigerez le rapport juste après.",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "observeTitle": "Observation qualité · {teacher} et {student}",
+    "observeNote": "Vous rejoindrez le cours en tant que « Amerivo quality team », caméra et micro coupés. Le professeur et l’élève verront que vous observez. Votre visite est enregistrée dans le journal.",
+    "observe": "Rejoindre en tant qu’observateur",
+    "observingBanner": "Vous observez en tant que « Amerivo quality team ». Le professeur et l’élève voient que vous êtes présent.",
+    "observerPresent": "Un membre de l’équipe « Amerivo quality team » observe ce cours (caméra et micro coupés).",
+    "observeWaiting": "Personne n’est encore dans la salle de classe."
   }
 }

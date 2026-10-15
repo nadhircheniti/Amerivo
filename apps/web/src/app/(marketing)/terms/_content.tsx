@@ -174,6 +174,12 @@ export const termsSections: TermsSection[] = [
             <>
               Video and audio of Lessons are transmitted through our video provider and are <B>not recorded</B> by Amerivo.
             </>,
+            <>
+              <B>Quality and safety observation of live Lessons.</B> Authorized Amerivo staff may join a Lesson while it takes place, without taking part in it, in order to
+              check the quality of the teaching, the safety of Students (including minors) and compliance with these Terms. The observer is always{" "}
+              <B>shown to both the Teacher and the Student</B> in the classroom (as &ldquo;Amerivo quality team&rdquo;) and enters with camera and microphone off; Lessons are
+              never observed secretly and the observation is not recorded. Each observation is logged. By booking or giving a Lesson, you consent to such observation.
+            </>,
             <>Amerivo may hide, edit or remove any Content, and may restrict any account, that it reasonably believes violates these Terms.</>,
           ]}
         />

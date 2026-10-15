@@ -170,6 +170,7 @@ export const privacySections: LegalSection[] = [
             "When something is detected, or when a user reports inappropriate behavior, the original text and the surrounding conversation may be reviewed by authorized Amerivo staff, who may warn or suspend the account concerned.",
             "Documents that teachers wish to share with their students are reviewed by Amerivo before they are made available.",
             "Video and audio of lessons are transmitted through our video provider and are not recorded by Amerivo.",
+            "Authorized Amerivo staff may join a live lesson as an observer for quality and safety control. The observer is always shown to both participants, enters with camera and microphone off, does not record the lesson, and each observation is logged.",
           ]}
         />
       </>

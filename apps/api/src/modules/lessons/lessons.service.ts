@@ -1,7 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { and, asc, eq, gte, inArray, sql } from "drizzle-orm";
 import { DB, type Db } from "../../db/db";
-import { bookings, homework, lessonChatMessages, lessonReports, lessons, reviews, teacherProfiles, users } from "../../db/schema";
+import { alias } from "drizzle-orm/pg-core";
+import { auditLogs, bookings, homework, lessonChatMessages, lessonReports, lessons, reviews, teacherProfiles, users } from "../../db/schema";
 import { CLOCK, type Clock } from "../../common/clock";
 import { badRequest, conflict, forbidden, notFound } from "../../common/errors";
 import type { AuthUser } from "../../auth/decorators";
@@ -9,7 +10,7 @@ import { DailyService } from "../../integrations/daily.service";
 import { NotificationsService } from "../../integrations/notifications.service";
 import { BookingsService } from "../bookings/bookings.service";
 import { ModerationService } from "../moderation/moderation.service";
-import { classroomWindow } from "../../domain/classroom";
+import { CLASSROOM_LATE_MIN, classroomEarlyMin, classroomWindow } from "../../domain/classroom";
 
 /** Live classroom chat: longest message and how many recent messages a poll returns at most. */
 export const LESSON_CHAT_MAX = 2000;
@@ -42,7 +43,42 @@ export class LessonsService {
     return classroomWindow(b);
   }
 
-  /** Everything the classroom page needs before joining (participants only). */
+  /**
+   * Lessons whose classroom is open right now (from a few minutes before the start to the end),
+   * for the admin "Live lessons" screen: who, when, and whether each person is already in.
+   */
+  async liveLessons() {
+    const now = this.clock.now();
+    const teacher = alias(users, "teacher");
+    const student = alias(users, "student");
+    const rows = await this.db
+      .select({
+        bookingId: bookings.id,
+        type: bookings.type,
+        topic: bookings.topic,
+        startsAt: bookings.startsAt,
+        durationMin: bookings.durationMin,
+        teacher: { id: teacher.id, firstName: teacher.firstName, lastName: teacher.lastName },
+        student: { id: student.id, firstName: student.firstName, lastName: student.lastName },
+        teacherJoinedAt: lessons.startedAt,
+      })
+      .from(bookings)
+      .innerJoin(teacher, eq(teacher.id, bookings.teacherId))
+      .innerJoin(student, eq(student.id, bookings.studentId))
+      .leftJoin(lessons, eq(lessons.bookingId, bookings.id))
+      .where(
+        and(
+          eq(bookings.status, "confirmed"),
+          sql`${bookings.startsAt} - ${classroomEarlyMin()} * interval '1 minute' <= ${now}`,
+          sql`${bookings.startsAt} + (${bookings.durationMin} + ${CLASSROOM_LATE_MIN}) * interval '1 minute' >= ${now}`,
+        ),
+      )
+      .orderBy(asc(bookings.startsAt))
+      .limit(200);
+    return rows.map((r) => ({ ...r, ...classroomWindow(r) }));
+  }
+
+  /** Everything the classroom page needs before joining (participants and observing admins). */
   async classroom(user: AuthUser, bookingId: string) {
     const b = await this.bookings.assertParticipant(user, bookingId);
     const people = await this.db
@@ -68,11 +104,15 @@ export class LessonsService {
     };
   }
 
-  /** Returns a Daily.co room URL + meeting token for the student or the teacher of the lesson. */
+  /**
+   * Returns a Daily.co room URL + meeting token for the student or the teacher of the lesson, or for
+   * an admin observing it for quality control (Terms §7): the observer is shown to both people,
+   * enters with camera and microphone off, and every observation is written to the audit log.
+   */
   async join(user: AuthUser, bookingId: string) {
     const b = await this.bookings.assertParticipant(user, bookingId);
-    // Lessons are private: only their teacher and student can enter (not admins).
-    if (user.id !== b.studentId && user.id !== b.teacherId) throw forbidden();
+    const observer = user.role === "admin" && user.id !== b.studentId && user.id !== b.teacherId;
+    if (!observer && user.id !== b.studentId && user.id !== b.teacherId) throw forbidden();
     if (b.status !== "confirmed") throw badRequest(`Lesson is ${b.status}`);
     const now = this.clock.now();
     const { opensAt, closesAt } = this.windowFor(b);
@@ -91,7 +131,13 @@ export class LessonsService {
     }
     if (user.id === b.teacherId && !lesson.startedAt) await this.db.update(lessons).set({ startedAt: now }).where(eq(lessons.id, lesson.id));
 
-    const { token } = await this.daily.meetingToken({ room: lesson.dailyRoomName!, userName: user.firstName, isOwner: user.id === b.teacherId, exp: closesAt });
+    if (observer) {
+      await this.daily.allowObserver(lesson.dailyRoomName!);
+      await this.db.insert(auditLogs).values({ actorId: user.id, action: "lesson.observe", entity: "booking", entityId: b.id, data: { at: now.toISOString() } });
+      const { token } = await this.daily.meetingToken({ room: lesson.dailyRoomName!, userName: "Amerivo quality team", isOwner: false, exp: closesAt, userId: `observer:${user.id}`, startOff: true });
+      return { roomUrl: await this.daily.roomUrl(lesson.dailyRoomName!), token, lessonId: lesson.id };
+    }
+    const { token } = await this.daily.meetingToken({ room: lesson.dailyRoomName!, userName: user.firstName, isOwner: user.id === b.teacherId, exp: closesAt, userId: `${user.id === b.teacherId ? "teacher" : "student"}:${user.id}` });
     return { roomUrl: await this.daily.roomUrl(lesson.dailyRoomName!), token, lessonId: lesson.id };
   }
 

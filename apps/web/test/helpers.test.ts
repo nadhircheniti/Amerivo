@@ -199,3 +199,18 @@ describe("sign-in from a new device (QA: Firefox stuck on 'Additional verificati
     await assert.rejects(passwordSignIn(fake({ status: "needs_protect_check", createdSessionId: null, supportedSecondFactors: null }), "a@b.c", "pw"), SignInIncompleteError);
   });
 });
+
+describe("quality observer in the classroom (Terms §7)", async () => {
+  const { isObserverId, isRemoteObserver, isRemotePerson } = await import("../src/app/classroom/[lessonId]/_components/participants.ts");
+  it("tells the observer apart from the teacher and the student", () => {
+    assert.equal(isObserverId("observer:9f1c"), true);
+    assert.equal(isObserverId("teacher:9f1c"), false);
+    assert.equal(isObserverId(undefined), false);
+    const teacher = { local: false, user_id: "teacher:t1" };
+    const observer = { local: false, user_id: "observer:a1" };
+    const me = { local: true, user_id: "student:s1" };
+    assert.deepEqual([teacher, observer, me].filter(isRemotePerson), [teacher], "the observer never replaces the other person's video");
+    assert.deepEqual([teacher, observer, me].filter(isRemoteObserver), [observer], "…and is announced to both");
+    assert.equal(isRemotePerson({ local: false }), true, "rooms joined before user ids existed still show the other person");
+  });
+});

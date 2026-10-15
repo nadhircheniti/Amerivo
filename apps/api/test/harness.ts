@@ -54,7 +54,8 @@ export async function createTestApp(opts: { stripe?: Record<string, unknown>; da
   const fakeDaily = {
     createRoom: async (p: { name: string }) => ({ name: p.name, url: `https://amerivo.daily.co/${p.name}` }),
     roomUrl: async (name: string) => `https://amerivo.daily.co/${name}`,
-    meetingToken: async (p: { isOwner: boolean }) => ({ token: p.isOwner ? "owner-token" : "guest-token" }),
+    meetingToken: async (p: { isOwner: boolean; userId?: string; startOff?: boolean }) => ({ token: p.userId?.startsWith("observer:") ? `observer-token${p.startOff ? "-muted" : ""}` : p.isOwner ? "owner-token" : "guest-token" }),
+    allowObserver: async () => undefined,
     ...opts.daily,
   };
 

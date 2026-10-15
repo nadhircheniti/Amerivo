@@ -11,7 +11,8 @@
     "signedIn2fa": "Sesión iniciada con 2FA",
     "moderation": "Reportes de seguridad",
     "materials": "Documentos de profesores",
-    "discounts": "Códigos de descuento"
+    "discounts": "Códigos de descuento",
+    "liveLessons": "Clases en vivo"
   },
   "overview": {
     "metaTitle": "Analíticas de la plataforma · Amerivo Admin",
@@ -893,5 +894,22 @@
     "disabled": "Código {code} desactivado.",
     "copy": "Copiar",
     "copied": "Copiado"
+  },
+  "liveLessonsPage": {
+    "metaTitle": "Clases en vivo",
+    "title": "Clases en vivo",
+    "subtitle": "Clases cuya aula está abierta ahora mismo. Entra en una para comprobar su calidad.",
+    "rules": "Entras como \"Amerivo quality team\", con la cámara y el micrófono apagados. El profesor y el estudiante ven que estás observando (Términos §7). No se graba nada y cada visita queda registrada.",
+    "what": "las clases en vivo",
+    "listTitle": "{count, plural, =0 {Ninguna clase en este momento} one {# clase en este momento} other {# clases en este momento}}",
+    "timesIn": "Horas en {tz}",
+    "empty": "No hay ningún aula abierta en este momento. Esta lista se actualiza cada 30 segundos.",
+    "pair": "{teacher} con {student}",
+    "inProgress": "{minutes, plural, =0 {Acaba de empezar} one {En curso · # min} other {En curso · # min}}",
+    "starting": "Empieza pronto",
+    "trial": "Prueba",
+    "teacherIn": "Profesor en el aula desde las {time}",
+    "teacherNotYet": "El profesor aún no ha entrado",
+    "observe": "Observar"
   }
 }

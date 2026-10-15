@@ -2,6 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { and, asc, count, desc, eq, gte, ilike, inArray, lt, ne, or, sql, type SQL } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { DB, type Db } from "../../db/db";
+import { CLASSROOM_LATE_MIN, classroomEarlyMin } from "../../domain/classroom";
 import { auditLogs, bookings, disputes, earnings, lessonPackages, lessons, payments, payouts, studentProfiles, teacherProfiles, users, supportMessages, moderationFlags, teachingMaterials } from "../../db/schema";
 import { CLOCK, type Clock } from "../../common/clock";
 import { notFound } from "../../common/errors";
@@ -485,6 +486,18 @@ export class AdminSpaceService {
       this.db.select({ n: count() }).from(moderationFlags).where(eq(moderationFlags.status, "open")),
       this.db.select({ n: count() }).from(teachingMaterials).where(eq(teachingMaterials.status, "pending")),
     ]);
-    return { pendingApplications: apps.n, openDisputes: disp.n, openSupport: support.n, openModeration: flags.n, pendingMaterials: docs.n };
+    // Lessons whose classroom is open now (same window as GET /admin/live-lessons).
+    const now = this.clock.now();
+    const [live] = await this.db
+      .select({ n: count() })
+      .from(bookings)
+      .where(
+        and(
+          eq(bookings.status, "confirmed"),
+          sql`${bookings.startsAt} - ${classroomEarlyMin()} * interval '1 minute' <= ${now}`,
+          sql`${bookings.startsAt} + (${bookings.durationMin} + ${CLASSROOM_LATE_MIN}) * interval '1 minute' >= ${now}`,
+        ),
+      );
+    return { pendingApplications: apps.n, openDisputes: disp.n, openSupport: support.n, openModeration: flags.n, pendingMaterials: docs.n, liveLessons: live.n };
   }
 }

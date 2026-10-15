@@ -2,6 +2,9 @@ import { Injectable, ServiceUnavailableException } from "@nestjs/common";
 
 type Room = { name: string; url: string };
 
+/** Teacher + student + one Amerivo quality observer (admin, visible to both). */
+export const MAX_PARTICIPANTS = 3;
+
 /** Daily.co REST API: one private room per lesson + short-lived meeting tokens. */
 @Injectable()
 export class DailyService {
@@ -27,7 +30,7 @@ export class DailyService {
     const created = await this.call<Room>("POST", "/rooms", {
       name: p.name,
       privacy: "private",
-      properties: { nbf, exp, max_participants: 2, enable_screenshare: true, enable_chat: false, eject_at_room_exp: true, enable_prejoin_ui: false },
+      properties: { nbf, exp, max_participants: MAX_PARTICIPANTS, enable_screenshare: true, enable_chat: false, eject_at_room_exp: true, enable_prejoin_ui: false },
     });
     if (created.ok) return created.data;
     const existing = await this.call<Room>("GET", `/rooms/${encodeURIComponent(p.name)}`);
@@ -44,9 +47,26 @@ export class DailyService {
     return room.data.url;
   }
 
-  async meetingToken(p: { room: string; userName: string; isOwner: boolean; exp: Date }) {
+  /** Rooms created before observers existed allowed 2 people: raise the limit when an admin joins. */
+  async allowObserver(name: string) {
+    const res = await this.call<Room>("POST", `/rooms/${encodeURIComponent(name)}`, { properties: { max_participants: MAX_PARTICIPANTS } });
+    if (!res.ok) throw new ServiceUnavailableException(`Daily.co error ${res.status}`);
+  }
+
+  /**
+   * Personal token for one room. `userId` lets the classroom tell people apart (an observer's starts
+   * with "observer:"); an observer enters with camera and microphone off.
+   */
+  async meetingToken(p: { room: string; userName: string; isOwner: boolean; exp: Date; userId?: string; startOff?: boolean }) {
     const res = await this.call<{ token: string }>("POST", "/meeting-tokens", {
-      properties: { room_name: p.room, user_name: p.userName, is_owner: p.isOwner, exp: Math.floor(p.exp.getTime() / 1000) },
+      properties: {
+        room_name: p.room,
+        user_name: p.userName,
+        is_owner: p.isOwner,
+        exp: Math.floor(p.exp.getTime() / 1000),
+        ...(p.userId ? { user_id: p.userId } : {}),
+        ...(p.startOff ? { start_video_off: true, start_audio_off: true } : {}),
+      },
     });
     if (!res.ok) throw new ServiceUnavailableException(`Daily.co error ${res.status}: ${JSON.stringify(res.data)}`);
     return res.data;
