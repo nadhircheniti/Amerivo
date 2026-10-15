@@ -55,6 +55,11 @@
       "title": "审批",
       "heading": "申请状态",
       "continue": "继续进入审批"
+    },
+    "agreement": {
+      "title": "协议",
+      "heading": "签署你的教师协议",
+      "continue": "继续前往协议"
     }
   },
   "wizard": {
@@ -71,7 +76,8 @@
     "saved": "已保存",
     "saveError": "无法保存您的申请，请重试。",
     "pickSubject": "请至少选择一项您可以教授的内容。",
-    "identityRequired": "请先通过 Stripe 完成身份验证再继续。"
+    "identityRequired": "请先通过 Stripe 完成身份验证再继续。",
+    "agreementRequired": "请签署《独立教师协议》以继续。"
   },
   "options": {
     "subjects": {

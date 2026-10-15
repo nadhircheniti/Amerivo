@@ -10,6 +10,7 @@ import { cn } from "@/lib/cn";
 import { editableStatus, initialApplication, stepPayload, steps, type Application } from "../_data";
 import { SAVE_EXIT_EVENT, useLive } from "./live-context";
 import { ApprovalStep, IdentityStep, PersonalStep, ProfessionalStep, ReviewStep, StepPreviews, VideoStep } from "./steps";
+import { TeacherAgreementPanel } from "@/components/legal/teacher-agreement";
 
 const last = steps.length - 1;
 const submitStep = last - 1;
@@ -74,6 +75,7 @@ export function Wizard({ initialApp = initialApplication, initialStep = 0 }: { i
     if (id === "identity" && live.profile.identityStatus !== "pending" && live.profile.identityStatus !== "verified") {
       return fail(new ApiError(400, t("identityRequired")));
     }
+    if (id === "agreement" && !live.profile.agreementSignedAt) return fail(new ApiError(400, t("agreementRequired")));
     setError(null);
     setPending(true);
     try {
@@ -185,12 +187,13 @@ export function Wizard({ initialApp = initialApplication, initialStep = 0 }: { i
           </h1>
         </div>
 
-        {step === 0 && <PersonalStep app={app} update={update} />}
-        {step === 1 && <ProfessionalStep app={app} update={update} />}
-        {step === 2 && <IdentityStep app={app} update={update} />}
-        {step === 3 && <VideoStep app={app} update={update} />}
-        {step === 4 && <ReviewStep app={app} update={update} onEdit={go} />}
-        {step === 5 && <ApprovalStep app={app} onEdit={() => go(0)} />}
+        {current.id === "personal" && <PersonalStep app={app} update={update} />}
+        {current.id === "professional" && <ProfessionalStep app={app} update={update} />}
+        {current.id === "identity" && <IdentityStep app={app} update={update} />}
+        {current.id === "video" && <VideoStep app={app} update={update} />}
+        {current.id === "agreement" && <TeacherAgreementPanel onSigned={(s) => live?.setProfile((p) => (p.agreementSignedAt ? p : { ...p, agreementSignedAt: s.signedAt }))} />}
+        {current.id === "review" && <ReviewStep app={app} update={update} onEdit={go} />}
+        {current.id === "approval" && <ApprovalStep app={app} onEdit={() => go(0)} />}
 
         {error && (
           <p ref={errorRef} role="alert" className="rounded-xl bg-danger-100 px-4 py-3 text-sm font-semibold text-danger-text">

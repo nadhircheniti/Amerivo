@@ -36,12 +36,12 @@ export class NotificationsService {
    * Sends one e-mail through Resend. Returns false (without throwing) when e-mail is not configured;
    * throws when Resend refuses the message so callers can report it.
    */
-  async sendEmail(m: { to: string; subject: string; text: string; replyTo?: string }) {
+  async sendEmail(m: { to: string; subject: string; text: string; html?: string; replyTo?: string }) {
     if (!this.emailEnabled()) return false;
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${process.env.RESEND_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: process.env.EMAIL_FROM, to: m.to, subject: m.subject, text: m.text, ...(m.replyTo ? { reply_to: m.replyTo } : {}) }),
+      body: JSON.stringify({ from: process.env.EMAIL_FROM, to: m.to, subject: m.subject, text: m.text, ...(m.html ? { html: m.html } : {}), ...(m.replyTo ? { reply_to: m.replyTo } : {}) }),
     });
     if (!res.ok) throw new Error(`Resend ${res.status}`);
     return true;

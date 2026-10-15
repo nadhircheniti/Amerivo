@@ -1,7 +1,8 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { and, desc, eq } from "drizzle-orm";
 import { DB, type Db } from "../../db/db";
-import { availabilityRules, blockedDates, teacherApplications, teacherProfiles, users } from "../../db/schema";
+import { availabilityRules, blockedDates, teacherAgreements, teacherApplications, teacherProfiles, users } from "../../db/schema";
+import { TEACHER_AGREEMENT_VERSION } from "../../legal/teacher-agreement";
 import { CLOCK, type Clock } from "../../common/clock";
 import { webOrigin } from "../../common/cors";
 import { badRequest, forbidden, notFound } from "../../common/errors";
@@ -55,6 +56,15 @@ export class ApplicationsService {
     private readonly moderation: ModerationService,
   ) {}
 
+  /** When the teacher signed the Independent Teacher Agreement in force (null: not yet). */
+  private async agreementSignedAt(teacherId: string) {
+    const [a] = await this.db
+      .select({ signedAt: teacherAgreements.signedAt })
+      .from(teacherAgreements)
+      .where(and(eq(teacherAgreements.teacherId, teacherId), eq(teacherAgreements.version, TEACHER_AGREEMENT_VERSION)));
+    return a?.signedAt ?? null;
+  }
+
   /** Everything the teacher sees about their own profile: application, settings, availability. */
   async getOwn(teacherId: string) {
     const [row] = await this.db
@@ -92,6 +102,8 @@ export class ApplicationsService {
       blockedDates: blocked,
       // Message from the admin shown to the applicant (rejection reason, interview request…)
       review: latest ?? null,
+      // Independent Teacher Agreement in force: signed or not (the application can't be sent before).
+      agreementSignedAt: await this.agreementSignedAt(teacherId),
     };
   }
 
@@ -137,12 +149,14 @@ export class ApplicationsService {
     const [t] = await this.db.select().from(teacherProfiles).where(eq(teacherProfiles.userId, teacherId));
     if (!t) throw notFound("Teacher profile");
     if (t.status !== "draft" && t.status !== "rejected") throw forbidden(`Application is already ${t.status}`);
+    const signed = await this.agreementSignedAt(teacherId);
     const missing = [
       !t.headline && "headline",
       !t.bio && "bio",
       !t.specialties.length && "what you can teach",
       !t.introVideoUrl && "2-minute introduction video",
       t.identityStatus === "not_started" && "identity verification",
+      !signed && "signature of the Independent Teacher Agreement",
     ].filter(Boolean);
     if (missing.length) throw badRequest(`Please complete: ${missing.join(", ")}`);
     await this.db.transaction(async (tx) => {

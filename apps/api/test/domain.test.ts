@@ -8,6 +8,9 @@ import { recommend } from "../src/domain/matching";
 import { ageOn, isOldEnough } from "../src/domain/age";
 import { corsOrigins } from "../src/common/cors";
 import { applyDiscount, generateCode, normalizeCode } from "../src/domain/discount";
+import { createHash } from "node:crypto";
+import { agreementHtml, signatureMatchesAccount, TEACHER_AGREEMENT_SHA256 } from "../src/legal/teacher-agreement";
+import { TEACHER_AGREEMENT_MARKDOWN } from "../src/legal/teacher-agreement.text";
 
 const teacher = { priceCents: 3500, offersTrial: true, offersPack5: true, offersPack10: true };
 
@@ -183,5 +186,25 @@ describe("discount codes", () => {
     assert.throws(() => applyDiscount(3500, 0));
     assert.throws(() => applyDiscount(3500, 101));
     assert.throws(() => applyDiscount(3500, 12.5));
+  });
+});
+
+describe("teacher agreement e-signature", () => {
+  it("the typed name must contain the account's first and last name", () => {
+    assert.equal(signatureMatchesAccount("Emma Stone", "Emma", "Stone"), true);
+    assert.equal(signatureMatchesAccount("  emma   STONE ", "Emma", "Stone"), true);
+    assert.equal(signatureMatchesAccount("Emma Louise Stone", "Emma", "Stone"), true, "middle name");
+    assert.equal(signatureMatchesAccount("José García", "Jose", "Garcia"), true, "accents");
+    assert.equal(signatureMatchesAccount("Mary Ann O'Neil", "Mary Ann", "O'Neil"), true);
+    assert.equal(signatureMatchesAccount("Emma", "Emma", "Stone"), false);
+    assert.equal(signatureMatchesAccount("John Doe", "Emma", "Stone"), false);
+    assert.equal(signatureMatchesAccount("x", "", ""), false);
+  });
+  it("renders the text safely and fingerprints it", () => {
+    const html = agreementHtml("# Title\n\nA **bold** <b>tag</b> & more\n\n1. one\n2. two\n\n- a\n");
+    assert.equal(html, "<h1>Title</h1>\n<p>A <strong>bold</strong> &lt;b&gt;tag&lt;/b&gt; &amp; more</p>\n<ol>\n<li>one</li>\n<li>two</li>\n</ol>\n<ul>\n<li>a</li>\n</ul>");
+    assert.match(TEACHER_AGREEMENT_SHA256, /^[a-f0-9]{64}$/);
+    assert.equal(createHash("sha256").update(TEACHER_AGREEMENT_MARKDOWN).digest("hex"), TEACHER_AGREEMENT_SHA256);
+    assert.equal((TEACHER_AGREEMENT_MARKDOWN.match(/^## \d+\./gm) ?? []).length, 16, "16 articles");
   });
 });

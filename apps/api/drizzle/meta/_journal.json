@@ -64,6 +64,13 @@
       "when": 1791402066910,
       "tag": "0008_discount_codes",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792074379521,
+      "tag": "0009_teacher_agreements",
+      "breakpoints": true
     }
   ]
 }
